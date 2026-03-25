@@ -879,12 +879,13 @@ function renderLineup(){
     const quoteMsg=`"Adalet mülkün temelidir."`;
 
     if(!upcoming.length){
-      el.innerHTML=`
-        <div class="lineup-waiting">
-          <span class="lw-icon">⚽</span>
+      // Aktif maç yok — saha önizlemesini demo modda göster
+      el.innerHTML=`<div class="lineup-waiting" style="padding-bottom:8px">
           <div class="lineup-quote">${quoteMsg}</div>
-          <p class="lineup-sub">Henüz planlanmış aktif bir maç yok.</p>
+          <p class="lineup-sub" style="margin-bottom:12px">Aktif maç yok — saha önizlemesi</p>
         </div>`;
+      const fakeMatch={lineup:{},attending:[],reserves:[],teamAName:'Takım A',teamBName:'Takım B',captainA:null,captainB:null,teamAvgA:0,teamAvgB:0,datetime:new Date().toISOString(),venue:'—'};
+      renderFieldLineup(el, fakeMatch);
       return;
     }
 
@@ -981,13 +982,13 @@ function renderLineup(){
   }
 }
 
-function renderFieldLineup(el, match){
+function renderFieldLineup(el, match, previewMode=false){
   const lineup=match.lineup||{};
   const users=getUsers();
   const attending=match.attending||[];
   const reserves=match.reserves||[];
 
-  // Build player map from ALL registered users
+  // Build player map
   const playerMap={};
   Object.values(users).forEach(u=>{playerMap[u.id]=u;});
   attending.forEach(p=>{if(!playerMap[p.id])playerMap[p.id]=p;});
@@ -1013,71 +1014,87 @@ function renderFieldLineup(el, match){
   const tB=match.teamBName||'Takım B';
   const W=340, H=520;
 
-  // SVG player figure: body + head silhouette (no circles)
-  function playerFigure(cx,cy,teamA,name,posLabel,rating){
-    const col  = teamA ? '#c8f520' : '#ff5555';
-    const dark = teamA ? '#1a3d00' : '#5a0000';
-    const shad = teamA ? 'rgba(184,247,23,.35)' : 'rgba(255,80,80,.35)';
-    const shortName = (name||'?').split(' ')[0].substring(0,6).toUpperCase();
-    // Figure parts (relative to cx,cy center-of-body)
-    // head
-    const hR=8, hY=cy-22;
-    // torso
-    const tY1=cy-13, tY2=cy+4;
-    // arms
-    const lAx1=cx-8,lAy1=cy-10,lAx2=cx-16,lAy2=cy+2;
-    const rAx1=cx+8,rAy1=cy-10,rAx2=cx+16,rAy2=cy+2;
-    // legs
-    const lLx1=cx-4,lLy1=cy+4,lLx2=cx-8,lLy2=cy+18;
-    const rLx1=cx+4,rLy1=cy+4,rLx2=cx+8,rLy2=cy+18;
-    // feet
-    const lFx=cx-10,lFy=cy+18;
-    const rFx=cx+10,rFy=cy+18;
+  // ── Modern oyuncu ikonu ──────────────────────────────────────
+  function playerFigure(cx, cy, isTeamA, name, posLabel, rating, isCap){
+    const pri  = isTeamA ? '#b8f717' : '#ff5050';   // forma rengi
+    const glow = isTeamA ? 'rgba(184,247,23,.5)' : 'rgba(255,80,80,.5)';
+    const dark = isTeamA ? '#1a3200' : '#4a0000';
+    const txt  = isTeamA ? '#0d1a00' : '#fff';
+    const shortName = (name||'?').split(' ')[0].substring(0,7).toUpperCase();
+    const r = rating||'';
 
-    return `<g>
-      <!-- Shadow -->
-      <ellipse cx="${cx}" cy="${cy+20}" rx="13" ry="4" fill="${shad}"/>
-      <!-- Legs -->
-      <line x1="${lLx1}" y1="${lLy1}" x2="${lLx2}" y2="${lLy2}" stroke="${col}" stroke-width="5" stroke-linecap="round"/>
-      <line x1="${rLx1}" y1="${rLy1}" x2="${rLx2}" y2="${rLy2}" stroke="${col}" stroke-width="5" stroke-linecap="round"/>
-      <!-- Feet -->
-      <ellipse cx="${lFx}" cy="${lFy}" rx="5" ry="3" fill="${dark}" transform="rotate(-15,${lFx},${lFy})"/>
-      <ellipse cx="${rFx}" cy="${rFy}" rx="5" ry="3" fill="${dark}" transform="rotate(15,${rFx},${rFy})"/>
-      <!-- Torso -->
-      <rect x="${cx-9}" y="${tY1}" width="18" height="${tY2-tY1}" rx="4" fill="${col}"/>
-      <!-- Jersey number shine -->
-      <rect x="${cx-4}" y="${tY1+3}" width="8" height="5" rx="1" fill="${dark}" opacity=".4"/>
-      <!-- Arms -->
-      <line x1="${lAx1}" y1="${lAy1}" x2="${lAx2}" y2="${lAy2}" stroke="${col}" stroke-width="4.5" stroke-linecap="round"/>
-      <line x1="${rAx1}" y1="${rAy1}" x2="${rAx2}" y2="${rAy2}" stroke="${col}" stroke-width="4.5" stroke-linecap="round"/>
-      <!-- Neck -->
-      <line x1="${cx}" y1="${tY1}" x2="${cx}" y2="${hY+hR}" stroke="#e8c8a0" stroke-width="4" stroke-linecap="round"/>
-      <!-- Head -->
-      <circle cx="${cx}" cy="${hY}" r="${hR}" fill="#e8c8a0" stroke="${col}" stroke-width="2"/>
-      <!-- Hair -->
-      <path d="M${cx-hR+1} ${hY-3} Q${cx} ${hY-hR-4} ${cx+hR-1} ${hY-3}" fill="${col}" opacity=".8"/>
-      <!-- Name label background -->
-      <rect x="${cx-22}" y="${cy+22}" width="44" height="13" rx="3" fill="rgba(0,0,0,.65)"/>
-      <!-- Name -->
-      <text x="${cx}" y="${cy+31}" text-anchor="middle" fill="${col}" font-family="'DM Sans',sans-serif" font-size="6.5" font-weight="700">${shortName}</text>
-      <!-- Pos + rating badge -->
-      <rect x="${cx-18}" y="${cy+37}" width="36" height="11" rx="3" fill="${col}" opacity=".9"/>
-      <text x="${cx}" y="${cy+45}" text-anchor="middle" fill="${dark}" font-family="'DM Sans',sans-serif" font-size="5.5" font-weight="700">${posLabel} ${rating||''}</text>
-    </g>`;
+    // ── Zemin gölge
+    const shadow = `<ellipse cx="${cx}" cy="${cy+26}" rx="18" ry="5" fill="${glow}" opacity=".4"/>`;
+
+    // ── Forma gövdesi (daha modern, yuvarlak köşeli)
+    const body = `
+      <rect x="${cx-13}" y="${cy-16}" width="26" height="22" rx="6" fill="${pri}"/>
+      <rect x="${cx-13}" y="${cy-16}" width="26" height="10" rx="6" fill="${dark}" opacity=".25"/>
+      <line x1="${cx}" y1="${cy-16}" x2="${cx}" y2="${cy+6}" stroke="${dark}" stroke-width="1" opacity=".3"/>`;
+
+    // ── Kol bantları
+    const arms = `
+      <rect x="${cx-20}" y="${cy-14}" width="8" height="14" rx="4" fill="${pri}"/>
+      <rect x="${cx+12}" y="${cy-14}" width="8" height="14" rx="4" fill="${pri}"/>`;
+
+    // ── Şort
+    const shorts = `<rect x="${cx-10}" y="${cy+6}" width="20" height="10" rx="3" fill="${dark}" opacity=".7"/>`;
+
+    // ── Bacaklar
+    const legs = `
+      <rect x="${cx-9}" y="${cy+16}" width="8" height="14" rx="4" fill="#d0a070"/>
+      <rect x="${cx+1}" y="${cy+16}" width="8" height="14" rx="4" fill="#d0a070"/>
+      <rect x="${cx-10}" y="${cy+28}" width="9" height="5" rx="2" fill="${dark}"/>
+      <rect x="${cx+1}" y="${cy+28}" width="9" height="5" rx="2" fill="${dark}"/>`;
+
+    // ── Baş
+    const head = `
+      <circle cx="${cx}" cy="${cy-26}" r="11" fill="#e0b888"/>
+      <ellipse cx="${cx}" cy="${cy-33}" rx="11" ry="7" fill="${pri}"/>
+      <circle cx="${cx-3}" cy="${cy-27}" r="1.5" fill="#5a3a1a" opacity=".7"/>
+      <circle cx="${cx+3}" cy="${cy-27}" r="1.5" fill="#5a3a1a" opacity=".7"/>
+      <path d="M${cx-3} ${cy-22} Q${cx} ${cy-20} ${cx+3} ${cy-22}" stroke="#5a3a1a" stroke-width="1.2" fill="none" opacity=".6"/>`;
+
+    // ── Reyting rozeti
+    const badge = `
+      <rect x="${cx-14}" y="${cy+34}" width="28" height="11" rx="5.5" fill="rgba(0,0,0,.75)" stroke="${pri}" stroke-width=".8"/>
+      <text x="${cx}" y="${cy+42}" text-anchor="middle" fill="${pri}" font-family="'Bebas Neue',cursive" font-size="7" letter-spacing=".5">${posLabel}${r?' '+r:''}</text>`;
+
+    // ── İsim etiketi
+    const nameTag = `
+      <rect x="${cx-20}" y="${cy-42}" width="40" height="12" rx="6" fill="rgba(0,0,0,.7)" stroke="${pri}" stroke-width=".7"/>
+      <text x="${cx}" y="${cy-34}" text-anchor="middle" fill="${pri}" font-family="'DM Sans',sans-serif" font-size="6" font-weight="700">${shortName}</text>`;
+
+    // ── Kaptan yıldızı
+    const captBadge = isCap ? `
+      <circle cx="${cx+14}" cy="${cy-42}" r="7" fill="#ffd700" stroke="#000" stroke-width="1"/>
+      <text x="${cx+14}" y="${cy-38}" text-anchor="middle" fill="#000" font-family="'Bebas Neue',cursive" font-size="8" font-weight="900">C</text>` : '';
+
+    return `<g>${shadow}${legs}${shorts}${body}${arms}${head}${badge}${nameTag}${captBadge}</g>`;
   }
 
-  let figures='';
-  Object.entries(lineup).forEach(([pid,slot])=>{
-    const pos=slotPositions[slot];if(!pos)return;
-    const p=playerMap[pid];if(!p)return;
-    const cx=Math.round(pos.x/100*W);
-    const cy=Math.round(pos.y/100*H);
-    const isCapt=(pid===match.captainA)||(pid===match.captainB);
-    const fig=playerFigure(cx,cy,slot.startsWith('A'),p.name||'?',pos.label,p.rating||'');
-    // Add golden captain crown badge if captain
-    const captBadge=isCapt?`<g><circle cx="${cx+16}" cy="${cy-30}" r="8" fill="#ffd700" stroke="#0d1a12" stroke-width="1.2"/><text x="${cx+16}" y="${cy-26}" text-anchor="middle" fill="#0d1a12" font-family="'DM Sans',sans-serif" font-size="8" font-weight="800">C</text></g>`:'';
-    figures+=fig+captBadge;
-  });
+  // ── Önizleme: lineup boşsa demo oyuncular göster ──────────────
+  let figures = '';
+  const hasLineup = Object.keys(lineup).length > 0;
+
+  if(hasLineup){
+    Object.entries(lineup).forEach(([pid,slot])=>{
+      const pos=slotPositions[slot];if(!pos)return;
+      const p=playerMap[pid];if(!p)return;
+      const cx=Math.round(pos.x/100*W);
+      const cy=Math.round(pos.y/100*H);
+      const isCap=(pid===match.captainA)||(pid===match.captainB);
+      figures+=playerFigure(cx,cy,slot.startsWith('A'),p.name,pos.label,calcRating(p,p.pos)||p.rating||'',isCap);
+    });
+  } else {
+    // Demo: tüm slotları boş oyuncularla doldur
+    Object.entries(slotPositions).forEach(([slot,pos])=>{
+      const cx=Math.round(pos.x/100*W);
+      const cy=Math.round(pos.y/100*H);
+      figures+=playerFigure(cx,cy,slot.startsWith('A'),'?',pos.label,'',false);
+    });
+    figures+=`<text x="${W/2}" y="${H/2+60}" text-anchor="middle" fill="rgba(255,255,255,.5)" font-family="'Bebas Neue',cursive" font-size="14" letter-spacing="2">KADRO BEKLENİYOR</text>`;
+  }
 
   // Pitch SVG — rich stadium feel
   const pitchSvg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
