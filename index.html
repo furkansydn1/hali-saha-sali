@@ -895,7 +895,22 @@ function renderLineup(){
 
   // Kadro açılma saati geldi veya belirlenmemişse direkt göster
   if(!revealTime || now>=revealTime){
-    renderFieldLineup(el, match);
+    const hasLineup = match.lineup && Object.keys(match.lineup).length>0;
+    if(!hasLineup && (match.attending||[]).length>=2){
+      // Lineup yok ama oyuncu var — otomatik oluştur
+      autoRevealAndBuildTeams(match.id).then(()=>{
+        setTimeout(async ()=>{
+          const snap = await db.ref('matches/'+match.id).once('value');
+          const fm = snap.val()||match;
+          const idx = _matches.findIndex(x=>x.id===match.id);
+          if(idx>=0) _matches[idx]=fm; else _matches.push(fm);
+          const el2=document.getElementById('lineup-content');
+          if(el2) renderFieldLineup(el2, fm);
+        }, 1200);
+      });
+    } else {
+      renderFieldLineup(el, match);
+    }
     return;
   }
 
@@ -908,28 +923,63 @@ function renderLineup(){
     const n=new Date();
     if(n>=revealTime){
       stopLineupTimer();
-      const fm=getMatches().find(m=>m.id===match.id)||match;
-      renderFieldLineup(el2,fm);
+      // Önce ekrana "Takımlar oluşturuluyor..." göster
+      el2.innerHTML=`<div class="lineup-waiting">
+        <span class="lw-icon">⚙️</span>
+        <div class="lineup-quote">"Adalet mülkün temelidir."</div>
+        <p class="lineup-sub">Takımlar oluşturuluyor...</p>
+      </div>`;
+      // Takımları otomatik oluştur, sonra göster
+      autoRevealAndBuildTeams(match.id).then(()=>{
+        // Firebase listener zaten güncelleyecek ama garantili olsun diye
+        // 1 saniye bekle (Firebase yazma tamamlansin)
+        setTimeout(async ()=>{
+          const snap = await db.ref('matches/'+match.id).once('value');
+          const fm = snap.val();
+          if(fm){
+            // _matches cache güncelle
+            const idx = _matches.findIndex(x=>x.id===match.id);
+            if(idx>=0) _matches[idx]=fm; else _matches.push(fm);
+            const el3=document.getElementById('lineup-content');
+            if(el3) renderFieldLineup(el3, fm);
+          }
+        }, 1200);
+      });
       return;
     }
     const diff=Math.floor((revealTime-n)/1000);
     const h=Math.floor(diff/3600);
     const m2=Math.floor((diff%3600)/60);
     const s=diff%60;
+    // Geri sayım üstte, saha önizlemesi altta
     el2.innerHTML=`
-      <div class="lineup-waiting">
-        <span class="lw-icon">⚽</span>
+      <div class="lineup-waiting" style="padding:20px 0 14px">
         <div class="lineup-quote">"Adalet mülkün temelidir."</div>
-        <p class="lineup-sub" style="margin-bottom:16px">${match.name} — Kadro açılmayı bekliyor</p>
-        <div style="display:flex;gap:8px;justify-content:center;margin:0 0 12px">
-          ${[['Saat',pad(h)],['Dakika',pad(m2)],['Saniye',pad(s)]].map(([lbl,val])=>`
+        <p class="lineup-sub" style="margin-bottom:14px">${match.name} — Kadro açılmayı bekliyor</p>
+        <div style="display:flex;gap:8px;justify-content:center;margin:0 0 10px">
           <div style="text-align:center;background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);padding:10px 12px;min-width:52px">
-            <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:var(--lime);line-height:1">${val}</div>
-            <div style="font-size:.58rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px">${lbl}</div>
-          </div>`).join('<div style="font-family:Bebas Neue,cursive;font-size:2rem;color:rgba(255,255,255,.3);padding-top:10px">:</div>')}
+            <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:var(--lime);line-height:1">${pad(h)}</div>
+            <div style="font-size:.58rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px">SAAT</div>
+          </div>
+          <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:rgba(255,255,255,.3);padding-top:10px">:</div>
+          <div style="text-align:center;background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);padding:10px 12px;min-width:52px">
+            <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:var(--lime);line-height:1">${pad(m2)}</div>
+            <div style="font-size:.58rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px">DAKİKA</div>
+          </div>
+          <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:rgba(255,255,255,.3);padding-top:10px">:</div>
+          <div style="text-align:center;background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);padding:10px 12px;min-width:52px">
+            <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:var(--lime);line-height:1">${pad(s)}</div>
+            <div style="font-size:.58rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px">SANİYE</div>
+          </div>
         </div>
-        <p class="lineup-sub" style="font-size:.74rem">Kadro açıklanmasına bu kadar süre kaldı.</p>
+        <p class="lineup-sub" style="font-size:.72rem;margin-bottom:0">Kadro açıklanmasına bu kadar süre kaldı.</p>
       </div>`;
+    // Geri sayımın altına demo saha ekle (inline append)
+    const previewDiv=document.createElement('div');
+    previewDiv.id='pitch-preview-wrap';
+    el2.appendChild(previewDiv);
+    const fakePreview={lineup:{},attending:[],reserves:[],teamAName:match.teamAName||'Takım A',teamBName:match.teamBName||'Takım B',captainA:null,captainB:null,teamAvgA:0,teamAvgB:0,datetime:match.datetime,venue:match.venue};
+    renderFieldLineup(previewDiv, fakePreview);
   }
 
   tick();
@@ -1753,6 +1803,58 @@ function aiMatchPrediction(avgA,avgB,nameA,nameB){
   return{stronger,weaker,winChance,drawChance,loseChance,comment,diff:absDiff};
 }
 
+
+/* ====== OTOMATİK KADRO OLUŞTURMA (geri sayım bitince) ====== */
+async function autoRevealAndBuildTeams(matchId){
+  try{
+    // Taze veri çek — cache stale olabilir
+    const snap = await db.ref('matches/'+matchId).once('value');
+    const match = snap.val();
+    if(!match){console.warn('autoReveal: maç bulunamadı',matchId);return;}
+
+    // Zaten lineup varsa tekrar oluşturma
+    if(match.lineup && Object.keys(match.lineup).length>0){
+      console.log('autoReveal: lineup zaten var, atlanıyor');
+      return;
+    }
+
+    const attending = match.attending ? Object.values(match.attending) : [];
+    if(attending.length < 2){
+      console.warn('autoReveal: yeterli oyuncu yok',attending.length);
+      return;
+    }
+
+    // Takımları kur
+    const{teamA,teamB,avgA,avgB} = buildFairTeams(attending);
+
+    // Kaptan seç
+    const captainA = teamA.length ? teamA[Math.floor(Math.random()*teamA.length)] : null;
+    const captainB = teamB.length ? teamB[Math.floor(Math.random()*teamB.length)] : null;
+
+    // Lineup objesi
+    const lineup = {};
+    const slotsA=['A_GK','A_D1','A_D2','A_M','A_A1','A_A2','A_F'];
+    const slotsB=['B_GK','B_D1','B_D2','B_M','B_A1','B_A2','B_F'];
+    teamA.forEach((p,i)=>{ if(slotsA[i]) lineup[p.id]=slotsA[i]; });
+    teamB.forEach((p,i)=>{ if(slotsB[i]) lineup[p.id]=slotsB[i]; });
+
+    // Firebase'e yaz — tek atomik update
+    const updates = {
+      lineup:    lineup,
+      captainA:  captainA ? captainA.id : null,
+      captainB:  captainB ? captainB.id : null,
+      teamAvgA:  avgA,
+      teamAvgB:  avgB,
+      autoBuilt: true
+    };
+    await db.ref('matches/'+matchId).update(updates);
+
+    console.log('autoReveal: takımlar oluşturuldu ✅ A='+avgA+' B='+avgB);
+  } catch(e){
+    console.error('autoReveal hatası:',e);
+  }
+}
+
 async function buildAndSaveTeams(matchId){
   if(!isAdmin(currentUser))return;
   const matches=getMatches();
@@ -2511,8 +2613,10 @@ async function forumVote(postId,val){
 /* ===================== ADIL TAKIM DAGITICI ===================== */
 function buildFairTeams(attending){
   const users=getUsers();
+  // attending array veya object olabilir — normalize et
+  const attendArr=Array.isArray(attending)?attending:Object.values(attending||{});
   // Enrich with full stats
-  const players=attending.map(p=>{
+  const players=attendArr.map(p=>{
     const u=users[p.name.toLowerCase()]||p;
     return{
       ...p,
