@@ -974,12 +974,11 @@ function renderLineup(){
         </div>
         <p class="lineup-sub" style="font-size:.72rem;margin-bottom:0">Kadro açıklanmasına bu kadar süre kaldı.</p>
       </div>`;
-    // Geri sayımın altına demo saha ekle (inline append)
-    const previewDiv=document.createElement('div');
-    previewDiv.id='pitch-preview-wrap';
-    el2.appendChild(previewDiv);
+    // Geri sayımın altına demo saha ekle — append mode
+    el2.dataset.appendMode='1';
     const fakePreview={lineup:{},attending:[],reserves:[],teamAName:match.teamAName||'Takım A',teamBName:match.teamBName||'Takım B',captainA:null,captainB:null,teamAvgA:0,teamAvgB:0,datetime:match.datetime,venue:match.venue};
-    renderFieldLineup(previewDiv, fakePreview);
+    renderFieldLineup(el2, fakePreview);
+    el2.dataset.appendMode='0';
   }
 
   tick();
@@ -1234,7 +1233,7 @@ function renderFieldLineup(el, match, previewMode=false){
       </div>`;
   }
 
-  el.innerHTML=`
+  const _fieldHtml=`
     <div class="section-title">Kadro Açıklandı</div>
     <div class="field-wrap" style="border-radius:var(--radius);overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.6)">
       <!-- Header -->
@@ -1266,6 +1265,11 @@ function renderFieldLineup(el, match, previewMode=false){
       ${reservesHtml}
     </div>
     ${predictionHtml}`;
+  if(el.dataset.appendMode==="1"){
+    el.innerHTML+=_fieldHtml;
+  } else {
+    el.innerHTML=_fieldHtml;
+  }
 }
 
 /* ====== VOTING ====== */
