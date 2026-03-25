@@ -367,11 +367,12 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 
 /* FORUM */
 .forum-post{background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);padding:13px 15px;margin-bottom:8px;display:flex;gap:12px}
-.forum-votes{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;min-width:36px}
-.forum-vote-btn{background:none;border:none;cursor:pointer;font-size:1rem;color:var(--text-muted);padding:2px;line-height:1;transition:color .15s}
-.forum-vote-btn:hover{color:var(--lime)}
-.forum-vote-btn.voted-up{color:var(--lime)}
-.forum-vote-btn.voted-down{color:var(--red)}
+.forum-votes{display:flex;flex-direction:row;align-items:center;gap:6px;margin-top:8px}
+.forum-vote-btn{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:20px;border:1.5px solid var(--surface-3);background:var(--dark-3);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:600;color:var(--text-muted);transition:all .15s;line-height:1}
+.forum-vote-btn:hover{background:var(--surface-2)}
+.forum-vote-btn.voted-up{color:var(--lime);border-color:rgba(184,247,23,.4);background:rgba(184,247,23,.08)}
+.forum-vote-btn.voted-down{color:var(--red);border-color:rgba(255,64,64,.4);background:rgba(255,64,64,.08)}
+.forum-score{font-family:'Bebas Neue',cursive;font-size:1rem;color:var(--text);min-width:20px;text-align:center}
 .forum-score{font-family:'Bebas Neue',cursive;font-size:1.1rem;color:var(--text)}
 .forum-body{flex:1;min-width:0}
 .forum-cat{display:inline-block;font-size:.6rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:2px 7px;border-radius:20px;margin-bottom:5px}
@@ -389,6 +390,38 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 /* Profile form card */
 .profile-form-card{background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius);padding:18px}
 .profile-form-card h3{font-family:'Bebas Neue',cursive;font-size:1.1rem;letter-spacing:1.5px;color:var(--lime);margin-bottom:14px}
+
+
+/* ===================== TRANSFER PIYASASI ===================== */
+.borsa-row{display:flex;align-items:center;gap:12px;padding:11px 15px;background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);margin-bottom:7px;transition:border-color .2s}
+.borsa-row:hover{border-color:var(--surface-2)}
+.borsa-rank{font-family:'Bebas Neue',cursive;font-size:1.4rem;width:28px;text-align:center;flex-shrink:0;line-height:1}
+.borsa-rank.r1{color:var(--gold)}
+.borsa-rank.r2{color:#c0c0c0}
+.borsa-rank.r3{color:#cd7f32}
+.borsa-rank.rn{color:var(--text-muted)}
+.borsa-avatar{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',cursive;font-size:1.1rem;flex-shrink:0}
+.borsa-info{flex:1;min-width:0}
+.borsa-name{font-weight:700;font-size:.88rem;display:flex;align-items:center;gap:5px}
+.borsa-pos{font-size:.68rem;color:var(--text-muted)}
+.borsa-value{text-align:right;flex-shrink:0}
+.borsa-price{font-family:'Bebas Neue',cursive;font-size:1.1rem;color:var(--lime);letter-spacing:.5px}
+.borsa-change{font-size:.7rem;font-weight:700;margin-top:1px}
+.borsa-change.up{color:#22cc66}
+.borsa-change.down{color:var(--red)}
+.borsa-change.flat{color:var(--text-muted)}
+.form-arrow{font-size:.8rem;line-height:1}
+.form-arrow.up{color:#22cc66}
+.form-arrow.down{color:var(--red)}
+.form-streak{display:inline-flex;gap:2px;align-items:center}
+.form-dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+.form-dot.w{background:#22cc66}
+.form-dot.l{background:var(--red)}
+.form-dot.d{background:var(--text-muted)}
+.borsa-header{background:linear-gradient(135deg,#0a1a0a,#1a3020);border:1px solid rgba(184,247,23,.2);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px}
+.ticker-wrap{overflow:hidden;white-space:nowrap;margin-top:8px}
+.ticker-inner{display:inline-block;animation:ticker 20s linear infinite}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 </style>
 </head>
@@ -439,6 +472,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
     <button class="nav-tab"        onclick="switchTab('tab-lb',this)">🏆 Sıralama</button>
     <button class="nav-tab"        onclick="switchTab('tab-news',this)">📰 Gazete</button>
     <button class="nav-tab"        onclick="switchTab('tab-forum',this)">💬 Forum</button>
+    <button class="nav-tab"        onclick="switchTab('tab-borsa',this)">📈 Piyasa</button>
     <button class="nav-tab"        onclick="switchTab('tab-past',this)">📚 Geçmiş</button>
     <button class="nav-tab" id="tab-admin-btn" style="display:none" onclick="switchTab('tab-admin',this)">⚙️ Admin</button>
   </div>
@@ -457,6 +491,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
   <div id="tab-lb"      class="panel"><div id="lb-content"></div></div>
   <div id="tab-news"    class="panel"><div id="news-content"></div></div>
   <div id="tab-forum"   class="panel"><div id="forum-content"></div></div>
+  <div id="tab-borsa"   class="panel"><div id="borsa-content"></div></div>
   <div id="tab-past"    class="panel"><div id="past-matches-list"></div></div>
   <div id="tab-admin"   class="panel"><div id="admin-content"></div></div>
 </div>
@@ -795,6 +830,7 @@ function switchTab(tabId,btn){
   if(tabId==='tab-admin')renderAdmin();
   if(tabId==='tab-profile')renderProfile();
   if(tabId==='tab-forum')renderForum();
+  if(tabId==='tab-borsa')renderBorsa();
   if(tabId==='tab-matches')document.getElementById('match-display').innerHTML='';
 }
 
@@ -1031,7 +1067,11 @@ function renderFieldLineup(el, match){
     const p=playerMap[pid];if(!p)return;
     const cx=Math.round(pos.x/100*W);
     const cy=Math.round(pos.y/100*H);
-    figures+=playerFigure(cx,cy,slot.startsWith('A'),p.name||'?',pos.label,p.rating||'');
+    const isCapt=(pid===match.captainA)||(pid===match.captainB);
+    const fig=playerFigure(cx,cy,slot.startsWith('A'),p.name||'?',pos.label,p.rating||'');
+    // Add golden captain crown badge if captain
+    const captBadge=isCapt?`<g><circle cx="${cx+16}" cy="${cy-30}" r="8" fill="#ffd700" stroke="#0d1a12" stroke-width="1.2"/><text x="${cx+16}" y="${cy-26}" text-anchor="middle" fill="#0d1a12" font-family="'DM Sans',sans-serif" font-size="8" font-weight="800">C</text></g>`:'';
+    figures+=fig+captBadge;
   });
 
   // Pitch SVG — rich stadium feel
@@ -1132,6 +1172,41 @@ function renderFieldLineup(el, match){
       </div>`;
   }
 
+  // Build captain info for display
+  const capA=match.captainA;
+  const capB=match.captainB;
+
+  // AI prediction
+  const avgA=match.teamAvgA||0;
+  const avgB=match.teamAvgB||0;
+  let predictionHtml='';
+  if(avgA>0&&avgB>0){
+    const pred=aiMatchPrediction(avgA,avgB,tA,tB);
+    const barA=Math.round(pred.stronger===tA?pred.winChance:100-pred.winChance-pred.drawChance);
+    const barB=100-barA-pred.drawChance;
+    predictionHtml=`
+      <div style="background:linear-gradient(135deg,#1a1a3a,#0d1a12);border:1px solid rgba(100,100,255,.3);border-radius:var(--radius);padding:16px;margin-top:14px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+          <span style="font-size:1.2rem">🤖</span>
+          <span style="font-family:'Bebas Neue',cursive;font-size:1.1rem;letter-spacing:1.5px;color:#a0a0ff">Yapay Zeka Maç Tahmini</span>
+        </div>
+        <p style="font-size:.82rem;color:#c0c0e0;line-height:1.7;margin-bottom:12px">${pred.comment}</p>
+        <div style="display:flex;gap:0;border-radius:6px;overflow:hidden;height:28px;margin-bottom:8px">
+          <div style="width:${barA}%;background:rgba(184,247,23,.7);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#0d1a12;transition:width .6s">${barA}%</div>
+          <div style="width:${pred.drawChance}%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:.68rem;color:rgba(255,255,255,.8)">${pred.drawChance}%</div>
+          <div style="width:${barB}%;background:rgba(255,80,80,.6);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">${barB}%</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:.65rem;color:rgba(255,255,255,.5)">
+          <span>🏆 ${tA} kazanır</span><span>🤝 Berabere</span><span>${tB} kazanır 🏆</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:.7rem">
+          <span style="color:#b8f717">Ort: <strong>${avgA}</strong></span>
+          <span style="color:rgba(255,255,255,.4)">vs</span>
+          <span style="color:#ff8080">Ort: <strong>${avgB}</strong></span>
+        </div>
+      </div>`;
+  }
+
   el.innerHTML=`
     <div class="section-title">Kadro Açıklandı</div>
     <div class="field-wrap" style="border-radius:var(--radius);overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.6)">
@@ -1162,7 +1237,8 @@ function renderFieldLineup(el, match){
         <span style="font-size:.68rem;color:var(--text-muted)">📍 ${match.venue}</span>
       </div>
       ${reservesHtml}
-    </div>`;
+    </div>
+    ${predictionHtml}`;
 }
 
 /* ====== VOTING ====== */
@@ -1334,154 +1410,267 @@ async function deleteNews(idx){if(!isAdmin(currentUser))return;const news=getNew
 /* ====== ADMIN ====== */
 function renderAdmin(){
   const el=document.getElementById('admin-content');if(!el||!isAdmin(currentUser))return;
-  const users=Object.values(getUsers()).sort((a,b)=>b.rating-a.rating);
+  const users=Object.values(getUsers()).sort((a,b)=>(calcRating(b,b.pos)||0)-(calcRating(a,a.pos)||0));
   const matches=getMatches();
-  const now=new Date();
   const upcomingMatches=matches.filter(m=>!m.finished).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
-  const pendingVote=matches.filter(m=>m.finished&&!m.votingOpen&&!m.motmId);
-
-  let html=`<div class="section-title">Admin Paneli</div>`;
-
-  // CREATE MATCH
-  html+=`<div class="card" style="margin-bottom:14px">
-    <h2 style="font-family:'Bebas Neue',cursive;font-size:1.1rem;letter-spacing:1.5px;color:var(--lime);margin-bottom:13px">➕ Yeni Maç Oluştur</h2>
-    <div class="form-group"><label>Maç İsmi</label><input type="text" id="c-name" placeholder="Salı Maçı..."></div>
-    <div class="form-group"><label>Yer</label><input type="text" id="c-venue" placeholder="Saha adı..."></div>
-    <div class="form-row">
-      <div class="form-group" style="margin-bottom:0"><label>Maç Tarihi & Saati</label><input type="datetime-local" id="c-datetime"></div>
-      <div class="form-group" style="margin-bottom:0"><label>Devre Süresi (dk)</label><input type="number" id="c-duration" placeholder="20" min="1"></div>
-    </div>
-    <div class="form-row" style="margin-top:13px">
-      <div class="form-group" style="margin-bottom:0"><label>Kayıt Başlangıç</label><input type="datetime-local" id="c-reg-start"></div>
-      <div class="form-group" style="margin-bottom:0"><label>Kayıt Bitiş</label><input type="datetime-local" id="c-reg-end"></div>
-    </div>
-    <button class="btn btn-primary" style="width:100%;margin-top:13px" onclick="createMatch()">✅ Maçı Oluştur</button>
-  </div>`;
-
-  // LINEUP MANAGER — tüm aktif maçlar için
-  if(upcomingMatches.length){
-    // Match picker if multiple
-    const matchPickerHtml = upcomingMatches.length>1
-      ? `<div class="form-group" style="margin-bottom:12px">
-          <label>Hangi Maç İçin?</label>
-          <select id="lineup-match-picker" onchange="renderAdmin()" style="background:var(--dark-3);border:1.5px solid var(--surface-3);border-radius:var(--radius-sm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.9rem;padding:10px 12px;outline:none;width:100%">
-            ${upcomingMatches.map((m,i)=>`<option value="${m.id}">${m.name} — ${new Date(m.datetime).toLocaleDateString('tr-TR')}</option>`).join('')}
-          </select>
-        </div>`
-      : '';
-
-    // Get selected match
-    const selectedMatchId = upcomingMatches.length>1
-      ? (document.getElementById('lineup-match-picker')?.value || upcomingMatches[0].id)
-      : upcomingMatches[0].id;
-    const m = upcomingMatches.find(x=>x.id===selectedMatchId) || upcomingMatches[0];
-
-    const attending=m.attending||[];
-    const lineup=m.lineup||{};
-    const slots=['A_GK','A_D1','A_D2','A_M','A_A1','A_A2','A_F','B_GK','B_D1','B_D2','B_M','B_A1','B_A2','B_F'];
-    const slotLabels={'A_GK':'Takım A — Kaleci','A_D1':'Takım A — Defans 1','A_D2':'Takım A — Defans 2','A_M':'Takım A — Orta Saha','A_A1':'Takım A — Hücum 1','A_A2':'Takım A — Hücum 2','A_F':'Takım A — Forvet','B_GK':'Takım B — Kaleci','B_D1':'Takım B — Defans 1','B_D2':'Takım B — Defans 2','B_M':'Takım B — Orta Saha','B_A1':'Takım B — Hücum 1','B_A2':'Takım B — Hücum 2','B_F':'Takım B — Forvet'};
-
-    // Players: all registered users (not just attending) so admin can pre-assign
-    const allUsers=Object.values(getUsers()).sort((a,b)=>a.name.localeCompare(b.name));
-    const playerOptions=`<option value="">— Seç —</option>`+allUsers.map(u=>`<option value="${u.id}">${u.name} (${posShort(u.pos)} • ${u.rating})</option>`).join('');
-
-    html+=`<div class="card" style="margin-bottom:14px">
-      <h2 style="font-family:'Bebas Neue',cursive;font-size:1.1rem;letter-spacing:1.5px;color:var(--amber);margin-bottom:10px">👕 Kadro & Diziliş Yönetimi</h2>
-      ${matchPickerHtml}
-
-      <div style="background:var(--dark-3);border-radius:var(--radius-sm);padding:10px;margin-bottom:12px">
-        <div style="font-size:.66rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">📅 Kadro Açılış Saati — ${m.name}</div>
-        <div class="form-row">
-          <div class="form-group" style="margin-bottom:0"><input type="datetime-local" id="reveal-time" value="${m.lineupRevealTime||''}"></div>
-          <div style="display:flex;align-items:flex-end"><button class="btn btn-primary" style="width:100%;font-size:.76rem" onclick="saveRevealTime('${m.id}')">⏰ Saati Kaydet</button></div>
-        </div>
-        ${m.lineupRevealTime?`<div style="margin-top:7px;font-size:.72rem;color:var(--lime)">✅ Açılış: ${new Date(m.lineupRevealTime).toLocaleString('tr-TR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}</div>`:'<div style="margin-top:7px;font-size:.72rem;color:var(--amber)">⚠️ Henüz saat belirlenmedi</div>'}
-      </div>
-
-      <div style="background:var(--dark-3);border-radius:var(--radius-sm);padding:10px;margin-bottom:12px">
-        <div style="font-size:.66rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">🏷️ Takım Adları</div>
-        <div class="form-row">
-          <div class="form-group" style="margin-bottom:0"><label style="color:var(--lime)">Takım A</label><input type="text" id="team-a-ln" value="${m.teamAName||'Takım A'}"></div>
-          <div class="form-group" style="margin-bottom:0"><label style="color:#ff8080">Takım B</label><input type="text" id="team-b-ln" value="${m.teamBName||'Takım B'}"></div>
-        </div>
-      </div>
-
-      <div style="font-size:.66rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;display:flex;align-items:center;gap:6px">
-        <span style="display:inline-block;width:10px;height:10px;background:var(--lime);border-radius:2px"></span> Takım A (Yeşil) &nbsp;&nbsp;
-        <span style="display:inline-block;width:10px;height:10px;background:#ff6060;border-radius:2px"></span> Takım B (Kırmızı)
-      </div>
-      ${slots.map(slot=>`
-        <div class="lineup-assign-row">
-          <span class="lineup-assign-name" style="color:${slot.startsWith('A')?'var(--lime)':'#ff8080'};font-size:.8rem">${slotLabels[slot]}</span>
-          <select class="lineup-assign-select" id="slot-${slot}">
-            ${playerOptions}
-          </select>
-        </div>`).join('')}
-      <button class="btn btn-amber" style="width:100%;margin-top:12px" onclick="saveLineup('${m.id}')">💾 Kadroyu Kaydet</button>
-      ${attending.length===0?'<p style="text-align:center;font-size:.72rem;color:var(--amber);margin-top:8px">⚠️ Henüz kadroya giren oyuncu yok, yine de atamaları kaydedebilirsin.</p>':''}
-    </div>`;
-
-    // Pre-fill existing lineup after render
-    setTimeout(()=>{
-      slots.forEach(slot=>{
-        const pid=Object.keys(lineup).find(k=>lineup[k]===slot)||'';
-        const sel=document.getElementById('slot-'+slot);
-        if(sel)sel.value=pid;
-      });
-    },60);
-  } else {
-    html+=`<div class="card" style="margin-bottom:14px;text-align:center;padding:24px">
-      <div style="font-size:2rem;margin-bottom:8px">👕</div>
-      <div style="font-size:.84rem;color:var(--text-muted)">Aktif (bitmemiş) maç yok.<br>Önce bir maç oluştur.</div>
-    </div>`;
-  }
-
-  // OYLAMA YÖNETİMİ
   const openVotings=matches.filter(m=>m.finished&&m.votingOpen&&!m.motmId);
   const pendingVotings=matches.filter(m=>m.finished&&!m.votingOpen&&!m.motmId);
-
-  if(openVotings.length||pendingVotings.length){
-    let voteRows='';
-    openVotings.forEach(m=>{voteRows+='<div style="display:flex;align-items:center;justify-content:space-between;gap:9px;padding:7px 0;border-bottom:1px solid var(--surface-3)"><div><span style="font-size:.83rem;font-weight:600">'+m.name+'</span> <span style="font-size:.68rem;color:var(--lime);margin-left:6px">● Açık</span></div><button class="btn btn-danger" style="font-size:.7rem;padding:5px 10px" onclick="closeVoting('+JSON.stringify(m.id)+')">🔒 Kapat</button></div>';});
-    pendingVotings.forEach(m=>{voteRows+='<div style="display:flex;align-items:center;justify-content:space-between;gap:9px;padding:7px 0;border-bottom:1px solid var(--surface-3)"><span style="font-size:.83rem;font-weight:600">'+m.name+'</span><button class="btn btn-amber" style="font-size:.7rem;padding:5px 10px" onclick="openVoting('+JSON.stringify(m.id)+')">Oylamayı Aç</button></div>';});
-    html+='<div class="card" style="margin-bottom:14px"><h2 style="font-family:Bebas Neue,cursive;font-size:1.1rem;letter-spacing:1.5px;color:var(--amber);margin-bottom:11px">🗳️ Oylama Yönetimi</h2>'+voteRows+'</div>';
-  }
-
-  // SCORE ENTRY for finished-but-no-score matches
   const noScore=matches.filter(m=>m.finished&&!m.score);
-  if(noScore.length){
-    let scoreRows='';
-    noScore.forEach(m=>{scoreRows+='<div style="display:flex;align-items:center;justify-content:space-between;gap:9px;padding:7px 0;border-bottom:1px solid var(--surface-3)"><span style="font-size:.83rem;font-weight:600">'+m.name+'</span><button class="btn btn-primary" style="font-size:.7rem;padding:5px 10px" onclick="openScore('+JSON.stringify(m.id)+')">Skor Gir</button></div>';});
-    html+='<div class="card" style="margin-bottom:14px"><h2 style="font-family:Bebas Neue,cursive;font-size:1.1rem;letter-spacing:1.5px;color:var(--lime);margin-bottom:11px">🏆 Skor Gir</h2>'+scoreRows+'</div>';
+  const activeForTeams=matches.filter(m=>!m.finished&&(m.attending||[]).length>=2);
+
+  // Active tab from state
+  const activeTab=el.dataset.tab||'matches';
+
+  const tabBtn=(id,icon,label)=>`<button onclick="adminTab('${id}')" style="flex:1;padding:9px 4px;border:none;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.68rem;font-weight:600;transition:all .15s;${activeTab===id?'background:var(--surface-2);color:var(--lime)':'background:transparent;color:var(--text-muted)'}">${icon}<br>${label}</button>`;
+
+  let html=`
+  <!-- Admin Header -->
+  <div style="background:linear-gradient(135deg,var(--dark-2),#0d2010);border:1px solid rgba(184,247,23,.2);border-radius:var(--radius);padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:12px">
+    <div style="width:42px;height:42px;background:rgba(245,166,35,.15);border:2px solid var(--amber);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">⚙️</div>
+    <div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:1.3rem;letter-spacing:2px;color:var(--amber)">Admin Paneli</div>
+      <div style="font-size:.7rem;color:var(--text-muted)">${users.length} oyuncu &nbsp;•&nbsp; ${matches.length} maç &nbsp;•&nbsp; ${upcomingMatches.length} aktif</div>
+    </div>
+    <div style="margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end">
+      ${openVotings.length?`<span style="background:rgba(245,166,35,.2);color:var(--amber);font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid rgba(245,166,35,.4)">🗳️ ${openVotings.length} açık oylama</span>`:''}
+      ${noScore.length?`<span style="background:rgba(255,64,64,.15);color:var(--red);font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid rgba(255,64,64,.3)">⚽ ${noScore.length} skor bekliyor</span>`:''}
+    </div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div style="display:flex;gap:3px;background:var(--dark-3);border-radius:var(--radius-sm);padding:3px;margin-bottom:14px">
+    ${tabBtn('matches','📋','Maçlar')}
+    ${tabBtn('players','👥','Oyuncular')}
+    ${tabBtn('teams','⚖️','Takımlar')}
+    ${tabBtn('voting','🗳️','Oylama')}
+  </div>`;
+
+  // ===================== TAB: MATCHES =====================
+  if(activeTab==='matches'){
+    html+=`
+    <div class="card" style="margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+        <span style="font-size:1.1rem">➕</span>
+        <span style="font-family:'Bebas Neue',cursive;font-size:1.1rem;letter-spacing:1.5px;color:var(--lime)">Yeni Maç Oluştur</span>
+      </div>
+      <div class="form-group"><label>Maç İsmi</label><input type="text" id="c-name" placeholder="Salı Maçı..."></div>
+      <div class="form-group"><label>Yer</label><input type="text" id="c-venue" placeholder="Saha adı..."></div>
+      <div class="form-row">
+        <div class="form-group" style="margin-bottom:0"><label>Maç Tarihi & Saati</label><input type="datetime-local" id="c-datetime"></div>
+        <div class="form-group" style="margin-bottom:0"><label>Devre (dk)</label><input type="number" id="c-duration" placeholder="20" min="1"></div>
+      </div>
+      <div class="form-row" style="margin-top:11px">
+        <div class="form-group" style="margin-bottom:0"><label>Kayıt Başlangıç</label><input type="datetime-local" id="c-reg-start"></div>
+        <div class="form-group" style="margin-bottom:0"><label>Kayıt Bitiş</label><input type="datetime-local" id="c-reg-end"></div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:13px" onclick="createMatch()">✅ Maçı Oluştur</button>
+    </div>`;
+
+    // Aktif maçlar
+    if(upcomingMatches.length){
+      html+=`<div style="font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">Aktif Maçlar</div>`;
+      upcomingMatches.forEach(m=>{
+        const att=(m.attending||[]).length;
+        const pct=Math.min(100,Math.round(att/14*100));
+        html+=`<div class="card" style="margin-bottom:10px;padding:14px 16px">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px">
+            <div>
+              <div style="font-weight:700;font-size:.9rem;margin-bottom:2px">${m.name}</div>
+              <div style="font-size:.72rem;color:var(--text-muted)">📍 ${m.venue} &nbsp;•&nbsp; 🕐 ${new Date(m.datetime).toLocaleString('tr-TR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}</div>
+            </div>
+            <span style="font-family:'Bebas Neue',cursive;font-size:1.1rem;color:${att>=14?'var(--red)':'var(--lime)'};flex-shrink:0">${att}/14</span>
+          </div>
+          <div style="height:5px;background:var(--surface-3);border-radius:20px;overflow:hidden;margin-bottom:10px">
+            <div style="height:100%;width:${pct}%;background:${att>=14?'var(--red)':'var(--lime)'};border-radius:20px"></div>
+          </div>
+          <div style="background:var(--dark-3);border-radius:var(--radius-sm);padding:10px;margin-bottom:10px">
+            <div style="font-size:.64rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text-muted);margin-bottom:7px">Kadro Açılış Saati</div>
+            <div style="display:flex;gap:7px;align-items:center">
+              <input type="datetime-local" id="reveal-time-${m.id}" value="${m.lineupRevealTime||''}" style="flex:1;background:var(--dark-2);border:1.5px solid var(--surface-3);border-radius:var(--radius-sm);color:var(--text);font-size:.8rem;padding:7px 9px;outline:none">
+              <button class="btn btn-primary" style="font-size:.72rem;padding:7px 11px;white-space:nowrap" onclick="saveRevealTime2('${m.id}')">⏰ Kaydet</button>
+            </div>
+            ${m.lineupRevealTime?`<div style="font-size:.68rem;color:var(--lime);margin-top:5px">✅ ${new Date(m.lineupRevealTime).toLocaleString('tr-TR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}</div>`:''}
+          </div>
+          <div style="display:flex;gap:7px;flex-wrap:wrap">
+            <button class="btn btn-amber" style="flex:1;font-size:.74rem" onclick="openScore('${m.id}')">🏆 Skor Gir</button>
+            <button class="btn btn-ghost" style="flex:1;font-size:.74rem" onclick="markFinished('${m.id}')">📌 Bitir</button>
+          </div>
+        </div>`;
+      });
+    } else {
+      html+=`<div class="card" style="text-align:center;padding:24px;color:var(--text-muted);font-size:.84rem">Aktif maç yok.</div>`;
+    }
+
+    // Skor bekleyenler
+    if(noScore.length){
+      html+=`<div style="font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--red);margin:14px 0 8px">⚽ Skor Bekleyen Maçlar</div>`;
+      noScore.forEach(m=>{
+        html+=`<div style="display:flex;align-items:center;justify-content:space-between;gap:9px;padding:9px 14px;background:var(--surface);border:1px solid rgba(255,64,64,.2);border-radius:var(--radius-sm);margin-bottom:7px">
+          <span style="font-size:.84rem;font-weight:600">${m.name}</span>
+          <button class="btn btn-primary" style="font-size:.7rem;padding:5px 11px" onclick="openScore('${m.id}')">Skor Gir</button>
+        </div>`;
+      });
+    }
   }
 
-  // USER MANAGEMENT
-  const userRows=users.map(u=>{
-    const r=calcRating(u,u.pos)||0;
-    const eksik=!u.profileComplete?'<span style="font-size:.6rem;color:var(--amber)"> [Profil Eksik]</span>':'';
-    return '<div class="admin-user-row">'
-      +'<div style="flex:1">'
-      +'<div class="admin-user-name">'+u.name+eksik+'</div>'
-      +'<div class="admin-user-pos">'+(u.pos||'Mevki yok')+' • Reyting: '+r+' • '+(u.ayak||'?')+'</div>'
-      +'</div>'
-      +'<button class="btn btn-danger" style="font-size:.68rem;padding:5px 9px" onclick="deleteUser('+JSON.stringify(u.name.toLowerCase())+')">🗑️</button>'
-      +'</div>';
-  }).join('');
-  html+='<div class="card" style="margin-bottom:14px">'
-    +'<h2 style="font-family:Bebas Neue,cursive;font-size:1.1rem;letter-spacing:1.5px;color:var(--red);margin-bottom:11px">👥 Kullanıcı Yönetimi</h2>'
-    +userRows
-    +'</div>';
+  // ===================== TAB: PLAYERS =====================
+  else if(activeTab==='players'){
+    html+=`<div style="font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px">${users.length} Kayıtlı Oyuncu</div>`;
+    users.forEach(u=>{
+      const r=calcRating(u,u.pos)||0;
+      const tier=cardTier(r);
+      const tierColor={'tier-gold':'#f5c842','tier-silver':'#a0b8cc','tier-bronze':'#c07838','tier-rare':'#5080ff','tier-common':'#4a8a5a'}[tier]||'var(--lime)';
+      html+=`<div class="card" style="margin-bottom:10px;padding:14px 16px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+          <div style="width:44px;height:44px;border-radius:10px;background:${tierColor}22;border:2px solid ${tierColor};display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',cursive;font-size:1.1rem;color:${tierColor};flex-shrink:0">${r}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;font-size:.9rem">${u.name} ${!u.profileComplete?'<span style="font-size:.58rem;color:var(--amber);background:rgba(245,166,35,.15);padding:1px 6px;border-radius:3px">Eksik</span>':''}</div>
+            <div style="font-size:.7rem;color:var(--text-muted)">${u.pos||'Mevki yok'} &nbsp;•&nbsp; ${u.ayak||'?'} &nbsp;•&nbsp; 🏆${u.wins||0} ⚽${u.matches||0}</div>
+          </div>
+          <button class="btn btn-danger" style="font-size:.66rem;padding:5px 9px;flex-shrink:0" onclick="deleteUser(${JSON.stringify(u.name.toLowerCase())})">🗑️</button>
+        </div>
+        <!-- Stat bars -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px 14px">
+          ${[['HIZ',u.hiz||50,'#b8f717'],['ŞUT',u.sut||50,'#ff6060'],['PAS',u.pas||50,'#60a0ff'],['FİZ',u.fizik||50,'#f5a623'],['DEF',u.defans||50,'#a060ff'],['KAL',u.kalecilik||50,'#40d0a0']].map(([lbl,val,col])=>`
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:2px">
+              <span style="font-size:.58rem;font-weight:700;color:${col};letter-spacing:.5px">${lbl}</span>
+              <span style="font-size:.58rem;color:var(--text-muted)">${val}</span>
+            </div>
+            <div style="height:4px;background:var(--surface-3);border-radius:20px;overflow:hidden">
+              <div style="height:100%;width:${val}%;background:${col};border-radius:20px"></div>
+            </div>
+          </div>`).join('')}
+        </div>
+        <!-- Admin stat edit -->
+        <details style="margin-top:10px">
+          <summary style="font-size:.68rem;color:var(--amber);cursor:pointer;font-weight:600">✏️ Özellikleri Düzenle</summary>
+          <div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px">
+            ${[['hiz','HIZ',u.hiz||50],['sut','ŞUT',u.sut||50],['pas','PAS',u.pas||50],['fizik','FİZ',u.fizik||50],['defans','DEF',u.defans||50],['kalecilik','KAL',u.kalecilik||50]].map(([key,lbl,val])=>`
+            <div>
+              <label style="font-size:.62rem;color:var(--text-muted);display:block;margin-bottom:2px">${lbl}</label>
+              <input type="number" min="1" max="100" value="${val}" id="stat-${u.id}-${key}" style="width:100%;background:var(--dark-3);border:1.5px solid var(--surface-3);border-radius:6px;color:var(--text);font-size:.84rem;padding:5px 8px;outline:none">
+            </div>`).join('')}
+          </div>
+          <div style="display:flex;gap:7px;margin-top:8px">
+            <select id="pos-${u.id}" style="flex:1;background:var(--dark-3);border:1.5px solid var(--surface-3);border-radius:6px;color:var(--text);font-size:.8rem;padding:6px 8px;outline:none">
+              ${MEVKILER.map(m=>`<option value="${m}"${u.pos===m?' selected':''}>${m}</option>`).join('')}
+            </select>
+            <button class="btn btn-amber" style="font-size:.72rem;padding:6px 12px" onclick="adminSaveStats('${u.id}','${u.name.toLowerCase()}')">💾 Kaydet</button>
+          </div>
+        </details>
+      </div>`;
+    });
+  }
 
-  // LINEUP TEAM BUILDER - show for active matches
-  const activeForTeams=matches.filter(m=>!m.finished&&(m.attending||[]).length>=2);
-  if(activeForTeams.length){
-    let teamRows='';
-    activeForTeams.forEach(m=>{teamRows+='<div style="display:flex;align-items:center;justify-content:space-between;gap:9px;padding:7px 0;border-bottom:1px solid var(--surface-3)"><div><span style="font-size:.83rem;font-weight:600">'+m.name+'</span> <span style="font-size:.7rem;color:var(--text-muted)">'+(m.attending||[]).length+' kişi</span></div><button class="btn btn-amber" style="font-size:.7rem;padding:5px 10px" onclick="buildAndSaveTeams('+JSON.stringify(m.id)+')">⚖️ Takımları Kur</button></div>';});
-    html+='<div class="card" style="margin-bottom:14px"><h2 style="font-family:Bebas Neue,cursive;font-size:1.1rem;letter-spacing:1.5px;color:var(--amber);margin-bottom:11px">⚖️ Adil Takım Kur</h2>'+teamRows+'</div>';
+  // ===================== TAB: TEAMS =====================
+  else if(activeTab==='teams'){
+    // Team builder
+    if(activeForTeams.length){
+      html+=`<div style="font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--amber);margin-bottom:10px">⚖️ Adil Takım Kur</div>`;
+      activeForTeams.forEach(m=>{
+        html+=`<div class="card" style="margin-bottom:10px;padding:14px 16px">
+          <div style="font-weight:600;font-size:.88rem;margin-bottom:4px">${m.name}</div>
+          <div style="font-size:.72rem;color:var(--text-muted);margin-bottom:10px">${(m.attending||[]).length} katılımcı kayıtlı</div>
+          <button class="btn btn-amber" style="width:100%" onclick="buildAndSaveTeams(${JSON.stringify(m.id)})">⚖️ Takımları Kur & Kaptan Seç</button>
+        </div>`;
+      });
+    } else {
+      html+=`<div class="card" style="text-align:center;padding:24px;margin-bottom:14px"><div style="font-size:2rem;margin-bottom:8px">⚖️</div><div style="font-size:.84rem;color:var(--text-muted)">En az 2 katılımcısı olan aktif maç yok.</div></div>`;
+    }
+
+    // Kadro yönetimi
+    if(upcomingMatches.length){
+      const m=upcomingMatches[0];
+      const lineup=m.lineup||{};
+      const slots=['A_GK','A_D1','A_D2','A_M','A_A1','A_A2','A_F','B_GK','B_D1','B_D2','B_M','B_A1','B_A2','B_F'];
+      const slotLabels={'A_GK':'A — Kaleci','A_D1':'A — Def 1','A_D2':'A — Def 2','A_M':'A — Orta','A_A1':'A — Hücum 1','A_A2':'A — Hücum 2','A_F':'A — Forvet','B_GK':'B — Kaleci','B_D1':'B — Def 1','B_D2':'B — Def 2','B_M':'B — Orta','B_A1':'B — Hücum 1','B_A2':'B — Hücum 2','B_F':'B — Forvet'};
+      const allUsers=Object.values(getUsers()).sort((a,b)=>a.name.localeCompare(b.name));
+      const playerOptions='<option value="">— Seç —</option>'+allUsers.map(u=>`<option value="${u.id}">${u.name} (${u.pos||'?'} • ${calcRating(u,u.pos)||0})</option>`).join('');
+      html+=`<div style="font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin:14px 0 8px">Manuel Kadro — ${m.name}</div>
+      <div class="card" style="margin-bottom:10px;padding:14px">
+        <div class="form-row" style="margin-bottom:10px">
+          <div class="form-group" style="margin-bottom:0"><label style="color:var(--lime)">Takım A Adı</label><input type="text" id="team-a-ln" value="${m.teamAName||'Takım A'}"></div>
+          <div class="form-group" style="margin-bottom:0"><label style="color:#ff8080">Takım B Adı</label><input type="text" id="team-b-ln" value="${m.teamBName||'Takım B'}"></div>
+        </div>
+        ${slots.map(slot=>`<div class="lineup-assign-row">
+          <span class="lineup-assign-name" style="color:${slot.startsWith('A')?'var(--lime)':'#ff8080'};font-size:.78rem">${slotLabels[slot]}</span>
+          <select class="lineup-assign-select" id="slot-${slot}">${playerOptions}</select>
+        </div>`).join('')}
+        <button class="btn btn-amber" style="width:100%;margin-top:10px" onclick="saveLineup('${m.id}')">💾 Kadroyu Kaydet</button>
+      </div>`;
+      setTimeout(()=>{
+        slots.forEach(slot=>{
+          const pid=Object.keys(lineup).find(k=>lineup[k]===slot)||'';
+          const sel=document.getElementById('slot-'+slot);
+          if(sel)sel.value=pid;
+        });
+      },80);
+    }
+  }
+
+  // ===================== TAB: VOTING =====================
+  else if(activeTab==='voting'){
+    if(openVotings.length){
+      html+=`<div style="font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--lime);margin-bottom:8px">🟢 Açık Oylamalar</div>`;
+      openVotings.forEach(m=>{
+        html+=`<div style="display:flex;align-items:center;justify-content:space-between;gap:9px;padding:10px 14px;background:rgba(184,247,23,.06);border:1px solid rgba(184,247,23,.2);border-radius:var(--radius-sm);margin-bottom:7px">
+          <span style="font-size:.84rem;font-weight:600">${m.name}</span>
+          <button class="btn btn-danger" style="font-size:.7rem;padding:5px 11px" onclick="closeVoting(${JSON.stringify(m.id)})">🔒 Kapat</button>
+        </div>`;
+      });
+    }
+    if(pendingVotings.length){
+      html+=`<div style="font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--amber);margin:12px 0 8px">⏳ Oylama Açılmamış</div>`;
+      pendingVotings.forEach(m=>{
+        html+=`<div style="display:flex;align-items:center;justify-content:space-between;gap:9px;padding:10px 14px;background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.2);border-radius:var(--radius-sm);margin-bottom:7px">
+          <span style="font-size:.84rem;font-weight:600">${m.name}</span>
+          <button class="btn btn-amber" style="font-size:.7rem;padding:5px 11px" onclick="openVoting(${JSON.stringify(m.id)})">🗳️ Aç</button>
+        </div>`;
+      });
+    }
+    if(!openVotings.length&&!pendingVotings.length){
+      html+=`<div class="card" style="text-align:center;padding:24px;color:var(--text-muted);font-size:.84rem"><div style="font-size:2rem;margin-bottom:8px">🗳️</div>Bekleyen oylama yok.</div>`;
+    }
   }
 
   el.innerHTML=html;
 }
+
+function adminTab(tab){
+  const el=document.getElementById('admin-content');
+  if(el)el.dataset.tab=tab;
+  renderAdmin();
+}
+
+async function adminSaveStats(userId,nameKey){
+  const users=getUsers();
+  const u=Object.values(users).find(x=>x.id===userId);if(!u)return;
+  const g=id=>+document.getElementById(id)?.value||50;
+  const hiz=g('stat-'+userId+'-hiz');
+  const sut=g('stat-'+userId+'-sut');
+  const pas=g('stat-'+userId+'-pas');
+  const fizik=g('stat-'+userId+'-fizik');
+  const defans=g('stat-'+userId+'-defans');
+  const kalecilik=g('stat-'+userId+'-kalecilik');
+  const posEl=document.getElementById('pos-'+userId);
+  const pos=posEl?posEl.value:u.pos;
+  const rating=calcRating({hiz,sut,pas,fizik,defans,kalecilik},pos);
+  users[nameKey]={...u,hiz,sut,pas,fizik,defans,kalecilik,pos,rating,profileComplete:true};
+  await saveUsers(users);
+  showNotif(u.name+' güncellendi → Reyting: '+rating+' ✅');
+  renderAdmin();
+}
+
+async function saveRevealTime2(matchId){
+  const inp=document.getElementById('reveal-time-'+matchId);if(!inp)return;
+  const val=inp.value;if(!val)return showNotif('Saat seç!','error');
+  const matches=getMatches();const match=matches.find(m=>m.id===matchId);if(!match)return;
+  match.lineupRevealTime=val;await saveMatches(matches);
+  showNotif('Kadro açılış saati kaydedildi! ⏰');
+  renderAdmin();
+}
+
 
 async function saveRevealTime(matchId){
   const inp=document.getElementById('reveal-time');if(!inp)return;
@@ -1525,9 +1714,30 @@ async function deleteUser(nameKey){
   if(!confirm('Bu kullanıcıyı silmek istediğine emin misin?'))return;
   const users=getUsers();
   delete users[nameKey];
-  await saveUsers(users);
-  showNotif('Kullanıcı silindi.');
+  // Hem cache hem Firebase'den sil
+  _users=users;
+  await db.ref('users/'+nameKey).remove();
+  showNotif('Kullanıcı silindi. 🗑️');
   renderAdmin();
+}
+
+function aiMatchPrediction(avgA,avgB,nameA,nameB){
+  const diff=avgA-avgB;
+  const absDiff=Math.abs(diff);
+  const stronger=diff>0?nameA:nameB;
+  const weaker=diff>0?nameB:nameA;
+  const strongerAvg=Math.max(avgA,avgB);
+  const weakerAvg=Math.min(avgA,avgB);
+  // Kazanma şansı hesapla (logistik eğri benzeri)
+  const winChance=Math.min(85,Math.max(50,Math.round(50+absDiff*1.8)));
+  const drawChance=Math.max(5,Math.round(20-absDiff*1.2));
+  const loseChance=100-winChance-drawChance;
+  let comment='';
+  if(absDiff<=2) comment=`İki takım neredeyse eşit güçte! Heyecanlı ve çekişmeli bir maç bekleniyor. Kader 90. dakikaya kalacak.`;
+  else if(absDiff<=5) comment=`${stronger} hafif favoride. Ortalama farkı ${absDiff} puan — dengeli ama ${stronger} biraz baskı kurar.`;
+  else if(absDiff<=10) comment=`${stronger} belirgin üstünlükte. ${weakerAvg} ortalamaya karşı ${strongerAvg} güçlü kadroyla geliyorlar. Sürpriz zor ama imkansız değil!`;
+  else comment=`${stronger} ezici favorisi! ${strongerAvg} vs ${weakerAvg} — bu maçta sürpriz yaşanması çok düşük ihtimalle. ${weaker} mucize yapabilir mi?`;
+  return{stronger,weaker,winChance,drawChance,loseChance,comment,diff:absDiff};
 }
 
 async function buildAndSaveTeams(matchId){
@@ -1537,15 +1747,26 @@ async function buildAndSaveTeams(matchId){
   const{teamA,teamB,avgA,avgB}=buildFairTeams(match.attending||[]);
   match.teamAName=match.teamAName||'Takım A';
   match.teamBName=match.teamBName||'Takım B';
-  // Save lineup based on fair teams
+
+  // Kaptan seçimi — her takımdan rastgele 1 kişi
+  const captainA=teamA.length?teamA[Math.floor(Math.random()*teamA.length)]:null;
+  const captainB=teamB.length?teamB[Math.floor(Math.random()*teamB.length)]:null;
+  match.captainA=captainA?captainA.id:null;
+  match.captainB=captainB?captainB.id:null;
+
+  // Lineup oluştur
   const lineup={};
   const slots=['A_GK','A_D1','A_D2','A_M','A_A1','A_A2','A_F'];
   const slotsB=['B_GK','B_D1','B_D2','B_M','B_A1','B_A2','B_F'];
   teamA.forEach((p,i)=>{if(slots[i])lineup[p.id]=slots[i];});
   teamB.forEach((p,i)=>{if(slotsB[i])lineup[p.id]=slotsB[i];});
   match.lineup=lineup;
+  match.teamAvgA=avgA;
+  match.teamAvgB=avgB;
   await saveMatches(matches);
-  showNotif(`Takımlar kuruldu! A: ort.${avgA} | B: ort.${avgB} ⚖️`);
+
+  const capMsg=(captainA&&captainB)?` | ⚽ Kaptanlar: ${captainA.name} & ${captainB.name}`:'';
+  showNotif('Takımlar kuruldu! A: ort.'+avgA+' | B: ort.'+avgB+capMsg+' ⚖️');
   renderAdmin();
 }
 
@@ -1643,7 +1864,14 @@ function renderMatchCard(match){
     </div>`;
   }
 
-  const attendHtml=attending.length?attending.map(p=>`<div class="player-item"><span class="p-name">${p.name}</span><span class="p-pos">${p.pos} • ${p.rating}</span></div>`).join(''):'<div style="font-size:.72rem;color:var(--text-muted);text-align:center;padding:11px 0;opacity:.6">Henüz kimse yok</div>';
+  const captA=match.captainA,captB=match.captainB;
+  const attendHtml=attending.length?attending.map(p=>{
+    const isCap=p.id===captA||p.id===captB;
+    return '<div class="player-item">'
+      +'<span class="p-name">'+p.name+(isCap?' <span style="background:#ffd700;color:#0d1a12;font-size:.55rem;font-weight:800;padding:1px 5px;border-radius:3px;letter-spacing:.5px">C</span>':'')+'</span>'
+      +'<span class="p-pos">'+p.pos+' • '+p.rating+'</span>'
+      +'</div>';
+  }).join(''):'<div style="font-size:.72rem;color:var(--text-muted);text-align:center;padding:11px 0;opacity:.6">Henüz kimse yok</div>';
   const absentHtml=absent.length?absent.map(p=>`<div class="player-item"><span class="p-name">${p.name} 🌈</span><span class="p-excuse">"${p.excuse}"</span></div>`).join(''):'<div style="font-size:.72rem;color:var(--text-muted);text-align:center;padding:11px 0;opacity:.6">Güzel!</div>';
 
   const fillPct=Math.min(100,Math.round(attending.length/KADRO_LIMIT*100));
@@ -1855,6 +2083,45 @@ function calcRating(user,mevki){
   return Math.min(99,Math.max(1,r));
 }
 
+function calcBonservisRaw(rating){
+  const r=Math.max(1,Math.min(99,rating||50));
+  return Math.round(500000*Math.pow(r/50,4.5));
+}
+
+function formatBonservis(val){
+  if(val>=1000000) return (val/1000000).toFixed(1).replace('.',',')+'M ₺';
+  if(val>=1000)    return Math.round(val/1000)+'K ₺';
+  return val+'₺';
+}
+
+function calcBonservis(rating){
+  return formatBonservis(calcBonservisRaw(rating));
+}
+
+function formatChange(diff){
+  if(diff===0)return{txt:'—',cls:'flat'};
+  const sign=diff>0?'+':'-';
+  const abs=Math.abs(diff);
+  let txt='';
+  if(abs>=1000000)txt=sign+(abs/1000000).toFixed(1).replace('.',',')+' M ₺';
+  else if(abs>=1000)txt=sign+Math.round(abs/1000)+' K ₺';
+  else txt=sign+abs+' ₺';
+  return{txt,cls:diff>0?'up':'down'};
+}
+
+function getFormArrow(user){
+  const streak=user.winStreak||0;
+  const lastResult=user.lastResult||'';
+  if(lastResult==='W')return'<span class="form-arrow up">⬆</span>';
+  if(lastResult==='L')return'<span class="form-arrow down">⬇</span>';
+  return'<span class="form-arrow flat" style="color:var(--text-muted);font-size:.7rem">—</span>';
+}
+
+function getFormDots(user){
+  const hist=(user.formHistory||[]).slice(-5);
+  return hist.map(r=>`<span class="form-dot ${r}"></span>`).join('');
+}
+
 function aiSuggestPos(user){
   const scores={};
   MEVKILER.forEach(m=>{scores[m]=calcRating(user,m);});
@@ -1896,6 +2163,10 @@ function buildFC2Card(user,mevki){
         <div class="fc2-stat"><span class="fc2-stat-val">${user.fizik||50}</span><span class="fc2-stat-lbl">FİZ</span></div>
         <div class="fc2-stat"><span class="fc2-stat-val">${user.defans||50}</span><span class="fc2-stat-lbl">DEF</span></div>
         <div class="fc2-stat"><span class="fc2-stat-val">${user.kalecilik||50}</span><span class="fc2-stat-lbl">KAL</span></div>
+      </div>
+      <div style="width:100%;margin-top:6px;padding:4px 6px;background:rgba(0,0,0,.25);border-radius:4px;text-align:center">
+        <span style="font-size:.48rem;opacity:.8;letter-spacing:.8px;text-transform:uppercase">Bonservis</span><br>
+        <span style="font-family:'Bebas Neue',cursive;font-size:.9rem;letter-spacing:1px">${calcBonservis(rating)}</span>
       </div>
     </div>`;
 }
@@ -1949,8 +2220,9 @@ function renderProfile(){
       </div>
     </div>
 
+    ${isAdmin(currentUser)?`
     <div class="profile-form-card" style="margin-bottom:14px">
-      <h3>📊 Özellikler (1–100)</h3>
+      <h3>📊 Özellikler (1–100) <span style="font-size:.65rem;color:var(--amber);font-family:'DM Sans',sans-serif;font-weight:400">— Admin Olarak Düzenliyorsun</span></h3>
       ${[
         ['pf-hiz','Hız',u.hiz||50],
         ['pf-sut','Şut',u.sut||50],
@@ -1964,9 +2236,24 @@ function renderProfile(){
           <input type="range" id="${id}" min="1" max="100" value="${val}" oninput="updateProfilePreview()">
           <span class="stat-val-badge" id="${id}-val">${val}</span>
         </div>`).join('')}
-    </div>
+    </div>`:`
+    <div class="profile-form-card" style="margin-bottom:14px">
+      <h3>📊 Özellikler</h3>
+      <p style="font-size:.76rem;color:var(--amber);margin-bottom:12px">⚠️ Özelliklerini sadece admin belirleyebilir.</p>
+      ${[
+        ['Hız',u.hiz||50],['Şut',u.sut||50],['Pas',u.pas||50],
+        ['Fizik',u.fizik||50],['Defans',u.defans||50],['Kalecilik',u.kalecilik||50],
+      ].map(([lbl,val])=>`
+        <div class="stat-row">
+          <label>${lbl}</label>
+          <div style="flex:1;background:var(--dark-3);border-radius:20px;height:8px;overflow:hidden">
+            <div style="height:100%;width:${val}%;background:var(--lime);border-radius:20px;transition:width .4s"></div>
+          </div>
+          <span class="stat-val-badge">${val}</span>
+        </div>`).join('')}
+    </div>`}
 
-    <button class="btn btn-primary" style="width:100%" onclick="saveProfile()">💾 Profili Kaydet</button>
+    <button class="btn btn-primary" style="width:100%" onclick="saveProfile()">💾 Mevki & Ayak Kaydet</button>
   `;
 }
 
@@ -2009,26 +2296,36 @@ async function saveProfile(){
   const users=getUsers();
   const key=currentUser.name.toLowerCase();
   if(!users[key])return;
-  const hiz=+document.getElementById('pf-hiz').value;
-  const sut=+document.getElementById('pf-sut').value;
-  const pas=+document.getElementById('pf-pas').value;
-  const fizik=+document.getElementById('pf-fizik').value;
-  const defans=+document.getElementById('pf-defans').value;
-  const kalecilik=+document.getElementById('pf-kalecilik').value;
   const pos=document.getElementById('pf-pos').value;
   const ayak=document.getElementById('pf-ayak').value;
   const altPos1=document.getElementById('pf-alt1').value;
   const altPos2=document.getElementById('pf-alt2').value;
   if(!pos)return showNotif('Ana mevkini seç!','error');
-  const rating=calcRating({hiz,sut,pas,fizik,defans,kalecilik},pos);
-  users[key]={...users[key],hiz,sut,pas,fizik,defans,kalecilik,pos,ayak,altPos1,altPos2,rating,profileComplete:true};
-  showLoading('Kaydediliyor...');
-  await saveUsers(users);
-  currentUser=users[key];
-  hideLoading();
-  // Update chip
-  document.getElementById('home-rating').textContent=rating;
-  showNotif(`Profil kaydedildi! Reyting: ${rating} ⭐`);
+  // Admin ise statları da kaydet
+  if(isAdmin(currentUser)){
+    const hiz=+document.getElementById('pf-hiz').value;
+    const sut=+document.getElementById('pf-sut').value;
+    const pas=+document.getElementById('pf-pas').value;
+    const fizik=+document.getElementById('pf-fizik').value;
+    const defans=+document.getElementById('pf-defans').value;
+    const kalecilik=+document.getElementById('pf-kalecilik').value;
+    const rating=calcRating({hiz,sut,pas,fizik,defans,kalecilik},pos);
+    users[key]={...users[key],hiz,sut,pas,fizik,defans,kalecilik,pos,ayak,altPos1,altPos2,rating,profileComplete:true};
+    showLoading('Kaydediliyor...');
+    await saveUsers(users);
+    currentUser=users[key];
+    hideLoading();
+    document.getElementById('home-rating').textContent=rating;
+    showNotif('Profil kaydedildi! Reyting: '+rating+' ⭐');
+  } else {
+    // Normal kullanıcı — sadece pos/ayak/altPos kaydeder
+    users[key]={...users[key],pos,ayak,altPos1,altPos2,profileComplete:true};
+    showLoading('Kaydediliyor...');
+    await saveUsers(users);
+    currentUser=users[key];
+    hideLoading();
+    showNotif('Mevki ve ayak kaydedildi! ⚽');
+  }
   renderProfile();
 }
 
@@ -2057,17 +2354,19 @@ async function renderForum(){
   listEl.innerHTML=posts.map(p=>{
     const myVote=(p.votes&&p.votes[currentUser.id])||0;
     const score=p.score||0;
-    return`<div class="forum-post">
-      <div class="forum-votes">
-        <button class="forum-vote-btn${myVote===1?' voted-up':''}" onclick="forumVote('${p.id}',1)">▲</button>
-        <span class="forum-score">${score}</span>
-        <button class="forum-vote-btn${myVote===-1?' voted-down':''}" onclick="forumVote('${p.id}',-1)">▼</button>
-      </div>
-      <div class="forum-body">
+    const upCount=Object.values(p.votes||{}).filter(v=>v===1).length;
+    const downCount=Object.values(p.votes||{}).filter(v=>v===-1).length;
+    return`<div class="forum-post" style="flex-direction:column;gap:0">
+      <div class="forum-body" style="width:100%">
         <span class="forum-cat forum-cat-${p.cat||'genel'}">${catLabel[p.cat]||'💬 Genel'}</span>
         <div class="forum-title">${p.title||''}</div>
         <div class="forum-text">${p.body||''}</div>
         <div class="forum-meta">👤 ${p.author||'?'} &nbsp;•&nbsp; ${p.date||''}</div>
+        <div class="forum-votes">
+          <button class="forum-vote-btn${myVote===1?' voted-up':''}" onclick="forumVote('${p.id}',1)">👍 Beğendim${upCount>0?' ('+upCount+')':''}</button>
+          <button class="forum-vote-btn${myVote===-1?' voted-down':''}" onclick="forumVote('${p.id}',-1)">👎 Beğenmedim${downCount>0?' ('+downCount+')':''}</button>
+          <span style="font-size:.68rem;color:var(--text-muted)">${score>0?'+'+score:score} puan</span>
+        </div>
       </div>
     </div>`;
   }).join('');
