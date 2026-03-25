@@ -869,118 +869,73 @@ function stopLineupTimer(){
 
 function renderLineup(){
   stopLineupTimer();
-  try{
-    const el=document.getElementById('lineup-content');
-    if(!el)return;
-    const matches=getMatches();
-    const upcoming=matches.filter(m=>!m.finished).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
+  const el=document.getElementById('lineup-content');
+  if(!el)return;
+  const matches=getMatches();
+  const upcoming=matches.filter(m=>!m.finished).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
 
-    // Always show the quote first — whether there's a match or not
-    const quoteMsg=`"Adalet mülkün temelidir."`;
-
-    if(!upcoming.length){
-      // Aktif maç yok — saha önizlemesini demo modda göster
-      el.innerHTML=`<div class="lineup-waiting" style="padding-bottom:8px">
-          <div class="lineup-quote">${quoteMsg}</div>
-          <p class="lineup-sub" style="margin-bottom:12px">Aktif maç yok — saha önizlemesi</p>
-        </div>`;
-      const fakeMatch={lineup:{},attending:[],reserves:[],teamAName:'Takım A',teamBName:'Takım B',captainA:null,captainB:null,teamAvgA:0,teamAvgB:0,datetime:new Date().toISOString(),venue:'—'};
-      renderFieldLineup(el, fakeMatch);
-      return;
-    }
-
-    const match=upcoming[0];
-    const matchDt=new Date(match.datetime);
-    const revealTime=match.lineupRevealTime
-      ? new Date(match.lineupRevealTime)
-      : new Date(matchDt.getTime()-60*60*1000);
-    const lineup=match.lineup||{};
-    const hasLineup=Object.keys(lineup).length>0;
-    const matchInfo=`${match.name} — ${matchDt.toLocaleString('tr-TR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}`;
-
-    const now=new Date();
-
-    // Reveal time passed → show field directly, no timer needed
-    if(now>=revealTime){
-      renderFieldLineup(el, match);
-      return;
-    }
-
-    // Otherwise: show quote + countdown, start timer
-    const pad=v=>String(v).padStart(2,'0');
-
-    const tick=()=>{
-      try{
-        const el2=document.getElementById('lineup-content');
-        if(!el2){stopLineupTimer();return;}
-
-        const n=new Date();
-
-        // Re-check: if reveal time passed, switch to field view regardless of lineup
-        const freshMatches=getMatches();
-        const freshMatch=freshMatches.find(m=>m.id===match.id);
-        if(freshMatch && n>=revealTime){
-          stopLineupTimer();
-          renderFieldLineup(el2, freshMatch);
-          return;
-        }
-
-        const diffMs=revealTime-n;
-        let countdownHtml='';
-
-        if(!match.lineupRevealTime){
-          countdownHtml=`<p class="lineup-sub" style="margin-top:12px">Kadro açılış saati henüz belirlenmedi.</p>`;
-        } else if(diffMs>0){
-          const totalSecs=Math.floor(diffMs/1000);
-          const h=Math.floor(totalSecs/3600);
-          const m2=Math.floor((totalSecs%3600)/60);
-          const s=totalSecs%60;
-          countdownHtml=`
-            <div style="display:flex;gap:8px;justify-content:center;margin:16px 0">
-              <div style="text-align:center;background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);padding:10px 12px;min-width:52px">
-                <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:var(--lime);line-height:1">${pad(h)}</div>
-                <div style="font-size:.58rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px">Saat</div>
-              </div>
-              <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:var(--text-muted);padding-top:10px">:</div>
-              <div style="text-align:center;background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);padding:10px 12px;min-width:52px">
-                <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:var(--lime);line-height:1">${pad(m2)}</div>
-                <div style="font-size:.58rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px">Dakika</div>
-              </div>
-              <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:var(--text-muted);padding-top:10px">:</div>
-              <div style="text-align:center;background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);padding:10px 12px;min-width:52px">
-                <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:var(--lime);line-height:1">${pad(s)}</div>
-                <div style="font-size:.58rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px">Saniye</div>
-              </div>
-            </div>
-            <p class="lineup-sub" style="font-size:.74rem">Kadro açıklanmasına bu kadar süre kaldı.</p>`;
-        } else {
-          // Time's up → switch to field view immediately
-          stopLineupTimer();
-          const fm=getMatches().find(m=>m.id===match.id)||match;
-          renderFieldLineup(el2, fm);
-          return;
-        }
-
-        el2.innerHTML=`
-          <div class="lineup-waiting">
-            <span class="lw-icon">⚽</span>
-            <div class="lineup-quote">${quoteMsg}</div>
-            ${countdownHtml}
-            <p class="lineup-sub" style="margin-top:10px;font-size:.7rem;opacity:.65">Maç: <strong>${matchInfo}</strong></p>
-          </div>`;
-      } catch(e){
-        stopLineupTimer();
-      }
+  // Aktif maç yoksa — demo saha göster
+  if(!upcoming.length){
+    const fakeMatch={
+      lineup:{},attending:[],reserves:[],
+      teamAName:'Takım A',teamBName:'Takım B',
+      captainA:null,captainB:null,
+      teamAvgA:0,teamAvgB:0,
+      datetime:new Date().toISOString(),venue:'—'
     };
-
-    tick();
-    _lineupTimer=setInterval(tick,1000);
-
-  } catch(e){
-    stopLineupTimer();
-    console.error('renderLineup error:',e);
+    renderFieldLineup(el, fakeMatch);
+    return;
   }
+
+  const match=upcoming[0];
+  const now=new Date();
+  const revealTime=match.lineupRevealTime
+    ? new Date(match.lineupRevealTime)
+    : null;
+
+  // Kadro açılma saati geldi veya belirlenmemişse direkt göster
+  if(!revealTime || now>=revealTime){
+    renderFieldLineup(el, match);
+    return;
+  }
+
+  // Geri sayım göster
+  const pad=v=>String(v).padStart(2,'0');
+
+  function tick(){
+    const el2=document.getElementById('lineup-content');
+    if(!el2){stopLineupTimer();return;}
+    const n=new Date();
+    if(n>=revealTime){
+      stopLineupTimer();
+      const fm=getMatches().find(m=>m.id===match.id)||match;
+      renderFieldLineup(el2,fm);
+      return;
+    }
+    const diff=Math.floor((revealTime-n)/1000);
+    const h=Math.floor(diff/3600);
+    const m2=Math.floor((diff%3600)/60);
+    const s=diff%60;
+    el2.innerHTML=`
+      <div class="lineup-waiting">
+        <span class="lw-icon">⚽</span>
+        <div class="lineup-quote">"Adalet mülkün temelidir."</div>
+        <p class="lineup-sub" style="margin-bottom:16px">${match.name} — Kadro açılmayı bekliyor</p>
+        <div style="display:flex;gap:8px;justify-content:center;margin:0 0 12px">
+          ${[['Saat',pad(h)],['Dakika',pad(m2)],['Saniye',pad(s)]].map(([lbl,val])=>`
+          <div style="text-align:center;background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);padding:10px 12px;min-width:52px">
+            <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:var(--lime);line-height:1">${val}</div>
+            <div style="font-size:.58rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px">${lbl}</div>
+          </div>`).join('<div style="font-family:Bebas Neue,cursive;font-size:2rem;color:rgba(255,255,255,.3);padding-top:10px">:</div>')}
+        </div>
+        <p class="lineup-sub" style="font-size:.74rem">Kadro açıklanmasına bu kadar süre kaldı.</p>
+      </div>`;
+  }
+
+  tick();
+  _lineupTimer=setInterval(tick,1000);
 }
+
 
 function renderFieldLineup(el, match, previewMode=false){
   const lineup=match.lineup||{};
