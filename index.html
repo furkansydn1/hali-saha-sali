@@ -220,7 +220,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .lineup-waiting{text-align:center;padding:36px 20px}
 .lineup-waiting .lw-icon{font-size:3.5rem;display:block;margin-bottom:14px;animation:spin 8s linear infinite}
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-.lineup-quote{font-family:'Bebas Neue',cursive;font-size:1.25rem;letter-spacing:1px;color:var(--lime);line-height:1.3;margin-bottom:10px;max-width:340px;margin-inline:auto}
+.lineup-quote{font-family:'Bebas Neue',cursive;font-size:1.35rem;letter-spacing:2px;color:var(--lime);line-height:1.2;margin-bottom:10px;max-width:380px;margin-inline:auto;text-align:center}
 .lineup-sub{font-size:.82rem;color:var(--text-muted);line-height:1.7}
 
 /* ===================== VOTING ===================== */
@@ -308,6 +308,88 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
   .fc-grid{gap:9px}
   .fc-card{width:122px;height:184px}
 }
+
+/* ===================== PROFILE & FC CARD v2 ===================== */
+.profile-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+@media(max-width:500px){.profile-wrap{grid-template-columns:1fr}}
+
+/* FC Card v2 - bigger, richer */
+.fc2-card{position:relative;width:100%;max-width:220px;margin:0 auto;aspect-ratio:3/4;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;align-items:center;padding:16px 12px 12px;cursor:default}
+.fc2-card .fc2-bg{position:absolute;inset:0;z-index:0}
+.fc2-card>*{position:relative;z-index:1}
+.fc2-card.tier-gold .fc2-bg{background:linear-gradient(150deg,#8b6010 0%,#f5c842 35%,#c8860a 70%,#7a4a00 100%)}
+.fc2-card.tier-silver .fc2-bg{background:linear-gradient(150deg,#4a5a6a 0%,#a0b8cc 35%,#7090a8 70%,#304050 100%)}
+.fc2-card.tier-bronze .fc2-bg{background:linear-gradient(150deg,#5a3010 0%,#c07838 35%,#8a4818 70%,#3a1800 100%)}
+.fc2-card.tier-rare .fc2-bg{background:linear-gradient(150deg,#1a1a4a 0%,#3a4aaa 35%,#1a2888 70%,#080820 100%)}
+.fc2-card.tier-common .fc2-bg{background:linear-gradient(150deg,#0a1a0a 0%,#1a3a20 35%,#0a2010 70%,#050f05 100%)}
+.fc2-shine{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15) 0%,transparent 50%,rgba(255,255,255,.05) 100%);z-index:2;pointer-events:none}
+.fc2-rating{font-family:'Bebas Neue',cursive;font-size:2.8rem;line-height:1;text-align:left;width:100%;letter-spacing:-1px}
+.fc2-pos{font-family:'Bebas Neue',cursive;font-size:.85rem;letter-spacing:2px;text-align:left;width:100%;margin-top:-4px;opacity:.85}
+.fc2-avatar{width:90px;height:90px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:8px 0 6px;border:3px solid rgba(255,255,255,.3);font-family:'Bebas Neue',cursive;font-size:2.2rem;letter-spacing:1px}
+.fc2-name{font-weight:700;font-size:.75rem;letter-spacing:1px;text-transform:uppercase;text-align:center;margin-bottom:8px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fc2-divider{width:100%;height:1px;background:rgba(255,255,255,.25);margin-bottom:8px}
+.fc2-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%}
+.fc2-stat{display:flex;flex-direction:column;align-items:center;gap:1px}
+.fc2-stat-val{font-family:'Bebas Neue',cursive;font-size:1.1rem;line-height:1}
+.fc2-stat-lbl{font-size:.5rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;opacity:.8}
+.fc2-foot{font-size:.6rem;letter-spacing:.5px;margin-top:4px;opacity:.75;text-align:center}
+
+/* tier colors */
+.fc2-card.tier-gold .fc2-rating,.fc2-card.tier-bronze .fc2-rating{color:#1a0800}
+.fc2-card.tier-silver .fc2-rating{color:#0a1a2a}
+.fc2-card.tier-rare .fc2-rating,.fc2-card.tier-common .fc2-rating{color:#c8f520}
+.fc2-card.tier-gold .fc2-pos,.fc2-card.tier-bronze .fc2-pos{color:#3a1800}
+.fc2-card.tier-silver .fc2-pos{color:#1a2a3a}
+.fc2-card.tier-rare .fc2-pos,.fc2-card.tier-common .fc2-pos{color:#90c060}
+.fc2-card.tier-gold .fc2-avatar,.fc2-card.tier-bronze .fc2-avatar{background:rgba(180,100,0,.3);color:#1a0800}
+.fc2-card.tier-silver .fc2-avatar{background:rgba(80,120,160,.3);color:#0a1a2a}
+.fc2-card.tier-rare .fc2-avatar,.fc2-card.tier-common .fc2-avatar{background:rgba(20,60,20,.4);color:#c8f520}
+.fc2-card.tier-gold .fc2-name,.fc2-card.tier-bronze .fc2-name{color:#1a0800}
+.fc2-card.tier-silver .fc2-name{color:#0a1a2a}
+.fc2-card.tier-rare .fc2-name,.fc2-card.tier-common .fc2-name{color:#e8f5eb}
+.fc2-card.tier-gold .fc2-stat-val,.fc2-card.tier-gold .fc2-stat-lbl,.fc2-card.tier-bronze .fc2-stat-val,.fc2-card.tier-bronze .fc2-stat-lbl{color:#1a0800}
+.fc2-card.tier-silver .fc2-stat-val,.fc2-card.tier-silver .fc2-stat-lbl{color:#0a1a2a}
+.fc2-card.tier-rare .fc2-stat-val,.fc2-card.tier-rare .fc2-stat-lbl,.fc2-card.tier-common .fc2-stat-val,.fc2-card.tier-common .fc2-stat-lbl{color:#c8f520}
+.fc2-card.tier-gold .fc2-foot,.fc2-card.tier-bronze .fc2-foot{color:#3a1800}
+.fc2-card.tier-silver .fc2-foot{color:#1a2a3a}
+.fc2-card.tier-rare .fc2-foot,.fc2-card.tier-common .fc2-foot{color:#90c060}
+
+/* AI suggestion badge */
+.ai-badge{background:linear-gradient(135deg,#1a1a3a,#2a2a5a);border:1px solid rgba(100,100,255,.4);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:12px;font-size:.82rem}
+.ai-badge .ai-title{font-size:.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8080ff;margin-bottom:5px}
+.ai-badge .ai-result{font-family:'Bebas Neue',cursive;font-size:1.3rem;letter-spacing:1.5px;color:#b0b0ff}
+
+/* Stat slider input */
+.stat-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.stat-row label{width:80px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);flex-shrink:0}
+.stat-row input[type=range]{flex:1;accent-color:var(--lime)}
+.stat-val-badge{width:36px;text-align:center;font-family:'Bebas Neue',cursive;font-size:1.1rem;color:var(--lime);flex-shrink:0}
+
+/* FORUM */
+.forum-post{background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);padding:13px 15px;margin-bottom:8px;display:flex;gap:12px}
+.forum-votes{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;min-width:36px}
+.forum-vote-btn{background:none;border:none;cursor:pointer;font-size:1rem;color:var(--text-muted);padding:2px;line-height:1;transition:color .15s}
+.forum-vote-btn:hover{color:var(--lime)}
+.forum-vote-btn.voted-up{color:var(--lime)}
+.forum-vote-btn.voted-down{color:var(--red)}
+.forum-score{font-family:'Bebas Neue',cursive;font-size:1.1rem;color:var(--text)}
+.forum-body{flex:1;min-width:0}
+.forum-cat{display:inline-block;font-size:.6rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:2px 7px;border-radius:20px;margin-bottom:5px}
+.forum-cat-oneri{background:rgba(184,247,23,.15);color:var(--lime);border:1px solid rgba(184,247,23,.3)}
+.forum-cat-sikayet{background:rgba(255,64,64,.15);color:var(--red);border:1px solid rgba(255,64,64,.3)}
+.forum-cat-genel{background:rgba(255,255,255,.08);color:var(--text-muted);border:1px solid rgba(255,255,255,.15)}
+.forum-cat-bug{background:rgba(245,166,35,.15);color:var(--amber);border:1px solid rgba(245,166,35,.3)}
+.forum-title{font-weight:600;font-size:.9rem;margin-bottom:3px;color:var(--text)}
+.forum-text{font-size:.78rem;color:var(--text-muted);line-height:1.55}
+.forum-meta{font-size:.65rem;color:var(--text-muted);margin-top:6px}
+
+/* Patch notes overlay */
+#modal-patch.open{display:flex;animation:fadeIn .3s ease}
+
+/* Profile form card */
+.profile-form-card{background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius);padding:18px}
+.profile-form-card h3{font-family:'Bebas Neue',cursive;font-size:1.1rem;letter-spacing:1.5px;color:var(--lime);margin-bottom:14px}
+
 </style>
 </head>
 <body>
@@ -352,10 +434,11 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="switchTab('tab-matches',this)">📋 Maçlar</button>
     <button class="nav-tab"        onclick="switchTab('tab-lineup',this)">👕 Kadro</button>
-    <button class="nav-tab"        onclick="switchTab('tab-cards',this)">🃏 Kartlar</button>
+    <button class="nav-tab"        onclick="switchTab('tab-profile',this)">👤 Profil</button>
     <button class="nav-tab"        onclick="switchTab('tab-vote',this)">🏅 Oylama</button>
     <button class="nav-tab"        onclick="switchTab('tab-lb',this)">🏆 Sıralama</button>
     <button class="nav-tab"        onclick="switchTab('tab-news',this)">📰 Gazete</button>
+    <button class="nav-tab"        onclick="switchTab('tab-forum',this)">💬 Forum</button>
     <button class="nav-tab"        onclick="switchTab('tab-past',this)">📚 Geçmiş</button>
     <button class="nav-tab" id="tab-admin-btn" style="display:none" onclick="switchTab('tab-admin',this)">⚙️ Admin</button>
   </div>
@@ -368,13 +451,14 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
     <div id="match-display"></div>
   </div>
 
-  <div id="tab-lineup" class="panel"><div id="lineup-content"></div></div>
-  <div id="tab-cards"  class="panel"><div id="cards-content"></div></div>
-  <div id="tab-vote"   class="panel"><div id="vote-content"></div></div>
-  <div id="tab-lb"     class="panel"><div id="lb-content"></div></div>
-  <div id="tab-news"   class="panel"><div id="news-content"></div></div>
-  <div id="tab-past"   class="panel"><div id="past-matches-list"></div></div>
-  <div id="tab-admin"  class="panel"><div id="admin-content"></div></div>
+  <div id="tab-lineup"  class="panel"><div id="lineup-content"></div></div>
+  <div id="tab-profile" class="panel"><div id="profile-content"></div></div>
+  <div id="tab-vote"    class="panel"><div id="vote-content"></div></div>
+  <div id="tab-lb"      class="panel"><div id="lb-content"></div></div>
+  <div id="tab-news"    class="panel"><div id="news-content"></div></div>
+  <div id="tab-forum"   class="panel"><div id="forum-content"></div></div>
+  <div id="tab-past"    class="panel"><div id="past-matches-list"></div></div>
+  <div id="tab-admin"   class="panel"><div id="admin-content"></div></div>
 </div>
 
 </div>
@@ -383,18 +467,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 <div id="modal-register" class="modal-overlay">
   <div class="modal-box">
     <h2>⚽ Kayıt Ol</h2>
+    <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:14px">Kaydolduktan sonra Profil sekmesinden özelliklerini doldur!</p>
     <div class="form-group"><label>Ad Soyad</label><input type="text" id="reg-name" placeholder="Adın Soyadın"></div>
-    <div class="form-group">
-      <label>Mevki</label>
-      <select id="reg-pos">
-        <option value="">Seç...</option>
-        <option>Kaleci</option><option>Defans</option><option>Orta Saha</option><option>Forvet</option>
-      </select>
-    </div>
-    <div class="form-group"><label>Rating Puanı (1–100)</label><input type="number" id="reg-rating" min="1" max="100" placeholder="60"></div>
     <div class="form-group"><label>Şifre</label><input type="password" id="reg-pass" placeholder="Şifreni belirle"></div>
     <div class="form-group"><label>Şifre Tekrar</label><input type="password" id="reg-pass2" placeholder="Tekrar gir"></div>
-    <p style="font-size:.72rem;color:var(--amber);margin-bottom:4px">⚠️ Ratingini admin onaylayacak.</p>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('modal-register')">İptal</button>
       <button class="btn btn-primary" onclick="handleRegister()">Kayıt Ol →</button>
@@ -470,29 +546,11 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
   </div>
 </div>
 
-<div id="notif" class="notif"></div>
+
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
-/* ====== GLOBAL ERROR CATCHER ====== */
-window.onerror=function(msg,src,line,col,err){
-  document.body.innerHTML='<div style="padding:20px;background:#1a0000;color:#ff6060;font-family:monospace;font-size:14px;word-break:break-all">'
-    +'<h2>JavaScript Hatası</h2>'
-    +'<p><b>Mesaj:</b> '+msg+'</p>'
-    +'<p><b>Kaynak:</b> '+src+'</p>'
-    +'<p><b>Satır:</b> '+line+' Sütun: '+col+'</p>'
-    +'<p><b>Detay:</b> '+(err?err.stack:'yok')+'</p>'
-    +'</div>';
-  return false;
-};
-window.addEventListener('unhandledrejection',function(e){
-  document.body.innerHTML='<div style="padding:20px;background:#1a0000;color:#ff6060;font-family:monospace;font-size:14px;word-break:break-all">'
-    +'<h2>Promise Hatası</h2>'
-    +'<p>'+(e.reason?e.reason.toString():'bilinmiyor')+'</p>'
-    +'<p>'+(e.reason&&e.reason.stack?e.reason.stack:'')+'</p>'
-    +'</div>';
-});
 
 /* ====== FIREBASE INIT ====== */
 const firebaseConfig={
@@ -615,24 +673,29 @@ document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click
 /* ====== AUTH ====== */
 async function handleRegister(){
   const name=document.getElementById('reg-name').value.trim();
-  const pos=document.getElementById('reg-pos').value;
-  const rating=parseInt(document.getElementById('reg-rating').value,10);
   const pass=document.getElementById('reg-pass').value;
   const pass2=document.getElementById('reg-pass2').value;
   if(!name)return showNotif('İsim gir!','error');
-  if(!pos)return showNotif('Mevkini seç!','error');
-  if(!rating||rating<1||rating>100)return showNotif('1–100 arası rating!','error');
   if(!pass)return showNotif('Şifre gir!','error');
   if(pass!==pass2)return showNotif('Şifreler eşleşmiyor!','error');
   const users=getUsers();
   if(users[name.toLowerCase()])return showNotif('Bu isim zaten kayıtlı!','warn');
-  users[name.toLowerCase()]={name,pos,rating,pass,id:uid(),wins:0,matches:0,motm:0,worst:0};
+  // Yeni kullanıcı - profil doldurulmamış halde başlar
+  users[name.toLowerCase()]={
+    name,pass,id:uid(),
+    // Stats - profil sayfasından doldurulacak
+    hiz:50,sut:50,pas:50,fizik:50,defans:50,kalecilik:50,
+    pos:'',altPos1:'',altPos2:'',ayak:'Sağ',
+    rating:0, // dinamik hesaplanacak
+    wins:0,matches:0,motm:0,worst:0,
+    profileComplete:false
+  };
   showLoading('Kayıt yapılıyor...');
   await saveUsers(users);
   hideLoading();
-  closeModal('modal-register');showNotif('Kayıt başarılı! ⚽');
-  ['reg-name','reg-rating','reg-pass','reg-pass2'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('reg-pos').value='';
+  closeModal('modal-register');
+  showNotif('Kayıt başarılı! Profil sekmesinden bilgilerini doldur! ⚽');
+  ['reg-name','reg-pass','reg-pass2'].forEach(id=>document.getElementById(id).value='');
 }
 
 async function handleLogin(){
@@ -695,13 +758,28 @@ function goHome(){
   stopLineupTimer();
   const fresh=Object.values(_users).find(u=>u.id===currentUser.id);
   if(fresh)currentUser=fresh;
+  const rating=currentUser?calcRating(currentUser):50;
   document.getElementById('home-username').textContent=currentUser.name;
-  document.getElementById('home-rating').textContent=currentUser.rating;
+  document.getElementById('home-rating').textContent=rating||'?';
   document.getElementById('home-avatar').textContent=initials(currentUser.name);
   document.getElementById('home-admin-badge').style.display=isAdmin(currentUser)?'inline-block':'none';
   document.getElementById('tab-admin-btn').style.display=isAdmin(currentUser)?'flex':'none';
   showPage('page-home');
   renderPastMatches();renderLeaderboard();
+  // Patch notes - ilk girişte göster
+  if(!LS.get('patch_v11_seen')){
+    setTimeout(()=>openModal('modal-patch'),600);
+  }
+}
+
+function closePatchNotes(){
+  LS.set('patch_v11_seen','1');
+  closeModal('modal-patch');
+  // Profile doldurmamışsa direkt profile götür
+  if(!currentUser.profileComplete){
+    const tabs=document.querySelectorAll('.nav-tab');
+    tabs.forEach(t=>{if(t.textContent.includes('Profil')){t.click();}});
+  }
 }
 
 function switchTab(tabId,btn){
@@ -711,11 +789,12 @@ function switchTab(tabId,btn){
   document.getElementById(tabId).classList.add('active');btn.classList.add('active');
   if(tabId==='tab-past')renderPastMatches();
   if(tabId==='tab-lb')renderLeaderboard();
-  if(tabId==='tab-cards')renderCards();
   if(tabId==='tab-vote')renderVoting();
   if(tabId==='tab-lineup')renderLineup();
   if(tabId==='tab-news')renderNewsTab();
   if(tabId==='tab-admin')renderAdmin();
+  if(tabId==='tab-profile')renderProfile();
+  if(tabId==='tab-forum')renderForum();
   if(tabId==='tab-matches')document.getElementById('match-display').innerHTML='';
 }
 
@@ -756,7 +835,7 @@ function renderLineup(){
     const upcoming=matches.filter(m=>!m.finished).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
 
     // Always show the quote first — whether there's a match or not
-    const quoteMsg=`"Sakin olun, eşit olmaması için Gökhan Başkan elinden gelen herşeyi yapıcak"`;
+    const quoteMsg=`"Adalet mülkün temelidir."`;
 
     if(!upcoming.length){
       el.innerHTML=`
@@ -1362,40 +1441,44 @@ function renderAdmin(){
   const pendingVotings=matches.filter(m=>m.finished&&!m.votingOpen&&!m.motmId);
 
   if(openVotings.length||pendingVotings.length){
-    html+=`<div class="card" style="margin-bottom:14px">
-      <h2 style="font-family:'Bebas Neue',cursive;font-size:1.1rem;letter-spacing:1.5px;color:var(--amber);margin-bottom:11px">🗳️ Oylama Yönetimi</h2>
-      ${openVotings.map(m=>`<div style="display:flex;align-items:center;justify-content:space-between;gap:9px;padding:7px 0;border-bottom:1px solid var(--surface-3)">
-        <div><span style="font-size:.83rem;font-weight:600">${m.name}</span> <span style="font-size:.68rem;color:var(--lime);margin-left:6px">● Oylama Açık</span></div>
-        <button class="btn btn-danger" style="font-size:.7rem;padding:5px 10px" onclick="closeVoting('${m.id}')">🔒 Kapat</button>
-      </div>`).join('')}
-      ${pendingVotings.map(m=>`<div style="display:flex;align-items:center;justify-content:space-between;gap:9px;padding:7px 0;border-bottom:1px solid var(--surface-3)">
-        <span style="font-size:.83rem;font-weight:600">${m.name}</span>
-        <button class="btn btn-amber" style="font-size:.7rem;padding:5px 10px" onclick="openVoting('${m.id}')">Oylamayı Aç</button>
-      </div>`).join('')}
-    </div>`;
+    let voteRows='';
+    openVotings.forEach(m=>{voteRows+='<div style="display:flex;align-items:center;justify-content:space-between;gap:9px;padding:7px 0;border-bottom:1px solid var(--surface-3)"><div><span style="font-size:.83rem;font-weight:600">'+m.name+'</span> <span style="font-size:.68rem;color:var(--lime);margin-left:6px">● Açık</span></div><button class="btn btn-danger" style="font-size:.7rem;padding:5px 10px" onclick="closeVoting('+JSON.stringify(m.id)+')">🔒 Kapat</button></div>';});
+    pendingVotings.forEach(m=>{voteRows+='<div style="display:flex;align-items:center;justify-content:space-between;gap:9px;padding:7px 0;border-bottom:1px solid var(--surface-3)"><span style="font-size:.83rem;font-weight:600">'+m.name+'</span><button class="btn btn-amber" style="font-size:.7rem;padding:5px 10px" onclick="openVoting('+JSON.stringify(m.id)+')">Oylamayı Aç</button></div>';});
+    html+='<div class="card" style="margin-bottom:14px"><h2 style="font-family:Bebas Neue,cursive;font-size:1.1rem;letter-spacing:1.5px;color:var(--amber);margin-bottom:11px">🗳️ Oylama Yönetimi</h2>'+voteRows+'</div>';
   }
 
   // SCORE ENTRY for finished-but-no-score matches
   const noScore=matches.filter(m=>m.finished&&!m.score);
   if(noScore.length){
-    html+=`<div class="card" style="margin-bottom:14px">
-      <h2 style="font-family:'Bebas Neue',cursive;font-size:1.1rem;letter-spacing:1.5px;color:var(--lime);margin-bottom:11px">🏆 Skor Gir</h2>
-      ${noScore.map(m=>`<div style="display:flex;align-items:center;justify-content:space-between;gap:9px;padding:7px 0;border-bottom:1px solid var(--surface-3)">
-        <span style="font-size:.83rem;font-weight:600">${m.name}</span>
-        <button class="btn btn-primary" style="font-size:.7rem;padding:5px 10px" onclick="openScore('${m.id}')">Skor Gir</button>
-      </div>`).join('')}
-    </div>`;
+    let scoreRows='';
+    noScore.forEach(m=>{scoreRows+='<div style="display:flex;align-items:center;justify-content:space-between;gap:9px;padding:7px 0;border-bottom:1px solid var(--surface-3)"><span style="font-size:.83rem;font-weight:600">'+m.name+'</span><button class="btn btn-primary" style="font-size:.7rem;padding:5px 10px" onclick="openScore('+JSON.stringify(m.id)+')">Skor Gir</button></div>';});
+    html+='<div class="card" style="margin-bottom:14px"><h2 style="font-family:Bebas Neue,cursive;font-size:1.1rem;letter-spacing:1.5px;color:var(--lime);margin-bottom:11px">🏆 Skor Gir</h2>'+scoreRows+'</div>';
   }
 
-  // RATING EDITOR
-  html+=`<div class="card">
-    <h2 style="font-family:'Bebas Neue',cursive;font-size:1.1rem;letter-spacing:1.5px;color:var(--lime);margin-bottom:11px">⭐ Rating Düzenle</h2>
-    ${users.map(u=>`<div class="admin-user-row">
-      <div style="flex:1"><div class="admin-user-name">${u.name}</div><div class="admin-user-pos">${u.pos}</div></div>
-      <input type="number" min="1" max="100" class="rating-edit-input" id="re-${u.id}" value="${u.rating}">
-      <button class="btn btn-ghost" style="font-size:.7rem;padding:5px 9px" onclick="saveRating('${u.id}')">Kaydet</button>
-    </div>`).join('')}
-  </div>`;
+  // USER MANAGEMENT
+  const userRows=users.map(u=>{
+    const r=calcRating(u,u.pos)||0;
+    const eksik=!u.profileComplete?'<span style="font-size:.6rem;color:var(--amber)"> [Profil Eksik]</span>':'';
+    return '<div class="admin-user-row">'
+      +'<div style="flex:1">'
+      +'<div class="admin-user-name">'+u.name+eksik+'</div>'
+      +'<div class="admin-user-pos">'+(u.pos||'Mevki yok')+' • Reyting: '+r+' • '+(u.ayak||'?')+'</div>'
+      +'</div>'
+      +'<button class="btn btn-danger" style="font-size:.68rem;padding:5px 9px" onclick="deleteUser('+JSON.stringify(u.name.toLowerCase())+')">🗑️</button>'
+      +'</div>';
+  }).join('');
+  html+='<div class="card" style="margin-bottom:14px">'
+    +'<h2 style="font-family:Bebas Neue,cursive;font-size:1.1rem;letter-spacing:1.5px;color:var(--red);margin-bottom:11px">👥 Kullanıcı Yönetimi</h2>'
+    +userRows
+    +'</div>';
+
+  // LINEUP TEAM BUILDER - show for active matches
+  const activeForTeams=matches.filter(m=>!m.finished&&(m.attending||[]).length>=2);
+  if(activeForTeams.length){
+    let teamRows='';
+    activeForTeams.forEach(m=>{teamRows+='<div style="display:flex;align-items:center;justify-content:space-between;gap:9px;padding:7px 0;border-bottom:1px solid var(--surface-3)"><div><span style="font-size:.83rem;font-weight:600">'+m.name+'</span> <span style="font-size:.7rem;color:var(--text-muted)">'+(m.attending||[]).length+' kişi</span></div><button class="btn btn-amber" style="font-size:.7rem;padding:5px 10px" onclick="buildAndSaveTeams('+JSON.stringify(m.id)+')">⚖️ Takımları Kur</button></div>';});
+    html+='<div class="card" style="margin-bottom:14px"><h2 style="font-family:Bebas Neue,cursive;font-size:1.1rem;letter-spacing:1.5px;color:var(--amber);margin-bottom:11px">⚖️ Adil Takım Kur</h2>'+teamRows+'</div>';
+  }
 
   el.innerHTML=html;
 }
@@ -1435,6 +1518,35 @@ async function openVoting(matchId){
   const matches=getMatches();const match=matches.find(m=>m.id===matchId);if(!match)return;
   match.votingOpen=true;if(!match.votes)match.votes={};await saveMatches(matches);
   showNotif('Oylama açıldı! 🗳️');renderAdmin();
+}
+
+async function deleteUser(nameKey){
+  if(!isAdmin(currentUser))return;
+  if(!confirm('Bu kullanıcıyı silmek istediğine emin misin?'))return;
+  const users=getUsers();
+  delete users[nameKey];
+  await saveUsers(users);
+  showNotif('Kullanıcı silindi.');
+  renderAdmin();
+}
+
+async function buildAndSaveTeams(matchId){
+  if(!isAdmin(currentUser))return;
+  const matches=getMatches();
+  const match=matches.find(m=>m.id===matchId);if(!match)return;
+  const{teamA,teamB,avgA,avgB}=buildFairTeams(match.attending||[]);
+  match.teamAName=match.teamAName||'Takım A';
+  match.teamBName=match.teamBName||'Takım B';
+  // Save lineup based on fair teams
+  const lineup={};
+  const slots=['A_GK','A_D1','A_D2','A_M','A_A1','A_A2','A_F'];
+  const slotsB=['B_GK','B_D1','B_D2','B_M','B_A1','B_A2','B_F'];
+  teamA.forEach((p,i)=>{if(slots[i])lineup[p.id]=slots[i];});
+  teamB.forEach((p,i)=>{if(slotsB[i])lineup[p.id]=slotsB[i];});
+  match.lineup=lineup;
+  await saveMatches(matches);
+  showNotif(`Takımlar kuruldu! A: ort.${avgA} | B: ort.${avgB} ⚖️`);
+  renderAdmin();
 }
 
 async function saveRating(userId){
@@ -1599,6 +1711,14 @@ async function joinMatch(matchId){
   if(!match.reserves)match.reserves=[];
   if(!match.attending)match.attending=[];
   if(!match.absent)match.absent=[];
+  // Profil kontrolü
+  if(!currentUser.profileComplete){
+    showNotif('Önce Profilini doldur! Mevkini ve özelliklerini belirlemeden kadroya giremezsin ⚠️','warn');
+    // Profil sekmesine yönlendir
+    const tabs=document.querySelectorAll('.nav-tab');
+    tabs.forEach(t=>{if(t.textContent.includes('Profil'))t.click();});
+    return;
+  }
   if(match.attending.find(p=>p.id===currentUser.id)){showNotif('Zaten kadrodasın!','warn');return;}
   if(match.reserves.find(p=>p.id===currentUser.id)){showNotif('Zaten yedek listindesin!','warn');return;}
   match.absent=match.absent.filter(p=>p.id!==currentUser.id);
@@ -1707,7 +1827,404 @@ function renderPastMatches(){
   }).join('');
 }
 
+
+/* ===================== RATING & AI LOGIC ===================== */
+const MEVKILER=['Kaleci','Stoper','Sağ Bek','Sol Bek','DOS','MOS','Forvet Arkası','Sağ Kanat','Sol Kanat','Santrafor'];
+
+// Mevkiye göre ağırlık katsayıları
+const MEVKI_WEIGHTS={
+  'Kaleci':    {hiz:.10,sut:.05,pas:.20,fizik:.25,defans:.15,kalecilik:.25},
+  'Stoper':    {hiz:.15,sut:.05,pas:.15,fizik:.25,defans:.30,kalecilik:.10},
+  'Sağ Bek':   {hiz:.25,sut:.10,pas:.20,fizik:.20,defans:.20,kalecilik:.05},
+  'Sol Bek':   {hiz:.25,sut:.10,pas:.20,fizik:.20,defans:.20,kalecilik:.05},
+  'DOS':       {hiz:.15,sut:.10,pas:.25,fizik:.20,defans:.25,kalecilik:.05},
+  'MOS':       {hiz:.20,sut:.15,pas:.30,fizik:.15,defans:.15,kalecilik:.05},
+  'Forvet Arkası':{hiz:.20,sut:.25,pas:.25,fizik:.15,defans:.10,kalecilik:.05},
+  'Sağ Kanat': {hiz:.30,sut:.20,pas:.20,fizik:.15,defans:.10,kalecilik:.05},
+  'Sol Kanat': {hiz:.30,sut:.20,pas:.20,fizik:.15,defans:.10,kalecilik:.05},
+  'Santrafor': {hiz:.20,sut:.35,pas:.15,fizik:.20,defans:.05,kalecilik:.05},
+};
+
+function calcRating(user,mevki){
+  if(!user)return 50;
+  const m=mevki||user.pos||'MOS';
+  const w=MEVKI_WEIGHTS[m]||MEVKI_WEIGHTS['MOS'];
+  const hiz=Number(user.hiz)||50,sut=Number(user.sut)||50,pas=Number(user.pas)||50;
+  const fizik=Number(user.fizik)||50,defans=Number(user.defans)||50,kal=Number(user.kalecilik)||50;
+  const r=Math.round(hiz*w.hiz+sut*w.sut+pas*w.pas+fizik*w.fizik+defans*w.defans+kal*w.kalecilik);
+  return Math.min(99,Math.max(1,r));
+}
+
+function aiSuggestPos(user){
+  const scores={};
+  MEVKILER.forEach(m=>{scores[m]=calcRating(user,m);});
+  return Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
+}
+
+function cardTier(r){
+  if(r>=85)return'tier-gold';
+  if(r>=75)return'tier-silver';
+  if(r>=65)return'tier-bronze';
+  if(r>=55)return'tier-rare';
+  return'tier-common';
+}
+
+function buildFC2Card(user,mevki){
+  const pos=mevki||user.pos||'?';
+  const rating=calcRating(user,pos);
+  const tier=cardTier(rating);
+  const ayak=user.ayak||'Sağ';
+  const ayakIcon=ayak==='İki Ayak'?'⚡':ayak==='Sol'?'🦶L':'🦶R';
+  return `
+    <div class="fc2-card ${tier}">
+      <div class="fc2-bg"></div>
+      <div class="fc2-shine"></div>
+      <div style="width:100%;display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div class="fc2-rating">${rating}</div>
+          <div class="fc2-pos">${pos.toUpperCase().substring(0,8)}</div>
+        </div>
+        <div style="text-align:right;font-size:.6rem;opacity:.7;padding-top:4px">${ayakIcon}</div>
+      </div>
+      <div class="fc2-avatar">${initials(user.name)}</div>
+      <div class="fc2-name">${user.name.split(' ')[0].toUpperCase()}</div>
+      <div class="fc2-divider"></div>
+      <div class="fc2-stats">
+        <div class="fc2-stat"><span class="fc2-stat-val">${user.hiz||50}</span><span class="fc2-stat-lbl">HIZ</span></div>
+        <div class="fc2-stat"><span class="fc2-stat-val">${user.sut||50}</span><span class="fc2-stat-lbl">ŞUT</span></div>
+        <div class="fc2-stat"><span class="fc2-stat-val">${user.pas||50}</span><span class="fc2-stat-lbl">PAS</span></div>
+        <div class="fc2-stat"><span class="fc2-stat-val">${user.fizik||50}</span><span class="fc2-stat-lbl">FİZ</span></div>
+        <div class="fc2-stat"><span class="fc2-stat-val">${user.defans||50}</span><span class="fc2-stat-lbl">DEF</span></div>
+        <div class="fc2-stat"><span class="fc2-stat-val">${user.kalecilik||50}</span><span class="fc2-stat-lbl">KAL</span></div>
+      </div>
+    </div>`;
+}
+
+/* ===================== PROFILE PAGE ===================== */
+function renderProfile(){
+  const el=document.getElementById('profile-content');if(!el)return;
+  const u=currentUser;
+  const suggestedPos=aiSuggestPos(u);
+  const currentRating=calcRating(u,u.pos||suggestedPos);
+  const posOptions=MEVKILER.map(m=>`<option value="${m}"${u.pos===m?' selected':''}>${m}</option>`).join('');
+  const altPosOptions=m=>`<option value="">—</option>`+MEVKILER.map(p=>`<option value="${p}"${u[m]===p?' selected':''}>${p}</option>`).join('');
+
+  el.innerHTML=`
+    <div class="section-title">Profil</div>
+
+    <!-- FC Card preview + AI badge -->
+    <div style="margin-bottom:16px">
+      ${buildFC2Card(u,u.pos)}
+    </div>
+
+    <div class="ai-badge" style="margin-bottom:14px">
+      <div class="ai-title">🤖 Yapay Zeka Analizi</div>
+      <div class="ai-result">Sana En İdeal Mevki → ${suggestedPos}</div>
+      <div style="font-size:.7rem;color:#8080cc;margin-top:4px">Ana mevkinde reyting: <strong style="color:#b0b0ff">${currentRating}</strong></div>
+    </div>
+
+    <div class="profile-form-card" style="margin-bottom:12px">
+      <h3>⚙️ Temel Bilgiler</h3>
+      <div class="form-group">
+        <label>Kullandığın Ayak</label>
+        <select id="pf-ayak" onchange="updateProfilePreview()">
+          <option${u.ayak==='Sağ'?' selected':''}>Sağ</option>
+          <option${u.ayak==='Sol'?' selected':''}>Sol</option>
+          <option${u.ayak==='İki Ayak'?' selected':''}>İki Ayak</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Ana Mevki</label>
+        <select id="pf-pos" onchange="updateProfilePreview()">${posOptions}</select>
+      </div>
+      <div class="form-row">
+        <div class="form-group" style="margin-bottom:0">
+          <label>Alt Mevki 1</label>
+          <select id="pf-alt1" onchange="updateProfilePreview()">${altPosOptions('altPos1')}</select>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label>Alt Mevki 2</label>
+          <select id="pf-alt2" onchange="updateProfilePreview()">${altPosOptions('altPos2')}</select>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-form-card" style="margin-bottom:14px">
+      <h3>📊 Özellikler (1–100)</h3>
+      ${[
+        ['pf-hiz','Hız',u.hiz||50],
+        ['pf-sut','Şut',u.sut||50],
+        ['pf-pas','Pas',u.pas||50],
+        ['pf-fizik','Fizik',u.fizik||50],
+        ['pf-defans','Defans',u.defans||50],
+        ['pf-kalecilik','Kalecilik',u.kalecilik||50],
+      ].map(([id,lbl,val])=>`
+        <div class="stat-row">
+          <label>${lbl}</label>
+          <input type="range" id="${id}" min="1" max="100" value="${val}" oninput="updateProfilePreview()">
+          <span class="stat-val-badge" id="${id}-val">${val}</span>
+        </div>`).join('')}
+    </div>
+
+    <button class="btn btn-primary" style="width:100%" onclick="saveProfile()">💾 Profili Kaydet</button>
+  `;
+}
+
+function updateProfilePreview(){
+  const el=document.getElementById('profile-content');if(!el)return;
+  // Update range value badges
+  ['pf-hiz','pf-sut','pf-pas','pf-fizik','pf-defans','pf-kalecilik'].forEach(id=>{
+    const inp=document.getElementById(id);
+    const badge=document.getElementById(id+'-val');
+    if(inp&&badge)badge.textContent=inp.value;
+  });
+  // Build temp user for preview
+  const tempUser={
+    ...currentUser,
+    hiz:+document.getElementById('pf-hiz')?.value||50,
+    sut:+document.getElementById('pf-sut')?.value||50,
+    pas:+document.getElementById('pf-pas')?.value||50,
+    fizik:+document.getElementById('pf-fizik')?.value||50,
+    defans:+document.getElementById('pf-defans')?.value||50,
+    kalecilik:+document.getElementById('pf-kalecilik')?.value||50,
+    pos:document.getElementById('pf-pos')?.value||currentUser.pos,
+    ayak:document.getElementById('pf-ayak')?.value||currentUser.ayak,
+  };
+  // Update card
+  const cardEl=document.querySelector('.fc2-card');
+  if(cardEl){
+    const parent=cardEl.parentNode;
+    parent.innerHTML=buildFC2Card(tempUser,tempUser.pos);
+  }
+  // Update AI badge
+  const suggested=aiSuggestPos(tempUser);
+  const rating=calcRating(tempUser,tempUser.pos||suggested);
+  const aiEl=document.querySelector('.ai-result');
+  if(aiEl)aiEl.textContent=`Sana En İdeal Mevki → ${suggested}`;
+  const aiSub=document.querySelector('.ai-badge div:last-child');
+  if(aiSub)aiSub.innerHTML=`Ana mevkinde reyting: <strong style="color:#b0b0ff">${rating}</strong>`;
+}
+
+async function saveProfile(){
+  const users=getUsers();
+  const key=currentUser.name.toLowerCase();
+  if(!users[key])return;
+  const hiz=+document.getElementById('pf-hiz').value;
+  const sut=+document.getElementById('pf-sut').value;
+  const pas=+document.getElementById('pf-pas').value;
+  const fizik=+document.getElementById('pf-fizik').value;
+  const defans=+document.getElementById('pf-defans').value;
+  const kalecilik=+document.getElementById('pf-kalecilik').value;
+  const pos=document.getElementById('pf-pos').value;
+  const ayak=document.getElementById('pf-ayak').value;
+  const altPos1=document.getElementById('pf-alt1').value;
+  const altPos2=document.getElementById('pf-alt2').value;
+  if(!pos)return showNotif('Ana mevkini seç!','error');
+  const rating=calcRating({hiz,sut,pas,fizik,defans,kalecilik},pos);
+  users[key]={...users[key],hiz,sut,pas,fizik,defans,kalecilik,pos,ayak,altPos1,altPos2,rating,profileComplete:true};
+  showLoading('Kaydediliyor...');
+  await saveUsers(users);
+  currentUser=users[key];
+  hideLoading();
+  // Update chip
+  document.getElementById('home-rating').textContent=rating;
+  showNotif(`Profil kaydedildi! Reyting: ${rating} ⭐`);
+  renderProfile();
+}
+
+/* ===================== CARDS (ALL PLAYERS) ===================== */
+function renderCards(){
+  const el=document.getElementById('cards-content');if(!el)return;
+  const users=Object.values(getUsers()).sort((a,b)=>(calcRating(b,b.pos)||0)-(calcRating(a,a.pos)||0));
+  if(!users.length){el.innerHTML='<div class="no-match-box"><span class="nm-icon">🃏</span><p>Henüz kayıtlı oyuncu yok.</p></div>';return;}
+  el.innerHTML=`<div class="section-title">Oyuncu Kartları</div><div class="fc-grid">${users.map(u=>buildFC2Card(u,u.pos)).join('')}</div>`;
+}
+
+/* ===================== FORUM ===================== */
+async function renderForum(){
+  const el=document.getElementById('forum-content');if(!el)return;
+  el.innerHTML=`<div class="section-title">Topluluk Forumu</div>
+    <button class="btn btn-primary" style="width:100%;margin-bottom:14px" onclick="openModal('modal-forum-post')">+ Yeni Gönderi</button>
+    <div id="forum-list"><div class="no-match-box"><span class="nm-icon">💬</span><p>Yükleniyor...</p></div></div>`;
+  const snap=await db.ref('forum').orderByChild('score').once('value');
+  const val=snap.val()||{};
+  const posts=Object.entries(val).map(([id,p])=>({id,...p})).sort((a,b)=>(b.score||0)-(a.score||0));
+  const listEl=document.getElementById('forum-list');if(!listEl)return;
+  if(!posts.length){
+    listEl.innerHTML='<div class="no-match-box"><span class="nm-icon">💬</span><p>Henüz gönderi yok. İlk yorumu sen yap!</p></div>';return;
+  }
+  const catLabel={oneri:'💡 Öneri',sikayet:'😤 Şikayet',genel:'💬 Genel',bug:'🐛 Bug'};
+  listEl.innerHTML=posts.map(p=>{
+    const myVote=(p.votes&&p.votes[currentUser.id])||0;
+    const score=p.score||0;
+    return`<div class="forum-post">
+      <div class="forum-votes">
+        <button class="forum-vote-btn${myVote===1?' voted-up':''}" onclick="forumVote('${p.id}',1)">▲</button>
+        <span class="forum-score">${score}</span>
+        <button class="forum-vote-btn${myVote===-1?' voted-down':''}" onclick="forumVote('${p.id}',-1)">▼</button>
+      </div>
+      <div class="forum-body">
+        <span class="forum-cat forum-cat-${p.cat||'genel'}">${catLabel[p.cat]||'💬 Genel'}</span>
+        <div class="forum-title">${p.title||''}</div>
+        <div class="forum-text">${p.body||''}</div>
+        <div class="forum-meta">👤 ${p.author||'?'} &nbsp;•&nbsp; ${p.date||''}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function submitForumPost(){
+  const cat=document.getElementById('forum-cat').value;
+  const title=document.getElementById('forum-title').value.trim();
+  const body=document.getElementById('forum-body').value.trim();
+  if(!title)return showNotif('Başlık yaz!','error');
+  const id=uid();
+  const post={cat,title,body,author:currentUser.name,date:new Date().toLocaleDateString('tr-TR'),score:0,votes:{}};
+  await db.ref('forum/'+id).set(post);
+  closeModal('modal-forum-post');
+  document.getElementById('forum-title').value='';
+  document.getElementById('forum-body').value='';
+  showNotif('Gönderildi! 📢');
+  renderForum();
+}
+
+async function forumVote(postId,val){
+  const snap=await db.ref('forum/'+postId).once('value');
+  const post=snap.val();if(!post)return;
+  const votes=post.votes||{};
+  const prev=votes[currentUser.id]||0;
+  if(prev===val){
+    // Toggle off
+    delete votes[currentUser.id];
+  } else {
+    votes[currentUser.id]=val;
+  }
+  const score=Object.values(votes).reduce((a,b)=>a+b,0);
+  await db.ref('forum/'+postId).update({votes,score});
+  renderForum();
+}
+
+/* ===================== ADIL TAKIM DAGITICI ===================== */
+function buildFairTeams(attending){
+  const users=getUsers();
+  // Enrich with full stats
+  const players=attending.map(p=>{
+    const u=users[p.name.toLowerCase()]||p;
+    return{
+      ...p,
+      rating:calcRating(u,u.pos||p.pos),
+      pos:u.pos||p.pos||'MOS',
+      altPos1:u.altPos1||'',
+      altPos2:u.altPos2||'',
+    };
+  });
+
+  // Need 1 GK per team
+  const keepers=players.filter(p=>p.pos==='Kaleci');
+  const outfielders=players.filter(p=>p.pos!=='Kaleci');
+
+  // Sort outfielders by rating desc
+  outfielders.sort((a,b)=>b.rating-a.rating);
+
+  let teamA=[],teamB=[];
+
+  // Assign keepers
+  if(keepers.length>=2){
+    teamA.push(keepers[0]);teamB.push(keepers[1]);
+    // remaining keepers as outfielders
+    keepers.slice(2).forEach((k,i)=>i%2===0?teamA.push(k):teamB.push(k));
+  } else if(keepers.length===1){
+    teamA.push(keepers[0]);
+  }
+
+  // Snake draft for outfielders
+  outfielders.forEach((p,i)=>{
+    const aScore=teamA.reduce((s,x)=>s+x.rating,0);
+    const bScore=teamB.reduce((s,x)=>s+x.rating,0);
+    if(teamA.length<=teamB.length&&aScore<=bScore) teamA.push(p);
+    else teamB.push(p);
+  });
+
+  const avgA=teamA.length?Math.round(teamA.reduce((s,p)=>s+p.rating,0)/teamA.length):0;
+  const avgB=teamB.length?Math.round(teamB.reduce((s,p)=>s+p.rating,0)/teamB.length):0;
+  return{teamA,teamB,avgA,avgB};
+}
+
+/* ===================== PAST MATCHES - only finished with score ===================== */
+function renderPastMatches(){
+  const matches=getMatches();const el=document.getElementById('past-matches-list');if(!el)return;
+  // Only finished matches with score
+  const finished=matches.filter(m=>m.finished&&m.score).sort((a,b)=>new Date(b.datetime)-new Date(a.datetime));
+  if(!finished.length){el.innerHTML='<div class="section-title">Geçmiş Maçlar</div><div class="no-match-box"><span class="nm-icon">📚</span><p>Henüz tamamlanmış maç yok.</p></div>';return;}
+  const fmt=d=>new Date(d).toLocaleString('tr-TR',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  const admin=isAdmin(currentUser);
+  el.innerHTML=`<div class="section-title">Geçmiş Maçlar</div>`+finished.map(m=>{
+    const wl=m.winner==='draw'?'🤝 Berabere':m.winner==='A'?`🏆 ${m.teamAName||'A'}`:m.winner==='B'?`🏆 ${m.teamBName||'B'}`:'';
+    const scorePart=`<div class="score-badge">${m.score}</div>${wl?`<div style="font-size:.62rem;color:var(--lime);text-align:right;margin-top:2px">${wl}</div>`:''}`;
+    const delBtn=admin?`<button class="btn btn-danger" style="font-size:.65rem;padding:4px 7px" onclick="askDelete('${m.id}')">🗑️</button>`:'';
+    return`<div class="past-match"><div class="past-match-info"><strong>${m.name}<span class="status-chip past">Bitti</span></strong><span>📍 ${m.venue} &nbsp;•&nbsp; 🕐 ${fmt(m.datetime)}</span><span style="display:block;margin-top:2px;font-size:.67rem;color:var(--text-muted)">✅ ${(m.attending||[]).length} katılımcı</span></div><div class="past-match-actions">${scorePart}${delBtn}</div></div>`;
+  }).join('');
+}
+
+
 /* ====== BOOT ====== */
 tryAutoLogin();
 
 </script>
+
+<!-- MODAL: PATCH NOTES -->
+<div id="modal-patch" class="modal-overlay" style="z-index:300">
+  <div class="modal-box" style="max-width:500px;background:var(--dark-2);border:1px solid rgba(184,247,23,.3)">
+    <div style="text-align:center;margin-bottom:18px">
+      <div style="font-size:2.5rem;margin-bottom:8px">🚀</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:1.8rem;letter-spacing:2px;color:var(--lime)">v1.1 Güncelleme</div>
+      <div style="font-size:.75rem;color:var(--text-muted);margin-top:4px">Salı Maçı Organizasyonu</div>
+    </div>
+    <div style="background:var(--dark-3);border-radius:var(--radius-sm);padding:14px;margin-bottom:14px">
+      <div style="font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--lime);margin-bottom:10px">✨ Yeni Özellikler</div>
+      <div style="font-size:.82rem;color:var(--text);line-height:1.9">
+        🃏 <strong>Dinamik Oyuncu Kartı</strong> — 6 parametreye göre otomatik reyting<br>
+        👤 <strong>Profil Sayfası</strong> — Mevki, ayak, alternatif mevkiler<br>
+        🤖 <strong>Yapay Zeka Mevki Önerisi</strong> — Parametrelerine göre ideal mevki<br>
+        ⚖️ <strong>Adil Takım Dağıtıcı</strong> — 7v7 otomatik dengeli kadro<br>
+        💬 <strong>Topluluk Forumu</strong> — Öneri, şikayet, upvote sistemi<br>
+        📚 <strong>Geçmiş Maç Filtresi</strong> — Sadece biten maçlar listelenir
+      </div>
+    </div>
+    <div style="background:rgba(255,64,64,.12);border:1px solid rgba(255,64,64,.4);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px">
+      <div style="font-size:.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--red);margin-bottom:8px">⚠️ KRİTİK UYARI</div>
+      <div style="font-size:.84rem;color:var(--text);line-height:1.7">
+        Sahaya çıkmadan önce <strong style="color:var(--lime)">hemen Profiline git!</strong><br>
+        <strong>6 temel özelliğini, kullandığın ayağı ve mevkilerini</strong> belirle.<br>
+        <span style="color:var(--red);font-weight:600">Aksi takdirde kadroya giremezsin!</span>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="closePatchNotes()">Anladım, Başlayalım ⚽</button>
+  </div>
+</div>
+
+<!-- MODAL: FORUM POST -->
+<div id="modal-forum-post" class="modal-overlay">
+  <div class="modal-box">
+    <h2>💬 Yeni Gönderi</h2>
+    <div class="form-group">
+      <label>Kategori</label>
+      <select id="forum-cat">
+        <option value="oneri">💡 Öneri</option>
+        <option value="sikayet">😤 Şikayet</option>
+        <option value="genel">💬 Genel</option>
+        <option value="bug">🐛 Bug Bildirimi</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Başlık</label><input type="text" id="forum-title" placeholder="Başlık yaz..."></div>
+    <div class="form-group"><label>Açıklama</label><textarea id="forum-body" rows="4" placeholder="Detayları yaz..."></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-forum-post')">İptal</button>
+      <button class="btn btn-primary" onclick="submitForumPost()">Paylaş 📢</button>
+    </div>
+  </div>
+</div>
+
+<div id="notif" class="notif"></div>
+</body>
+</html>
