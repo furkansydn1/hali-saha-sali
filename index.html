@@ -252,35 +252,247 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .lb-val{font-family:'Bebas Neue',cursive;font-size:1.15rem;color:var(--lime)}
 
 /* ===================== NEWSPAPER ===================== */
-.newspaper-outer{background:#e8e0cc;border-radius:var(--radius);overflow:hidden;box-shadow:0 12px 50px rgba(0,0,0,.6),inset 0 0 0 1px rgba(0,0,0,.15);margin-bottom:18px;position:relative}
-.newspaper-outer::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;border-radius:var(--radius)}
-.newspaper-outer>*{position:relative;z-index:1}
+/* ===================== GAZETE — TÜRK SPOR GAZETESİ ===================== */
 
-/* masthead */
-.np-masthead{background:#1a1208;padding:0;border-bottom:4px double #8b6914}
-.np-masthead-top{display:flex;align-items:center;justify-content:space-between;padding:6px 14px;border-bottom:1px solid #4a3608}
-.np-edition{font-size:.58rem;color:#8b6914;font-family:'IM Fell English',serif;letter-spacing:.5px}
-.np-price{font-size:.58rem;color:#8b6914;font-family:'IM Fell English',serif}
-.np-title-row{padding:8px 14px 6px;text-align:center}
-.np-title{font-family:'UnifrakturMaguntia',cursive;font-size:clamp(2rem,8vw,3.2rem);color:#f5e8cc;letter-spacing:2px;line-height:1;text-shadow:1px 2px 4px rgba(0,0,0,.5)}
-.np-subtitle{font-family:'IM Fell English',serif;font-size:.65rem;color:#8b6914;letter-spacing:2px;text-transform:uppercase;margin-top:2px}
-.np-rule-bar{height:3px;background:linear-gradient(90deg,#8b6914,#f0c040,#8b6914);margin:0}
+/* Kağıt dokusu */
+.np-outer{
+  position:relative;
+  background:#f4f1e8;
+  margin-bottom:22px;
+  border-radius:2px;
+  box-shadow:
+    0 1px 1px rgba(0,0,0,.15),
+    0 2px 2px rgba(0,0,0,.12),
+    0 4px 4px rgba(0,0,0,.10),
+    0 8px 16px rgba(0,0,0,.08),
+    0 16px 40px rgba(0,0,0,.06);
+  overflow:visible;
+}
+/* Kağıt kenar kıvrılma efekti */
+.np-outer::before{
+  content:'';position:absolute;bottom:-4px;left:8px;right:8px;height:8px;
+  background:rgba(0,0,0,.12);
+  border-radius:0 0 4px 4px;
+  filter:blur(3px);
+  z-index:-1;
+}
+/* Kağıt dokusu overlay */
+.np-outer::after{
+  content:'';position:absolute;inset:0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:2;
+}
+.np-outer>*{position:relative;z-index:3;}
 
-/* dateline */
-.np-dateline{background:#2a1e08;padding:4px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #8b6914}
-.np-dateline span{font-size:.58rem;color:#c8a84b;font-family:'IM Fell English',serif;letter-spacing:.5px}
+/* ── MASTHEAD ── */
+.np-masthead{
+  background:#c8102e; /* Fotomaç kırmızısı */
+  padding:0;
+  border-bottom:5px solid #000;
+}
+.np-masthead-meta{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:3px 12px;
+  background:#000;
+  border-bottom:1px solid #c8102e;
+}
+.np-masthead-meta span{
+  font-size:.52rem;color:#ccc;
+  font-family:'Times New Roman',serif;
+  letter-spacing:.3px;
+}
+.np-logo-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:6px 12px 8px;
+  gap:8px;
+}
+.np-logo{
+  font-family:'Impact','Arial Black',sans-serif;
+  font-size:clamp(2rem,9vw,3.4rem);
+  font-weight:900;
+  color:#fff;
+  letter-spacing:-2px;
+  line-height:1;
+  text-transform:uppercase;
+  text-shadow:3px 3px 0 rgba(0,0,0,.4);
+  flex:1;
+}
+.np-logo-sub{
+  font-family:'Times New Roman',serif;
+  font-size:.55rem;
+  color:rgba(255,255,255,.8);
+  letter-spacing:3px;
+  text-transform:uppercase;
+  margin-top:2px;
+}
+.np-logo-right{
+  text-align:right;
+  font-family:'Times New Roman',serif;
+  font-size:.5rem;
+  color:rgba(255,255,255,.7);
+  line-height:1.8;
+  flex-shrink:0;
+}
 
-/* body */
-.np-body{padding:12px 14px;background:#ede5cf}
-.np-headline{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,5vw,2rem);font-weight:700;color:#1a0e00;line-height:1.1;text-align:center;padding-bottom:8px;border-bottom:2px solid #8b6914;margin-bottom:8px;letter-spacing:-.5px}
-.np-deck{font-family:'IM Fell English',serif;font-size:.82rem;color:#3a2800;text-align:center;font-style:italic;margin-bottom:10px;line-height:1.55}
-.np-columns{column-count:2;column-gap:14px;column-rule:1px solid #c8a84b}
-.np-columns p{font-family:'IM Fell English',serif;font-size:.76rem;color:#1a0e00;line-height:1.7;margin-bottom:6px;text-align:justify}
-.np-drop-cap p:first-child::first-letter{float:left;font-family:'Playfair Display',serif;font-size:3.2em;font-weight:700;line-height:.75;margin-right:4px;margin-top:4px;color:#8b6914}
+/* ── KIRMIZI-SİYAH ÇİZGİ ŞERİT ── */
+.np-stripe{
+  height:6px;
+  background:repeating-linear-gradient(
+    90deg,
+    #000 0px, #000 12px,
+    #c8102e 12px, #c8102e 24px
+  );
+}
 
-/* footer rule */
-.np-footer{background:#1a1208;padding:5px 14px;display:flex;align-items:center;justify-content:space-between;border-top:2px solid #8b6914}
-.np-footer span{font-size:.55rem;color:#8b6914;font-family:'IM Fell English',serif;letter-spacing:.5px}
+/* ── TARİH SATIRI ── */
+.np-datebar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:4px 12px;
+  background:#f4f1e8;
+  border-top:1px solid #000;
+  border-bottom:3px solid #000;
+}
+.np-datebar span{
+  font-family:'Times New Roman',serif;
+  font-size:.58rem;
+  color:#1a1a1a;
+  letter-spacing:.3px;
+}
+.np-datebar strong{
+  font-weight:700;
+  font-family:'Times New Roman',serif;
+}
+
+/* ── BODY ── */
+.np-body{
+  padding:14px 14px 10px;
+  background:#f4f1e8;
+  border-bottom:2px solid #000;
+}
+
+/* Flaş rozeti */
+.np-flash{
+  display:inline-block;
+  background:#c8102e;
+  color:#fff;
+  font-family:'Impact','Arial Black',sans-serif;
+  font-size:.72rem;
+  font-weight:900;
+  letter-spacing:1px;
+  padding:3px 10px;
+  text-transform:uppercase;
+  transform:rotate(-2deg);
+  margin-bottom:8px;
+  position:relative;
+  box-shadow:2px 2px 0 rgba(0,0,0,.4);
+}
+.np-flash::before{
+  content:'▶';
+  margin-right:4px;
+  font-size:.6rem;
+}
+
+/* Ana manşet */
+.np-headline{
+  font-family:'Impact','Arial Black',sans-serif;
+  font-size:clamp(1.6rem,7vw,2.8rem);
+  font-weight:900;
+  color:#000;
+  line-height:.95;
+  text-transform:uppercase;
+  letter-spacing:-1px;
+  margin-bottom:8px;
+  border-bottom:3px solid #000;
+  padding-bottom:8px;
+}
+/* Manşette vurgu rengi */
+.np-headline .hl-red{background:#c8102e;color:#fff;padding:0 4px;display:inline;}
+.np-headline .hl-yellow{background:#ffe600;color:#000;padding:0 4px;display:inline;}
+
+/* Alt başlık (deck) */
+.np-deck{
+  font-family:'Times New Roman',serif;
+  font-size:.88rem;
+  color:#1a1a1a;
+  font-style:italic;
+  margin-bottom:10px;
+  padding-bottom:8px;
+  border-bottom:1px solid #000;
+  line-height:1.5;
+}
+
+/* Bölüm başlığı (alt başlık) */
+.np-subhead{
+  display:block;
+  background:#000;
+  color:#ffe600;
+  font-family:'Impact','Arial Black',sans-serif;
+  font-size:.82rem;
+  font-weight:900;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  padding:3px 8px;
+  margin:10px 0 6px;
+}
+
+/* Sütunlu metin */
+.np-cols{
+  column-count:2;
+  column-gap:16px;
+  column-rule:1.5px solid #000;
+  text-align:justify;
+}
+.np-cols p{
+  font-family:'Times New Roman',serif;
+  font-size:.76rem;
+  color:#111;
+  line-height:1.75;
+  margin-bottom:5px;
+  break-inside:avoid;
+}
+/* Drop cap */
+.np-cols p.dropcap::first-letter{
+  float:left;
+  font-family:'Times New Roman',serif;
+  font-size:4em;
+  font-weight:700;
+  line-height:.72;
+  color:#c8102e;
+  margin-right:5px;
+  margin-top:4px;
+}
+
+/* İnce ayırıcı çizgi */
+.np-rule{
+  border:none;
+  border-top:1px solid #888;
+  margin:8px 0;
+}
+.np-rule-thick{
+  border:none;
+  border-top:3px solid #000;
+  margin:10px 0;
+}
+
+/* ── FOOTER ── */
+.np-footer{
+  background:#000;
+  padding:4px 12px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.np-footer span{
+  font-size:.5rem;
+  color:#aaa;
+  font-family:'Times New Roman',serif;
+  letter-spacing:.5px;
+}
+
+@media(max-width:440px){
+  .np-cols{column-count:1}
+  .np-logo{font-size:2rem}
+  .np-headline{font-size:1.5rem}
+}
 
 /* admin rating */
 .admin-user-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--surface-3)}
@@ -304,7 +516,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 @media(max-width:440px){
   .roster-grid,.match-actions,.form-row,.winner-select{grid-template-columns:1fr}
   .nav-tab{font-size:.62rem;padding:6px 2px}
-  .np-columns{column-count:1}
+  .np-cols{column-count:1}
   .fc-grid{gap:9px}
   .fc-card{width:122px;height:184px}
 }
@@ -975,8 +1187,12 @@ function renderLineup(){
         <p class="lineup-sub" style="font-size:.72rem;margin-bottom:0">Kadro açıklanmasına bu kadar süre kaldı.</p>
       </div>`;
     // Geri sayımın altına demo saha ekle — append mode
+    // Boş saha göster (lineup yok = ikonlar yok)
     el2.dataset.appendMode='1';
-    const fakePreview={lineup:{},attending:[],reserves:[],teamAName:match.teamAName||'Takım A',teamBName:match.teamBName||'Takım B',captainA:null,captainB:null,teamAvgA:0,teamAvgB:0,datetime:match.datetime,venue:match.venue};
+    const fakePreview={lineup:{},attending:[],reserves:[],
+      teamAName:match.teamAName||'Takım A',teamBName:match.teamBName||'Takım B',
+      captainA:null,captainB:null,teamAvgA:0,teamAvgB:0,
+      datetime:match.datetime,venue:match.venue};
     renderFieldLineup(el2, fakePreview);
     el2.dataset.appendMode='0';
   }
@@ -997,87 +1213,80 @@ function renderFieldLineup(el, match, previewMode=false){
   Object.values(users).forEach(u=>{playerMap[u.id]=u;});
   attending.forEach(p=>{if(!playerMap[p.id])playerMap[p.id]=p;});
 
+  // Yan yana iki saha — koordinatlar artık piksel cinsinden
+  // Sol = Takım A, Sağ = Takım B, her saha SW x SH
+  const SP=12; // sağ saha başlangıç offset
   const slotPositions={
-    'A_GK':{x:50,y:6.5,label:'KAL'},
-    'A_D1':{x:22,y:21,label:'DEF'},
-    'A_D2':{x:78,y:21,label:'DEF'},
-    'A_M': {x:50,y:34,label:'OSA'},
-    'A_A1':{x:24,y:47,label:'ATK'},
-    'A_A2':{x:76,y:47,label:'ATK'},
-    'A_F': {x:50,y:58,label:'FOR'},
-    'B_GK':{x:50,y:93.5,label:'KAL'},
-    'B_D1':{x:22,y:79,label:'DEF'},
-    'B_D2':{x:78,y:79,label:'DEF'},
-    'B_M': {x:50,y:66,label:'OSA'},
-    'B_A1':{x:24,y:53,label:'ATK'},
-    'B_A2':{x:76,y:53,label:'ATK'},
-    'B_F': {x:50,y:42,label:'FOR'},
+    // Takım A — sol saha (0..SW), yukarıdan aşağıya: GK > DEF > MID > ATK > FOR
+    'A_GK':{ax:SW*0.50,       ay:SH*0.07, label:'KAL'},
+    'A_D1':{ax:SW*0.22,       ay:SH*0.22, label:'DEF'},
+    'A_D2':{ax:SW*0.78,       ay:SH*0.22, label:'DEF'},
+    'A_M': {ax:SW*0.50,       ay:SH*0.38, label:'MID'},
+    'A_A1':{ax:SW*0.22,       ay:SH*0.55, label:'ATK'},
+    'A_A2':{ax:SW*0.78,       ay:SH*0.55, label:'ATK'},
+    'A_F': {ax:SW*0.50,       ay:SH*0.72, label:'FOR'},
+    // Takım B — sağ saha (SW+SP..W), yukarıdan aşağıya
+    'B_GK':{ax:SW+SP+SW*0.50, ay:SH*0.07, label:'KAL'},
+    'B_D1':{ax:SW+SP+SW*0.22, ay:SH*0.22, label:'DEF'},
+    'B_D2':{ax:SW+SP+SW*0.78, ay:SH*0.22, label:'DEF'},
+    'B_M': {ax:SW+SP+SW*0.50, ay:SH*0.38, label:'MID'},
+    'B_A1':{ax:SW+SP+SW*0.22, ay:SH*0.55, label:'ATK'},
+    'B_A2':{ax:SW+SP+SW*0.78, ay:SH*0.55, label:'ATK'},
+    'B_F': {ax:SW+SP+SW*0.50, ay:SH*0.72, label:'FOR'},
   };
 
   const tA=match.teamAName||'Takım A';
   const tB=match.teamBName||'Takım B';
-  const W=340, H=520;
+  // Yan yana 2 saha
+  const SW=180, SH=400; // tek saha boyutu
+  const W=SW*2+12, H=SH; // toplam genişlik (ortada 12px boşluk)
 
-  // ── Modern oyuncu ikonu ──────────────────────────────────────
-  function playerFigure(cx, cy, isTeamA, name, posLabel, rating, isCap){
-    const pri  = isTeamA ? '#b8f717' : '#ff5050';   // forma rengi
-    const glow = isTeamA ? 'rgba(184,247,23,.5)' : 'rgba(255,80,80,.5)';
-    const dark = isTeamA ? '#1a3200' : '#4a0000';
-    const txt  = isTeamA ? '#0d1a00' : '#fff';
-    const shortName = (name||'?').split(' ')[0].substring(0,7).toUpperCase();
-    const r = rating||'';
+  // Oyuncu figürü — FC kartı tarzı chip (icon yok, kart tasarımı)
+  function playerChip(cx, cy, isTeamA, name, posLabel, rating, isCap, user){
+    const pri   = isTeamA ? '#b8f717' : '#ff5050';
+    const bg    = isTeamA ? 'rgba(184,247,23,.15)' : 'rgba(255,80,80,.15)';
+    const dark  = isTeamA ? '#0d1a00' : '#1a0000';
+    const short = (name||'?').split(' ')[0].substring(0,7).toUpperCase();
+    const r     = rating||'?';
+    const tier  = rating>=85?'#f5c842':rating>=75?'#b0c8d8':rating>=65?'#c07838':rating>=55?'#6080cc':'#4a7a5a';
 
-    // ── Zemin gölge
-    const shadow = `<ellipse cx="${cx}" cy="${cy+26}" rx="18" ry="5" fill="${glow}" opacity=".4"/>`;
+    // kart boyutu sahaya göre
+    const W2=28, H2=38; // sahaya orantılı küçük
+    const x = cx - W2/2;
+    const y = cy - H2/2;
 
-    // ── Forma gövdesi (daha modern, yuvarlak köşeli)
-    const body = `
-      <rect x="${cx-13}" y="${cy-16}" width="26" height="22" rx="6" fill="${pri}"/>
-      <rect x="${cx-13}" y="${cy-16}" width="26" height="10" rx="6" fill="${dark}" opacity=".25"/>
-      <line x1="${cx}" y1="${cy-16}" x2="${cx}" y2="${cy+6}" stroke="${dark}" stroke-width="1" opacity=".3"/>`;
+    // kaptan rozeti
+    const cap = isCap ? `
+      <rect x="${cx+16}" y="${y-4}" width="14" height="14" rx="7" fill="#ffd700" stroke="#000" stroke-width="1"/>
+      <text x="${cx+23}" y="${y+7}" text-anchor="middle" fill="#000" font-family="'Bebas Neue',cursive" font-size="9" font-weight="900">C</text>` : '';
 
-    // ── Kol bantları
-    const arms = `
-      <rect x="${cx-20}" y="${cy-14}" width="8" height="14" rx="4" fill="${pri}"/>
-      <rect x="${cx+12}" y="${cy-14}" width="8" height="14" rx="4" fill="${pri}"/>`;
-
-    // ── Şort
-    const shorts = `<rect x="${cx-10}" y="${cy+6}" width="20" height="10" rx="3" fill="${dark}" opacity=".7"/>`;
-
-    // ── Bacaklar
-    const legs = `
-      <rect x="${cx-9}" y="${cy+16}" width="8" height="14" rx="4" fill="#d0a070"/>
-      <rect x="${cx+1}" y="${cy+16}" width="8" height="14" rx="4" fill="#d0a070"/>
-      <rect x="${cx-10}" y="${cy+28}" width="9" height="5" rx="2" fill="${dark}"/>
-      <rect x="${cx+1}" y="${cy+28}" width="9" height="5" rx="2" fill="${dark}"/>`;
-
-    // ── Baş
-    const head = `
-      <circle cx="${cx}" cy="${cy-26}" r="11" fill="#e0b888"/>
-      <ellipse cx="${cx}" cy="${cy-33}" rx="11" ry="7" fill="${pri}"/>
-      <circle cx="${cx-3}" cy="${cy-27}" r="1.5" fill="#5a3a1a" opacity=".7"/>
-      <circle cx="${cx+3}" cy="${cy-27}" r="1.5" fill="#5a3a1a" opacity=".7"/>
-      <path d="M${cx-3} ${cy-22} Q${cx} ${cy-20} ${cx+3} ${cy-22}" stroke="#5a3a1a" stroke-width="1.2" fill="none" opacity=".6"/>`;
-
-    // ── Reyting rozeti
-    const badge = `
-      <rect x="${cx-14}" y="${cy+34}" width="28" height="11" rx="5.5" fill="rgba(0,0,0,.75)" stroke="${pri}" stroke-width=".8"/>
-      <text x="${cx}" y="${cy+42}" text-anchor="middle" fill="${pri}" font-family="'Bebas Neue',cursive" font-size="7" letter-spacing=".5">${posLabel}${r?' '+r:''}</text>`;
-
-    // ── İsim etiketi
-    const nameTag = `
-      <rect x="${cx-20}" y="${cy-42}" width="40" height="12" rx="6" fill="rgba(0,0,0,.7)" stroke="${pri}" stroke-width=".7"/>
-      <text x="${cx}" y="${cy-34}" text-anchor="middle" fill="${pri}" font-family="'DM Sans',sans-serif" font-size="6" font-weight="700">${shortName}</text>`;
-
-    // ── Kaptan yıldızı
-    const captBadge = isCap ? `
-      <circle cx="${cx+14}" cy="${cy-42}" r="7" fill="#ffd700" stroke="#000" stroke-width="1"/>
-      <text x="${cx+14}" y="${cy-38}" text-anchor="middle" fill="#000" font-family="'Bebas Neue',cursive" font-size="8" font-weight="900">C</text>` : '';
-
-    return `<g>${shadow}${legs}${shorts}${body}${arms}${head}${badge}${nameTag}${captBadge}</g>`;
+    return `<g>
+      <!-- Gölge -->
+      <rect x="${x+2}" y="${y+2}" width="${W2}" height="${H2}" rx="6" fill="rgba(0,0,0,.4)"/>
+      <!-- Kart arka plan -->
+      <rect x="${x}" y="${y}" width="${W2}" height="${H2}" rx="6" fill="${bg}" stroke="${pri}" stroke-width="1.5"/>
+      <!-- Üst renk şeridi -->
+      <rect x="${x}" y="${y}" width="${W2}" height="16" rx="6" fill="${pri}" opacity=".9"/>
+      <rect x="${x}" y="${y+10}" width="${W2}" height="6" fill="${pri}" opacity=".9"/>
+      <!-- Rating -->
+      <text x="${cx}" y="${y+12}" text-anchor="middle" fill="${dark}" font-family="'Bebas Neue',cursive" font-size="11" font-weight="900">${r}</text>
+      <!-- Mevki -->
+      <text x="${cx}" y="${y+24}" text-anchor="middle" fill="${pri}" font-family="'Bebas Neue',cursive" font-size="7" letter-spacing="1">${posLabel}</text>
+      <!-- İsim arka plan -->
+      <rect x="${x+2}" y="${y+26}" width="${W2-4}" height="14" rx="3" fill="rgba(0,0,0,.5)"/>
+      <!-- İsim -->
+      <text x="${cx}" y="${y+36}" text-anchor="middle" fill="${pri}" font-family="'DM Sans',sans-serif" font-size="5.5" font-weight="700">${short}</text>
+      <!-- Alt çizgi -->
+      <line x1="${x+4}" y1="${y+42}" x2="${x+W2-4}" y2="${y+42}" stroke="${pri}" stroke-width=".5" opacity=".5"/>
+      <!-- Form oku -->
+      <text x="${cx}" y="${y+52}" text-anchor="middle" fill="${pri}" font-family="'DM Sans',sans-serif" font-size="7">${
+        user&&user.lastResult==='W'?'⬆':user&&user.lastResult==='L'?'⬇':'·'
+      }</text>
+      ${cap}
+    </g>`;
   }
 
-  // ── Önizleme: lineup boşsa demo oyuncular göster ──────────────
+  // Lineup varsa gerçek kartlar, yoksa boş saha
   let figures = '';
   const hasLineup = Object.keys(lineup).length > 0;
 
@@ -1085,23 +1294,54 @@ function renderFieldLineup(el, match, previewMode=false){
     Object.entries(lineup).forEach(([pid,slot])=>{
       const pos=slotPositions[slot];if(!pos)return;
       const p=playerMap[pid];if(!p)return;
-      const cx=Math.round(pos.x/100*W);
-      const cy=Math.round(pos.y/100*H);
+      const cx=Math.round(pos.ax); // artık direkt piksel
+      const cy=Math.round(pos.ay);
       const isCap=(pid===match.captainA)||(pid===match.captainB);
-      figures+=playerFigure(cx,cy,slot.startsWith('A'),p.name,pos.label,calcRating(p,p.pos)||p.rating||'',isCap);
+      const fullUser=users[p.name&&p.name.toLowerCase()]||p;
+      const r=calcRating(fullUser,fullUser.pos||p.pos)||p.rating||50;
+      figures+=playerChip(cx,cy,slot.startsWith('A'),p.name,pos.label,r,isCap,fullUser);
     });
-  } else {
-    // Demo: tüm slotları boş oyuncularla doldur
-    Object.entries(slotPositions).forEach(([slot,pos])=>{
-      const cx=Math.round(pos.x/100*W);
-      const cy=Math.round(pos.y/100*H);
-      figures+=playerFigure(cx,cy,slot.startsWith('A'),'?',pos.label,'',false);
+  }
+  // lineup yoksa figures boş kalır — saha boş görünür
+
+  // Pitch SVG — yan yana iki saha
+  // Saha çizim yardımcısı
+  function drawPitch(ox, w, h, stripeCount=6){
+    let s='';
+    // Zemin
+    s+=`<rect x="${ox}" y="0" width="${w}" height="${h}" fill="url(#pitchGrad)"/>`;
+    // Şeritler
+    for(let i=0;i<stripeCount;i++){
+      s+=`<rect x="${ox}" y="${i*h/stripeCount}" width="${w}" height="${h/stripeCount}" fill="url(#${i%2===0?'stripeLight':'stripeDark'})"/>`;
+    }
+    // Dış çizgi
+    s+=`<rect x="${ox+6}" y="6" width="${w-12}" height="${h-12}" rx="3" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="1.5"/>`;
+    // Orta çizgi
+    s+=`<line x1="${ox+6}" y1="${h/2}" x2="${ox+w-6}" y2="${h/2}" stroke="rgba(255,255,255,.7)" stroke-width="1.2"/>`;
+    // Orta daire
+    s+=`<circle cx="${ox+w/2}" cy="${h/2}" r="${w*0.2}" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.2"/>`;
+    s+=`<circle cx="${ox+w/2}" cy="${h/2}" r="2.5" fill="rgba(255,255,255,.9)"/>`;
+    // Ceza sahası üst
+    const pw=w*0.55,ph=h*0.18;
+    s+=`<rect x="${ox+w/2-pw/2}" y="6" width="${pw}" height="${ph}" rx="2" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.7)" stroke-width="1"/>`;
+    // Küçük ceza sahası üst
+    const pw2=w*0.3,ph2=h*0.09;
+    s+=`<rect x="${ox+w/2-pw2/2}" y="6" width="${pw2}" height="${ph2}" rx="1" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.5)" stroke-width=".8"/>`;
+    // Kale üst
+    s+=`<rect x="${ox+w/2-w*0.18}" y="0" width="${w*0.36}" height="8" rx="2" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.8)" stroke-width="1.5"/>`;
+    // Ceza sahası alt
+    s+=`<rect x="${ox+w/2-pw/2}" y="${h-6-ph}" width="${pw}" height="${ph}" rx="2" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.7)" stroke-width="1"/>`;
+    s+=`<rect x="${ox+w/2-pw2/2}" y="${h-6-ph2}" width="${pw2}" height="${ph2}" rx="1" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.5)" stroke-width=".8"/>`;
+    // Kale alt
+    s+=`<rect x="${ox+w/2-w*0.18}" y="${h-8}" width="${w*0.36}" height="8" rx="2" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.8)" stroke-width="1.5"/>`;
+    // Köşe yayları
+    [[ox+6,6],[ox+w-6,6],[ox+6,h-6],[ox+w-6,h-6]].forEach(([cx2,cy2])=>{
+      s+=`<path d="M${cx2} ${cy2} A8 8 0 0 ${cx2<ox+w/2?1:0} ${cx2<ox+w/2?cx2+8:cx2-8} ${cy2<h/2?cy2+8:cy2-8}" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1"/>`;
     });
-    figures+=`<text x="${W/2}" y="${H/2+60}" text-anchor="middle" fill="rgba(255,255,255,.5)" font-family="'Bebas Neue',cursive" font-size="14" letter-spacing="2">KADRO BEKLENİYOR</text>`;
+    return s;
   }
 
-  // Pitch SVG — rich stadium feel
-  const pitchSvg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+  const pitchSvg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%">
     <defs>
       <linearGradient id="pitchGrad" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stop-color="#1e6b2e"/>
@@ -1115,70 +1355,28 @@ function renderFieldLineup(el, match, previewMode=false){
         <stop offset="0%" stop-color="#1a7030"/>
         <stop offset="100%" stop-color="#145525"/>
       </linearGradient>
-      <filter id="glow">
-        <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
-        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
     </defs>
 
-    <!-- Base pitch -->
-    <rect width="${W}" height="${H}" fill="url(#pitchGrad)"/>
-
-    <!-- Mowing stripes (8 bands) -->
-    ${Array.from({length:8},(_,i)=>`<rect x="0" y="${i*H/8}" width="${W}" height="${H/8}" fill="url(#${i%2===0?'stripeLight':'stripeDark'})"/>`).join('')}
-
-    <!-- Outer pitch border with rounded corners -->
-    <rect x="14" y="12" width="${W-28}" height="${H-24}" rx="4" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"/>
-
-    <!-- Center line -->
-    <line x1="14" y1="${H/2}" x2="${W-14}" y2="${H/2}" stroke="rgba(255,255,255,.8)" stroke-width="1.8"/>
-
-    <!-- Center circle -->
-    <circle cx="${W/2}" cy="${H/2}" r="46" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="1.8"/>
-    <!-- Center spot -->
-    <circle cx="${W/2}" cy="${H/2}" r="3.5" fill="rgba(255,255,255,.9)"/>
-
-    <!-- Penalty area TOP -->
-    <rect x="${W/2-68}" y="12" width="136" height="68" rx="2" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.8)" stroke-width="1.6"/>
-    <!-- 6-yard box TOP -->
-    <rect x="${W/2-38}" y="12" width="76" height="32" rx="1" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.7)" stroke-width="1.2"/>
-    <!-- Penalty spot TOP -->
-    <circle cx="${W/2}" cy="${12+52}" r="2.5" fill="rgba(255,255,255,.8)"/>
-    <!-- Penalty arc TOP -->
-    <path d="M ${W/2-38} ${12+68} A 46 46 0 0 1 ${W/2+38} ${12+68}" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.5"/>
-
-    <!-- Penalty area BOTTOM -->
-    <rect x="${W/2-68}" y="${H-80}" width="136" height="68" rx="2" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.8)" stroke-width="1.6"/>
-    <!-- 6-yard box BOTTOM -->
-    <rect x="${W/2-38}" y="${H-44}" width="76" height="32" rx="1" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.7)" stroke-width="1.2"/>
-    <!-- Penalty spot BOTTOM -->
-    <circle cx="${W/2}" cy="${H-12-52}" r="2.5" fill="rgba(255,255,255,.8)"/>
-    <!-- Penalty arc BOTTOM -->
-    <path d="M ${W/2-38} ${H-80} A 46 46 0 0 0 ${W/2+38} ${H-80}" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.5"/>
-
-    <!-- Goals TOP -->
-    <rect x="${W/2-26}" y="4" width="52" height="12" rx="2" fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.9)" stroke-width="2"/>
-    <!-- Goal net lines TOP -->
-    ${Array.from({length:5},(_,i)=>`<line x1="${W/2-26+i*13}" y1="4" x2="${W/2-26+i*13}" y2="16" stroke="rgba(255,255,255,.25)" stroke-width=".8"/>`).join('')}
-    <line x1="${W/2-26}" y1="10" x2="${W/2+26}" y2="10" stroke="rgba(255,255,255,.2)" stroke-width=".8"/>
-
-    <!-- Goals BOTTOM -->
-    <rect x="${W/2-26}" y="${H-16}" width="52" height="12" rx="2" fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.9)" stroke-width="2"/>
-    ${Array.from({length:5},(_,i)=>`<line x1="${W/2-26+i*13}" y1="${H-16}" x2="${W/2-26+i*13}" y2="${H-4}" stroke="rgba(255,255,255,.25)" stroke-width=".8"/>`).join('')}
-    <line x1="${W/2-26}" y1="${H-10}" x2="${W/2+26}" y2="${H-10}" stroke="rgba(255,255,255,.2)" stroke-width=".8"/>
-
-    <!-- Corner arcs -->
-    <path d="M 14 22 A 10 10 0 0 1 24 12" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.2"/>
-    <path d="M ${W-24} 12 A 10 10 0 0 1 ${W-14} 22" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.2"/>
-    <path d="M 14 ${H-22} A 10 10 0 0 0 24 ${H-12}" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.2"/>
-    <path d="M ${W-24} ${H-12} A 10 10 0 0 0 ${W-14} ${H-22}" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.2"/>
-
-    <!-- Team watermarks -->
-    <text x="${W/2}" y="${H/4+8}" text-anchor="middle" fill="rgba(255,255,255,.07)" font-family="'Bebas Neue',cursive" font-size="36" letter-spacing="3">${tA.toUpperCase().substring(0,8)}</text>
-    <text x="${W/2}" y="${H*3/4+12}" text-anchor="middle" fill="rgba(255,255,255,.07)" font-family="'Bebas Neue',cursive" font-size="36" letter-spacing="3">${tB.toUpperCase().substring(0,8)}</text>
-
-    <!-- Player figures -->
-    ${figures||`<text x="${W/2}" y="${H/2+5}" text-anchor="middle" fill="rgba(255,255,255,.4)" font-family="'DM Sans',sans-serif" font-size="13">Kadro henüz atanmadı</text>`}
+    <!-- Sol saha (Takım A) -->
+    ${drawPitch(0,SW,SH)}
+    <!-- Sağ saha (Takım B) -->
+    ${drawPitch(SW+SP,SW,SH)}
+    <!-- Orta ayırıcı -->
+    <rect x="${SW}" y="0" width="${SP}" height="${SH}" fill="#0d1a12"/>
+    <line x1="${SW+SP/2}" y1="20" x2="${SW+SP/2}" y2="${SH-20}" stroke="rgba(255,255,255,.15)" stroke-width="1" stroke-dasharray="4,4"/>
+    <!-- Takım A etiketi -->
+    <rect x="2" y="${SH/2-12}" width="${SW-4}" height="24" rx="4" fill="rgba(184,247,23,.12)"/>
+    <text x="${SW/2}" y="${SH/2+5}" text-anchor="middle" fill="rgba(184,247,23,.35)" font-family="'Bebas Neue',cursive" font-size="16" letter-spacing="2">${tA.toUpperCase().substring(0,8)}</text>
+    <!-- Takım B etiketi -->
+    <rect x="${SW+SP+2}" y="${SH/2-12}" width="${SW-4}" height="24" rx="4" fill="rgba(255,80,80,.12)"/>
+    <text x="${SW+SP+SW/2}" y="${SH/2+5}" text-anchor="middle" fill="rgba(255,80,80,.35)" font-family="'Bebas Neue',cursive" font-size="16" letter-spacing="2">${tB.toUpperCase().substring(0,8)}</text>
+    <!-- Oyuncular -->
+    ${figures||`
+      <text x="${SW/2}" y="${SH/2-10}" text-anchor="middle" fill="rgba(184,247,23,.25)" font-family="'Bebas Neue',cursive" font-size="13" letter-spacing="2">KADRO</text>
+      <text x="${SW/2}" y="${SH/2+10}" text-anchor="middle" fill="rgba(184,247,23,.25)" font-family="'Bebas Neue',cursive" font-size="13" letter-spacing="2">BEKLENİYOR</text>
+      <text x="${SW+SP+SW/2}" y="${SH/2-10}" text-anchor="middle" fill="rgba(255,80,80,.25)" font-family="'Bebas Neue',cursive" font-size="13" letter-spacing="2">KADRO</text>
+      <text x="${SW+SP+SW/2}" y="${SH/2+10}" text-anchor="middle" fill="rgba(255,80,80,.25)" font-family="'Bebas Neue',cursive" font-size="13" letter-spacing="2">BEKLENİYOR</text>
+    `}
   </svg>`;
 
   const fmt=d=>new Date(d).toLocaleString('tr-TR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
@@ -1381,38 +1579,88 @@ function renderNewsTab(){
   let html=`<div class="section-title">Gazete</div>`;
   if(isAdmin(currentUser))html+=`<button class="btn btn-amber" style="width:100%;margin-bottom:14px" onclick="openNewsModal()">📰 Yeni Manşet Yaz</button>`;
   if(!news.length){
-    html+=`<div style="background:#ede5cf;border-radius:var(--radius);padding:32px;text-align:center"><p style="font-size:.84rem;color:#6b5a3a;font-family:'IM Fell English',serif">Henüz manşet yok. Admin ilk manşeti yazacak.</p></div>`;
+    html+=`<div class="np-outer" style="padding:32px;text-align:center">
+      <p style="font-family:'Times New Roman',serif;font-size:.9rem;color:#555;font-style:italic">
+        Henüz baskı yapılmadı.<br>Admin ilk manşeti yazarsa piyasaya çıkarız.
+      </p>
+    </div>`;
   } else {
     html+=news.slice().reverse().map((n,i)=>{
       const origIdx=news.length-1-i;
-      const paragraphs=(n.body||'').split('\n').filter(Boolean).map(p=>`<p>${p}</p>`).join('');
+      const sayiNo=news.length-i;
+      // Paragraflara böl — ilk paragraf dropcap alır
+      const paras=(n.body||'').split('\n').filter(Boolean);
+      const parasHtml=paras.map((p,pi)=>
+        `<p${pi===0?' class="dropcap"':''}>${p}</p>`
+      ).join('');
+      // Manşeti kelimelerine böl — ilk 2 kelime kırmızı vurgulu
+      const words=(n.headline||'').split(' ');
+      const headlineHtml=words.map((w,wi)=>{
+        if(wi===0||wi===1) return `<span class="hl-red">${w}</span>`;
+        if(wi===words.length-1&&words.length>3) return `<span class="hl-yellow">${w}</span>`;
+        return w;
+      }).join(' ');
+
       return`
-        <div class="newspaper-outer">
+        <div class="np-outer">
+
+          <!-- MASTHEAD -->
           <div class="np-masthead">
-            <div class="np-masthead-top">
-              <span class="np-edition">Salı Maçı Yayın Organı</span>
-              <span class="np-price">Ücretsiz Dağıtım</span>
+            <div class="np-masthead-meta">
+              <span>HALI SAHA POSTASI — BAĞIMSIZ SPOR YAYINI</span>
+              <span>SAYI: ${sayiNo} &nbsp;|&nbsp; FİYATI: PAHA BİÇİLEMEZ</span>
             </div>
-            <div class="np-title-row">
-              <div class="np-title">Salı Gazetesi</div>
-              <div class="np-subtitle">⚽ &nbsp; Halı Saha'nın Sesi &nbsp; ⚽</div>
+            <div class="np-logo-row">
+              <div>
+                <div class="np-logo">HALI SAHA POSTASI</div>
+                <div class="np-logo-sub">Mahallenin En Taraflı Spor Gazetesi</div>
+              </div>
+              <div class="np-logo-right">
+                ${n.date||new Date().toLocaleDateString('tr-TR')}<br>
+                Gökhan Başkan<br>Onaylıdır ✓
+              </div>
             </div>
           </div>
-          <div class="np-rule-bar"></div>
-          <div class="np-dateline">
+
+          <!-- ŞERİT -->
+          <div class="np-stripe"></div>
+
+          <!-- TARİH BARI -->
+          <div class="np-datebar">
             <span>${n.date||''}</span>
-            <span>Sayı: ${news.length-i}</span>
-            <span>Gökhan Başkan Onaylı</span>
+            <span><strong>⚽ MAHALLEMAH ELEŞTİRMEN — HALICININ SESİ ⚽</strong></span>
+            <span>Sayı No: ${sayiNo}</span>
           </div>
+
+          <!-- BODY -->
           <div class="np-body">
-            <div class="np-headline">${n.headline||'—'}</div>
-            <div class="np-deck">${n.sub||''}</div>
-            <div class="np-columns np-drop-cap">${paragraphs||'<p>—</p>'}</div>
+
+            <!-- FLAŞ ROZETİ -->
+            <div class="np-flash">FLAŞ HABER</div>
+
+            <!-- ANA MANŞET -->
+            <div class="np-headline">${headlineHtml}</div>
+
+            <!-- ALT BAŞLIK -->
+            ${n.sub?`<div class="np-deck">${n.sub}</div>`:''}
+
+            <hr class="np-rule-thick">
+
+            ${paras.length?`
+            <!-- SÜTUNLU HABER METNİ -->
+            <div class="np-cols">
+              ${parasHtml||'<p>—</p>'}
+            </div>`:''}
+
           </div>
+
+          <!-- FOOTER -->
           <div class="np-footer">
-            <span>© Salı Maçı Organizasyonu</span>
-            <span>Tüm hakları saklıdır</span>
+            <span>© HALI SAHA POSTASI — TÜM HAKLARI SAKLIDIR</span>
+            <span>halısaha.local — BASKISI YAPILMAZ, OKUNUR</span>
+            <span>SORUMLU MÜDÜR: GÖKHAN BAŞKAN</span>
           </div>
+
         </div>
         ${isAdmin(currentUser)?`<button class="btn btn-danger" style="font-size:.7rem;padding:5px 9px;margin-bottom:12px" onclick="deleteNews(${origIdx})">🗑️ Manşeti Sil</button>`:''}`;
     }).join('');
@@ -2617,48 +2865,110 @@ async function forumVote(postId,val){
 /* ===================== ADIL TAKIM DAGITICI ===================== */
 function buildFairTeams(attending){
   const users=getUsers();
-  // attending array veya object olabilir — normalize et
   const attendArr=Array.isArray(attending)?attending:Object.values(attending||{});
-  // Enrich with full stats
+
+  // Oyuncu verilerini zenginleştir
   const players=attendArr.map(p=>{
-    const u=users[p.name.toLowerCase()]||p;
+    const key=(p.name||'').toLowerCase();
+    const u=users[key]||p;
+    const r=Math.max(1,calcRating(u,u.pos||p.pos)||50);
     return{
       ...p,
-      rating:calcRating(u,u.pos||p.pos),
+      id:p.id||u.id,
+      rating:r,
       pos:u.pos||p.pos||'MOS',
+      hiz:Number(u.hiz)||50,
+      sut:Number(u.sut)||50,
+      pas:Number(u.pas)||50,
+      fizik:Number(u.fizik)||50,
+      defans:Number(u.defans)||50,
+      kalecilik:Number(u.kalecilik)||50,
       altPos1:u.altPos1||'',
       altPos2:u.altPos2||'',
     };
   });
 
-  // Need 1 GK per team
-  const keepers=players.filter(p=>p.pos==='Kaleci');
-  const outfielders=players.filter(p=>p.pos!=='Kaleci');
+  const target=Math.floor(players.length/2);
 
-  // Sort outfielders by rating desc
-  outfielders.sort((a,b)=>b.rating-a.rating);
+  // ── Mevki kategorileri ──────────────────────────────────────
+  const isGK  =p=>p.pos==='Kaleci';
+  const isDef =p=>['Stoper','Sağ Bek','Sol Bek','DOS'].includes(p.pos)||
+                  ['Stoper','Sağ Bek','Sol Bek','DOS'].includes(p.altPos1)||
+                  ['Stoper','Sağ Bek','Sol Bek','DOS'].includes(p.altPos2);
+  const isFwd =p=>['Santrafor','Sağ Kanat','Sol Kanat','Forvet Arkası'].includes(p.pos)||
+                  ['Santrafor','Sağ Kanat','Sol Kanat','Forvet Arkası'].includes(p.altPos1);
+  const isMid =p=>['MOS','MOS'].includes(p.pos)||p.pos==='MOS'||p.pos==='Forvet Arkası';
+
+  // ── GK'leri ayır ───────────────────────────────────────────
+  const keepers   =players.filter(isGK).sort((a,b)=>b.kalecilik-a.kalecilik);
+  const outfielders=players.filter(p=>!isGK(p)).sort((a,b)=>b.rating-a.rating);
 
   let teamA=[],teamB=[];
 
-  // Assign keepers
+  // En iyi 2 GK'yi farklı takımlara ver
   if(keepers.length>=2){
-    teamA.push(keepers[0]);teamB.push(keepers[1]);
-    // remaining keepers as outfielders
+    teamA.push(keepers[0]);
+    teamB.push(keepers[1]);
     keepers.slice(2).forEach((k,i)=>i%2===0?teamA.push(k):teamB.push(k));
   } else if(keepers.length===1){
     teamA.push(keepers[0]);
   }
 
-  // Snake draft for outfielders
-  outfielders.forEach((p,i)=>{
-    const aScore=teamA.reduce((s,x)=>s+x.rating,0);
-    const bScore=teamB.reduce((s,x)=>s+x.rating,0);
-    if(teamA.length<=teamB.length&&aScore<=bScore) teamA.push(p);
-    else teamB.push(p);
+  // ── Defansçıları dengeli dağıt ──────────────────────────────
+  const defenders=outfielders.filter(isDef);
+  const rest=outfielders.filter(p=>!isDef(p));
+
+  // Defansçıları sırayla snake draft ile dağıt
+  defenders.forEach((p,i)=>{
+    const aStr=teamA.filter(isDef).reduce((s,x)=>s+x.defans,0);
+    const bStr=teamB.filter(isDef).reduce((s,x)=>s+x.defans,0);
+    const aSmaller=teamA.length<teamB.length;
+    const aWeaker=aStr<=bStr;
+    if((aSmaller||aWeaker)&&teamA.length<target) teamA.push(p);
+    else if(teamB.length<target) teamB.push(p);
+    else teamA.push(p);
   });
 
-  const avgA=teamA.length?Math.round(teamA.reduce((s,p)=>s+p.rating,0)/teamA.length):0;
-  const avgB=teamB.length?Math.round(teamB.reduce((s,p)=>s+p.rating,0)/teamB.length):0;
+  // ── Geri kalanları snake draft ──────────────────────────────
+  rest.forEach(p=>{
+    const aScore=teamA.reduce((s,x)=>s+x.rating,0);
+    const bScore=teamB.reduce((s,x)=>s+x.rating,0);
+    const aSmaller=teamA.length<teamB.length;
+    const aWeaker=aScore<=bScore;
+    if((aSmaller||aWeaker)&&teamA.length<target+1) teamA.push(p);
+    else if(teamB.length<target+1) teamB.push(p);
+    else teamA.push(p);
+  });
+
+  // ── Son denge kontrolü: swap ile iyileştir ──────────────────
+  // 50 iterasyon boyunca en kötü dengesizliği düzelt
+  for(let iter=0;iter<50;iter++){
+    const avgA=teamA.reduce((s,p)=>s+p.rating,0)/teamA.length;
+    const avgB=teamB.reduce((s,p)=>s+p.rating,0)/teamB.length;
+    if(Math.abs(avgA-avgB)<0.5) break; // yeterince dengeli
+
+    // En iyi swap'ı bul
+    let bestSwap=null,bestDiff=Math.abs(avgA-avgB);
+    for(let i=0;i<teamA.length;i++){
+      for(let j=0;j<teamB.length;j++){
+        const pA=teamA[i],pB=teamB[j];
+        // GK swap — sadece GK ile GK
+        if(isGK(pA)!==isGK(pB)) continue;
+        const newAvgA=(teamA.reduce((s,p)=>s+p.rating,0)-pA.rating+pB.rating)/teamA.length;
+        const newAvgB=(teamB.reduce((s,p)=>s+p.rating,0)-pB.rating+pA.rating)/teamB.length;
+        const newDiff=Math.abs(newAvgA-newAvgB);
+        if(newDiff<bestDiff){bestDiff=newDiff;bestSwap={i,j};}
+      }
+    }
+    if(!bestSwap) break;
+    // Swap yap
+    const tmp=teamA[bestSwap.i];
+    teamA[bestSwap.i]=teamB[bestSwap.j];
+    teamB[bestSwap.j]=tmp;
+  }
+
+  const avgA=Math.round(teamA.reduce((s,p)=>s+p.rating,0)/(teamA.length||1));
+  const avgB=Math.round(teamB.reduce((s,p)=>s+p.rating,0)/(teamB.length||1));
   return{teamA,teamB,avgA,avgB};
 }
 
