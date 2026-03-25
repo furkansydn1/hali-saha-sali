@@ -689,7 +689,7 @@ function hideLoading(){
 }
 
 /* ====== STATE ====== */
-let currentUser=null,activeMatchId=null,scoreTargetId=null,deleteTargetId=null,selectedWinner=null;
+let currentUser=null,activeMatchId=null,scoreTargetId=null,deleteTargetId=null,selectedWinner=null,_pendingDeleteKey=null;
 
 /* ====== NOTIF ====== */
 let _nt;
@@ -1711,45 +1711,32 @@ async function openVoting(matchId){
 
 function deleteUser(nameKey){
   if(!isAdmin(currentUser))return;
-  // Custom confirm modal yerine inline onaylama
-  const el=document.getElementById('admin-content');
-  if(!el)return;
-  // Sil butonunu confirm moduna al
-  const btn=el.querySelector('[data-delkey="'+nameKey+'"]')||el.querySelector('#delbtn-'+Object.values(_users).find(u=>u.name.toLowerCase()===nameKey)?.id);
-  if(btn&&btn.dataset.confirmed!=='1'){
-    btn.dataset.confirmed='1';
-    btn.textContent='Emin misin?';
-    btn.style.background='#ff2020';
-    setTimeout(()=>{
-      if(btn.dataset.confirmed==='1'){
-        btn.dataset.confirmed='0';
-        btn.textContent='🗑️';
-        btn.style.background='';
-      }
-    },3000);
-    return;
-  }
-  // Onaylandı - sil
-  deleteUserConfirmed(nameKey);
+  _pendingDeleteKey=nameKey;
+  const u=Object.values(_users).find(x=>x.name.toLowerCase()===nameKey);
+  document.getElementById('delete-user-name').textContent=u?u.name:nameKey;
+  openModal('modal-delete-user');
 }
 
-async function deleteUserConfirmed(nameKey){
-  if(!isAdmin(currentUser))return;
+async function confirmDeleteUser(){
+  if(!_pendingDeleteKey)return;
+  const key=_pendingDeleteKey;
+  _pendingDeleteKey=null;
+  closeModal('modal-delete-user');
   showLoading('Siliniyor...');
   try{
-    await db.ref('users/'+nameKey).remove();
+    await db.ref('users/'+key).remove();
     const users=getUsers();
-    delete users[nameKey];
+    delete users[key];
     _users={...users};
     hideLoading();
-    showNotif('Kullanıcı silindi. 🗑️');
+    showNotif('Kullanıcı silindi! 🗑️');
   }catch(e){
     hideLoading();
     showNotif('Hata: '+e.message,'error');
-    console.error(e);
   }
   renderAdmin();
 }
+
 
 function aiMatchPrediction(avgA,avgB,nameA,nameB){
   const diff=avgA-avgB;
@@ -2738,5 +2725,19 @@ tryAutoLogin();
 </div>
 
 <div id="notif" class="notif"></div>
+
+<!-- MODAL: DELETE USER -->
+<div id="modal-delete-user" class="modal-overlay">
+  <div class="modal-box" style="max-width:360px">
+    <h2>🗑️ Kullanıcı Sil</h2>
+    <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:6px">Şu kullanıcıyı silmek istediğine emin misin?</p>
+    <p style="font-size:1rem;font-weight:700;color:var(--red);margin-bottom:16px" id="delete-user-name"></p>
+    <p style="font-size:.76rem;color:var(--amber);margin-bottom:16px">⚠️ Bu işlem geri alınamaz!</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-delete-user')">Vazgeç</button>
+      <button class="btn btn-danger" onclick="confirmDeleteUser()">Evet, Sil</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
