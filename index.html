@@ -474,8 +474,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 
 <script type="module">
 /* ====== FIREBASE ====== */
-import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import{getDatabase,ref,set,get,onValue,remove}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+import{initializeApp}from'https://cdn.jsdelivr.net/npm/firebase@10.12.0/app/+esm';
+import{getDatabase,ref,set,get,onValue}from'https://cdn.jsdelivr.net/npm/firebase@10.12.0/database/+esm';
 
 const firebaseConfig={
   apiKey:"AIzaSyBc_JhGF0Axeey-pPyUQsV6RZ3UIXd2WIc",
@@ -633,9 +633,13 @@ async function handleLogin(){
   if(!name)return showNotif('Adını gir!','error');
   if(!pass)return showNotif('Şifreni gir!','error');
   showLoading('Giriş yapılıyor...');
-  // Firebase'den taze users çek
-  const snap=await get(ref(db,'users'));
-  _users=snap.val()||{};
+  try{
+    const snap=await get(ref(db,'users'));
+    _users=snap.val()||{};
+  }catch(e){
+    hideLoading();
+    return showNotif('Bağlantı hatası! İnterneti kontrol et.','error');
+  }
   hideLoading();
   const user=_users[name.toLowerCase()];
   if(!user)return showNotif('Kullanıcı bulunamadı!','error');
@@ -648,27 +652,32 @@ async function handleLogin(){
 function handleLogout(){stopLineupTimer();currentUser=null;localStorage.removeItem('hs_session');showPage('page-login');}
 
 async function tryAutoLogin(){
-  showLoading('Bağlanıyor...');
-  // Önce Firebase'den veri çek
-  const [usersSnap,matchesSnap,newsSnap]=await Promise.all([
-    get(ref(db,'users')),
-    get(ref(db,'matches')),
-    get(ref(db,'news'))
-  ]);
-  _users=usersSnap.val()||{};
-  const mVal=matchesSnap.val()||{};
-  _matches=Object.values(mVal).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
-  const nVal=newsSnap.val()||[];
-  _news=Array.isArray(nVal)?nVal:Object.values(nVal);
-  hideLoading();
-  // Gerçek zamanlı listener'ları başlat
-  startListeners();
-  // Oturum kontrolü
-  const sid=LS.get('hs_session');
-  if(!sid)return;
-  const user=Object.values(_users).find(u=>u.id===sid);
-  if(user){currentUser=user;goHome();}
-  else{localStorage.removeItem('hs_session');}
+  showLoading('Firebase\'e bağlanıyor...');
+  try{
+    const [usersSnap,matchesSnap,newsSnap]=await Promise.all([
+      get(ref(db,'users')),
+      get(ref(db,'matches')),
+      get(ref(db,'news'))
+    ]);
+    _users=usersSnap.val()||{};
+    const mVal=matchesSnap.val()||{};
+    _matches=Object.values(mVal).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
+    const nVal=newsSnap.val()||[];
+    _news=Array.isArray(nVal)?nVal:Object.values(nVal);
+    hideLoading();
+    startListeners();
+    const sid=LS.get('hs_session');
+    if(!sid)return;
+    const user=Object.values(_users).find(u=>u.id===sid);
+    if(user){currentUser=user;goHome();}
+    else{localStorage.removeItem('hs_session');}
+  }catch(err){
+    hideLoading();
+    console.error('Firebase bağlantı hatası:',err);
+    // Hata durumunda kullanıcıya göster
+    document.getElementById('notif').textContent='Bağlantı hatası! İnternet bağlantınızı kontrol edin.';
+    document.getElementById('notif').className='notif error show';
+  }
 }
 
 /* ====== PAGES ====== */
