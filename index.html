@@ -475,6 +475,25 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
+/* ====== GLOBAL ERROR CATCHER ====== */
+window.onerror=function(msg,src,line,col,err){
+  document.body.innerHTML='<div style="padding:20px;background:#1a0000;color:#ff6060;font-family:monospace;font-size:14px;word-break:break-all">'
+    +'<h2>JavaScript Hatası</h2>'
+    +'<p><b>Mesaj:</b> '+msg+'</p>'
+    +'<p><b>Kaynak:</b> '+src+'</p>'
+    +'<p><b>Satır:</b> '+line+' Sütun: '+col+'</p>'
+    +'<p><b>Detay:</b> '+(err?err.stack:'yok')+'</p>'
+    +'</div>';
+  return false;
+};
+window.addEventListener('unhandledrejection',function(e){
+  document.body.innerHTML='<div style="padding:20px;background:#1a0000;color:#ff6060;font-family:monospace;font-size:14px;word-break:break-all">'
+    +'<h2>Promise Hatası</h2>'
+    +'<p>'+(e.reason?e.reason.toString():'bilinmiyor')+'</p>'
+    +'<p>'+(e.reason&&e.reason.stack?e.reason.stack:'')+'</p>'
+    +'</div>';
+});
+
 /* ====== FIREBASE INIT ====== */
 const firebaseConfig={
   apiKey:"AIzaSyBc_JhGF0Axeey-pPyUQsV6RZ3UIXd2WIc",
