@@ -1122,7 +1122,7 @@ function renderVoting(){
     ${isAdmin(currentUser)?`<button class="btn btn-amber" style="width:100%;margin-top:10px" onclick="closeVoting('${match.id}')">🔒 Oylamayı Kapat & Sonuçları Kaydet</button>`:''}`;
 }
 
-function castVote(matchId,type,playerId){
+async function castVote(matchId,type,playerId){
   const matches=getMatches();const match=matches.find(m=>m.id===matchId);
   if(!match||!match.votingOpen)return;
   if(!match.votes)match.votes={};
@@ -1135,7 +1135,7 @@ function castVote(matchId,type,playerId){
   await saveMatches(matches);showNotif(type==='good'?'Maçın adamı oyun verildi! ⭐':'En kötü oyun verildi! 😬');renderVoting();
 }
 
-function closeVoting(matchId){
+async function closeVoting(matchId){
   if(!isAdmin(currentUser))return;
   const matches=getMatches();const match=matches.find(m=>m.id===matchId);if(!match)return;
   match.votingOpen=false;
@@ -1221,7 +1221,7 @@ function openNewsModal(){
   document.getElementById('news-date').value=new Date().toLocaleDateString('tr-TR',{day:'2-digit',month:'long',year:'numeric'});
   openModal('modal-news');
 }
-function saveNews(){
+async function saveNews(){
   if(!isAdmin(currentUser))return;
   const headline=document.getElementById('news-headline').value.trim();
   const sub=document.getElementById('news-sub').value.trim();
@@ -1231,7 +1231,7 @@ function saveNews(){
   const news=getNewsList();news.push({headline,sub,body,date});await saveNewsList(news);
   closeModal('modal-news');showNotif('Manşet yayınlandı! 📰');renderNewsTab();
 }
-function deleteNews(idx){if(!isAdmin(currentUser))return;const news=getNewsList();news.splice(idx,1);await saveNewsList(news);showNotif('Manşet silindi.');renderNewsTab();}
+async function deleteNews(idx){if(!isAdmin(currentUser))return;const news=getNewsList();news.splice(idx,1);await saveNewsList(news);showNotif('Manşet silindi.');renderNewsTab();}
 
 /* ====== ADMIN ====== */
 function renderAdmin(){
@@ -1381,7 +1381,7 @@ function renderAdmin(){
   el.innerHTML=html;
 }
 
-function saveRevealTime(matchId){
+async function saveRevealTime(matchId){
   const inp=document.getElementById('reveal-time');if(!inp)return;
   const val=inp.value;if(!val)return showNotif('Saat seç!','error');
   const matches=getMatches();const match=matches.find(m=>m.id===matchId);if(!match)return;
@@ -1390,7 +1390,7 @@ function saveRevealTime(matchId){
   renderAdmin();
 }
 
-function saveLineup(matchId){
+async function saveLineup(matchId){
   if(!isAdmin(currentUser))return;
   const matches=getMatches();const match=matches.find(m=>m.id===matchId);if(!match)return;
   const slots=['A_GK','A_D1','A_D2','A_M','A_A1','A_A2','A_F','B_GK','B_D1','B_D2','B_M','B_A1','B_A2','B_F'];
@@ -1411,14 +1411,14 @@ function saveLineup(matchId){
   await saveMatches(matches);showNotif('Kadro kaydedildi! 💾');
 }
 
-function openVoting(matchId){
+async function openVoting(matchId){
   if(!isAdmin(currentUser))return;
   const matches=getMatches();const match=matches.find(m=>m.id===matchId);if(!match)return;
   match.votingOpen=true;if(!match.votes)match.votes={};await saveMatches(matches);
   showNotif('Oylama açıldı! 🗳️');renderAdmin();
 }
 
-function saveRating(userId){
+async function saveRating(userId){
   if(!isAdmin(currentUser))return;
   const inp=document.getElementById('re-'+userId);if(!inp)return;
   const val=parseInt(inp.value,10);if(!val||val<1||val>100)return showNotif('1–100 arası gir!','error');
@@ -1428,7 +1428,7 @@ function saveRating(userId){
 }
 
 /* ====== CREATE MATCH ====== */
-function createMatch(){
+async function createMatch(){
   if(!isAdmin(currentUser))return showNotif('Yetkisiz!','error');
   const name=document.getElementById('c-name').value.trim();const venue=document.getElementById('c-venue').value.trim();
   const dt=document.getElementById('c-datetime').value;const rs=document.getElementById('c-reg-start').value;const re=document.getElementById('c-reg-end').value;
