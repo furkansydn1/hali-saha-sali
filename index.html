@@ -1527,7 +1527,7 @@ function renderAdmin(){
             <div style="font-weight:700;font-size:.9rem">${u.name} ${!u.profileComplete?'<span style="font-size:.58rem;color:var(--amber);background:rgba(245,166,35,.15);padding:1px 6px;border-radius:3px">Eksik</span>':''}</div>
             <div style="font-size:.7rem;color:var(--text-muted)">${u.pos||'Mevki yok'} &nbsp;•&nbsp; ${u.ayak||'?'} &nbsp;•&nbsp; 🏆${u.wins||0} ⚽${u.matches||0}</div>
           </div>
-          <button class="btn btn-danger" style="font-size:.66rem;padding:5px 9px;flex-shrink:0" onclick="deleteUser(${JSON.stringify(u.name.toLowerCase())})">🗑️</button>
+          <button class="btn btn-danger" style="font-size:.66rem;padding:5px 9px;flex-shrink:0" data-delkey="${u.name.toLowerCase()}" id="delbtn-${u.id}" onclick="deleteUser(${JSON.stringify(u.name.toLowerCase())})">🗑️</button>
         </div>
         <!-- Stat bars -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px 14px">
@@ -1709,15 +1709,45 @@ async function openVoting(matchId){
   showNotif('Oylama açıldı! 🗳️');renderAdmin();
 }
 
-async function deleteUser(nameKey){
+function deleteUser(nameKey){
   if(!isAdmin(currentUser))return;
-  if(!confirm('Bu kullanıcıyı silmek istediğine emin misin?'))return;
-  const users=getUsers();
-  delete users[nameKey];
-  // Hem cache hem Firebase'den sil
-  _users=users;
-  await db.ref('users/'+nameKey).remove();
-  showNotif('Kullanıcı silindi. 🗑️');
+  // Custom confirm modal yerine inline onaylama
+  const el=document.getElementById('admin-content');
+  if(!el)return;
+  // Sil butonunu confirm moduna al
+  const btn=el.querySelector('[data-delkey="'+nameKey+'"]')||el.querySelector('#delbtn-'+Object.values(_users).find(u=>u.name.toLowerCase()===nameKey)?.id);
+  if(btn&&btn.dataset.confirmed!=='1'){
+    btn.dataset.confirmed='1';
+    btn.textContent='Emin misin?';
+    btn.style.background='#ff2020';
+    setTimeout(()=>{
+      if(btn.dataset.confirmed==='1'){
+        btn.dataset.confirmed='0';
+        btn.textContent='🗑️';
+        btn.style.background='';
+      }
+    },3000);
+    return;
+  }
+  // Onaylandı - sil
+  deleteUserConfirmed(nameKey);
+}
+
+async function deleteUserConfirmed(nameKey){
+  if(!isAdmin(currentUser))return;
+  showLoading('Siliniyor...');
+  try{
+    await db.ref('users/'+nameKey).remove();
+    const users=getUsers();
+    delete users[nameKey];
+    _users={...users};
+    hideLoading();
+    showNotif('Kullanıcı silindi. 🗑️');
+  }catch(e){
+    hideLoading();
+    showNotif('Hata: '+e.message,'error');
+    console.error(e);
+  }
   renderAdmin();
 }
 
@@ -2008,12 +2038,104 @@ async function submitScore(){
 
 async function revertUserStats(match){
   if(!match.score)return;const users=getUsers();
-  (match.attending||[]).forEach(p=>{const k=p.name.toLowerCase();if(!users[k])return;users[k].matches=Math.max(0,(users[k].matches||0)-1);if(match.winner&&match.winner!=='draw')users[k].wins=Math.max(0,(users[k].wins||0)-1);});
+  (match.attending||[]).forEach(p=>{
+    const k=p.name.toLowerCase();if(!users[k])return;
+    const u=users[k];
+    u.matches=Math.max(0,(u.matches||0)-1);
+    if(match.winner&&match.winner!=='draw')u.wins=Math.max(0,(u.wins||0)-1);
+    // Form geçmişinden son kaydı geri al
+    if(Array.isArray(u.formHistory)&&u.formHistory.length)u.formHistory.pop();
+    u.lastResult=u.formHistory&&u.formHistory.length?
+      (u.formHistory[u.formHistory.length-1]==='w'?'W':u.formHistory[u.formHistory.length-1]==='l'?'L':'D'):'';
+    // Bonservis override'ı geri al (change tersine)
+    if(u.bonservisChange&&u.bonservisOverride){
+      u.bonservisOverride=Math.max(0,u.bonservisOverride-u.bonservisChange);
+      u.bonservisChange=0;
+    }
+    // Streak sıfırla (tam geri alma zor, sıfırlıyoruz)
+    u.winStreak=0;u.loseStreak=0;
+    users[k]=u;
+  });
   await saveUsers(users);
 }
 async function applyUserStats(match){
   const users=getUsers();
-  (match.attending||[]).forEach(p=>{const k=p.name.toLowerCase();if(!users[k])return;users[k].matches=(users[k].matches||0)+1;if(match.winner&&match.winner!=='draw')users[k].wins=(users[k].wins||0)+1;});
+  const attending=match.attending||[];
+  const lineup=match.lineup||{};
+
+  // Hangi oyuncu hangi takımda?
+  const teamAIds=new Set();const teamBIds=new Set();
+  Object.entries(lineup).forEach(([pid,slot])=>{
+    if(slot.startsWith('A'))teamAIds.add(pid);
+    else teamBIds.add(pid);
+  });
+  // Katılımcı ama lineup'ta yoksa takıma göre böl
+  attending.forEach(p=>{
+    if(!teamAIds.has(p.id)&&!teamBIds.has(p.id)){
+      // fallback: eşit böl
+      if(teamAIds.size<=teamBIds.size)teamAIds.add(p.id);
+      else teamBIds.add(p.id);
+    }
+  });
+
+  const winnerTeam=match.winner; // 'A','B','draw',null
+
+  attending.forEach(p=>{
+    const k=p.name.toLowerCase();if(!users[k])return;
+    const u=users[k];
+    u.matches=(u.matches||0)+1;
+
+    // Maç sonucu belirle
+    const inA=teamAIds.has(p.id);
+    let result='d'; // draw
+    if(winnerTeam==='A')result=inA?'w':'l';
+    else if(winnerTeam==='B')result=inA?'l':'w';
+
+    if(result==='w')u.wins=(u.wins||0)+1;
+
+    // Form geçmişi (son 5)
+    const hist=Array.isArray(u.formHistory)?[...u.formHistory]:[];
+    hist.push(result);
+    u.formHistory=hist.slice(-5);
+    u.lastResult=result==='w'?'W':result==='l'?'L':'D';
+
+    // Seri galibiyet sayacı
+    if(result==='w'){
+      u.winStreak=(u.winStreak||0)+1;
+      u.loseStreak=0;
+    } else if(result==='l'){
+      u.loseStreak=(u.loseStreak||0)+1;
+      u.winStreak=0;
+    } else {
+      u.winStreak=0;u.loseStreak=0;
+    }
+
+    // Bonservis değişimi
+    const baseRating=calcRating(u,u.pos);
+    const baseBonservis=calcBonservisRaw(baseRating);
+    const prevBonservis=u.bonservisOverride||baseBonservis;
+
+    let multiplier=1;
+    if(result==='w'){
+      // Seri galibiyet bonusu
+      if(u.winStreak>=3) multiplier=1.08;
+      else if(u.winStreak>=2) multiplier=1.06;
+      else multiplier=1.04;
+    } else if(result==='l'){
+      if(u.loseStreak>=3) multiplier=0.91;
+      else if(u.loseStreak>=2) multiplier=0.94;
+      else multiplier=0.96;
+    } else {
+      multiplier=1.0; // berabere değişim yok
+    }
+
+    const newBonservis=Math.round(prevBonservis*multiplier);
+    u.bonservisChange=newBonservis-prevBonservis;
+    u.bonservisOverride=newBonservis;
+
+    users[k]=u;
+  });
+
   await saveUsers(users);
 }
 
@@ -2154,7 +2276,7 @@ function buildFC2Card(user,mevki){
         <div style="text-align:right;font-size:.6rem;opacity:.7;padding-top:4px">${ayakIcon}</div>
       </div>
       <div class="fc2-avatar">${initials(user.name)}</div>
-      <div class="fc2-name">${user.name.split(' ')[0].toUpperCase()}</div>
+      <div class="fc2-name">${user.name.split(' ')[0].toUpperCase()} ${getFormArrow(user)}</div>
       <div class="fc2-divider"></div>
       <div class="fc2-stats">
         <div class="fc2-stat"><span class="fc2-stat-val">${user.hiz||50}</span><span class="fc2-stat-lbl">HIZ</span></div>
@@ -2166,7 +2288,7 @@ function buildFC2Card(user,mevki){
       </div>
       <div style="width:100%;margin-top:6px;padding:4px 6px;background:rgba(0,0,0,.25);border-radius:4px;text-align:center">
         <span style="font-size:.48rem;opacity:.8;letter-spacing:.8px;text-transform:uppercase">Bonservis</span><br>
-        <span style="font-family:'Bebas Neue',cursive;font-size:.9rem;letter-spacing:1px">${calcBonservis(rating)}</span>
+        <span style="font-family:'Bebas Neue',cursive;font-size:.9rem;letter-spacing:1px">${(()=>{const bv=user.bonservisOverride||calcBonservisRaw(rating);return formatBonservis(bv);})()} ${user.bonservisChange&&user.bonservisChange!==0?'<span style="font-size:.55rem;font-weight:700;color:'+(user.bonservisChange>0?'#22cc66':'#ff4040')+'">'+(user.bonservisChange>0?'▲':'▼')+'</span>':''}</span>
       </div>
     </div>`;
 }
@@ -2465,6 +2587,97 @@ function renderPastMatches(){
   }).join('');
 }
 
+
+
+/* ===================== TRANSFER PIYASASI ===================== */
+function renderBorsa(){
+  const el=document.getElementById('borsa-content');if(!el)return;
+  const users=Object.values(getUsers());
+
+  // Bonservis değerlerine göre sırala
+  const sorted=[...users].filter(u=>u.name).sort((a,b)=>{
+    const bvA=a.bonservisOverride||calcBonservisRaw(Math.max(1,calcRating(a,a.pos)||50));
+    const bvB=b.bonservisOverride||calcBonservisRaw(Math.max(1,calcRating(b,b.pos)||50));
+    return bvB-bvA;
+  });
+
+  // Ticker için top 5
+  const tickerItems=sorted.slice(0,Math.min(5,sorted.length)).map(u=>{
+    const bv=u.bonservisOverride||calcBonservisRaw(Math.max(1,calcRating(u,u.pos)||50));
+    const ch=u.bonservisChange||0;
+    const arrow=ch>0?'▲':ch<0?'▼':'—';
+    const col=ch>0?'#22cc66':ch<0?'#ff4040':'#7fa889';
+    return`<span style="margin-right:32px">${u.name.split(' ')[0].toUpperCase()} &nbsp;<span style="color:${col}">${arrow} ${formatBonservis(bv)}</span></span>`;
+  }).join('');
+
+  const tierColor={
+    'tier-gold':'#f5c842','tier-silver':'#a0b8cc',
+    'tier-bronze':'#c07838','tier-rare':'#5080ff','tier-common':'#4a8a5a'
+  };
+
+  let html=`
+  <div class="borsa-header">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+      <span style="font-size:1.4rem">📈</span>
+      <div>
+        <div style="font-family:'Bebas Neue',cursive;font-size:1.4rem;letter-spacing:2px;color:var(--lime)">Transfer Piyasası</div>
+        <div style="font-size:.68rem;color:var(--text-muted)">Oyuncu Bonservis Borsası — Canlı Sıralama</div>
+      </div>
+    </div>
+    <div class="ticker-wrap" style="border-top:1px solid rgba(184,247,23,.15);padding-top:6px">
+      <div class="ticker-inner">${tickerItems+tickerItems}</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:28px 1fr auto;gap:0;padding:5px 14px;margin-bottom:4px">
+    <span style="font-size:.6rem;font-weight:700;text-transform:uppercase;color:var(--text-muted)">#</span>
+    <span style="font-size:.6rem;font-weight:700;text-transform:uppercase;color:var(--text-muted)">Oyuncu</span>
+    <span style="font-size:.6rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);text-align:right">Değer / Değişim</span>
+  </div>`;
+
+  if(!sorted.length){
+    html+='<div class="no-match-box"><span class="nm-icon">📈</span><p>Henüz kayıtlı oyuncu yok.</p></div>';
+    el.innerHTML=html;return;
+  }
+
+  sorted.forEach((u,i)=>{
+    const rating=Math.max(1,calcRating(u,u.pos)||50);
+    const tier=cardTier(rating);
+    const col=tierColor[tier]||'var(--lime)';
+    // bonservisOverride yoksa rating'e göre hesapla
+    const bv=u.bonservisOverride||calcBonservisRaw(rating);
+    const ch=u.bonservisChange||0;
+    const{txt:changeTxt,cls:changeCls}=formatChange(ch);
+    const rankCls=i===0?'r1':i===1?'r2':i===2?'r3':'rn';
+    const rankIcon=i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
+    const formArrow=getFormArrow(u);
+    const dots=getFormDots(u);
+
+    html+=`<div class="borsa-row">
+      <div class="borsa-rank ${rankCls}">${rankIcon}</div>
+      <div class="borsa-avatar" style="background:${col}22;border:2px solid ${col};color:${col}">${initials(u.name)}</div>
+      <div class="borsa-info">
+        <div class="borsa-name">${u.name} ${formArrow}</div>
+        <div class="borsa-pos">${u.pos||'Mevki yok'} &nbsp;•&nbsp; Reyting: <strong>${rating}</strong>
+          ${dots?`<span style="margin-left:4px">${dots}</span>`:''}
+        </div>
+      </div>
+      <div class="borsa-value">
+        <div class="borsa-price">${formatBonservis(bv)}</div>
+        <div class="borsa-change ${changeCls}">${ch!==0?changeTxt:'—'}</div>
+      </div>
+    </div>`;
+  });
+
+  // Toplam piyasa değeri
+  const totalBv=sorted.reduce((s,u)=>s+(u.bonservisOverride||calcBonservisRaw(Math.max(1,calcRating(u,u.pos)||50))),0);
+  html+=`<div style="margin-top:14px;padding:12px 15px;background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);display:flex;justify-content:space-between;align-items:center">
+    <span style="font-size:.78rem;color:var(--text-muted)">Toplam Piyasa Değeri</span>
+    <span style="font-family:'Bebas Neue',cursive;font-size:1.2rem;color:var(--lime)">${formatBonservis(totalBv)}</span>
+  </div>`;
+
+  el.innerHTML=html;
+}
 
 /* ====== BOOT ====== */
 tryAutoLogin();
