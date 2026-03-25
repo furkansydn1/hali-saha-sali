@@ -596,8 +596,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .forum-text{font-size:.78rem;color:var(--text-muted);line-height:1.55}
 .forum-meta{font-size:.65rem;color:var(--text-muted);margin-top:6px}
 
-/* Patch notes overlay */
-#modal-patch.open{display:flex;animation:fadeIn .3s ease}
+/* patch slider css is below */
 
 /* Profile form card */
 .profile-form-card{background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius);padding:18px}
@@ -634,6 +633,152 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .ticker-wrap{overflow:hidden;white-space:nowrap;margin-top:8px}
 .ticker-inner{display:inline-block;animation:ticker 20s linear infinite}
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+
+/* ===================== PATCH NOTES SLIDER ===================== */
+#patchOverlay{
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:rgba(0,0,0,.85);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  align-items:center;justify-content:center;
+  padding:16px;
+}
+#patchOverlay.open{display:flex;animation:patchFadeIn .4s ease forwards}
+@keyframes patchFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes patchFadeOut{from{opacity:1}to{opacity:0}}
+
+.patch-card{
+  width:100%;max-width:480px;
+  background:linear-gradient(145deg,#0d1a12 0%,#142019 50%,#0a120e 100%);
+  border:1px solid rgba(184,247,23,.2);
+  border-radius:20px;
+  box-shadow:
+    0 0 0 1px rgba(184,247,23,.08),
+    0 20px 60px rgba(0,0,0,.8),
+    0 0 80px rgba(184,247,23,.06) inset;
+  overflow:hidden;
+  position:relative;
+}
+/* Üst dekoratif çizgi */
+.patch-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,#b8f717,#60ff90,#b8f717,transparent);
+  animation:scanline 2.5s linear infinite;
+}
+@keyframes scanline{0%{opacity:.4}50%{opacity:1}100%{opacity:.4}}
+
+/* Başlık barı */
+.patch-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px 0;
+}
+.patch-version{
+  font-family:'Bebas Neue',cursive;font-size:.8rem;
+  letter-spacing:3px;color:var(--lime);
+  background:rgba(184,247,23,.1);
+  border:1px solid rgba(184,247,23,.25);
+  padding:3px 10px;border-radius:20px;
+}
+.patch-close{
+  background:rgba(255,255,255,.07);border:none;
+  color:rgba(255,255,255,.5);font-size:1.1rem;
+  width:28px;height:28px;border-radius:50%;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;line-height:1;
+}
+.patch-close:hover{background:rgba(255,64,64,.2);color:var(--red);}
+
+/* Slider wrapper */
+.patch-slider{overflow:hidden;position:relative;min-height:280px;}
+.patch-slides{
+  display:flex;
+  transition:transform .4s cubic-bezier(.4,0,.2,1);
+}
+.patch-slide{
+  min-width:100%;padding:20px 24px 16px;
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;
+}
+.patch-emoji{font-size:3rem;margin-bottom:12px;animation:patchBounce 2s ease infinite;}
+@keyframes patchBounce{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.05)}}
+.patch-slide-title{
+  font-family:'Bebas Neue',cursive;
+  font-size:1.5rem;letter-spacing:2px;
+  color:#fff;margin-bottom:10px;line-height:1.1;
+}
+.patch-slide-title span{color:var(--lime);}
+.patch-slide-desc{
+  font-size:.84rem;color:rgba(255,255,255,.7);
+  line-height:1.75;max-width:360px;
+}
+/* Özellik listesi */
+.patch-features{
+  list-style:none;margin-top:12px;width:100%;text-align:left;
+}
+.patch-features li{
+  display:flex;align-items:flex-start;gap:8px;
+  padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);
+  font-size:.82rem;color:rgba(255,255,255,.75);line-height:1.5;
+}
+.patch-features li:last-child{border-bottom:none}
+.patch-features li::before{
+  content:'▸';color:var(--lime);flex-shrink:0;margin-top:1px;
+}
+
+/* Dots + Navigation */
+.patch-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px 18px;
+  border-top:1px solid rgba(255,255,255,.07);
+}
+.patch-dots{display:flex;gap:6px;align-items:center;}
+.patch-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(255,255,255,.2);
+  transition:all .3s;cursor:pointer;
+}
+.patch-dot.active{
+  background:var(--lime);width:20px;border-radius:3px;
+  box-shadow:0 0 8px rgba(184,247,23,.6);
+}
+.patch-btn-next{
+  font-family:'Bebas Neue',cursive;font-size:.95rem;letter-spacing:1.5px;
+  padding:9px 22px;border:none;border-radius:8px;cursor:pointer;
+  background:linear-gradient(135deg,#b8f717,#80d000);
+  color:#0d1a12;font-weight:700;
+  transition:all .2s;box-shadow:0 0 20px rgba(184,247,23,.3);
+}
+.patch-btn-next:hover{transform:scale(1.04);box-shadow:0 0 30px rgba(184,247,23,.5);}
+.patch-btn-prev{
+  font-family:'Bebas Neue',cursive;font-size:.9rem;letter-spacing:1px;
+  padding:9px 16px;border:1.5px solid rgba(255,255,255,.15);border-radius:8px;
+  cursor:pointer;background:transparent;color:rgba(255,255,255,.5);
+  transition:all .2s;
+}
+.patch-btn-prev:hover{border-color:rgba(255,255,255,.35);color:#fff;}
+.patch-btn-prev:disabled{opacity:.2;cursor:default;}
+/* Son slayt butonu */
+.patch-btn-finish{
+  font-family:'Bebas Neue',cursive;font-size:.95rem;letter-spacing:1.5px;
+  padding:9px 22px;border:none;border-radius:8px;cursor:pointer;
+  background:linear-gradient(135deg,#ff6b35,#ff4500);
+  color:#fff;font-weight:700;
+  transition:all .2s;box-shadow:0 0 20px rgba(255,80,0,.3);
+  animation:pulseFinish 1.5s ease infinite;
+}
+.patch-btn-finish:hover{transform:scale(1.04)}
+@keyframes pulseFinish{0%,100%{box-shadow:0 0 20px rgba(255,80,0,.3)}50%{box-shadow:0 0 35px rgba(255,80,0,.6)}}
+
+/* Progress bar */
+.patch-progress{
+  height:2px;background:rgba(255,255,255,.08);
+  margin:0 20px;border-radius:2px;overflow:hidden;
+}
+.patch-progress-bar{
+  height:100%;background:linear-gradient(90deg,#b8f717,#60ff90);
+  border-radius:2px;transition:width .4s ease;
+}
 
 </style>
 </head>
@@ -1019,19 +1164,77 @@ function goHome(){
   showPage('page-home');
   renderPastMatches();renderLeaderboard();
   // Patch notes - ilk girişte göster
-  if(!LS.get('patch_v11_seen')){
-    setTimeout(()=>openModal('modal-patch'),600);
+  if(!LS.get('patch_v2_seen')){
+    setTimeout(()=>openPatchNotes(),700);
   }
 }
 
+/* ===== PATCH NOTES SLIDER JS ===== */
+let _patchCurrent=0;
+const PATCH_TOTAL=7;
+
+function openPatchNotes(){
+  _patchCurrent=0;
+  patchRender();
+  const el=document.getElementById('patchOverlay');
+  if(el){el.style.display='flex';requestAnimationFrame(()=>el.classList.add('open'));}
+}
+
 function closePatchNotes(){
-  LS.set('patch_v11_seen','1');
-  closeModal('modal-patch');
-  // Profile doldurmamışsa direkt profile götür
-  if(!currentUser.profileComplete){
+  const el=document.getElementById('patchOverlay');
+  if(!el)return;
+  el.style.animation='patchFadeOut .35s ease forwards';
+  setTimeout(()=>{
+    el.style.display='none';
+    el.style.animation='';
+    el.classList.remove('open');
+  },350);
+  LS.set('patch_v2_seen','1');
+  // Profile doldurmamışsa profil sekmesine götür
+  if(currentUser&&!currentUser.profileComplete){
     const tabs=document.querySelectorAll('.nav-tab');
-    tabs.forEach(t=>{if(t.textContent.includes('Profil')){t.click();}});
+    tabs.forEach(t=>{if(t.textContent.includes('Profil'))t.click();});
   }
+}
+
+function patchRender(){
+  // Slides'ı kaydır
+  const slides=document.getElementById('patchSlides');
+  if(slides) slides.style.transform=`translateX(-${_patchCurrent*100}%)`;
+
+  // Progress bar
+  const prog=document.getElementById('patchProgress');
+  if(prog) prog.style.width=`${((_patchCurrent+1)/PATCH_TOTAL)*100}%`;
+
+  // Dots
+  const dotsEl=document.getElementById('patchDots');
+  if(dotsEl){
+    dotsEl.innerHTML='';
+    for(let i=0;i<PATCH_TOTAL;i++){
+      const d=document.createElement('div');
+      d.className='patch-dot'+(i===_patchCurrent?' active':'');
+      d.onclick=(()=>{const idx=i;return()=>{_patchCurrent=idx;patchRender();};})();
+      dotsEl.appendChild(d);
+    }
+  }
+
+  // Butonlar
+  const prev=document.getElementById('patchPrev');
+  const next=document.getElementById('patchNext');
+  if(prev) prev.disabled=_patchCurrent===0;
+  if(next){
+    const isLast=_patchCurrent===PATCH_TOTAL-1;
+    next.className=isLast?'patch-btn-finish':'patch-btn-next';
+    next.textContent=isLast?'⚽ Anladım, Sahaya Çık!':'İleri ▶';
+    next.onclick=isLast?closePatchNotes:patchNext;
+  }
+}
+
+function patchNext(){
+  if(_patchCurrent<PATCH_TOTAL-1){_patchCurrent++;patchRender();}
+}
+function patchPrev(){
+  if(_patchCurrent>0){_patchCurrent--;patchRender();}
 }
 
 function switchTab(tabId,btn){
@@ -3085,34 +3288,118 @@ tryAutoLogin();
 
 </script>
 
-<!-- MODAL: PATCH NOTES -->
-<div id="modal-patch" class="modal-overlay" style="z-index:300">
-  <div class="modal-box" style="max-width:500px;background:var(--dark-2);border:1px solid rgba(184,247,23,.3)">
-    <div style="text-align:center;margin-bottom:18px">
-      <div style="font-size:2.5rem;margin-bottom:8px">🚀</div>
-      <div style="font-family:'Bebas Neue',cursive;font-size:1.8rem;letter-spacing:2px;color:var(--lime)">v1.1 Güncelleme</div>
-      <div style="font-size:.75rem;color:var(--text-muted);margin-top:4px">Salı Maçı Organizasyonu</div>
+<!-- PATCH NOTES SLIDER -->
+<div id="patchOverlay">
+  <div class="patch-card">
+
+    <!-- Üst bar -->
+    <div class="patch-topbar">
+      <span class="patch-version">v2.0 — BÜYÜK GÜNCELLEME</span>
+      <button class="patch-close" onclick="closePatchNotes()" title="Atla">✕</button>
     </div>
-    <div style="background:var(--dark-3);border-radius:var(--radius-sm);padding:14px;margin-bottom:14px">
-      <div style="font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--lime);margin-bottom:10px">✨ Yeni Özellikler</div>
-      <div style="font-size:.82rem;color:var(--text);line-height:1.9">
-        🃏 <strong>Dinamik Oyuncu Kartı</strong> — 6 parametreye göre otomatik reyting<br>
-        👤 <strong>Profil Sayfası</strong> — Mevki, ayak, alternatif mevkiler<br>
-        🤖 <strong>Yapay Zeka Mevki Önerisi</strong> — Parametrelerine göre ideal mevki<br>
-        ⚖️ <strong>Adil Takım Dağıtıcı</strong> — 7v7 otomatik dengeli kadro<br>
-        💬 <strong>Topluluk Forumu</strong> — Öneri, şikayet, upvote sistemi<br>
-        📚 <strong>Geçmiş Maç Filtresi</strong> — Sadece biten maçlar listelenir
+
+    <!-- Progress bar -->
+    <div class="patch-progress" style="margin-top:12px">
+      <div class="patch-progress-bar" id="patchProgress" style="width:14.28%"></div>
+    </div>
+
+    <!-- Slaytlar -->
+    <div class="patch-slider">
+      <div class="patch-slides" id="patchSlides">
+
+        <!-- SLAYT 1 -->
+        <div class="patch-slide">
+          <div class="patch-emoji">📰</div>
+          <div class="patch-slide-title">Gazetemizi <span>Tamamen Yeniledik!</span></div>
+          <p class="patch-slide-desc">Eski gazete tasarımımız yeterince güzel değildi. Artık maç sonlarında skorları ve olayları okurken size tam bir gerçek spor gazetesi hissiyatı verecek devasa görsel iyileştirmeler yaptık. Manşetlere çıkmaya hazır ol!</p>
+        </div>
+
+        <!-- SLAYT 2 -->
+        <div class="patch-slide">
+          <div class="patch-emoji">🃏</div>
+          <div class="patch-slide-title">Oyuncu <span>Profilleri</span> ve Kartlar</div>
+          <p class="patch-slide-desc">Artık herkesin kendine ait janjanlı bir oyuncu profili ve EA FC tarzı oyuncu kartı var!</p>
+          <ul class="patch-features">
+            <li>Ana mevkini ve alternatif mevkilerini seç</li>
+            <li>Kullandığın ayağı belirle (Sağ, Sol, İki Ayak)</li>
+            <li>Kartın tier sistemiyle (Gold/Silver/Bronze) otomatik belirlenir</li>
+          </ul>
+        </div>
+
+        <!-- SLAYT 3 -->
+        <div class="patch-slide">
+          <div class="patch-emoji">⭐</div>
+          <div class="patch-slide-title">Daha <span>Adaletli</span> Reyting Sistemi</div>
+          <p class="patch-slide-desc">Eskisi gibi kafaya göre reyting vermek yok!</p>
+          <ul class="patch-features">
+            <li>Hız, Şut, Pas, Fizik, Defans, Kalecilik — 6 özelliğe puan ver</li>
+            <li>Sistem mevkine göre ağırlıklandırarak genel reytingini hesaplar</li>
+            <li>Yapay zeka en ideal mevkini öneriyor</li>
+          </ul>
+        </div>
+
+        <!-- SLAYT 4 -->
+        <div class="patch-slide">
+          <div class="patch-emoji">⚖️</div>
+          <div class="patch-slide-title"><span>Otomatik</span> Takım Oluşturucu</div>
+          <p class="patch-slide-desc">"Adalet mülkün temelidir" dedik ve takım kurma derdini bitirdik.</p>
+          <ul class="patch-features">
+            <li>14 kişi tamamlanınca yapay zeka devreye giriyor</li>
+            <li>Rating + mevki dengesine göre kusursuz 7v7</li>
+            <li>Her takıma rastgele kaptan seçiliyor 👑</li>
+          </ul>
+        </div>
+
+        <!-- SLAYT 5 -->
+        <div class="patch-slide">
+          <div class="patch-emoji">🏟️</div>
+          <div class="patch-slide-title">Görsel <span>Taktik Tahtası</span></div>
+          <p class="patch-slide-desc">Kadrolar belli olduktan sonra isimleri alt alta kuru kuru okumayacaksınız.</p>
+          <ul class="patch-features">
+            <li>Oyuncu kartları yemyeşil saha üzerinde diziliyor</li>
+            <li>Yan yana iki saha — Takım A vs Takım B</li>
+            <li>Kaptan, form oku ve reyting kartlarda görünüyor</li>
+          </ul>
+        </div>
+
+        <!-- SLAYT 6 -->
+        <div class="patch-slide">
+          <div class="patch-emoji">📈</div>
+          <div class="patch-slide-title">Bonservis ve <span>Transfer Piyasası</span></div>
+          <p class="patch-slide-desc">Artık her oyuncunun reytingine göre belirlenen bir Piyasa Değeri var!</p>
+          <ul class="patch-features">
+            <li>Maç kazandıkça bonservisin artar ⬆</li>
+            <li>Kaybedince değerin düşer ⬇</li>
+            <li>Transfer Piyasası sekmesinden borsa gibi takip et</li>
+          </ul>
+        </div>
+
+        <!-- SLAYT 7 — SON -->
+        <div class="patch-slide">
+          <div class="patch-emoji">💬</div>
+          <div class="patch-slide-title">Topluluk <span>Forumu</span></div>
+          <p class="patch-slide-desc">Sitemizi sizinle birlikte büyütüyoruz! Yeni Forum sekmesinde öneri ve şikayetlerini yaz, oylarını kullan.</p>
+          <div style="margin-top:16px;padding:14px;background:rgba(255,64,64,.1);border:1px solid rgba(255,64,64,.3);border-radius:10px;text-align:left">
+            <div style="font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--red);margin-bottom:6px">⚠️ UNUTMA!</div>
+            <div style="font-size:.8rem;color:rgba(255,255,255,.8);line-height:1.6">
+              Profil sekmesine gir, <strong style="color:var(--lime)">6 özelliğini ve mevkini belirle.</strong><br>
+              Aksi takdirde kadroya giremezsin!
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
-    <div style="background:rgba(255,64,64,.12);border:1px solid rgba(255,64,64,.4);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px">
-      <div style="font-size:.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--red);margin-bottom:8px">⚠️ KRİTİK UYARI</div>
-      <div style="font-size:.84rem;color:var(--text);line-height:1.7">
-        Sahaya çıkmadan önce <strong style="color:var(--lime)">hemen Profiline git!</strong><br>
-        <strong>6 temel özelliğini, kullandığın ayağı ve mevkilerini</strong> belirle.<br>
-        <span style="color:var(--red);font-weight:600">Aksi takdirde kadroya giremezsin!</span>
+
+    <!-- Navigation -->
+    <div class="patch-nav">
+      <div class="patch-dots" id="patchDots"></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="patch-btn-prev" id="patchPrev" onclick="patchPrev()" disabled>◀ Geri</button>
+        <button class="patch-btn-next" id="patchNext" onclick="patchNext()">İleri ▶</button>
       </div>
     </div>
-    <button class="btn btn-primary" style="width:100%" onclick="closePatchNotes()">Anladım, Başlayalım ⚽</button>
+
   </div>
 </div>
 
