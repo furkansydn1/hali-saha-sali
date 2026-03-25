@@ -472,11 +472,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 
 <div id="notif" class="notif"></div>
 
-<script type="module">
-/* ====== FIREBASE ====== */
-import{initializeApp}from'https://cdn.jsdelivr.net/npm/firebase@10.12.0/app/+esm';
-import{getDatabase,ref,set,get,onValue}from'https://cdn.jsdelivr.net/npm/firebase@10.12.0/database/+esm';
-
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+/* ====== FIREBASE INIT ====== */
 const firebaseConfig={
   apiKey:"AIzaSyBc_JhGF0Axeey-pPyUQsV6RZ3UIXd2WIc",
   authDomain:"sali-maci.firebaseapp.com",
@@ -486,8 +485,8 @@ const firebaseConfig={
   messagingSenderId:"656383692297",
   appId:"1:656383692297:web:ecd81c5645e86e073b72d8"
 };
-const fbApp=initializeApp(firebaseConfig);
-const db=getDatabase(fbApp);
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
 
 /* ====== CONSTANTS ====== */
 const ADMIN_KEY='furkan soydan';
@@ -498,11 +497,10 @@ const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const initials=n=>n.split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
 const isAdmin=u=>u&&u.name.toLowerCase()===ADMIN_KEY;
 
-/* ====== IN-MEMORY CACHE (Firebase'den gelen veriyi tutuyoruz) ====== */
+/* ====== IN-MEMORY CACHE ====== */
 let _users={};
 let _matches=[];
 let _news=[];
-
 const getUsers=()=>_users;
 const getMatches=()=>_matches;
 const getNewsList=()=>_news;
@@ -510,25 +508,23 @@ const getNewsList=()=>_news;
 /* ====== FIREBASE WRITE HELPERS ====== */
 async function saveUsers(u){
   _users=u;
-  await set(ref(db,'users'),u);
+  await db.ref('users').set(u);
 }
 async function saveMatches(m){
   _matches=m;
-  // Firebase array yerine object tutar, array'i objeye çeviriyoruz
-  const obj={};m.forEach((v,i)=>{obj[v.id]=v;});
-  await set(ref(db,'matches'),obj);
+  const obj={};
+  m.forEach(v=>{obj[v.id]=v;});
+  await db.ref('matches').set(obj);
 }
 async function saveNewsList(n){
   _news=n;
-  await set(ref(db,'news'),n.length?n:null);
+  await db.ref('news').set(n.length?n:null);
 }
 
-/* ====== FIREBASE REAL-TIME LISTENERS ====== */
+/* ====== REAL-TIME LISTENERS ====== */
 function startListeners(){
-  // Users listener
-  onValue(ref(db,'users'),snap=>{
+  db.ref('users').on('value',snap=>{
     _users=snap.val()||{};
-    // Eğer giriş yapılmışsa chip'i güncelle
     if(currentUser){
       const fresh=Object.values(_users).find(u=>u.id===currentUser.id);
       if(fresh){
@@ -539,48 +535,41 @@ function startListeners(){
         if(ur)ur.textContent=fresh.rating;
       }
     }
-    // Açık panelleri yenile
     if(document.getElementById('tab-cards')?.classList.contains('active'))renderCards();
     if(document.getElementById('tab-lb')?.classList.contains('active'))renderLeaderboard();
     if(document.getElementById('tab-admin')?.classList.contains('active'))renderAdmin();
   });
 
-  // Matches listener
-  onValue(ref(db,'matches'),snap=>{
+  db.ref('matches').on('value',snap=>{
     const val=snap.val()||{};
     _matches=Object.values(val).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
-    // Açık panelleri yenile
     if(document.getElementById('tab-past')?.classList.contains('active'))renderPastMatches();
     if(document.getElementById('tab-vote')?.classList.contains('active'))renderVoting();
     if(document.getElementById('tab-lb')?.classList.contains('active'))renderLeaderboard();
-    // Aktif maç kartını yenile
     if(activeMatchId){
       const m=_matches.find(x=>x.id===activeMatchId);
       if(m&&document.getElementById('match-display')?.innerHTML!=='')renderMatchCard(m);
     }
   });
 
-  // News listener
-  onValue(ref(db,'news'),snap=>{
-    _news=snap.val()||[];
-    if(!Array.isArray(_news))_news=Object.values(_news);
+  db.ref('news').on('value',snap=>{
+    const val=snap.val()||[];
+    _news=Array.isArray(val)?val:Object.values(val);
     if(document.getElementById('tab-news')?.classList.contains('active'))renderNewsTab();
   });
 }
 
-/* ====== LOADING SCREEN ====== */
+/* ====== LOADING ====== */
 function showLoading(msg='Yükleniyor...'){
   let el=document.getElementById('fb-loading');
   if(!el){
     el=document.createElement('div');
     el.id='fb-loading';
-    el.style.cssText='position:fixed;inset:0;background:rgba(13,26,18,.92);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#e8f5eb;font-family:DM Sans,sans-serif';
-    el.innerHTML=`<div style="font-size:3rem;animation:spin 1s linear infinite">⚽</div><div style="font-size:.9rem;color:#7fa889">${msg}</div>`;
+    el.style.cssText='position:fixed;inset:0;background:rgba(13,26,18,.92);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#e8f5eb;font-family:DM Sans,sans-serif;font-size:.9rem';
     document.body.appendChild(el);
-  }else{
-    el.querySelector('div:last-child').textContent=msg;
-    el.style.display='flex';
   }
+  el.innerHTML='<div style="font-size:3rem;animation:spin 1s linear infinite">⚽</div><div style="color:#7fa889">'+msg+'</div>';
+  el.style.display='flex';
 }
 function hideLoading(){
   const el=document.getElementById('fb-loading');
@@ -634,7 +623,7 @@ async function handleLogin(){
   if(!pass)return showNotif('Şifreni gir!','error');
   showLoading('Giriş yapılıyor...');
   try{
-    const snap=await get(ref(db,'users'));
+    const snap=await db.ref('users').once('value');
     _users=snap.val()||{};
   }catch(e){
     hideLoading();
@@ -655,9 +644,9 @@ async function tryAutoLogin(){
   showLoading('Firebase\'e bağlanıyor...');
   try{
     const [usersSnap,matchesSnap,newsSnap]=await Promise.all([
-      get(ref(db,'users')),
-      get(ref(db,'matches')),
-      get(ref(db,'news'))
+      db.ref('users').once('value'),
+      db.ref('matches').once('value'),
+      db.ref('news').once('value')
     ]);
     _users=usersSnap.val()||{};
     const mVal=matchesSnap.val()||{};
@@ -1702,21 +1691,4 @@ function renderPastMatches(){
 /* ====== BOOT ====== */
 tryAutoLogin();
 
-// type="module" kullandığımız için onclick'lerin çalışması adına
-// tüm fonksiyonları window'a açıyoruz
-Object.assign(window,{
-  handleRegister,handleLogin,handleLogout,
-  openModal,closeModal,switchTab,
-  findMatch,selectMatch,
-  joinMatch,openExcuse,submitExcuse,
-  openScore,submitScore,selectWinner,
-  markFinished,askDelete,confirmDelete,
-  openVoting,closeVoting,castVote,
-  openNewsModal,saveNews,deleteNews,
-  saveRating,saveRevealTime,saveLineup,
-  renderAdmin,renderCards,renderVoting,renderLineup,renderLeaderboard,renderNewsTab,renderPastMatches,
-});
-
 </script>
-</body>
-</html>
