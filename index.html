@@ -1175,7 +1175,7 @@ function goHome(){
   showPage('page-home');
   renderPastMatches();renderLeaderboard();
   // Patch notes - ilk girişte göster
-  if(!LS.get('patch_v2_seen')){
+  if(!LS.get('patch_v3_seen')){
     setTimeout(()=>openPatchNotes(),700);
   }
 }
@@ -1200,7 +1200,7 @@ function closePatchNotes(){
     el.style.animation='';
     el.classList.remove('open');
   },350);
-  LS.set('patch_v2_seen','1');
+  LS.set('patch_v3_seen','1');
   // Profile doldurmamışsa profil sekmesine götür
   if(currentUser&&!currentUser.profileComplete){
     const tabs=document.querySelectorAll('.nav-tab');
@@ -2042,7 +2042,7 @@ function renderAdmin(){
         <details style="margin-top:10px">
           <summary style="font-size:.68rem;color:var(--amber);cursor:pointer;font-weight:600">✏️ Özellikleri Düzenle</summary>
           <div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px">
-            ${[['hiz','HIZ',u.hiz||50],['sut','ŞUT',u.sut||50],['pas','PAS',u.pas||50],['fizik','FİZ',u.fizik||50],['defans','DEF',u.defans||50],['kalecilik','KAL',u.kalecilik||50],['topkontrol','TOP',u.topKontrol||50]].map(([key,lbl,val])=>`
+            ${[['hiz','HIZ',u.hiz||50],['sut','ŞUT',u.sut||50],['pas','PAS',u.pas||50],['fizik','FİZ',u.fizik||50],['defans','DEF',u.defans||50],['kalecilik','KAL',u.kalecilik||50],['topkontrol','TOP',u.topKontrol||50],['dribling','DRİB',u.dribling||50]].map(([key,lbl,val])=>`
             <div>
               <label style="font-size:.62rem;color:var(--text-muted);display:block;margin-bottom:2px">${lbl}</label>
               <input type="number" min="1" max="100" value="${val}" id="stat-${u.id}-${key}" style="width:100%;background:var(--dark-3);border:1.5px solid var(--surface-3);border-radius:6px;color:var(--text);font-size:.84rem;padding:5px 8px;outline:none">
@@ -2150,10 +2150,11 @@ async function adminSaveStats(userId,nameKey){
   const defans=g('stat-'+userId+'-defans');
   const kalecilik=g('stat-'+userId+'-kalecilik');
   const topKontrol=g('stat-'+userId+'-topkontrol');
+  const dribling=g('stat-'+userId+'-dribling');
   const posEl=document.getElementById('pos-'+userId);
   const pos=posEl?posEl.value:u.pos;
-  const rating=calcRating({hiz,sut,pas,fizik,defans,kalecilik,topKontrol},pos);
-  users[nameKey]={...u,hiz,sut,pas,fizik,defans,kalecilik,topKontrol,pos,rating,profileComplete:true};
+  const rating=calcRating({hiz,sut,pas,fizik,defans,kalecilik,topKontrol,dribling},pos);
+  users[nameKey]={...u,hiz,sut,pas,fizik,defans,kalecilik,topKontrol,dribling,pos,rating,profileComplete:true};
   await saveUsers(users);
   showNotif(u.name+' güncellendi → Reyting: '+rating+' ✅');
   renderAdmin();
@@ -2737,24 +2738,17 @@ const MEVKILER=['Kaleci','Stoper','Sağ Bek','Sol Bek','DOS','MOS','Forvet Arkas
 // Her katsayı toplamı 1.00 = tam hassas ağırlıklandırma
 // Parametreler: hiz, sut, pas, fizik, defans, kalecilik, topK (top kontrolü)
 const MEVKI_WEIGHTS={
-  // Kaleci: Refleks=kalecilik, Pozisyon=defans, Ayak oyunu=pas, Güç=fizik
-  'Kaleci':       {hiz:.06,sut:.03,pas:.14,fizik:.18,defans:.12,kalecilik:.38,topK:.09},
-  // Stoper: Hava topu+müdahale=defans+fizik, kısa pas=pas
-  'Stoper':       {hiz:.10,sut:.04,pas:.12,fizik:.22,defans:.36,kalecilik:.04,topK:.12},
-  // Bek: Koşu=hız, Savunma=defans, Orta=pas, Çapraz=sut
-  'Sağ Bek':      {hiz:.22,sut:.09,pas:.18,fizik:.16,defans:.20,kalecilik:.03,topK:.12},
-  'Sol Bek':      {hiz:.22,sut:.09,pas:.18,fizik:.16,defans:.20,kalecilik:.03,topK:.12},
-  // DOS: Savunma katkısı yüksek, pas ve top kontrolü kritik
-  'DOS':          {hiz:.10,sut:.08,pas:.22,fizik:.18,defans:.24,kalecilik:.03,topK:.15},
-  // MOS: Pas+top kontrolü en kritik, her yönde denge
-  'MOS':          {hiz:.14,sut:.13,pas:.26,fizik:.13,defans:.12,kalecilik:.02,topK:.20},
-  // Forvet Arkası: Yaratıcılık=pas+topK, Şut katkısı
-  'Forvet Arkası':{hiz:.16,sut:.22,pas:.20,fizik:.12,defans:.06,kalecilik:.02,topK:.22},
-  // Kanat: Hız en kritik, dribbling=topK, orta=pas
-  'Sağ Kanat':    {hiz:.28,sut:.16,pas:.15,fizik:.13,defans:.06,kalecilik:.02,topK:.20},
-  'Sol Kanat':    {hiz:.28,sut:.16,pas:.15,fizik:.13,defans:.06,kalecilik:.02,topK:.20},
-  // Santrafor: Şut en kritik, fizik (hava topu), hız (arkası)
-  'Santrafor':    {hiz:.16,sut:.32,pas:.10,fizik:.18,defans:.03,kalecilik:.02,topK:.19},
+  // Toplam: hiz+sut+pas+fizik+defans+kalecilik+topK+drib = 1.00
+  'Kaleci':       {hiz:.06,sut:.02,pas:.12,fizik:.16,defans:.11,kalecilik:.38,topK:.08,drib:.07},
+  'Stoper':       {hiz:.10,sut:.03,pas:.11,fizik:.21,defans:.34,kalecilik:.04,topK:.10,drib:.07},
+  'Sağ Bek':      {hiz:.20,sut:.08,pas:.16,fizik:.14,defans:.18,kalecilik:.03,topK:.10,drib:.11},
+  'Sol Bek':      {hiz:.20,sut:.08,pas:.16,fizik:.14,defans:.18,kalecilik:.03,topK:.10,drib:.11},
+  'DOS':          {hiz:.09,sut:.07,pas:.20,fizik:.16,defans:.22,kalecilik:.02,topK:.13,drib:.11},
+  'MOS':          {hiz:.12,sut:.11,pas:.22,fizik:.11,defans:.10,kalecilik:.02,topK:.16,drib:.16},
+  'Forvet Arkası':{hiz:.13,sut:.19,pas:.17,fizik:.10,defans:.05,kalecilik:.02,topK:.17,drib:.17},
+  'Sağ Kanat':    {hiz:.24,sut:.13,pas:.12,fizik:.10,defans:.04,kalecilik:.01,topK:.15,drib:.21},
+  'Sol Kanat':    {hiz:.24,sut:.13,pas:.12,fizik:.10,defans:.04,kalecilik:.01,topK:.15,drib:.21},
+  'Santrafor':    {hiz:.14,sut:.28,pas:.09,fizik:.16,defans:.03,kalecilik:.01,topK:.15,drib:.14},
 };
 
 function calcRating(user,mevki){
@@ -2768,7 +2762,8 @@ function calcRating(user,mevki){
   const defans=Number(user.defans)||50;
   const kal=Number(user.kalecilik)||50;
   const topK=Number(user.topKontrol)||50;
-  const raw=hiz*w.hiz+sut*w.sut+pas*w.pas+fizik*w.fizik+defans*w.defans+kal*w.kalecilik+topK*w.topK;
+  const drib=Number(user.dribling)||50;
+  const raw=hiz*w.hiz+sut*w.sut+pas*w.pas+fizik*w.fizik+defans*w.defans+kal*w.kalecilik+topK*w.topK+drib*w.drib;
   // Gerçekçi skala: ham değeri 1-99 bandına sıkıştır (çok yüksek şişmesin)
   const scaled=Math.round(raw*0.94+2);
   return Math.min(99,Math.max(1,scaled));
@@ -2874,6 +2869,7 @@ function buildFC2Card(user,mevki){
         <div class="fc2-stat"><span class="fc2-stat-val">${user.defans||50}</span><span class="fc2-stat-lbl">DEF</span></div>
         <div class="fc2-stat"><span class="fc2-stat-val">${user.kalecilik||50}</span><span class="fc2-stat-lbl">KAL</span></div>
         <div class="fc2-stat"><span class="fc2-stat-val">${user.topKontrol||50}</span><span class="fc2-stat-lbl">TOP</span></div>
+        <div class="fc2-stat"><span class="fc2-stat-val">${user.dribling||50}</span><span class="fc2-stat-lbl">DRİB</span></div>
       </div>
       <div style="width:100%;margin-top:6px;padding:4px 6px;background:rgba(0,0,0,.25);border-radius:4px;text-align:center">
         <span style="font-size:.48rem;opacity:.8;letter-spacing:.8px;text-transform:uppercase">Bonservis</span><br>
@@ -2942,6 +2938,7 @@ function renderProfile(){
         ['pf-defans','Defans',u.defans||50],
         ['pf-kalecilik','Kalecilik',u.kalecilik||50],
         ['pf-topkontrol','Top Kontrolü',u.topKontrol||50],
+        ['pf-dribling','Dribling',u.dribling||50],
       ].map(([id,lbl,val])=>`
         <div class="stat-row">
           <label>${lbl}</label>
@@ -2955,7 +2952,7 @@ function renderProfile(){
       ${[
         ['Hız',u.hiz||50],['Şut',u.sut||50],['Pas',u.pas||50],
         ['Fizik',u.fizik||50],['Defans',u.defans||50],['Kalecilik',u.kalecilik||50],
-        ['Top Kontrolü',u.topKontrol||50],
+        ['Top Kontrolü',u.topKontrol||50],['Dribling',u.dribling||50],
       ].map(([lbl,val])=>`
         <div class="stat-row">
           <label>${lbl}</label>
@@ -2973,7 +2970,7 @@ function renderProfile(){
 function updateProfilePreview(){
   const el=document.getElementById('profile-content');if(!el)return;
   // Update range value badges
-  ['pf-hiz','pf-sut','pf-pas','pf-fizik','pf-defans','pf-kalecilik','pf-topkontrol'].forEach(id=>{
+  ['pf-hiz','pf-sut','pf-pas','pf-fizik','pf-defans','pf-kalecilik','pf-topkontrol','pf-dribling'].forEach(id=>{
     const inp=document.getElementById(id);
     const badge=document.getElementById(id+'-val');
     if(inp&&badge)badge.textContent=inp.value;
@@ -2988,6 +2985,7 @@ function updateProfilePreview(){
     defans:+document.getElementById('pf-defans')?.value||50,
     kalecilik:+document.getElementById('pf-kalecilik')?.value||50,
     topKontrol:+document.getElementById('pf-topkontrol')?.value||50,
+    dribling:+document.getElementById('pf-dribling')?.value||50,
     pos:document.getElementById('pf-pos')?.value||currentUser.pos,
     ayak:document.getElementById('pf-ayak')?.value||currentUser.ayak,
   };
@@ -3024,8 +3022,9 @@ async function saveProfile(){
     const defans=+document.getElementById('pf-defans').value;
     const kalecilik=+document.getElementById('pf-kalecilik').value;
     const topKontrol=+document.getElementById('pf-topkontrol').value;
-    const rating=calcRating({hiz,sut,pas,fizik,defans,kalecilik,topKontrol},pos);
-    users[key]={...users[key],hiz,sut,pas,fizik,defans,kalecilik,topKontrol,pos,ayak,altPos1,altPos2,rating,profileComplete:true};
+    const dribling=+document.getElementById('pf-dribling').value;
+    const rating=calcRating({hiz,sut,pas,fizik,defans,kalecilik,topKontrol,dribling},pos);
+    users[key]={...users[key],hiz,sut,pas,fizik,defans,kalecilik,topKontrol,dribling,pos,ayak,altPos1,altPos2,rating,profileComplete:true};
     showLoading('Kaydediliyor...');
     await saveUsers(users);
     currentUser=users[key];
@@ -3140,6 +3139,7 @@ function buildFairTeams(attending){
       defans:Number(u.defans)||50,
       kalecilik:Number(u.kalecilik)||50,
       topKontrol:Number(u.topKontrol)||50,
+      dribling:Number(u.dribling)||50,
       altPos1:u.altPos1||'',
       altPos2:u.altPos2||'',
     };
@@ -3386,7 +3386,7 @@ tryAutoLogin();
           <div class="patch-slide-title">Daha <span>Adaletli</span> Reyting Sistemi</div>
           <p class="patch-slide-desc">Farklı parametreleri ekibimizce inceleyip en hassas, en adaletli şekilde sizi puanlıyacağız.</p>
           <ul class="patch-features">
-            <li>Hız, Şut, Pas, Fizik, Defans, Kalecilik ve Top Kontrolü değerlendiriliyor</li>
+            <li>Hız, Şut, Pas, Fizik, Defans, Kalecilik, Top Kontrolü ve Dribling değerlendiriliyor</li>
             <li>Sistem mevkine göre ağırlıklandırarak genel reytingini hesaplar</li>
             <li>Yapay zeka en ideal mevkini gerçekçi analizle öneriyor</li>
           </ul>
