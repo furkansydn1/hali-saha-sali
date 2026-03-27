@@ -2150,112 +2150,33 @@ function renderLineup(){
   const matches=getMatches();
   const upcoming=matches.filter(m=>!m.finished).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
 
-  // Aktif maç yoksa — boş saha göster
+  // Aktif maç yok
   if(!upcoming.length){
-    const fake={lineup:{},attending:[],reserves:[],teamAName:'Takım A',teamBName:'Takım B',captainA:null,captainB:null,teamAvgA:0,teamAvgB:0,datetime:new Date().toISOString(),venue:'—'};
-    renderFieldLineup(el,fake);
+    el.innerHTML=`<div class="lineup-waiting">
+      <span class="lw-icon">⚽</span>
+      <div class="lineup-quote">"Adalet mülkün temelidir."</div>
+      <p class="lineup-sub">Henüz aktif maç yok.</p>
+    </div>`;
     return;
   }
 
   const match=upcoming[0];
-  const now=new Date();
-  const revealTime=match.lineupRevealTime ? new Date(match.lineupRevealTime) : null;
+  const hasLineup=match.lineup&&Object.keys(match.lineup).length>0;
 
-  // Reveal zamanı geldi veya set edilmemiş
-  if(!revealTime||now>=revealTime){
-    const hasLineup=match.lineup&&Object.keys(match.lineup).length>0;
-    if(!hasLineup&&(match.attending||[]).length>=2){
-      el.innerHTML='<div class="lineup-waiting"><span class="lw-icon">⚙️</span><p class="lineup-sub">Takımlar oluşturuluyor...</p></div>';
-      autoRevealAndBuildTeams(match.id).then(()=>{
-        setTimeout(async()=>{
-          const snap=await db.ref('matches/'+match.id).once('value');
-          const fm=snap.val()||match;
-          const i=_matches.findIndex(x=>x.id===match.id);
-          if(i>=0)_matches[i]=fm;else _matches.push(fm);
-          const e2=document.getElementById('lineup-content');
-          if(e2)renderFieldLineup(e2,fm);
-        },1200);
-      });
-    } else {
-      renderFieldLineup(el,match);
-    }
+  // Kadro oluşmuşsa direkt göster
+  if(hasLineup){
+    renderFieldLineup(el,match);
     return;
   }
 
-  // ── Geri sayım ──────────────────────────────────────────
-  const pad=v=>String(v).padStart(2,'0');
-
-  // Sayaç ve saha için 2 ayrı div — sadece sayaç güncellenir
-  el.innerHTML=`
-    <div id="lc-countdown">
-      <div class="lineup-waiting" style="padding:18px 0 12px">
-        <div class="lineup-quote">"Adalet mülkün temelidir."</div>
-        <p class="lineup-sub" style="margin-bottom:12px">${match.name} — Kadro açılmayı bekliyor</p>
-        <div id="lc-digits" style="display:flex;gap:8px;justify-content:center;margin:0 0 8px"></div>
-        <p class="lineup-sub" style="font-size:.7rem;margin:0">Kadro açıklanmasına bu kadar süre kaldı.</p>
-      </div>
-    </div>
-    <div id="lc-field"></div>`;
-
-  // Boş saha önizlemesi (bir kez render et — minimal mod)
-  const fieldEl=document.getElementById('lc-field');
-  if(fieldEl){
-    fieldEl.dataset.minimal='1';
-    const fake={lineup:{},attending:[],reserves:[],
-      teamAName:match.teamAName||'Takım A',teamBName:match.teamBName||'Takım B',
-      captainA:null,captainB:null,teamAvgA:0,teamAvgB:0,datetime:match.datetime,venue:match.venue};
-    renderFieldLineup(fieldEl,fake);
-  }
-
-  function updateDigits(){
-    const digEl=document.getElementById('lc-digits');
-    if(!digEl)return false;
-    const n=new Date();
-    const diff=Math.floor((revealTime-n)/1000);
-    if(diff<=0)return false;
-    const h=Math.floor(diff/3600);
-    const m2=Math.floor((diff%3600)/60);
-    const s=diff%60;
-    const box=(val,lbl)=>`<div style="text-align:center;background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);padding:10px 12px;min-width:52px">
-      <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:var(--lime);line-height:1">${pad(val)}</div>
-      <div style="font-size:.58rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px">${lbl}</div>
-    </div>`;
-    const sep=`<div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:rgba(255,255,255,.3);padding-top:10px">:</div>`;
-    digEl.innerHTML=box(h,'SAAT')+sep+box(m2,'DAKİKA')+sep+box(s,'SANİYE');
-    return true;
-  }
-
-  function tick(){
-    const cdEl=document.getElementById('lc-countdown');
-    if(!cdEl){stopLineupTimer();return;}
-    const n=new Date();
-    if(n>=revealTime){
-      stopLineupTimer();
-      const outer=document.getElementById('lineup-content');
-      if(outer){
-        outer.innerHTML='<div class="lineup-waiting"><span class="lw-icon">⚙️</span><div class="lineup-quote">"Adalet mülkün temelidir."</div><p class="lineup-sub">Takımlar oluşturuluyor...</p></div>';
-      }
-      autoRevealAndBuildTeams(match.id).then(()=>{
-        setTimeout(async()=>{
-          const snap=await db.ref('matches/'+match.id).once('value');
-          const fm=snap.val();
-          if(fm){
-            const i=_matches.findIndex(x=>x.id===match.id);
-            if(i>=0)_matches[i]=fm;else _matches.push(fm);
-            const e3=document.getElementById('lineup-content');
-            if(e3)renderFieldLineup(e3,fm);
-          }
-        },1200);
-      });
-      return;
-    }
-    updateDigits();
-  }
-
-  updateDigits(); // ilk render
-  _lineupTimer=setInterval(tick,1000);
+  // Kadro yoksa — bekleniyor mesajı
+  el.innerHTML=`<div class="lineup-waiting">
+    <span class="lw-icon">⏳</span>
+    <div class="lineup-quote">"Adalet mülkün temelidir."</div>
+    <p class="lineup-sub" style="margin-bottom:6px">${match.name}</p>
+    <p class="lineup-sub" style="font-size:.72rem">Kadro henüz açıklanmadı. Saatini bekle!</p>
+  </div>`;
 }
-
 
 function renderFieldLineup(el, match, previewMode=false){
   const lineup=match.lineup||{};
@@ -3535,14 +3456,15 @@ async function applyUserStats(match){
 
     let multiplier=1;
     if(result==='w'){
-      // Seri galibiyet bonusu
-      if(u.winStreak>=3) multiplier=1.08;
-      else if(u.winStreak>=2) multiplier=1.06;
-      else multiplier=1.04;
+      // Seri galibiyet: max +%5 tek seferde
+      if(u.winStreak>=3) multiplier=1.05;
+      else if(u.winStreak>=2) multiplier=1.04;
+      else multiplier=1.03;
     } else if(result==='l'){
-      if(u.loseStreak>=3) multiplier=0.91;
-      else if(u.loseStreak>=2) multiplier=0.94;
-      else multiplier=0.96;
+      // Seri mağlubiyet: max -%5.5 tek seferde
+      if(u.loseStreak>=3) multiplier=0.945;
+      else if(u.loseStreak>=2) multiplier=0.96;
+      else multiplier=0.97;
     } else {
       multiplier=1.0; // berabere değişim yok
     }
@@ -3674,8 +3596,8 @@ function calcRating(user,mevki){
   const topK=Number(user.topKontrol)||50;
   const drib=Number(user.dribling)||50;
   const raw=hiz*w.hiz+sut*w.sut+pas*w.pas+fizik*w.fizik+defans*w.defans+kal*w.kalecilik+topK*w.topK+drib*w.drib;
-  // Gerçekçi skala: ham değeri 1-99 bandına sıkıştır (çok yüksek şişmesin)
-  const scaled=Math.round(raw*0.94+2);
+  // Ham değeri gerçekçi bantta tut — +2-3 OVR daha yüksek
+  const scaled=Math.round(raw*0.96+3);
   return Math.min(99,Math.max(1,scaled));
 }
 
@@ -3697,10 +3619,10 @@ const BONSERVIS_MULTIPLIER={
 function calcBonservisRaw(rating, pos){
   const r=Math.max(1,Math.min(99,rating||50));
   const mult=BONSERVIS_MULTIPLIER[pos]||1.0;
-  // Temel formül: üstel artış, mevki çarpanı ile ölçekle
-  // 50 rating Stoper → ~2.5M, 50 rating Santrafor → ~4M
-  // 90 rating Stoper → ~45M, 90 rating Santrafor → ~85M
-  return Math.round(600000*Math.pow(r/50,4.2)*mult);
+  // Formül: 2.5M baz, r/50 üstel (exp=4.0), mevki çarpanı
+  // 82 Santrafor → ~24M | 82 MOS → ~20M | 82 Stoper → ~15M
+  // 75 MOS → ~14M | 90 Santrafor → ~35M | 50 DOS → ~2.5M
+  return Math.round(2500000*Math.pow(r/50,4.0)*mult);
 }
 
 function formatBonservis(val){
