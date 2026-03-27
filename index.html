@@ -6,187 +6,11 @@
 <title>Salı Maçı Organizasyonu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=UnifrakturMaguntia&family=Playfair+Display:ital,wght@0,700;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-
-<div id="page-login" class="page active">
-  <div class="topbar">
-    <div class="brand">SALI<span>MAÇI</span></div>
-  </div>
-  <div style="max-width:400px;margin:0 auto;padding:32px 16px">
-    <div style="text-align:center;margin-bottom:32px">
-      <div style="font-family:'Bebas Neue',cursive;font-size:2.5rem;color:var(--lime);letter-spacing:3px;text-shadow:0 0 30px rgba(184,247,23,.3)">PITCH APP</div>
-      <div style="font-size:.78rem;color:#446044;margin-top:4px;letter-spacing:1px">SALI MAÇI PLATFORMU</div>
-    </div>
-    <div class="profile-form-card">
-      <h3>🔐 Giriş Yap</h3>
-      <div class="form-group"><label>Ad Soyad</label><input type="text" id="login-name" placeholder="Adın Soyadın" autocomplete="name"></div>
-      <div class="form-group"><label>Şifre</label><input type="password" id="login-pass" placeholder="Şifren" autocomplete="current-password"></div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
-        <input type="checkbox" id="login-remember" style="width:16px;height:16px;accent-color:var(--lime)">
-        <label for="login-remember" style="font-size:.78rem;color:var(--text-muted);cursor:pointer">Beni Hatırla</label>
-      </div>
-      <button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="handleLogin()">Giriş Yap →</button>
-      <p style="margin-top:12px;text-align:center;font-size:.8rem;color:var(--text-muted)">Hesabın yok mu? <a style="color:var(--lime);cursor:pointer;font-weight:600" onclick="openModal('modal-register')">Kayıt Ol</a></p>
-    </div>
-  </div>
-</div>
-
-<!-- ====== HOME ====== -->
-<div id="page-home" class="page" style="padding:0;max-width:100%">
-<div class="app-shell">
-
-  <!-- SIDE NAV -->
-  <nav class="sidenav" id="sidenav">
-    <div class="sn-logo">
-      <span class="sn-logo-text">SALI</span>
-      <span class="sn-logo-text">MAÇI</span>
-      <span class="sn-logo-sub">FC</span>
-    </div>
-    <button class="sn-item active" onclick="switchTab('tab-dashboard',this)" data-title="Ana Sayfa"><span class="sn-icon">🏠</span><span class="sn-lbl">Ana</span></button>
-    <button class="sn-item" onclick="switchTab('tab-matches',this)" data-title="Maçlar"><span class="sn-icon">⚽</span><span class="sn-lbl">Maçlar</span></button>
-    <button class="sn-item" onclick="switchTab('tab-lineup',this)" data-title="Kadro"><span class="sn-icon">👕</span><span class="sn-lbl">Kadro</span></button>
-    <button class="sn-item" onclick="switchTab('tab-profile',this)" data-title="Profil"><span class="sn-icon">👤</span><span class="sn-lbl">Profil</span></button>
-    <button class="sn-item" onclick="switchTab('tab-vote',this)" data-title="Oylama"><span class="sn-icon">🏅</span><span class="sn-lbl">Oylama</span></button>
-    <button class="sn-item" onclick="switchTab('tab-lb',this)" data-title="Sıralama"><span class="sn-icon">🏆</span><span class="sn-lbl">Sıralama</span></button>
-    <button class="sn-item" onclick="switchTab('tab-forum',this)" data-title="Forum"><span class="sn-icon">💬</span><span class="sn-lbl">Forum</span></button>
-    <button class="sn-item" onclick="switchTab('tab-borsa',this)" data-title="Transfer Piyasası"><span class="sn-icon">📈</span><span class="sn-lbl">Piyasa</span></button>
-    <button class="sn-item" onclick="switchTab('tab-news',this)" data-title="Gazete"><span class="sn-icon">📰</span><span class="sn-lbl">Gazete</span></button>
-    <button class="sn-item" onclick="switchTab('tab-updates',this)" data-title="Yama Notları"><span class="sn-icon">🆕</span><span class="sn-lbl">Yamalar</span></button>
-    <button class="sn-item" onclick="switchTab('tab-past',this)" data-title="Geçmiş Maçlar"><span class="sn-icon">📚</span><span class="sn-lbl">Geçmiş</span></button>
-    <button class="sn-guide-btn" onclick="openOnboard()" title="Nasıl Oynanır?"><span class="sn-icon">❓</span><span class="sn-lbl" style="color:var(--lime);font-size:.41rem">Rehber</span></button>
-    <button class="sn-item" id="tab-admin-btn" style="display:none" onclick="switchTab('tab-admin',this)" data-title="Admin Paneli"><span class="sn-icon">⚙️</span><span class="sn-lbl">Admin</span></button>
-    <div class="sn-bottom">
-      <div class="sn-av" id="home-avatar" onclick="switchTab('tab-profile',document.querySelector('.sn-item[data-title=Profil]'))"></div>
-      <div class="sn-rating" id="home-rating">—</div>
-      <button class="sn-out" onclick="handleLogout()">Çıkış</button>
-    </div>
-  </nav>
-
-  <!-- ANA İÇERİK -->
-  <div class="main-content">
-    <div class="page-topbar">
-      <div>
-        <div class="page-title" id="page-title-text">Ana Sayfa</div>
-        <div class="page-sub" id="home-username"></div>
-      </div>
-      <span class="admin-badge" id="home-admin-badge" style="display:none">ADMİN</span>
-    </div>
-
-    <div id="tab-dashboard" class="panel active"><div id="dashboard-content"></div></div>
-    <div id="tab-matches" class="panel">
-      <div style="display:flex;flex-direction:column;align-items:center;padding:36px 0 22px;text-align:center;gap:12px">
-        <p style="font-size:.86rem;color:var(--text-muted);max-width:260px;line-height:1.6">Yaklaşan maçlara katıl, kadroyu doldur.</p>
-        <button class="btn btn-primary btn-big" onclick="findMatch()">⚽ Maç Bul</button>
-      </div>
-      <div id="match-display"></div>
-    </div>
-    <div id="tab-lineup"  class="panel"><div id="lineup-content"></div></div>
-    <div id="tab-profile" class="panel"><div id="profile-content"></div></div>
-    <div id="tab-vote"    class="panel"><div id="vote-content"></div></div>
-    <div id="tab-lb"      class="panel"><div id="lb-content"></div></div>
-    <div id="tab-forum"   class="panel" style="padding:0"><div id="forum-content"></div></div>
-    <div id="tab-borsa"   class="panel"><div id="borsa-content"></div></div>
-    <div id="tab-news"    class="panel"><div id="news-content"></div></div>
-    <div id="tab-updates" class="panel"><div id="updates-content"></div></div>
-    <div id="tab-past"    class="panel"><div id="past-matches-list"></div></div>
-    <div id="tab-admin"   class="panel"><div id="admin-content"></div></div>
-  </div>
-</div>
-</div>
-
-<!-- MODAL: REGISTER -->
-<div id="modal-register" class="modal-overlay">
-  <div class="modal-box">
-    <h2>⚽ Kayıt Ol</h2>
-    <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:14px">Kaydolduktan sonra Profil sekmesinden özelliklerini doldur!</p>
-    <div class="form-group"><label>Ad Soyad</label><input type="text" id="reg-name" placeholder="Adın Soyadın"></div>
-    <div class="form-group"><label>Şifre</label><input type="password" id="reg-pass" placeholder="Şifreni belirle"></div>
-    <div class="form-group"><label>Şifre Tekrar</label><input type="password" id="reg-pass2" placeholder="Tekrar gir"></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('modal-register')">İptal</button>
-      <button class="btn btn-primary" onclick="handleRegister()">Kayıt Ol →</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: EXCUSE -->
-<div id="modal-excuse" class="modal-overlay">
-  <div class="modal-box">
-    <h2>😢 Gelemiyorum</h2>
-    <div class="form-group"><label>Neden gelemiyorsun?</label><textarea id="excuse-text" rows="3" placeholder="Kısa bir açıklama yaz..."></textarea></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('modal-excuse')">Vazgeç</button>
-      <button class="btn btn-danger" onclick="submitExcuse()">Gönder</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: SCORE -->
-<div id="modal-score" class="modal-overlay">
-  <div class="modal-box">
-    <h2>⚽ Skor Gir</h2>
-    <div class="form-row">
-      <div class="form-group" style="margin-bottom:0"><label id="team-a-name-lbl">Takım A</label><input type="number" id="score-a" min="0" max="99" placeholder="0"></div>
-      <div style="padding-top:28px;font-family:'Bebas Neue',cursive;font-size:1.4rem;color:var(--text-muted)">—</div>
-      <div class="form-group" style="margin-bottom:0"><label id="team-b-name-lbl">Takım B</label><input type="number" id="score-b" min="0" max="99" placeholder="0"></div>
-    </div>
-    <div style="margin:14px 0 10px"><label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:8px">Kazanan</label>
-      <div style="display:flex;gap:8px">
-        <button class="winner-btn btn btn-ghost" id="wbtn-a" onclick="selectWinner('A',this)" style="flex:1">Takım A</button>
-        <button class="winner-btn btn btn-ghost" id="wbtn-draw" onclick="selectWinner('draw',this)" style="flex:1">Berabere</button>
-        <button class="winner-btn btn btn-ghost" id="wbtn-b" onclick="selectWinner('B',this)" style="flex:1">Takım B</button>
-      </div>
-    </div>
-    <div class="form-group"><label>Takım A Adı</label><input type="text" id="team-a-name" placeholder="Takım A"></div>
-    <div class="form-group"><label>Takım B Adı</label><input type="text" id="team-b-name" placeholder="Takım B"></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('modal-score')">İptal</button>
-      <button class="btn btn-primary" onclick="submitScore()">Kaydet ✓</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: DELETE MATCH -->
-<div id="modal-delete" class="modal-overlay">
-  <div class="modal-box" style="max-width:340px">
-    <h2>🗑️ Maçı Sil</h2>
-    <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:16px">Bu maçı silmek istediğine emin misin? Bu işlem geri alınamaz.</p>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('modal-delete')">Vazgeç</button>
-      <button class="btn btn-danger" onclick="confirmDelete()">Evet, Sil</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: NEWS -->
-<div id="modal-news" class="modal-overlay">
-  <div class="modal-box" style="max-width:480px">
-    <h2>📰 Gazete Yayımla</h2>
-    <div class="form-group"><label>Maç Seç</label><select id="news-match-select"></select></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('modal-news')">İptal</button>
-      <button class="btn btn-primary" onclick="generateNewspaper()">Yayımla 📰</button>
-    </div>
-  </div>
-</div>
-
-<div id="notif" class="notif"></div>
-
-<!-- MODAL: DELETE USER -->
-<div id="modal-delete-user" class="modal-overlay">
-  <div class="modal-box" style="max-width:360px">
-    <h2>🗑️ Kullanıcı Gizle</h2>
-    <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:6px">Şu kullanıcıyı gizlemek istediğine emin misin?</p>
-    <p style="font-size:1rem;font-weight:700;color:var(--red);margin-bottom:16px" id="delete-user-name"></p>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('modal-delete-user')">Vazgeç</button>
-      <button class="btn btn-danger" onclick="confirmDeleteUser()">Evet, Gizle</button>
-    </div>
-  </div>
-</div>
-
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js">
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body>
 <style>
 :root{
   --grass:#1a6b2f;--lime:#b8f717;--lime-dim:#9fd614;
@@ -5429,9 +5253,188 @@ function renderBorsa(){
 }
 
 /* ====== BOOT ====== */
-tryAutoLogin();
+initApp();
 
 </script>
+<div id="page-login" class="page active">
+  <div class="topbar">
+    <div class="brand">SALI<span>MAÇI</span></div>
+  </div>
+  <div style="max-width:400px;margin:0 auto;padding:32px 16px">
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="font-family:'Bebas Neue',cursive;font-size:2.5rem;color:var(--lime);letter-spacing:3px;text-shadow:0 0 30px rgba(184,247,23,.3)">PITCH APP</div>
+      <div style="font-size:.78rem;color:#446044;margin-top:4px;letter-spacing:1px">SALI MAÇI PLATFORMU</div>
+    </div>
+    <div class="profile-form-card">
+      <h3>🔐 Giriş Yap</h3>
+      <div class="form-group"><label>Ad Soyad</label><input type="text" id="login-name" placeholder="Adın Soyadın" autocomplete="name"></div>
+      <div class="form-group"><label>Şifre</label><input type="password" id="login-pass" placeholder="Şifren" autocomplete="current-password"></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+        <input type="checkbox" id="login-remember" style="width:16px;height:16px;accent-color:var(--lime)">
+        <label for="login-remember" style="font-size:.78rem;color:var(--text-muted);cursor:pointer">Beni Hatırla</label>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="handleLogin()">Giriş Yap →</button>
+      <p style="margin-top:12px;text-align:center;font-size:.8rem;color:var(--text-muted)">Hesabın yok mu? <a style="color:var(--lime);cursor:pointer;font-weight:600" onclick="openModal('modal-register')">Kayıt Ol</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ====== HOME ====== -->
+<div id="page-home" class="page" style="padding:0;max-width:100%">
+<div class="app-shell">
+
+  <!-- SIDE NAV -->
+  <nav class="sidenav" id="sidenav">
+    <div class="sn-logo">
+      <span class="sn-logo-text">SALI</span>
+      <span class="sn-logo-text">MAÇI</span>
+      <span class="sn-logo-sub">FC</span>
+    </div>
+    <button class="sn-item active" onclick="switchTab('tab-dashboard',this)" data-title="Ana Sayfa"><span class="sn-icon">🏠</span><span class="sn-lbl">Ana</span></button>
+    <button class="sn-item" onclick="switchTab('tab-matches',this)" data-title="Maçlar"><span class="sn-icon">⚽</span><span class="sn-lbl">Maçlar</span></button>
+    <button class="sn-item" onclick="switchTab('tab-lineup',this)" data-title="Kadro"><span class="sn-icon">👕</span><span class="sn-lbl">Kadro</span></button>
+    <button class="sn-item" onclick="switchTab('tab-profile',this)" data-title="Profil"><span class="sn-icon">👤</span><span class="sn-lbl">Profil</span></button>
+    <button class="sn-item" onclick="switchTab('tab-vote',this)" data-title="Oylama"><span class="sn-icon">🏅</span><span class="sn-lbl">Oylama</span></button>
+    <button class="sn-item" onclick="switchTab('tab-lb',this)" data-title="Sıralama"><span class="sn-icon">🏆</span><span class="sn-lbl">Sıralama</span></button>
+    <button class="sn-item" onclick="switchTab('tab-forum',this)" data-title="Forum"><span class="sn-icon">💬</span><span class="sn-lbl">Forum</span></button>
+    <button class="sn-item" onclick="switchTab('tab-borsa',this)" data-title="Transfer Piyasası"><span class="sn-icon">📈</span><span class="sn-lbl">Piyasa</span></button>
+    <button class="sn-item" onclick="switchTab('tab-news',this)" data-title="Gazete"><span class="sn-icon">📰</span><span class="sn-lbl">Gazete</span></button>
+    <button class="sn-item" onclick="switchTab('tab-updates',this)" data-title="Yama Notları"><span class="sn-icon">🆕</span><span class="sn-lbl">Yamalar</span></button>
+    <button class="sn-item" onclick="switchTab('tab-past',this)" data-title="Geçmiş Maçlar"><span class="sn-icon">📚</span><span class="sn-lbl">Geçmiş</span></button>
+    <button class="sn-guide-btn" onclick="openOnboard()" title="Nasıl Oynanır?"><span class="sn-icon">❓</span><span class="sn-lbl" style="color:var(--lime);font-size:.41rem">Rehber</span></button>
+    <button class="sn-item" id="tab-admin-btn" style="display:none" onclick="switchTab('tab-admin',this)" data-title="Admin Paneli"><span class="sn-icon">⚙️</span><span class="sn-lbl">Admin</span></button>
+    <div class="sn-bottom">
+      <div class="sn-av" id="home-avatar" onclick="switchTab('tab-profile',document.querySelector('.sn-item[data-title=Profil]'))"></div>
+      <div class="sn-rating" id="home-rating">—</div>
+      <button class="sn-out" onclick="handleLogout()">Çıkış</button>
+    </div>
+  </nav>
+
+  <!-- ANA İÇERİK -->
+  <div class="main-content">
+    <div class="page-topbar">
+      <div>
+        <div class="page-title" id="page-title-text">Ana Sayfa</div>
+        <div class="page-sub" id="home-username"></div>
+      </div>
+      <span class="admin-badge" id="home-admin-badge" style="display:none">ADMİN</span>
+    </div>
+
+    <div id="tab-dashboard" class="panel active"><div id="dashboard-content"></div></div>
+    <div id="tab-matches" class="panel">
+      <div style="display:flex;flex-direction:column;align-items:center;padding:36px 0 22px;text-align:center;gap:12px">
+        <p style="font-size:.86rem;color:var(--text-muted);max-width:260px;line-height:1.6">Yaklaşan maçlara katıl, kadroyu doldur.</p>
+        <button class="btn btn-primary btn-big" onclick="findMatch()">⚽ Maç Bul</button>
+      </div>
+      <div id="match-display"></div>
+    </div>
+    <div id="tab-lineup"  class="panel"><div id="lineup-content"></div></div>
+    <div id="tab-profile" class="panel"><div id="profile-content"></div></div>
+    <div id="tab-vote"    class="panel"><div id="vote-content"></div></div>
+    <div id="tab-lb"      class="panel"><div id="lb-content"></div></div>
+    <div id="tab-forum"   class="panel" style="padding:0"><div id="forum-content"></div></div>
+    <div id="tab-borsa"   class="panel"><div id="borsa-content"></div></div>
+    <div id="tab-news"    class="panel"><div id="news-content"></div></div>
+    <div id="tab-updates" class="panel"><div id="updates-content"></div></div>
+    <div id="tab-past"    class="panel"><div id="past-matches-list"></div></div>
+    <div id="tab-admin"   class="panel"><div id="admin-content"></div></div>
+  </div>
+</div>
+</div>
+
+<!-- MODAL: REGISTER -->
+<div id="modal-register" class="modal-overlay">
+  <div class="modal-box">
+    <h2>⚽ Kayıt Ol</h2>
+    <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:14px">Kaydolduktan sonra Profil sekmesinden özelliklerini doldur!</p>
+    <div class="form-group"><label>Ad Soyad</label><input type="text" id="reg-name" placeholder="Adın Soyadın"></div>
+    <div class="form-group"><label>Şifre</label><input type="password" id="reg-pass" placeholder="Şifreni belirle"></div>
+    <div class="form-group"><label>Şifre Tekrar</label><input type="password" id="reg-pass2" placeholder="Tekrar gir"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-register')">İptal</button>
+      <button class="btn btn-primary" onclick="handleRegister()">Kayıt Ol →</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: EXCUSE -->
+<div id="modal-excuse" class="modal-overlay">
+  <div class="modal-box">
+    <h2>😢 Gelemiyorum</h2>
+    <div class="form-group"><label>Neden gelemiyorsun?</label><textarea id="excuse-text" rows="3" placeholder="Kısa bir açıklama yaz..."></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-excuse')">Vazgeç</button>
+      <button class="btn btn-danger" onclick="submitExcuse()">Gönder</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: SCORE -->
+<div id="modal-score" class="modal-overlay">
+  <div class="modal-box">
+    <h2>⚽ Skor Gir</h2>
+    <div class="form-row">
+      <div class="form-group" style="margin-bottom:0"><label id="team-a-name-lbl">Takım A</label><input type="number" id="score-a" min="0" max="99" placeholder="0"></div>
+      <div style="padding-top:28px;font-family:'Bebas Neue',cursive;font-size:1.4rem;color:var(--text-muted)">—</div>
+      <div class="form-group" style="margin-bottom:0"><label id="team-b-name-lbl">Takım B</label><input type="number" id="score-b" min="0" max="99" placeholder="0"></div>
+    </div>
+    <div style="margin:14px 0 10px"><label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:8px">Kazanan</label>
+      <div style="display:flex;gap:8px">
+        <button class="winner-btn btn btn-ghost" id="wbtn-a" onclick="selectWinner('A',this)" style="flex:1">Takım A</button>
+        <button class="winner-btn btn btn-ghost" id="wbtn-draw" onclick="selectWinner('draw',this)" style="flex:1">Berabere</button>
+        <button class="winner-btn btn btn-ghost" id="wbtn-b" onclick="selectWinner('B',this)" style="flex:1">Takım B</button>
+      </div>
+    </div>
+    <div class="form-group"><label>Takım A Adı</label><input type="text" id="team-a-name" placeholder="Takım A"></div>
+    <div class="form-group"><label>Takım B Adı</label><input type="text" id="team-b-name" placeholder="Takım B"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-score')">İptal</button>
+      <button class="btn btn-primary" onclick="submitScore()">Kaydet ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: DELETE MATCH -->
+<div id="modal-delete" class="modal-overlay">
+  <div class="modal-box" style="max-width:340px">
+    <h2>🗑️ Maçı Sil</h2>
+    <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:16px">Bu maçı silmek istediğine emin misin? Bu işlem geri alınamaz.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-delete')">Vazgeç</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Evet, Sil</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: NEWS -->
+<div id="modal-news" class="modal-overlay">
+  <div class="modal-box" style="max-width:480px">
+    <h2>📰 Gazete Yayımla</h2>
+    <div class="form-group"><label>Maç Seç</label><select id="news-match-select"></select></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-news')">İptal</button>
+      <button class="btn btn-primary" onclick="generateNewspaper()">Yayımla 📰</button>
+    </div>
+  </div>
+</div>
+
+<div id="notif" class="notif"></div>
+
+<!-- MODAL: DELETE USER -->
+<div id="modal-delete-user" class="modal-overlay">
+  <div class="modal-box" style="max-width:360px">
+    <h2>🗑️ Kullanıcı Gizle</h2>
+    <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:6px">Şu kullanıcıyı gizlemek istediğine emin misin?</p>
+    <p style="font-size:1rem;font-weight:700;color:var(--red);margin-bottom:16px" id="delete-user-name"></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-delete-user')">Vazgeç</button>
+      <button class="btn btn-danger" onclick="confirmDeleteUser()">Evet, Gizle</button>
+    </div>
+  </div>
+</div>
+
+
+
 
 <!-- PATCH NOTES SLIDER -->
 <div id="patchOverlay">
@@ -6180,6 +6183,7 @@ tryAutoLogin();
 
 </div><!-- /ob-card -->
 </div><!-- /onboardOverlay -->
+
 
 
 
