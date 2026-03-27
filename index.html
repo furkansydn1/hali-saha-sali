@@ -2198,7 +2198,7 @@ function goHome(){
   renderDashboard();
   renderPastMatches();renderLeaderboard();
   // Patch notes - ilk girişte göster
-  if(!LS.get('patch_v5_seen')){
+  if(!LS.get('patch_v6_seen')){
     setTimeout(()=>openPatchNotes(),700);
   }
 }
@@ -2223,7 +2223,7 @@ function closePatchNotes(){
     el.style.animation='';
     el.classList.remove('open');
   },350);
-  LS.set('patch_v5_seen','1');
+  LS.set('patch_v6_seen','1');
   // Profile doldurmamışsa profil sekmesine götür
   if(currentUser&&!currentUser.profileComplete){
     const tabs=document.querySelectorAll('.nav-tab');
