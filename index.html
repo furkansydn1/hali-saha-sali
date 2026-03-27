@@ -3766,8 +3766,16 @@ function renderMatchCard(match){
   const kadroFull=attending.length>=KADRO_LIMIT;
 
   let actionHtml='';
-  if(iAttend)actionHtml=`<div class="attending-self">✅ Kadrodasın! Hazır ol. (${attending.length}/${KADRO_LIMIT})</div>`;
-  else if(iReserve)actionHtml=`<div class="attending-self" style="color:var(--amber);border-color:rgba(245,166,35,.3);background:rgba(245,166,35,.07)">🪑 ${iReserveIdx+1}. yedeksin. Boşluk çıkarsa haber verilir.</div>`;
+  if(iAttend)actionHtml=`
+    <div class="attending-self" style="justify-content:space-between">
+      <span>✅ Kadrodasın! Hazır ol. (${attending.length}/${KADRO_LIMIT})</span>
+      <button onclick="leaveMatch('${match.id}')" style="background:rgba(255,60,60,.1);border:1px solid rgba(255,60,60,.25);color:#ff6060;border-radius:8px;padding:4px 10px;font-size:.68rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;flex-shrink:0">↩ Çık</button>
+    </div>`;
+  else if(iReserve)actionHtml=`
+    <div class="attending-self" style="justify-content:space-between;color:var(--amber);border-color:rgba(245,166,35,.3);background:rgba(245,166,35,.07)">
+      <span>🪑 ${iReserveIdx+1}. yedeksin. Boşluk çıkarsa haber verilir.</span>
+      <button onclick="leaveMatch('${match.id}')" style="background:rgba(255,60,60,.1);border:1px solid rgba(255,60,60,.25);color:#ff6060;border-radius:8px;padding:4px 10px;font-size:.68rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;flex-shrink:0">↩ Çık</button>
+    </div>`;
   else if(iAbsent)actionHtml=`<div class="attending-self" style="color:var(--text-muted);border-color:rgba(255,255,255,.1)">😢 Gelemeyeceksin olarak işaretlendin.</div>`;
   else if(!match.finished)actionHtml=`<div class="match-actions"><button class="btn btn-primary" onclick="joinMatch('${match.id}')">⚽ Kadroya Gir</button><button class="btn btn-danger" onclick="openExcuse('${match.id}')">❌ Gelemiyorum</button></div>`;
 
@@ -3890,6 +3898,26 @@ async function joinMatch(matchId){
   await saveMatches(matches);
   const kalan=KADRO_LIMIT-match.attending.length;
   showNotif(kalan===0?'Kadroya girdin! Kadro DOLDU ⚽🔒':`Kadroya girdin! ⚽ (${match.attending.length}/${KADRO_LIMIT})`);
+  renderMatchCard(match);
+}
+
+async function leaveMatch(matchId){
+  if(!confirm('Kadradan çıkmak istediğine emin misin?\nYedek listesine de alınmayacaksın.'))return;
+  const matches=getMatches();
+  const match=matches.find(m=>m.id===matchId);
+  if(!match)return;
+  // Kadrodan çıkar
+  match.attending=(match.attending||[]).filter(p=>p.id!==currentUser.id);
+  match.reserves=(match.reserves||[]).filter(p=>p.id!==currentUser.id);
+  // Yedek varsa kadro boşluğunu doldur
+  if((match.attending||[]).length<KADRO_LIMIT&&(match.reserves||[]).length>0){
+    const nextUp=match.reserves.shift();
+    match.attending.push(nextUp);
+    showNotif('Kadrodan çıktın. '+nextUp.name+' yedeğe çıktı! 🔄');
+  } else {
+    showNotif('Kadrodan çıktın. ');
+  }
+  await saveMatches(matches);
   renderMatchCard(match);
 }
 
