@@ -2537,7 +2537,7 @@ function goHome(){
   renderDashboard();
   renderPastMatches();renderLeaderboard();
   // Patch notes - ilk girişte göster
-  if(!LS.get('patch_v6_seen')){
+  if(!LS.get('patch_v7_seen')){
     setTimeout(()=>openPatchNotes(),700);
   }
 }
@@ -2562,7 +2562,7 @@ function closePatchNotes(){
     el.style.animation='';
     el.classList.remove('open');
   },350);
-  LS.set('patch_v6_seen','1');
+  LS.set('patch_v7_seen','1');
   // Profile doldurmamışsa profil sekmesine götür
   if(currentUser&&!currentUser.profileComplete){
     const tabs=document.querySelectorAll('.nav-tab');
@@ -4886,7 +4886,7 @@ tryAutoLogin();
 
     <!-- Üst bar -->
     <div class="patch-topbar">
-      <span class="patch-version">v2.2 — YENİ GÜNCELLEME</span>
+      <span class="patch-version">v3.1 — YENİ GÜNCELLEME</span>
       <button class="patch-close" onclick="closePatchNotes()" title="Atla">✕</button>
     </div>
 
@@ -4901,22 +4901,17 @@ tryAutoLogin();
 
         <!-- SLAYT 1 -->
         <div class="patch-slide">
-          <div class="patch-emoji">🏆</div>
-          <div class="patch-slide-title">7 Farklı <span>Tier Kart</span> Sistemi!</div>
-          <p class="patch-slide-desc">Artık oyuncu kartları performansına göre değişiyor. Her tier'ın kendine özgü rengi ve efekti var!</p>
-          <ul class="patch-features">
-            <li>Common, Bronze, Silver, Gold — standart tierlar</li>
-            <li>Epic, Legend, Elite, Champion — özel kazanım kartları</li>
-            <li>Her özel kartın animasyonu ve efekti farklı</li>
-          </ul>
+          <div class="patch-emoji">🃏</div>
+          <div class="patch-slide-title"><span>Kart Evrimi</span> Başlıyor!</div>
+          <p class="patch-slide-desc">Sıradanlık bitti. Yeni Tier Kart sistemiyle sahadaki başarın artık doğrudan oyuncu kartının görünümüne yansıyor. Ne kadar iyi oynarsan, profiline o kadar görkemli bir kart hükmedecek!</p>
         </div>
 
-        <!-- SLAYT 2 — EPIC KART -->
+        <!-- SLAYT 2 -->
         <div class="patch-slide card-slide">
           <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center;width:100%">YENİ ÖZEL TİER KARTLARI</div>
           <div class="ps-card-wrap">
-            <!-- Mini Epic Kart -->
-            <div class="ps-mini-card ps-epic">              <div class="ps-card-inner">
+            <div class="ps-mini-card ps-epic">
+              <div class="ps-card-inner">
                 <div class="ps-stripe"></div>
                 <div class="ps-tier-lbl">★ EPIC ★</div>
                 <div class="ps-rating">94</div>
@@ -4927,20 +4922,18 @@ tryAutoLogin();
                 <div class="ps-bons">68,4 M ₺</div>
               </div>
             </div>
-            <!-- Bilgi -->
             <div class="ps-card-info">
               <div class="ps-info-title" style="color:#e080ff">💜 Epic Kart</div>
               <div class="ps-info-cond">
                 <div class="ps-info-cond-icon">🏆</div>
                 <div class="ps-info-cond-text">
                   <strong>5× Maçın Adamı</strong>
-                  MOTM ödülünü 5 kez kazanınca otomatik aktif olur
+                  Dönen çift holografik halka ve ışın taraması efektleriyle rakiplerini büyüle!
                 </div>
               </div>
               <ul class="ps-info-efx">
                 <li>Dönen çift holografik halka</li>
                 <li>Mor/cyan renk değiştiren şerit</li>
-                <li>Conic gradient avatar çemberi</li>
                 <li>Ekran boyunca ışın taraması</li>
                 <li>Yüzen mor partiküller</li>
               </ul>
@@ -4948,12 +4941,12 @@ tryAutoLogin();
           </div>
         </div>
 
-        <!-- SLAYT 3 — LEGEND KART -->
+        <!-- SLAYT 3 -->
         <div class="patch-slide card-slide">
           <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center;width:100%">YENİ ÖZEL TİER KARTLARI</div>
           <div class="ps-card-wrap">
-            <!-- Mini Legend Kart -->
-            <div class="ps-mini-card ps-legend">              <div class="ps-card-inner">
+            <div class="ps-mini-card ps-legend">
+              <div class="ps-card-inner">
                 <div class="ps-stripe"></div>
                 <div class="ps-tier-lbl">◈ LEGEND</div>
                 <div class="ps-rating">91</div>
@@ -4964,14 +4957,13 @@ tryAutoLogin();
                 <div class="ps-bons">52,1 M ₺</div>
               </div>
             </div>
-            <!-- Bilgi -->
             <div class="ps-card-info">
               <div class="ps-info-title" style="color:#ffaa44">🔥 Legend Kart</div>
               <div class="ps-info-cond">
                 <div class="ps-info-cond-icon">💰</div>
                 <div class="ps-info-cond-text">
-                  <strong>Bonservis 50M ₺+</strong>
-                  Piyasa değerin 50 milyon ₺'yi geçince aktif olur
+                  <strong>Bonservis 50.000.000 ₺+</strong>
+                  Alev alev yanan ateş halkalarıyla sahada kimin patron olduğunu göster!
                 </div>
               </div>
               <ul class="ps-info-efx">
@@ -4984,12 +4976,12 @@ tryAutoLogin();
           </div>
         </div>
 
-        <!-- SLAYT 4 — ELİTE KART -->
+        <!-- SLAYT 4 -->
         <div class="patch-slide card-slide">
           <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center;width:100%">YENİ ÖZEL TİER KARTLARI</div>
           <div class="ps-card-wrap">
-            <!-- Mini Elite Kart -->
-            <div class="ps-mini-card ps-elite">              <div class="ps-card-inner">
+            <div class="ps-mini-card ps-elite">
+              <div class="ps-card-inner">
                 <div class="ps-stripe"></div>
                 <div class="ps-tier-lbl">✦ ELİTE</div>
                 <div class="ps-rating">93</div>
@@ -5000,14 +4992,13 @@ tryAutoLogin();
                 <div class="ps-bons">48,6 M ₺</div>
               </div>
             </div>
-            <!-- Bilgi -->
             <div class="ps-card-info">
               <div class="ps-info-title" style="color:#ffd700">⭐ Elite Kart</div>
               <div class="ps-info-cond">
                 <div class="ps-info-cond-icon">📈</div>
                 <div class="ps-info-cond-text">
                   <strong>Genel Reyting 90+</strong>
-                  OVR değerin 90'ı geçince otomatik aktif olur
+                  Altın yıldız halkası ve elektrik efektleriyle sahanın hakimi ol!
                 </div>
               </div>
               <ul class="ps-info-efx">
@@ -5020,12 +5011,12 @@ tryAutoLogin();
           </div>
         </div>
 
-        <!-- SLAYT 5 — CHAMPION KART -->
+        <!-- SLAYT 5 -->
         <div class="patch-slide card-slide">
           <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center;width:100%">YENİ ÖZEL TİER KARTLARI</div>
           <div class="ps-card-wrap">
-            <!-- Mini Champion Kart -->
-            <div class="ps-mini-card ps-champ">              <div class="ps-card-inner">
+            <div class="ps-mini-card ps-champ">
+              <div class="ps-card-inner">
                 <div class="ps-stripe"></div>
                 <div class="ps-tier-lbl">🏆 CHAMPION</div>
                 <div class="ps-rating">87</div>
@@ -5036,21 +5027,20 @@ tryAutoLogin();
                 <div class="ps-bons">38,2 M ₺</div>
               </div>
             </div>
-            <!-- Bilgi -->
             <div class="ps-card-info">
               <div class="ps-info-title" style="color:#00ee66">🏆 Champion Kart</div>
               <div class="ps-info-cond">
                 <div class="ps-info-cond-icon">🔥</div>
                 <div class="ps-info-cond-text">
                   <strong>10 Maç Galibiyet Serisi</strong>
-                  Üst üste 10 maç kazanınca aktif olur
+                  Altın-yeşil çift halka ve konfetilerle yenilmezliğini ilan et!
                 </div>
               </div>
               <ul class="ps-info-efx">
                 <li>Altın+yeşil çift dönen halka</li>
                 <li>Konfeti yağmuru animasyonu</li>
                 <li>Yeşil enerji dalgası efekti</li>
-                <li>Sürekli zafer parıltısı</li>
+                <li>Şampiyonluk parıltısı</li>
               </ul>
             </div>
           </div>
@@ -5059,21 +5049,21 @@ tryAutoLogin();
         <!-- SLAYT 6 -->
         <div class="patch-slide">
           <div class="patch-emoji">📊</div>
-          <div class="patch-slide-title">Dinamik <span>Momentum</span> Sistemi</div>
-          <p class="patch-slide-desc">Artık her maç reytingini doğrudan etkiliyor. Üst üste kazan, zirvene ulaş!</p>
+          <div class="patch-slide-title">Momentum ve <span>Form Çizgisi</span></div>
+          <p class="patch-slide-desc">Artık her maç bir final! Kazandıkça form kutuların dolacak, üst üste galibiyetlerde reytingin kalıcı olarak artacak. Dikkat et — üst üste mağlubiyetlerde çöküş başlar!</p>
           <ul class="patch-features">
-            <li>3 üst üste galibiyet → Reyting kalıcı +1 artar 📈</li>
-            <li>3 üst üste mağlubiyet → Reyting -1 düşer 📉</li>
-            <li>Kartında 3 noktalı form göstergesi</li>
-            <li>2. notta gösterge titreşip yanıp söner — tehlike!</li>
+            <li>MOTM seçilirsen +2 form + bonservis %8 artar</li>
+            <li>En Kötü seçilirsen -2 form + bonservis %6 düşer</li>
+            <li>3 üst üste galibiyet → Reyting kalıcı +1 artar</li>
+            <li>3 üst üste mağlubiyet → Reyting -1 düşer</li>
           </ul>
         </div>
 
         <!-- SLAYT 7 -->
         <div class="patch-slide">
           <div class="patch-emoji">👑</div>
-          <div class="patch-slide-title">Kaptan İsimli <span>Takımlar</span></div>
-          <p class="patch-slide-desc">Artık "Takım A" ve "Takım B" tarih oldu. Kaptanların ismi her yerde!</p>
+          <div class="patch-slide-title">Kaptanların <span>Çarpışması</span></div>
+          <p class="patch-slide-desc">Takımlar artık sıradan "A Takımı" ve "B Takımı" değil. Yapay zekanın belirlediği kaptanların isimleriyle sahaya çıkacaksınız. Armanı savunmaya hazır ol!</p>
           <ul class="patch-features">
             <li>Kaptan Furkan → "Furkan'ın Takımı"</li>
             <li>Kaptan Mehmet → "Mehmet'in Takımı"</li>
@@ -5083,17 +5073,18 @@ tryAutoLogin();
 
         <!-- SLAYT 8 -->
         <div class="patch-slide">
-          <div class="patch-emoji">🔑</div>
-          <div class="patch-slide-title">Artık <span>Şifreni Unutma</span> Derdi Yok!</div>
-          <p class="patch-slide-desc">Çıkış yapmadığın sürece sistem seni otomatik hatırlıyor. Yeni hesap açma devri kapandı!</p>
+          <div class="patch-emoji">👤</div>
+          <div class="patch-slide-title">Profil V2: <span>Kusursuz Vitrin</span></div>
+          <p class="patch-slide-desc">Profil sayfası baştan aşağı yenilendi. Hero bölümünde tier rozetin, OVR reytingin, bonservisin ve animasyonlu FC2 kartın şov yapıyor!</p>
           <ul class="patch-features">
-            <li>Tarayıcını kapayıp açsan bile otomatik giriş</li>
-            <li>Sadece "Çıkış" butonuna basınca oturum kapanır</li>
-            <li>"Beni Hatırla" seçeneği giriş ekranında</li>
+            <li>3 noktalı form şeridi + son 5 maç geçmişi</li>
+            <li>25 rozet koleksiyon grid'i</li>
+            <li>Piyasa ve Sıralamalarda tıklanabilir profiller</li>
+            <li>Transfer Piyasasından oyuncu profillerini incele</li>
           </ul>
         </div>
 
-              </div>
+            </div>
     </div>
 
     <!-- Navigation -->
