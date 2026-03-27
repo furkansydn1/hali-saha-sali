@@ -2296,6 +2296,8 @@ let _users = {}, _matches = [], _news = [];
 let currentUser = null, activeMatchId = null;
 let scoreTargetId = null, deleteTargetId = null;
 let selectedWinner = null, _pendingDeleteKey = null;
+const KADRO_LIMIT = 14;
+const ADMIN_KEY = 'furkan soydan';
 
 
 // Yardımcı
@@ -4146,7 +4148,6 @@ function renderMatchCard(match){
 }
 
 /* ====== JOIN / EXCUSE ====== */
-const KADRO_LIMIT=14;
 
 async function joinMatch(matchId){
   const matches=getMatches();const match=matches.find(m=>m.id===matchId);if(!match)return;
