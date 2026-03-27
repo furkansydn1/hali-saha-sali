@@ -589,30 +589,99 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .fc2-card.tier-common .fc2-bg{background:linear-gradient(150deg,#080e08,#0e180e 35%,#162016 65%,#0a100a 100%)}
 
 /* ── ÖZEL TİER ARKA PLANLAR ── */
+
+/* ═══ TİER KART ÖZEL ANİMASYONLAR (ring yok) ═══ */
+
+/* Epic — mor neon border pulse */
+@keyframes epic-border{
+  0%,100%{box-shadow:0 0 0 1px rgba(180,0,255,.3),0 0 15px rgba(180,0,255,.15),inset 0 0 20px rgba(180,0,255,.05)}
+  50%{box-shadow:0 0 0 2px rgba(200,0,255,.6),0 0 35px rgba(180,0,255,.35),inset 0 0 30px rgba(180,0,255,.12)}
+}
+.fc2-card.tier-epic .fc2-bg::after{
+  content:'';position:absolute;inset:0;border-radius:18px;
+  animation:epic-border 2s ease infinite;
+  pointer-events:none;
+}
+.fc2-card.tier-epic{
+  animation:epic-border 2s ease infinite;
+}
+
+/* Epic — köşe ışık huzmeleri */
+@keyframes epic-corner{
+  0%,100%{opacity:.3;transform:scale(.95)}
+  50%{opacity:.8;transform:scale(1.02)}
+}
+.fc2-card.tier-epic::before{
+  content:'';position:absolute;
+  top:-2px;left:-2px;right:-2px;bottom:-2px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#ff00ff20 0%,transparent 40%,transparent 60%,#00ffff20 100%);
+  animation:epic-corner 2s ease infinite;
+  pointer-events:none;z-index:0;
+}
+
+/* Legend — ateş glow */
+@keyframes legend-fire{
+  0%,100%{box-shadow:0 0 0 1px rgba(255,100,0,.3),0 0 20px rgba(255,80,0,.2),0 8px 25px rgba(255,60,0,.15)}
+  50%{box-shadow:0 0 0 2px rgba(255,140,0,.5),0 0 40px rgba(255,100,0,.4),0 8px 40px rgba(255,60,0,.3)}
+}
+.fc2-card.tier-legend{animation:legend-fire 1.8s ease infinite}
+@keyframes legend-heat{
+  0%,100%{opacity:.2}50%{opacity:.5}
+}
+.fc2-card.tier-legend::before{
+  content:'';position:absolute;
+  bottom:0;left:0;right:0;height:40%;border-radius:0 0 18px 18px;
+  background:linear-gradient(to top,rgba(255,80,0,.08),transparent);
+  animation:legend-heat 1.8s ease infinite;
+  pointer-events:none;z-index:0;
+}
+
+/* Elite — altın elektrik */
+@keyframes elite-gold{
+  0%,100%{box-shadow:0 0 0 1px rgba(255,200,0,.25),0 0 18px rgba(255,200,0,.1)}
+  33%{box-shadow:0 0 0 2px rgba(255,220,0,.5),0 0 30px rgba(255,200,0,.3),0 0 50px rgba(255,180,0,.15)}
+  66%{box-shadow:0 0 0 1px rgba(255,200,0,.3),0 0 20px rgba(255,200,0,.15)}
+}
+.fc2-card.tier-elite{animation:elite-gold 2.5s ease infinite}
+/* Elektrik çakma overlay */
+@keyframes elite-zap{
+  0%,88%,100%{opacity:0}
+  89%{opacity:.6}
+  92%{opacity:0}
+  93%{opacity:.4}
+  96%{opacity:0}
+}
+.fc2-card.tier-elite::before{
+  content:'';position:absolute;inset:0;border-radius:18px;
+  background:linear-gradient(135deg,transparent 30%,rgba(255,220,0,.15) 50%,transparent 70%);
+  animation:elite-zap 3s ease infinite;
+  pointer-events:none;z-index:0;
+}
+
+/* Champion — yeşil enerji dalgası */
+@keyframes champ-wave{
+  0%,100%{box-shadow:0 0 0 1px rgba(0,200,60,.25),0 0 20px rgba(0,180,50,.12),0 4px 20px rgba(0,200,60,.08)}
+  50%{box-shadow:0 0 0 2px rgba(0,230,80,.5),0 0 40px rgba(0,200,60,.3),0 4px 35px rgba(255,215,0,.15)}
+}
+.fc2-card.tier-champion{animation:champ-wave 2.2s ease infinite}
+@keyframes champ-confetti-bg{
+  0%,100%{opacity:.08}50%{opacity:.18}
+}
+.fc2-card.tier-champion::before{
+  content:'';position:absolute;inset:0;border-radius:18px;
+  background:radial-gradient(ellipse at 50% 100%,rgba(0,220,60,.12) 0%,transparent 65%);
+  animation:champ-confetti-bg 2.2s ease infinite;
+  pointer-events:none;z-index:0;
+}
+
 .fc2-card.tier-epic .fc2-bg{background:linear-gradient(150deg,#0d0020,#1e0055,#2a0075,#150040,#0a0018)}
 .fc2-card.tier-legend .fc2-bg{background:linear-gradient(150deg,#180400,#3a0e00,#5a1800,#380800,#140300)}
 .fc2-card.tier-elite .fc2-bg{background:linear-gradient(150deg,#0a0900,#1c1700,#2e2500,#1a1500,#080700)}
 .fc2-card.tier-champion .fc2-bg{background:linear-gradient(150deg,#001a03,#003308,#005512,#003008,#001203)}
 
-/* ── DÖNEN HALKALAR ── */
-.fc2-ring{position:absolute;border-radius:50%;border:2px solid transparent;z-index:1;pointer-events:none}
-@keyframes fc2spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes fc2spinr{from{transform:rotate(360deg)}to{transform:rotate(0deg)}}
-
-/* Epic halkaları */
-.fc2-ring-outer{inset:-14px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 0deg,#ff00ff,#8000ff,#00ffff,#8000ff,#ff00ff) border-box;animation:fc2spin 3s linear infinite}
-.fc2-ring-inner{inset:-7px;border-width:1.5px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 180deg,#00ffff,#ff00ff,#8000ff,#ff00ff,#00ffff) border-box;animation:fc2spinr 2s linear infinite}
-
-/* Legend halkalar */
-.fc2-fire-ring1{inset:-13px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 0deg,#ff3300,#ffaa00,#ff6600,#ffdd00,#ff3300) border-box;animation:fc2spin 2.5s linear infinite}
-.fc2-fire-ring2{inset:-6px;border-width:1.5px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 90deg,#ffdd00,#ff3300,#ffaa00,#ff3300,#ffdd00) border-box;animation:fc2spinr 1.8s linear infinite}
-
-/* Elite halka */
-.fc2-star-ring{inset:-13px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 0deg,#ffd700,#fff5a0,#ffd700,#ffe450,#ffd700) border-box;animation:fc2spin 4s linear infinite}
-
-/* Champion halkalar */
-.fc2-champ-ring1{inset:-14px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 0deg,#ffd700,#00cc44,#ffd700,#00ff66,#ffd700) border-box;animation:fc2spin 3.5s linear infinite}
-.fc2-champ-ring2{inset:-7px;border-width:1.5px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 270deg,#00ff66,#ffd700,#00cc44,#ffd700,#00ff66) border-box;animation:fc2spinr 2s linear infinite}
+/* ── ÖZEL TİER BORDER GLOW (halka yok) ── */
+.fc2-ring{display:none} /* ring'ler kaldırıldı */
 
 /* ── SCAN + PARTİKÜLLER ── */
 .fc2-scan{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,rgba(180,0,255,.12) 49%,rgba(180,0,255,.2) 50%,rgba(180,0,255,.12) 51%,transparent 100%);background-size:100% 200%;animation:fc2scanmove 3s ease infinite;pointer-events:none;z-index:3;border-radius:18px}
@@ -1345,13 +1414,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
   position:relative;z-index:2;
 }
 .ps-ring{position:absolute;border-radius:50%;border:2px solid transparent;z-index:1;pointer-events:none}
-@keyframes ps-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes ps-spinr{from{transform:rotate(360deg)}to{transform:rotate(0deg)}}
-
 /* Epic */
 .ps-epic .ps-card-inner{background:linear-gradient(155deg,#0d0020,#1e0055,#2a0075,#150040)}
-.ps-epic .ps-r1{inset:-10px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 0deg,#ff00ff,#8000ff,#00ffff,#8000ff,#ff00ff) border-box;animation:ps-spin 3s linear infinite}
-.ps-epic .ps-r2{inset:-5px;border-width:1.5px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 180deg,#00ffff,#ff00ff,#8000ff,#ff00ff,#00ffff) border-box;animation:ps-spinr 2s linear infinite}
 .ps-epic .ps-stripe{background:linear-gradient(90deg,#ff00ff,#8000ff,#00ffff,#8000ff,#ff00ff);background-size:200%;animation:fc2shimmer 2s linear infinite}
 .ps-epic .ps-rating{color:#e080ff;text-shadow:0 0 15px rgba(180,0,255,.8)}
 .ps-epic .ps-pos{color:#bb55ee}
@@ -1362,8 +1426,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 
 /* Legend */
 .ps-legend .ps-card-inner{background:linear-gradient(155deg,#180400,#380d00,#581800,#380800,#140300)}
-.ps-legend .ps-r1{inset:-10px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 0deg,#ff3300,#ffaa00,#ff6600,#ffdd00,#ff3300) border-box;animation:ps-spin 2.5s linear infinite}
-.ps-legend .ps-r2{inset:-5px;border-width:1.5px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 90deg,#ffdd00,#ff3300,#ffaa00,#ff3300,#ffdd00) border-box;animation:ps-spinr 1.8s linear infinite}
 .ps-legend .ps-stripe{background:linear-gradient(90deg,#ff3300,#ffcc00,#ff6600,#ffaa00,#ff3300);background-size:200%;animation:fc2shimmer 1.5s linear infinite}
 .ps-legend .ps-rating{color:#ffaa44;text-shadow:0 0 15px rgba(255,100,0,.8)}
 .ps-legend .ps-pos{color:#dd7722}
@@ -1374,7 +1436,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 
 /* Elite */
 .ps-elite .ps-card-inner{background:linear-gradient(155deg,#0a0900,#1c1700,#2e2500,#1a1500,#080700)}
-.ps-elite .ps-r1{inset:-10px;border-width:2.5px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 0deg,#ffd700,#fff5a0,#ffd700,#ffe450,#ffd700) border-box;animation:ps-spin 4s linear infinite}
 .ps-elite .ps-stripe{background:linear-gradient(90deg,#aa8800,#ffd700,#ffe880,#ffd700,#aa8800);background-size:200%;animation:fc2shimmer 2.5s linear infinite}
 .ps-elite .ps-rating{color:#ffd700;text-shadow:0 0 12px rgba(255,200,0,.8)}
 .ps-elite .ps-pos{color:#ccaa00}
@@ -1385,8 +1446,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 
 /* Champion */
 .ps-champ .ps-card-inner{background:linear-gradient(155deg,#001a03,#003308,#005512,#003008,#001203)}
-.ps-champ .ps-r1{inset:-10px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 0deg,#ffd700,#00cc44,#ffd700,#00ff66,#ffd700) border-box;animation:ps-spin 3.5s linear infinite}
-.ps-champ .ps-r2{inset:-5px;border-width:1.5px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 270deg,#00ff66,#ffd700,#00cc44,#ffd700,#00ff66) border-box;animation:ps-spinr 2s linear infinite}
 .ps-champ .ps-stripe{background:linear-gradient(90deg,#ffd700,#00cc44,#00ff88,#00cc44,#ffd700);background-size:200%;animation:fc2shimmer 2s linear infinite}
 .ps-champ .ps-rating{color:#00ee66;text-shadow:0 0 15px rgba(0,210,60,.8)}
 .ps-champ .ps-pos{color:#00bb44}
@@ -1394,6 +1453,17 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .ps-champ .ps-av-i{background:#001a05;color:#00ff66}
 .ps-champ .ps-name{color:#00ee66}
 .ps-champ .ps-bons{color:#00ee66;background:rgba(0,200,60,.12)}
+
+
+/* ── Patch notes kart glow efektleri ── */
+@keyframes ps-epic-glow{0%,100%{box-shadow:0 0 0 1px rgba(180,0,255,.3),0 0 20px rgba(180,0,255,.2)}50%{box-shadow:0 0 0 2px rgba(200,0,255,.6),0 0 40px rgba(180,0,255,.45)}}
+@keyframes ps-legend-glow{0%,100%{box-shadow:0 0 0 1px rgba(255,100,0,.3),0 0 20px rgba(255,80,0,.2)}50%{box-shadow:0 0 0 2px rgba(255,140,0,.6),0 0 40px rgba(255,100,0,.45)}}
+@keyframes ps-elite-glow{0%,33%,100%{box-shadow:0 0 0 1px rgba(255,200,0,.3),0 0 20px rgba(255,200,0,.15)}55%{box-shadow:0 0 0 2px rgba(255,220,0,.7),0 0 50px rgba(255,200,0,.5)}}
+@keyframes ps-champ-glow{0%,100%{box-shadow:0 0 0 1px rgba(0,200,60,.3),0 0 20px rgba(0,180,50,.15)}50%{box-shadow:0 0 0 2px rgba(0,230,80,.6),0 0 40px rgba(0,200,60,.4),0 0 60px rgba(255,215,0,.1)}}
+.ps-mini-card.ps-epic{animation:ps-epic-glow 2s ease infinite;border-radius:14px}
+.ps-mini-card.ps-legend{animation:ps-legend-glow 1.8s ease infinite;border-radius:14px}
+.ps-mini-card.ps-elite{animation:ps-elite-glow 2.5s ease infinite;border-radius:14px}
+.ps-mini-card.ps-champ{animation:ps-champ-glow 2.2s ease infinite;border-radius:14px}
 
 /* Paylaşılan kart elemanları */
 .ps-stripe{height:3px;width:calc(100%+18px);margin:-10px -9px 8px;border-radius:14px 14px 0 0}
@@ -3828,10 +3898,10 @@ function buildFC2Card(user,mevki){
 
   return `
     <div class="fc2-card ${tier}" style="position:relative">
-      ${tier==='tier-epic'?'<div class="fc2-ring fc2-ring-outer"></div><div class="fc2-ring fc2-ring-inner"></div><div class="fc2-scan"></div><div class="fc2-particles"><span></span><span></span><span></span><span></span><span></span></div>':''}
-      ${tier==='tier-legend'?'<div class="fc2-ring fc2-fire-ring1"></div><div class="fc2-ring fc2-fire-ring2"></div><div class="fc2-fire-pts"><span></span><span></span><span></span><span></span></div>':''}
-      ${tier==='tier-elite'?'<div class="fc2-ring fc2-star-ring"></div><div class="fc2-bolts"><span></span><span></span></div>':''}
-      ${tier==='tier-champion'?'<div class="fc2-ring fc2-champ-ring1"></div><div class="fc2-ring fc2-champ-ring2"></div><div class="fc2-confetti"><span></span><span></span><span></span><span></span></div>':''}
+      ${tier==='tier-epic'?'<div class="fc2-scan"></div><div class="fc2-particles"><span></span><span></span><span></span><span></span><span></span></div>':''}
+      ${tier==='tier-legend'?'<div class="fc2-fire-pts"><span></span><span></span><span></span><span></span></div>':''}
+      ${tier==='tier-elite'?'<div class="fc2-bolts"><span></span><span></span></div>':''}
+      ${tier==='tier-champion'?'<div class="fc2-confetti"><span></span><span></span><span></span><span></span></div>':''}
       ${isCapt?'<div class="fc2-capt-badge">C</div>':''}
       <div class="fc2-bg"></div>
       <div class="fc2-top-stripe"></div>
@@ -4419,7 +4489,7 @@ tryAutoLogin();
 
     <!-- Üst bar -->
     <div class="patch-topbar">
-      <span class="patch-version">v2.0 — BÜYÜK GÜNCELLEME</span>
+      <span class="patch-version">v2.2 — YENİ GÜNCELLEME</span>
       <button class="patch-close" onclick="closePatchNotes()" title="Atla">✕</button>
     </div>
 
@@ -4449,10 +4519,7 @@ tryAutoLogin();
           <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center;width:100%">YENİ ÖZEL TİER KARTLARI</div>
           <div class="ps-card-wrap">
             <!-- Mini Epic Kart -->
-            <div class="ps-mini-card ps-epic">
-              <div class="ps-ring ps-r1"></div>
-              <div class="ps-ring ps-r2"></div>
-              <div class="ps-card-inner">
+            <div class="ps-mini-card ps-epic">              <div class="ps-card-inner">
                 <div class="ps-stripe"></div>
                 <div class="ps-tier-lbl">★ EPIC ★</div>
                 <div class="ps-rating">94</div>
@@ -4489,10 +4556,7 @@ tryAutoLogin();
           <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center;width:100%">YENİ ÖZEL TİER KARTLARI</div>
           <div class="ps-card-wrap">
             <!-- Mini Legend Kart -->
-            <div class="ps-mini-card ps-legend">
-              <div class="ps-ring ps-r1"></div>
-              <div class="ps-ring ps-r2"></div>
-              <div class="ps-card-inner">
+            <div class="ps-mini-card ps-legend">              <div class="ps-card-inner">
                 <div class="ps-stripe"></div>
                 <div class="ps-tier-lbl">◈ LEGEND</div>
                 <div class="ps-rating">91</div>
@@ -4528,9 +4592,7 @@ tryAutoLogin();
           <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center;width:100%">YENİ ÖZEL TİER KARTLARI</div>
           <div class="ps-card-wrap">
             <!-- Mini Elite Kart -->
-            <div class="ps-mini-card ps-elite">
-              <div class="ps-ring ps-r1"></div>
-              <div class="ps-card-inner">
+            <div class="ps-mini-card ps-elite">              <div class="ps-card-inner">
                 <div class="ps-stripe"></div>
                 <div class="ps-tier-lbl">✦ ELİTE</div>
                 <div class="ps-rating">93</div>
@@ -4566,10 +4628,7 @@ tryAutoLogin();
           <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center;width:100%">YENİ ÖZEL TİER KARTLARI</div>
           <div class="ps-card-wrap">
             <!-- Mini Champion Kart -->
-            <div class="ps-mini-card ps-champ">
-              <div class="ps-ring ps-r1"></div>
-              <div class="ps-ring ps-r2"></div>
-              <div class="ps-card-inner">
+            <div class="ps-mini-card ps-champ">              <div class="ps-card-inner">
                 <div class="ps-stripe"></div>
                 <div class="ps-tier-lbl">🏆 CHAMPION</div>
                 <div class="ps-rating">87</div>
