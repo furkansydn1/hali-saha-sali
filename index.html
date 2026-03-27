@@ -2268,6 +2268,237 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 
 </style>
 <script>
+/* ══ BOOTSTRAP — TEMEL SİSTEM ══ */
+
+// LocalStorage helper
+const LS = {
+  get: k => { try{ return localStorage.getItem(k)||sessionStorage.getItem(k); }catch(e){return null;} },
+  set: (k,v) => { try{ localStorage.setItem(k,v); }catch(e){} },
+  setSession: (k,v) => { try{ sessionStorage.setItem(k,v); }catch(e){} },
+  remove: k => { try{ localStorage.removeItem(k); sessionStorage.removeItem(k); }catch(e){} }
+};
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyBc_JhGF0Axeey-pPyUQsV6RZ3UIXd2WIc",
+  authDomain: "sali-maci.firebaseapp.com",
+  databaseURL: "https://sali-maci-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "sali-maci",
+  storageBucket: "sali-maci.appspot.com",
+  messagingSenderId: "1234567890",
+  appId: "1:sali-maci:web:abcdef"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// State
+let _users = {}, _matches = [], _news = [];
+let currentUser = null, activeMatchId = null;
+let scoreTargetId = null, deleteTargetId = null;
+let selectedWinner = null, _pendingDeleteKey = null;
+
+
+// Yardımcı
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).substr(2,6); }
+function initials(name){ return (name||'?').split(' ').map(w=>w[0]).join('').toUpperCase().substr(0,2); }
+function isAdmin(u){ return u && u.name && u.name.toLowerCase() === ADMIN_KEY; }
+
+// Sayfa göster/gizle
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+  const el = document.getElementById(id);
+  if(el) el.style.display='block';
+}
+
+// Modal
+function openModal(id){
+  const el=document.getElementById(id);
+  if(el){ el.style.display='flex'; requestAnimationFrame(()=>el.classList.add('open')); }
+}
+function closeModal(id){
+  const el=document.getElementById(id);
+  if(el){ el.classList.remove('open'); setTimeout(()=>el.style.display='none',250); }
+}
+
+// Bildirim
+function showNotif(msg, type='success'){
+  const el=document.getElementById('notif');
+  if(!el) return;
+  el.textContent=msg;
+  el.className='notif show '+(type==='error'?'notif-error':type==='warn'?'notif-warn':'notif-success');
+  clearTimeout(el._t);
+  el._t=setTimeout(()=>el.classList.remove('show'),3000);
+}
+function showLoading(msg='Yükleniyor...'){
+  let el=document.getElementById('loadingOverlay');
+  if(!el){ el=document.createElement('div'); el.id='loadingOverlay';
+    el.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99999;display:flex;align-items:center;justify-content:center;';
+    el.innerHTML=`<div style="background:#0a120a;border:1px solid #1a2a1a;border-radius:14px;padding:24px 32px;text-align:center;color:var(--lime);font-family:'Bebas Neue',cursive;font-size:1rem;letter-spacing:1px">${msg}</div>`;
+    document.body.appendChild(el); }
+  else { el.querySelector('div').textContent=msg; el.style.display='flex'; }
+}
+function hideLoading(){
+  const el=document.getElementById('loadingOverlay');
+  if(el) el.style.display='none';
+}
+
+// Veri helpers
+const getUsers=(includeHidden=false)=>{
+  if(includeHidden) return _users;
+  const filtered={};
+  Object.entries(_users).forEach(([k,v])=>{ if(!v.hidden) filtered[k]=v; });
+  return filtered;
+};
+const getMatches=()=>_matches;
+const getNewsList=()=>_news;
+
+async function saveUsers(u){ _users=u; await db.ref('users').set(u); }
+async function saveMatches(m){
+  _matches=m;
+  const obj={};
+  m.forEach(v=>{ obj[v.id]=v; });
+  await db.ref('matches').set(obj);
+}
+async function saveNewsList(n){ _news=n; await db.ref('news').set(n.length?n:null); }
+
+// Firebase realtime listeners
+function startListeners(){
+  db.ref('users').on('value', snap=>{
+    _users = snap.val()||{};
+    if(currentUser){
+      const fresh = Object.values(_users).find(u=>u.id===currentUser.id);
+      if(fresh){
+        currentUser = fresh;
+        const un=document.getElementById('home-username');
+        const ur=document.getElementById('home-rating');
+        const av=document.getElementById('home-avatar');
+        if(un) un.textContent=fresh.name;
+        if(ur) ur.textContent=calcRating(fresh,fresh.pos)||'?';
+        if(av) av.textContent=initials(fresh.name);
+      }
+    }
+    if(document.getElementById('tab-lb')?.classList.contains('active')) renderLeaderboard();
+    if(document.getElementById('tab-admin')?.classList.contains('active')) renderAdmin();
+    if(document.getElementById('tab-borsa')?.classList.contains('active')) renderBorsa();
+  });
+  db.ref('matches').on('value', snap=>{
+    const val=snap.val()||{};
+    _matches=Object.values(val);
+    if(document.getElementById('tab-matches')?.classList.contains('active')) renderMatchCard();
+    if(document.getElementById('tab-lineup')?.classList.contains('active')) renderLineup();
+  });
+  db.ref('news').on('value', snap=>{ _news=snap.val()||[]; });
+}
+
+// GİRİŞ / KAYIT
+async function handleLogin(){
+  const name=(document.getElementById('login-name')?.value||'').trim().toLowerCase();
+  const pass=(document.getElementById('login-pass')?.value||'').trim();
+  const remember=document.getElementById('login-remember')?.checked;
+  if(!name||!pass){ showNotif('Ad ve şifre gir!','error'); return; }
+  showLoading('Giriş yapılıyor...');
+  try{
+    const snap=await db.ref('users').once('value');
+    _users=snap.val()||{};
+    const user=_users[name];
+    if(!user){ hideLoading(); showNotif('Kullanıcı bulunamadı!','error'); return; }
+    if(user.pass!==pass){ hideLoading(); showNotif('Şifre yanlış!','error'); return; }
+    currentUser=user;
+    const sessionData=JSON.stringify({id:user.id,name:user.name});
+    if(remember) LS.set('hs_session', sessionData);
+    else LS.setSession('hs_session_temp', sessionData);
+    hideLoading();
+    await startListeners_after_login();
+    goHome();
+  }catch(e){ hideLoading(); showNotif('Bağlantı hatası: '+e.message,'error'); }
+}
+
+async function handleRegister(){
+  const name=(document.getElementById('reg-name')?.value||'').trim();
+  const pass=(document.getElementById('reg-pass')?.value||'').trim();
+  const pass2=(document.getElementById('reg-pass2')?.value||'').trim();
+  if(!name||!pass){ showNotif('Tüm alanları doldur!','error'); return; }
+  if(pass!==pass2){ showNotif('Şifreler uyuşmuyor!','error'); return; }
+  if(pass.length<3){ showNotif('Şifre en az 3 karakter!','error'); return; }
+  showLoading('Kayıt yapılıyor...');
+  try{
+    const snap=await db.ref('users').once('value');
+    _users=snap.val()||{};
+    const key=name.toLowerCase();
+    if(_users[key]){ hideLoading(); showNotif('Bu isim kullanımda!','error'); return; }
+    const newUser={
+      id:uid(), name, pass, pos:'', ayak:'Sağ',
+      hiz:50,sut:50,pas:50,fizik:50,defans:50,kalecilik:50,topKontrol:50,dribling:50,
+      wins:0, matches:0, motm:0, worst:0,
+      winStreak:0, loseStreak:0, formPuani:0, formHistory:[],
+      profileComplete:false
+    };
+    _users[key]=newUser;
+    await db.ref('users').set(_users);
+    currentUser=newUser;
+    LS.set('hs_session', JSON.stringify({id:newUser.id, name:newUser.name}));
+    hideLoading();
+    closeModal('modal-register');
+    await startListeners_after_login();
+    goHome();
+    showNotif('Hoş geldin '+name+'! Profilini doldur 👤');
+  }catch(e){ hideLoading(); showNotif('Hata: '+e.message,'error'); }
+}
+
+function handleLogout(){
+  stopLineupTimer();
+  currentUser=null;
+  LS.remove('hs_session');
+  LS.remove('hs_session_temp');
+  db.ref('users').off();
+  db.ref('matches').off();
+  db.ref('news').off();
+  showPage('page-login');
+}
+
+async function startListeners_after_login(){
+  // Off önce (çift listener önle)
+  db.ref('users').off();
+  db.ref('matches').off();
+  db.ref('news').off();
+  startListeners();
+}
+
+// Auto-login
+async function initApp(){
+  let sessionData = LS.get('hs_session') || LS.get('hs_session_temp');
+  if(sessionData){
+    try{
+      const parsed = JSON.parse(sessionData);
+      showLoading('Giriş yapılıyor...');
+      const snap = await db.ref('users').once('value');
+      _users = snap.val()||{};
+      const matchSnap = await db.ref('matches').once('value');
+      const val = matchSnap.val()||{};
+      _matches = Object.values(val);
+      const fresh = Object.values(_users).find(u=>u.id===parsed.id);
+      if(fresh){
+        currentUser = fresh;
+        hideLoading();
+        await startListeners_after_login();
+        goHome();
+        return;
+      }
+    }catch(e){ console.error('Auto-login error:', e); }
+    hideLoading();
+  }
+  showPage('page-login');
+}
+
+// Modal overlay click to close
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.querySelectorAll('.modal-overlay').forEach(m=>{
+    m.addEventListener('click', e=>{ if(e.target===m) closeModal(m.id); });
+  });
+  initApp();
+});
+
+
 
 function buildAdminParamsHTML(u){
   const sColor = v => v>=85?'#b8f717':v>=70?'#f5a623':v>=55?'#60a8ff':'#ff6060';
