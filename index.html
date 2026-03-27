@@ -1645,14 +1645,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 }
 
 /* İçerik alanı */
-.main-content{
-  flex:1;margin-left:64px;
-  display:flex;flex-direction:column;
-  min-height:100vh;
-}
-@media(max-width:600px){
-  .main-content{margin-left:64px}
-}
+
 
 /* Sayfa başlık barı */
 .page-topbar{
@@ -1791,162 +1784,302 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 
 
 /* ══════════════════════════════════════════════════════
-   ONBOARDING REHBER
+   ONBOARDING REHBER — DEVASA PRO TASARIM
 ══════════════════════════════════════════════════════ */
 #onboardOverlay{
   position:fixed;inset:0;z-index:9999;
-  background:rgba(0,0,0,.85);
-  backdrop-filter:blur(8px);
+  background:rgba(0,0,0,.9);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   display:none;align-items:center;justify-content:center;
-  padding:12px;
+  padding:8px;
 }
-#onboardOverlay.open{display:flex;animation:ob-fade-in .35s ease}
-@keyframes ob-fade-in{from{opacity:0}to{opacity:1}}
+#onboardOverlay.open{display:flex;animation:ob-bg-in .4s ease}
+@keyframes ob-bg-in{from{opacity:0}to{opacity:1}}
 
 .ob-card{
-  width:100%;max-width:480px;max-height:92vh;
-  background:#060e06;border:1px solid rgba(184,247,23,.18);
-  border-radius:22px;overflow:hidden;
+  width:100%;max-width:560px;
+  height:90vh;max-height:700px;
+  background:#050c05;
+  border:1px solid rgba(184,247,23,.2);
+  border-radius:24px;overflow:hidden;
   display:flex;flex-direction:column;
-  box-shadow:0 0 60px rgba(184,247,23,.08),0 24px 80px rgba(0,0,0,.7);
-  animation:ob-slide-up .4s ease;
+  box-shadow:
+    0 0 0 1px rgba(184,247,23,.05),
+    0 0 80px rgba(184,247,23,.06),
+    0 32px 100px rgba(0,0,0,.8);
+  animation:ob-card-in .45s cubic-bezier(.16,1,.3,1);
 }
-@keyframes ob-slide-up{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes ob-card-in{from{transform:translateY(32px) scale(.97);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
 
-/* Üst bar */
-.ob-topbar{
+/* ─ Header ─ */
+.ob-header{
+  flex-shrink:0;
+  background:linear-gradient(135deg,#040804 0%,#091409 100%);
+  border-bottom:1px solid rgba(184,247,23,.12);
+  padding:14px 20px;
   display:flex;align-items:center;justify-content:space-between;
-  padding:14px 18px 12px;
-  border-bottom:1px solid #1a221a;
-  background:#040804;flex-shrink:0;
 }
-.ob-logo{font-family:'Bebas Neue',cursive;font-size:.95rem;letter-spacing:3px;color:var(--lime)}
-.ob-logo span{color:rgba(184,247,23,.4)}
-.ob-badge{font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;
-  background:rgba(184,247,23,.1);color:var(--lime);border:1px solid rgba(184,247,23,.2);
-  letter-spacing:1px;text-transform:uppercase}
-.ob-close{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
-  color:rgba(255,255,255,.4);width:28px;height:28px;border-radius:50%;
-  cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;
-  transition:all .2s}
+.ob-header-left{display:flex;align-items:center;gap:12px}
+.ob-logo-wrap{display:flex;flex-direction:column;line-height:1}
+.ob-logo-main{font-family:'Bebas Neue',cursive;font-size:1rem;letter-spacing:3px;color:var(--lime)}
+.ob-logo-sub{font-size:.52rem;color:rgba(184,247,23,.35);letter-spacing:2px;text-transform:uppercase}
+.ob-ver-badge{
+  background:rgba(184,247,23,.08);border:1px solid rgba(184,247,23,.2);
+  color:var(--lime);font-size:.58rem;font-weight:800;
+  padding:3px 10px;border-radius:20px;letter-spacing:1px;
+}
+.ob-close{
+  width:30px;height:30px;border-radius:50%;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:rgba(255,255,255,.4);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;transition:all .2s;
+}
 .ob-close:hover{background:rgba(255,60,60,.15);border-color:rgba(255,60,60,.3);color:#ff6060}
 
-/* Progress */
-.ob-progress{height:3px;background:#0e160e;flex-shrink:0}
-.ob-progress-fill{height:100%;background:linear-gradient(90deg,#5ab800,var(--lime));transition:width .4s ease}
+/* ─ Progress ─ */
+.ob-progress-wrap{flex-shrink:0;padding:0 20px 12px;background:#040804}
+.ob-progress-track{height:3px;background:#0e160e;border-radius:3px;overflow:hidden;margin-bottom:6px}
+.ob-progress-fill{height:100%;background:linear-gradient(90deg,#3a8000,var(--lime));border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.ob-step-labels{display:flex;justify-content:space-between}
+.ob-step-lbl{font-size:.5rem;color:#2a3a2a;font-weight:700;text-transform:uppercase;letter-spacing:.5px;transition:color .3s}
+.ob-step-lbl.on{color:var(--lime)}
 
-/* Slayt alanı */
-.ob-slides{flex:1;overflow:hidden;position:relative}
+/* ─ Slayt alanı ─ */
+.ob-body{flex:1;overflow:hidden;position:relative}
 .ob-slide{
-  position:absolute;inset:0;overflow-y:auto;
-  padding:20px 18px 16px;scrollbar-width:none;
-  opacity:0;pointer-events:none;transition:all .35s ease;
-  transform:translateX(30px);
+  position:absolute;inset:0;
+  overflow-y:auto;scrollbar-width:thin;scrollbar-color:#1a2a1a transparent;
+  padding:20px;
+  opacity:0;pointer-events:none;
+  transition:opacity .3s ease, transform .35s cubic-bezier(.4,0,.2,1);
+  transform:translateX(40px);
 }
-.ob-slide::-webkit-scrollbar{display:none}
+.ob-slide::-webkit-scrollbar{width:4px}
+.ob-slide::-webkit-scrollbar-track{background:transparent}
+.ob-slide::-webkit-scrollbar-thumb{background:#1a2a1a;border-radius:2px}
 .ob-slide.active{opacity:1;pointer-events:all;transform:translateX(0);position:relative}
-.ob-slide.prev{transform:translateX(-30px)}
+.ob-slide.prev{transform:translateX(-40px)}
 
-/* Slayt içerik */
-.ob-num{font-size:.6rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;
-  color:rgba(184,247,23,.4);margin-bottom:6px}
-.ob-title{font-family:'Bebas Neue',cursive;font-size:1.4rem;letter-spacing:1.5px;
-  color:#fff;line-height:1.1;margin-bottom:10px}
+/* ─ Slayt içerik ─ */
+.ob-slide-header{margin-bottom:14px}
+.ob-slide-num{
+  font-size:.58rem;font-weight:800;letter-spacing:2.5px;
+  text-transform:uppercase;color:rgba(184,247,23,.35);
+  margin-bottom:5px;display:flex;align-items:center;gap:8px;
+}
+.ob-slide-num::after{content:'';flex:1;height:1px;background:rgba(184,247,23,.08)}
+.ob-title{
+  font-family:'Bebas Neue',cursive;font-size:1.65rem;
+  letter-spacing:1.5px;color:#fff;line-height:1.05;margin-bottom:10px;
+}
 .ob-title span{color:var(--lime)}
-.ob-desc{font-size:.78rem;color:#608060;line-height:1.7;margin-bottom:14px}
+.ob-desc{font-size:.8rem;color:#607060;line-height:1.75}
+.ob-desc strong{color:#a0c8a0}
 
-/* Demo bileşen çerçevesi */
+/* ─ Demo bileşen ─ */
 .ob-demo{
-  background:#0a120a;border:1px solid #1a2a1a;border-radius:14px;
-  padding:14px;margin-bottom:4px;overflow:hidden;
+  background:#0a120a;border:1px solid #1a2a1a;
+  border-radius:16px;padding:16px;margin-top:14px;
+  overflow:hidden;
 }
-.ob-demo-lbl{font-size:.58rem;font-weight:800;letter-spacing:1.5px;
-  text-transform:uppercase;color:#446044;margin-bottom:10px;
-  display:flex;align-items:center;gap:6px}
-.ob-demo-lbl::before{content:'';width:16px;height:1px;background:#1a2a1a}
-.ob-demo-lbl::after{content:'';flex:1;height:1px;background:#1a2a1a}
+.ob-demo-label{
+  display:flex;align-items:center;gap:8px;
+  font-size:.58rem;font-weight:800;letter-spacing:2px;
+  text-transform:uppercase;color:#446044;margin-bottom:12px;
+}
+.ob-demo-label::before{
+  content:'';width:3px;height:12px;background:var(--lime);
+  border-radius:2px;flex-shrink:0;
+}
 
-/* Mini borsa satırı */
-.ob-borsa-row{display:flex;align-items:center;gap:10px;padding:8px 12px;
-  background:#060e06;border:1px solid #1a221a;border-radius:10px}
-.ob-bav{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;
-  justify-content:center;font-family:'Bebas Neue',cursive;font-size:.9rem;flex-shrink:0}
-.ob-bname{font-size:.8rem;font-weight:700;color:#c0d8c0;flex:1}
-.ob-bpos{font-size:.6rem;color:#446044;margin-top:1px}
-.ob-bval{text-align:right}
-.ob-bprice{font-family:'Bebas Neue',cursive;font-size:1rem}
-.ob-bchg{font-size:.62rem;font-weight:700}
+/* ─ Info pill ─ */
+.ob-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 12px;border-radius:20px;
+  font-size:.65rem;font-weight:700;
+  border:1px solid;margin:3px;
+}
 
-/* Mini form dots */
-.ob-form-row{display:flex;align-items:center;gap:10px;padding:10px 12px;
-  background:#060e06;border:1px solid #1a221a;border-radius:10px}
-.ob-fdot{width:13px;height:13px;border-radius:4px}
+/* ─ Tier listesi ─ */
+.ob-tier-row{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 12px;border-radius:10px;
+  background:#060e06;border:1px solid #1a221a;
+  margin-bottom:6px;transition:border-color .2s;
+}
+.ob-tier-row:hover{border-color:#2a3a2a}
+.ob-tier-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.ob-tier-name{font-family:'Bebas Neue',cursive;font-size:.85rem;flex-shrink:0;width:80px}
+.ob-tier-cond{font-size:.65rem;color:#446044;flex:1}
+.ob-tier-anim{font-size:.62rem;color:#2a4a2a;text-align:right}
+
+/* ─ Stat box grid ─ */
+.ob-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.ob-stat-box{
+  background:#060e06;border:1px solid #1a221a;border-radius:12px;
+  padding:12px 8px;text-align:center;position:relative;overflow:hidden;
+}
+.ob-stat-box::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:var(--accent-color,var(--lime));
+  opacity:.4;
+}
+.ob-stat-num{font-family:'Bebas Neue',cursive;font-size:1.8rem;line-height:1;color:var(--accent-color,var(--lime))}
+.ob-stat-lbl{font-size:.58rem;color:#446044;text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+
+/* ─ Form demo ─ */
+.ob-form-demo{background:#060e06;border:1px solid #1a221a;border-radius:12px;padding:12px 14px;margin-bottom:8px}
+.ob-fdots{display:flex;gap:6px;align-items:center;margin-bottom:6px}
+.ob-fdot{width:13px;height:13px;border-radius:4px;flex-shrink:0}
 .ob-fd-pos{background:#22cc66;box-shadow:0 0 8px rgba(34,204,102,.6)}
-.ob-fd-pos2{background:#00ff88;box-shadow:0 0 14px rgba(0,255,136,.9);animation:db-fp-pulse .8s ease infinite}
+.ob-fd-pos2{background:#00ff88;box-shadow:0 0 14px rgba(0,255,136,.9);animation:ob-pulse .8s ease infinite}
+.ob-fd-neg{background:#ff4040;box-shadow:0 0 8px rgba(255,64,64,.6)}
+.ob-fd-neg2{background:#ff1010;box-shadow:0 0 14px rgba(255,0,0,.9);animation:ob-pulse .8s ease infinite}
 .ob-fd-empty{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
-.ob-form-lbl{font-size:.68rem;font-weight:700;color:#22cc66}
+@keyframes ob-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.35)}}
+.ob-fhist{display:flex;gap:4px}
+.ob-fh{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900}
+.ob-fh-w{background:rgba(34,204,102,.12);color:#22cc66;border:1px solid rgba(34,204,102,.2)}
+.ob-fh-l{background:rgba(255,64,64,.1);color:#ff5050;border:1px solid rgba(255,64,64,.18)}
+.ob-fh-d{background:rgba(255,255,255,.05);color:#446044;border:1px solid #1a221a}
 
-/* Mini gazete */
-.ob-newspaper{border-radius:10px;overflow:hidden;border:1px solid #1a221a}
-.ob-paper-head{background:#c00;padding:8px 14px;display:flex;align-items:center;gap:10px}
-.ob-paper-logo{font-family:Impact,'Arial Black',sans-serif;font-size:1rem;letter-spacing:3px;color:#fff}
-.ob-paper-sub{font-size:.55rem;color:rgba(255,255,255,.6);letter-spacing:1px}
-.ob-paper-body{background:#f5f0e8;padding:10px 14px}
-.ob-paper-headline{font-family:Georgia,serif;font-size:.82rem;font-weight:700;color:#111;line-height:1.3;margin-bottom:5px}
-.ob-paper-byline{font-size:.6rem;color:#666;font-style:italic}
-
-/* Saha demo */
-.ob-field-demo{
-  background:linear-gradient(180deg,#1a6b2a 0%,#1e7a30 40%,#166320 100%);
-  border-radius:10px;overflow:hidden;padding:12px 8px;
-  display:flex;justify-content:space-around;align-items:center;
-  gap:8px;border:1px solid #1a221a;
+/* ─ Borsa demo ─ */
+.ob-mrow{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:10px;
+  background:#060e06;border:1px solid #1a221a;margin-bottom:6px;
+  transition:border-color .2s;cursor:pointer;
 }
-.ob-player-chip{
-  background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);
-  border-radius:8px;padding:5px 8px;text-align:center;min-width:50px;
-}
-.ob-chip-av{width:24px;height:24px;border-radius:50%;margin:0 auto 4px;
+.ob-mrow:hover{border-color:#2a3a2a}
+.ob-mav{
+  width:38px;height:38px;border-radius:10px;
   display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',cursive;font-size:.6rem;font-weight:900}
-.ob-chip-name{font-size:.55rem;font-weight:700;color:#fff;white-space:nowrap}
-.ob-chip-pos{font-size:.48rem;color:rgba(255,255,255,.5);text-transform:uppercase}
+  font-family:'Bebas Neue',cursive;font-size:.95rem;flex-shrink:0;
+}
+.ob-mname{font-size:.82rem;font-weight:700;color:#c0d8c0}
+.ob-mpos{font-size:.62rem;color:#446044;margin-top:1px}
+.ob-mbv{font-family:'Bebas Neue',cursive;font-size:1rem;text-align:right}
+.ob-mchg{font-size:.62rem;font-weight:700;text-align:right}
 
-/* Alt nav */
-.ob-nav{
+/* ─ Ödül kartı ─ */
+.ob-award{
+  border-radius:14px;padding:14px;
+  display:flex;align-items:center;gap:14px;margin-bottom:8px;
+}
+.ob-award-icon{font-size:2.4rem;flex-shrink:0}
+.ob-award-title{font-family:'Bebas Neue',cursive;font-size:.9rem;letter-spacing:1.5px;margin-bottom:5px}
+.ob-award-pills{display:flex;gap:6px;flex-wrap:wrap}
+
+/* ─ Saha demo ─ */
+.ob-field{
+  background:linear-gradient(180deg,#1a6b2a 0%,#1f7d32 45%,#166322 100%);
+  border-radius:12px;padding:14px 10px;
+  display:flex;justify-content:space-around;
+  align-items:stretch;gap:10px;position:relative;
+  overflow:hidden;
+}
+.ob-field::before{
+  content:'';position:absolute;
+  top:50%;left:10%;right:10%;height:1px;
+  background:rgba(255,255,255,.15);
+  box-shadow:0 0 8px rgba(255,255,255,.1);
+}
+.ob-field::after{
+  content:'';position:absolute;
+  top:10%;bottom:10%;left:50%;width:1px;
+  background:rgba(255,255,255,.12);
+}
+.ob-team{display:flex;flex-direction:column;gap:7px;align-items:center;flex:1;position:relative;z-index:1}
+.ob-team-name{font-family:'Bebas Neue',cursive;font-size:.65rem;letter-spacing:1.5px;color:rgba(255,255,255,.6);margin-bottom:4px;text-align:center}
+.ob-pchip{
+  background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.18);
+  border-radius:9px;padding:5px 8px;text-align:center;min-width:52px;
+  backdrop-filter:blur(4px);transition:transform .2s;
+}
+.ob-pchip:hover{transform:scale(1.05)}
+.ob-pchip-av{
+  width:26px;height:26px;border-radius:50%;margin:0 auto 3px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',cursive;font-size:.62rem;font-weight:900;
+}
+.ob-pchip-name{font-size:.55rem;font-weight:700;color:#fff;white-space:nowrap}
+.ob-pchip-pos{font-size:.48rem;color:rgba(255,255,255,.45);text-transform:uppercase}
+
+/* ─ Gazete demo ─ */
+.ob-newspaper{border-radius:12px;overflow:hidden;border:1px solid #1a221a}
+.ob-paper-masthead{
+  background:linear-gradient(135deg,#8b0000,#c00);
+  padding:10px 16px;display:flex;align-items:center;justify-content:space-between;
+}
+.ob-paper-logo{font-family:Impact,'Arial Black',sans-serif;font-size:1.05rem;letter-spacing:3px;color:#fff}
+.ob-paper-tagline{font-size:.52rem;color:rgba(255,255,255,.55);letter-spacing:1px;font-style:italic}
+.ob-paper-flash{
+  background:#111;border-bottom:3px solid #c00;
+  padding:5px 16px;display:flex;align-items:center;gap:8px;
+}
+.ob-flash-badge{background:#c00;color:#fff;font-size:.52rem;font-weight:900;padding:2px 7px;letter-spacing:1px;border-radius:2px;flex-shrink:0}
+.ob-flash-text{font-size:.6rem;color:rgba(255,255,255,.7);font-weight:700}
+.ob-paper-body{background:linear-gradient(135deg,#f8f4e8,#f0ecdf);padding:12px 16px}
+.ob-headline{font-family:Georgia,'Times New Roman',serif;font-size:.9rem;font-weight:900;color:#111;line-height:1.3;margin-bottom:5px}
+.ob-byline{font-size:.58rem;color:#666;border-top:1px solid #ccc;padding-top:5px;margin-top:5px;font-style:italic}
+
+/* ─ Final ekran ─ */
+.ob-final{
+  background:linear-gradient(135deg,#0a160a,#0e200e);
+  border:1px solid rgba(184,247,23,.2);border-radius:16px;
+  padding:20px;text-align:center;margin-top:14px;
+  position:relative;overflow:hidden;
+}
+.ob-final::before{
+  content:'';position:absolute;top:-30px;left:50%;transform:translateX(-50%);
+  width:180px;height:180px;border-radius:50%;
+  background:radial-gradient(circle,rgba(184,247,23,.07),transparent 70%);
+  pointer-events:none;
+}
+.ob-final-icon{font-size:2.8rem;margin-bottom:10px;display:block}
+.ob-final-title{font-family:'Bebas Neue',cursive;font-size:1.4rem;letter-spacing:2px;color:var(--lime);margin-bottom:8px}
+.ob-final-desc{font-size:.78rem;color:#608060;line-height:1.7}
+
+/* ─ Footer nav ─ */
+.ob-footer{
+  flex-shrink:0;
+  background:#040804;border-top:1px solid #1a221a;
+  padding:12px 20px;
   display:flex;align-items:center;justify-content:space-between;
-  padding:12px 18px;border-top:1px solid #1a221a;
-  background:#040804;flex-shrink:0;
 }
-.ob-dots{display:flex;gap:5px;align-items:center}
-.ob-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.15);
-  cursor:pointer;transition:all .3s}
-.ob-dot.on{background:var(--lime);width:18px;border-radius:3px;
-  box-shadow:0 0 8px rgba(184,247,23,.5)}
-.ob-btn-prev{font-family:'Bebas Neue',cursive;font-size:.85rem;letter-spacing:1px;
-  padding:8px 16px;border:1.5px solid rgba(255,255,255,.12);border-radius:8px;
-  cursor:pointer;background:transparent;color:rgba(255,255,255,.4);transition:all .2s}
-.ob-btn-prev:hover{border-color:rgba(255,255,255,.3);color:#fff}
-.ob-btn-prev:disabled{opacity:.2;cursor:default}
-.ob-btn-next{font-family:'Bebas Neue',cursive;font-size:.85rem;letter-spacing:1px;
-  padding:9px 22px;border:none;border-radius:8px;cursor:pointer;
+.ob-dots-wrap{display:flex;gap:5px;align-items:center}
+.ob-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(255,255,255,.12);cursor:pointer;transition:all .35s;
+}
+.ob-dot.on{background:var(--lime);width:20px;border-radius:3px;box-shadow:0 0 8px rgba(184,247,23,.5)}
+.ob-btn-prev{
+  font-family:'Bebas Neue',cursive;font-size:.82rem;letter-spacing:1px;
+  padding:9px 18px;border:1.5px solid rgba(255,255,255,.1);border-radius:10px;
+  cursor:pointer;background:transparent;color:rgba(255,255,255,.35);transition:all .2s;
+}
+.ob-btn-prev:hover:not(:disabled){border-color:rgba(255,255,255,.3);color:#fff}
+.ob-btn-prev:disabled{opacity:.15;cursor:default}
+.ob-btn-next{
+  font-family:'Bebas Neue',cursive;font-size:.88rem;letter-spacing:1.5px;
+  padding:10px 26px;border:none;border-radius:10px;cursor:pointer;
   background:linear-gradient(135deg,#5ab800,var(--lime));
-  color:#050e05;font-weight:700;transition:all .2s;
-  box-shadow:0 0 20px rgba(184,247,23,.25)}
-.ob-btn-next:hover{transform:scale(1.03);box-shadow:0 0 30px rgba(184,247,23,.4)}
-
-/* Sn-item'a rehber butonu */
-.sn-guide-btn{
-  width:50px;height:40px;border-radius:12px;
-  display:flex;flex-direction:column;align-items:center;
-  justify-content:center;gap:3px;
-  cursor:pointer;background:rgba(184,247,23,.06);
-  border:1px solid rgba(184,247,23,.15);
-  margin:4px 0;transition:all .2s;
+  color:#030e03;font-weight:700;transition:all .2s;
+  box-shadow:0 0 24px rgba(184,247,23,.2);
 }
-.sn-guide-btn:hover{background:rgba(184,247,23,.12)}
-.sn-guide-btn .sn-icon{font-size:14px}
-.sn-guide-btn .sn-lbl{color:var(--lime)}
+.ob-btn-next:hover{transform:scale(1.03);box-shadow:0 0 36px rgba(184,247,23,.35)}
+
+/* Rehber butonu side nav'da */
+.sn-guide-btn{
+  width:50px;height:42px;border-radius:12px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;cursor:pointer;
+  background:rgba(184,247,23,.06);
+  border:1px solid rgba(184,247,23,.15);
+  margin:3px 0;transition:all .2s;
+}
+.sn-guide-btn:hover{background:rgba(184,247,23,.12);border-color:rgba(184,247,23,.3)}
 
 </style>
 </head>
@@ -2947,36 +3080,42 @@ function closeOnboard(){
 }
 
 function obRender(){
+  const STEP_NAMES=['Giriş','Kart & Tier','Momentum','Piyasa','MOTM & Bidon','Kadro','Medya'];
   // Slaytları göster/gizle
   for(let i=0;i<OB_TOTAL;i++){
-    const sl = document.getElementById('ob-slide-'+i);
-    if(!sl) continue;
+    const sl=document.getElementById('ob-slide-'+i);
+    if(!sl)continue;
     sl.classList.remove('active','prev');
-    if(i === _obCurrent) sl.classList.add('active');
-    else if(i < _obCurrent) sl.classList.add('prev');
+    if(i===_obCurrent)sl.classList.add('active');
+    else if(i<_obCurrent)sl.classList.add('prev');
   }
   // Progress
-  const prog = document.getElementById('obProgress');
-  if(prog) prog.style.width = (((_obCurrent+1)/OB_TOTAL)*100)+'%';
+  const prog=document.getElementById('obProgress');
+  if(prog)prog.style.width=(((_obCurrent+1)/OB_TOTAL)*100)+'%';
+  // Step labels
+  const stepLbls=document.getElementById('obStepLabels');
+  if(stepLbls){
+    stepLbls.innerHTML=STEP_NAMES.map((n,i)=>`<span class="ob-step-lbl${i===_obCurrent?' on':''}">${n}</span>`).join('');
+  }
   // Dots
-  const dots = document.getElementById('obDots');
+  const dots=document.getElementById('obDots');
   if(dots){
-    dots.innerHTML = '';
+    dots.innerHTML='';
     for(let i=0;i<OB_TOTAL;i++){
-      const d = document.createElement('div');
-      d.className = 'ob-dot' + (i===_obCurrent?' on':'');
-      d.onclick = ()=>{ _obCurrent=i; obRender(); };
+      const d=document.createElement('div');
+      d.className='ob-dot'+(i===_obCurrent?' on':'');
+      d.onclick=()=>{_obCurrent=i;obRender();};
       dots.appendChild(d);
     }
   }
   // Butonlar
-  const prev = document.getElementById('obPrev');
-  const next = document.getElementById('obNext');
-  if(prev) prev.disabled = _obCurrent === 0;
-  const isLast = _obCurrent === OB_TOTAL-1;
+  const prev=document.getElementById('obPrev');
+  const next=document.getElementById('obNext');
+  if(prev)prev.disabled=_obCurrent===0;
+  const isLast=_obCurrent===OB_TOTAL-1;
   if(next){
-    next.textContent = isLast ? '🚀 Sahaya Çık!' : 'İleri ▶';
-    next.onclick = isLast ? closeOnboard : obNext;
+    next.textContent=isLast?'🚀 Sahaya Çık!':'İleri ▶';
+    next.onclick=isLast?closeOnboard:obNext;
   }
 }
 
@@ -5940,342 +6079,436 @@ tryAutoLogin();
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     ONBOARDING REHBER MODALI
-══════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════
+     ONBOARDING — HAYATTA KALMA REHBERİ
+══════════════════════════════════════════ -->
 <div id="onboardOverlay">
-  <div class="ob-card">
+<div class="ob-card">
 
-    <!-- Üst bar -->
-    <div class="ob-topbar">
-      <div style="display:flex;align-items:center;gap:10px">
-        <span class="ob-logo">PITCH <span>APP</span></span>
-        <span class="ob-badge">v1.2 Rehber</span>
+  <!-- HEADER -->
+  <div class="ob-header">
+    <div class="ob-header-left">
+      <div class="ob-logo-wrap">
+        <span class="ob-logo-main">PITCH APP</span>
+        <span class="ob-logo-sub">Hayatta Kalma Rehberi</span>
       </div>
-      <button class="ob-close" onclick="closeOnboard()">✕</button>
+      <span class="ob-ver-badge">v1.2</span>
     </div>
+    <button class="ob-close" onclick="closeOnboard()" title="Kapat">✕</button>
+  </div>
 
-    <!-- Progress -->
-    <div class="ob-progress">
+  <!-- PROGRESS -->
+  <div class="ob-progress-wrap">
+    <div class="ob-progress-track">
       <div class="ob-progress-fill" id="obProgress" style="width:14.28%"></div>
     </div>
+    <div class="ob-step-labels" id="obStepLabels"></div>
+  </div>
 
-    <!-- Slaytlar -->
-    <div class="ob-slides" id="obSlides">
+  <!-- SLIDES -->
+  <div class="ob-body" id="obSlides">
 
-      <!-- SLAYT 1 -->
-      <div class="ob-slide active" id="ob-slide-0">
-        <div class="ob-num">01 / 07 — Giriş</div>
-        <div class="ob-title">v1.2 <span>Hayatta Kalma</span> Rehberine Hoş Geldin!</div>
-        <div class="ob-desc">Burası sıradan bir halı saha kayıt sitesi değil; kendi ekonomisi, medyası ve efsaneleri olan <strong style="color:#c0d8c0">yaşayan bir futbol meta-evreni</strong>.<br><br>Bu rehber, sahada ve borsada ayakta kalman için gereken her şeyi öğretecek. Hazır mısın?</div>
-
-        <!-- Büyük stat vitrin -->
-        <div class="ob-demo">
-          <div class="ob-demo-lbl">Platform İstatistikleri</div>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-            <div style="background:#060e06;border:1px solid #1a221a;border-radius:10px;padding:10px;text-align:center">
-              <div style="font-family:'Bebas Neue',cursive;font-size:1.6rem;color:var(--lime);line-height:1">7</div>
-              <div style="font-size:.58rem;color:#446044;text-transform:uppercase;margin-top:2px">Tier Kart</div>
-            </div>
-            <div style="background:#060e06;border:1px solid #1a221a;border-radius:10px;padding:10px;text-align:center">
-              <div style="font-family:'Bebas Neue',cursive;font-size:1.6rem;color:#cc66ff;line-height:1">25</div>
-              <div style="font-size:.58rem;color:#446044;text-transform:uppercase;margin-top:2px">Rozet</div>
-            </div>
-            <div style="background:#060e06;border:1px solid #1a221a;border-radius:10px;padding:10px;text-align:center">
-              <div style="font-family:'Bebas Neue',cursive;font-size:1.6rem;color:#f5a623;line-height:1">∞</div>
-              <div style="font-size:.58rem;color:#446044;text-transform:uppercase;margin-top:2px">Rekabet</div>
-            </div>
-          </div>
+    <!-- ── SLAYT 1: GİRİŞ ── -->
+    <div class="ob-slide active" id="ob-slide-0">
+      <div class="ob-slide-header">
+        <div class="ob-slide-num">01 / 07</div>
+        <div class="ob-title">Hoş Geldin! <span>Meta-Evrene</span></div>
+        <div class="ob-desc">Burası sıradan bir halı saha kayıt sitesi değil; kendi ekonomisi, medyası ve efsaneleri olan <strong>yaşayan bir futbol meta-evreni</strong>. Bu rehber sahada ve borsada ayakta kalman için gereken her şeyi öğretecek.</div>
+      </div>
+      <div class="ob-stat-grid">
+        <div class="ob-stat-box" style="--accent-color:var(--lime)">
+          <div class="ob-stat-num">7</div>
+          <div class="ob-stat-lbl">Tier Kart</div>
+        </div>
+        <div class="ob-stat-box" style="--accent-color:#cc66ff">
+          <div class="ob-stat-num" style="color:#cc66ff">25</div>
+          <div class="ob-stat-lbl">Başarım</div>
+        </div>
+        <div class="ob-stat-box" style="--accent-color:#f5a623">
+          <div class="ob-stat-num" style="color:#f5a623">∞</div>
+          <div class="ob-stat-lbl">Rekabet</div>
+        </div>
+        <div class="ob-stat-box" style="--accent-color:#60a8ff">
+          <div class="ob-stat-num" style="color:#60a8ff">14</div>
+          <div class="ob-stat-lbl">Kadro Limit</div>
+        </div>
+        <div class="ob-stat-box" style="--accent-color:#00ccaa">
+          <div class="ob-stat-num" style="color:#00ccaa">3</div>
+          <div class="ob-stat-lbl">Form Nokta</div>
+        </div>
+        <div class="ob-stat-box" style="--accent-color:#ff5050">
+          <div class="ob-stat-num" style="color:#ff5050">%8</div>
+          <div class="ob-stat-lbl">MOTM Bonus</div>
         </div>
       </div>
-
-      <!-- SLAYT 2 -->
-      <div class="ob-slide" id="ob-slide-1">
-        <div class="ob-num">02 / 07 — Oyuncu Kartı</div>
-        <div class="ob-title">Kart & <span>Tier</span> Sistemi</div>
-        <div class="ob-desc">Kartın senin kimliğindir — performansına göre evrimleşir. MOTM oldukça veya seri bağladıkça <strong style="color:#e080ff">Epic</strong>, <strong style="color:#ffaa44">Legend</strong> gibi özel tier kartlarının kilidini açarsın.</div>
-
-        <!-- Canlı Epic Kart Demo -->
-        <div class="ob-demo">
-          <div class="ob-demo-lbl">Canlı Kart Önizlemesi</div>
-          <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap">
-            <!-- Epic kart -->
-            <div class="fc2-card tier-epic" style="width:120px;flex-shrink:0">
-              <div class="fc2-bg"></div>
-              <div class="fc2-stripe"></div>
-              <div class="fc2-tier-label">★ EPIC ★</div>
-              <div class="fc2-rating" style="font-size:2.2rem">94</div>
-              <div class="fc2-pos">SANTRAFOR</div>
-              <div class="fc2-avatar-wrap">
-                <div class="fc2-avatar" style="width:44px;height:44px;font-size:.9rem">FS</div>
-              </div>
-              <div class="fc2-name">Furkan S.</div>
-              <div class="fc2-divider"></div>
-              <div class="fc2-bons" style="font-size:.6rem">68,4 M ₺</div>
-              <div class="fc2-scan"></div>
-              <div class="fc2-particles"><span></span><span></span><span></span><span></span><span></span></div>
-            </div>
-            <!-- Tier listesi -->
-            <div style="flex:1;min-width:120px">
-              ${[
-                ['tier-epic','#e080ff','★ EPIC','5× MOTM'],
-                ['tier-legend','#ffaa44','◈ LEGEND','50M ₺+'],
-                ['tier-elite','#ffd700','✦ ELİTE','OVR 90+'],
-                ['tier-champion','#00ee66','🏆 CHAMP','10 Seri'],
-                ['tier-gold','#ffd060','◆ GOLD','Standart'],
-              ].map(([t,c,l,r])=>`
-                <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #0e160e">
-                  <div style="width:8px;height:8px;border-radius:2px;background:${c};flex-shrink:0"></div>
-                  <span style="font-family:'Bebas Neue',cursive;font-size:.72rem;color:${c}">${l}</span>
-                  <span style="font-size:.6rem;color:#446044;margin-left:auto">${r}</span>
-                </div>`).join('')}
-            </div>
-          </div>
+      <div style="margin-top:14px;background:#0a120a;border:1px solid rgba(184,247,23,.12);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px">
+        <span style="font-size:1.6rem">⚡</span>
+        <div>
+          <div style="font-size:.75rem;font-weight:700;color:#c0d8c0;margin-bottom:3px">Hızlı Başlangıç</div>
+          <div style="font-size:.68rem;color:#506050;line-height:1.5">Profil sekmesinden mevkini ve parametrelerini doldur → Maçlara katıl → Kazan → Borsada zirvele!</div>
         </div>
-      </div>
-
-      <!-- SLAYT 3 -->
-      <div class="ob-slide" id="ob-slide-2">
-        <div class="ob-num">03 / 07 — Momentum</div>
-        <div class="ob-title">Form ve <span>Momentum</span> Sistemi</div>
-        <div class="ob-desc">Reytingler kafaya göre artmaz. Her maç bir <strong style="color:#22cc66">Momentum Puanı</strong>dır. 3 yeşil nokta → Reyting kalıcı +1! 3 kırmızı → Reyting düşer. MOTM olursan +2 form, en kötü seçilirsen -2 form alırsın.</div>
-
-        <div class="ob-demo">
-          <div class="ob-demo-lbl">Form Çizgisi Demo</div>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <!-- İyi form -->
-            <div class="ob-form-row">
-              <div style="display:flex;gap:5px">
-                <div class="ob-fdot ob-fd-pos"></div>
-                <div class="ob-fdot ob-fd-pos2"></div>
-                <div class="ob-fdot ob-fd-empty"></div>
-              </div>
-              <span class="ob-form-lbl">+2 Form</span>
-              <span style="font-size:.65rem;color:#446044;margin-left:auto">→ Bir daha kazan, reyting atlar!</span>
-            </div>
-            <!-- Kötü form -->
-            <div class="ob-form-row">
-              <div style="display:flex;gap:5px">
-                <div class="ob-fdot" style="background:#ff4040;box-shadow:0 0 8px rgba(255,64,64,.6)"></div>
-                <div class="ob-fdot" style="background:#ff1010;box-shadow:0 0 14px rgba(255,0,0,.9);animation:db-fp-pulse .8s ease infinite"></div>
-                <div class="ob-fdot ob-fd-empty"></div>
-              </div>
-              <span style="font-size:.68rem;font-weight:700;color:#ff5050">-2 Form</span>
-              <span style="font-size:.65rem;color:#446044;margin-left:auto">→ Dikkat! Çöküş yakın.</span>
-            </div>
-            <!-- Maç sonuçları -->
-            <div style="display:flex;gap:6px;margin-top:4px">
-              ${[['G','#22cc66'],['G','#22cc66'],['M','#ff5050'],['G','#22cc66'],['B','#446044']].map(([l,c])=>`
-                <div style="width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;background:${c}18;color:${c};border:1px solid ${c}30">${l}</div>
-              `).join('')}
-              <span style="font-size:.6rem;color:#446044;align-self:center;margin-left:4px">Son 5 maç</span>
-            </div>
-          </div>
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
-          <div style="background:#060e06;border:1px solid #1a221a;border-radius:10px;padding:10px">
-            <div style="font-size:.65rem;color:#22cc66;font-weight:700;margin-bottom:3px">🏆 MOTM</div>
-            <div style="font-size:.7rem;color:#608060;line-height:1.5">+2 Form<br>Bonservis +%8</div>
-          </div>
-          <div style="background:#060e06;border:1px solid #1a221a;border-radius:10px;padding:10px">
-            <div style="font-size:.65rem;color:#ff5050;font-weight:700;margin-bottom:3px">😬 En Kötü</div>
-            <div style="font-size:.7rem;color:#608060;line-height:1.5">-2 Form<br>Bonservis -%6</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLAYT 4 -->
-      <div class="ob-slide" id="ob-slide-3">
-        <div class="ob-num">04 / 07 — Ekonomi</div>
-        <div class="ob-title">Transfer Piyasası <span>& Ekonomi</span></div>
-        <div class="ob-desc">Sahadaki performansın cüzdanını etkiler! Bonservisin reytingine ve formuna göre borsa gibi anlık dalgalanır. Piyasadan herhangi bir oyuncuya tıklayarak profilini, form grafiğini ve rozetlerini görebilirsin.</div>
-
-        <div class="ob-demo">
-          <div class="ob-demo-lbl">Canlı Piyasa Satırları</div>
-          <div style="display:flex;flex-direction:column;gap:6px">
-            ${[
-              ['FS','Furkan Soydan','Santrafor','#ffd060','24,4 M ₺','+%8','#22cc66',true],
-              ['ET','Emre Tekin','Sağ Kanat','#ffd060','19,3 M ₺','+%3','#22cc66',false],
-              ['AK','Ahmet Kaya','Stoper','#a0c8e8','13,9 M ₺','-%4','#ff5050',false],
-            ].map(([av,nm,ps,tc,bv,chg,cc,motm])=>`
-              <div class="ob-borsa-row">
-                <div class="ob-bav" style="background:${tc}18;border:1.5px solid ${tc}40;color:${tc}">${av}</div>
-                <div style="flex:1">
-                  <div class="ob-bname">${nm} ${motm?'<span style="font-size:.55rem;background:rgba(184,247,23,.1);color:var(--lime);padding:1px 6px;border-radius:10px;border:1px solid rgba(184,247,23,.2)">MOTM</span>':''}</div>
-                  <div class="ob-bpos">${ps}</div>
-                </div>
-                <div class="ob-bval">
-                  <div class="ob-bprice" style="color:${tc}">${bv}</div>
-                  <div class="ob-bchg" style="color:${cc}">${chg}</div>
-                </div>
-              </div>`).join('')}
-          </div>
-        </div>
-      </div>
-
-      <!-- SLAYT 5 -->
-      <div class="ob-slide" id="ob-slide-4">
-        <div class="ob-num">05 / 07 — Ödüller</div>
-        <div class="ob-title">MOTM <span>& Bidon</span> Sistemi</div>
-        <div class="ob-desc">Maç biter bitmez oylama başlar. En çok oy alan <strong style="color:var(--lime)">Maçın Adamı (MOTM)</strong> seçilir, en az oy alan ise <strong style="color:#ff5050">Bidon</strong> olur. Bu seçim, bonservisi ve formu doğrudan etkiler!</div>
-
-        <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
-          <!-- MOTM kartı -->
-          <div style="background:linear-gradient(135deg,#061206,#0a1e0a);border:1px solid rgba(184,247,23,.2);border-radius:14px;padding:14px;display:flex;align-items:center;gap:14px">
-            <div style="font-size:2.2rem;flex-shrink:0">🏆</div>
-            <div>
-              <div style="font-family:'Bebas Neue',cursive;font-size:.85rem;letter-spacing:1.5px;color:var(--lime);margin-bottom:4px">Maçın Adamı (MOTM)</div>
-              <div style="display:flex;gap:8px;flex-wrap:wrap">
-                <span style="background:rgba(34,204,102,.1);color:#22cc66;border:1px solid rgba(34,204,102,.2);border-radius:20px;padding:2px 10px;font-size:.65rem;font-weight:700">+2 Form</span>
-                <span style="background:rgba(34,204,102,.1);color:#22cc66;border:1px solid rgba(34,204,102,.2);border-radius:20px;padding:2px 10px;font-size:.65rem;font-weight:700">Bonservis +%8</span>
-              </div>
-            </div>
-          </div>
-          <!-- Bidon kartı -->
-          <div style="background:linear-gradient(135deg,#120606,#1e0a0a);border:1px solid rgba(255,80,80,.15);border-radius:14px;padding:14px;display:flex;align-items:center;gap:14px">
-            <div style="font-size:2.2rem;flex-shrink:0">😬</div>
-            <div>
-              <div style="font-family:'Bebas Neue',cursive;font-size:.85rem;letter-spacing:1.5px;color:#ff6060;margin-bottom:4px">En Kötü (Bidon)</div>
-              <div style="display:flex;gap:8px;flex-wrap:wrap">
-                <span style="background:rgba(255,64,64,.1);color:#ff5050;border:1px solid rgba(255,64,64,.2);border-radius:20px;padding:2px 10px;font-size:.65rem;font-weight:700">-2 Form</span>
-                <span style="background:rgba(255,64,64,.1);color:#ff5050;border:1px solid rgba(255,64,64,.2);border-radius:20px;padding:2px 10px;font-size:.65rem;font-weight:700">Bonservis -%6</span>
-              </div>
-            </div>
-          </div>
-          <!-- Normal -->
-          <div style="background:#0a120a;border:1px solid #1a221a;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px">
-            <div style="font-size:1.4rem;flex-shrink:0">⚽</div>
-            <div>
-              <div style="font-size:.75rem;font-weight:700;color:#608060;margin-bottom:3px">Normal Maç</div>
-              <div style="display:flex;gap:8px">
-                <span style="font-size:.65rem;color:#22cc66">Galibiyet: +1 Form</span>
-                <span style="font-size:.65rem;color:#ff5050">Mağlubiyet: -1 Form</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLAYT 6 -->
-      <div class="ob-slide" id="ob-slide-5">
-        <div class="ob-num">06 / 07 — Kadro</div>
-        <div class="ob-title">Kadro <span>& Saha</span> Dizilişi</div>
-        <div class="ob-desc">14 kişi tamamlandığında yapay zeka en dengeli iki takımı kurar. Kaptanların isimleriyle sahaya çıkıyorsunuz — "Takım A" ve "Takım B" artık tarih!</div>
-
-        <div class="ob-demo">
-          <div class="ob-demo-lbl">Taktik Tahtası Önizlemesi</div>
-          <div class="ob-field-demo">
-            <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
-              <div class="ob-player-chip">
-                <div class="ob-chip-av" style="background:rgba(184,247,23,.15);color:var(--lime)">FS</div>
-                <div class="ob-chip-name">Furkan</div>
-                <div class="ob-chip-pos">STR</div>
-              </div>
-              <div style="display:flex;gap:6px">
-                <div class="ob-player-chip">
-                  <div class="ob-chip-av" style="background:rgba(96,168,255,.15);color:#6aacff">ET</div>
-                  <div class="ob-chip-name">Emre</div>
-                  <div class="ob-chip-pos">SKN</div>
-                </div>
-                <div class="ob-player-chip">
-                  <div class="ob-chip-av" style="background:rgba(255,166,35,.15);color:#f5a623">MK</div>
-                  <div class="ob-chip-name">Mert</div>
-                  <div class="ob-chip-pos">MOS</div>
-                </div>
-              </div>
-              <div style="display:flex;gap:6px">
-                <div class="ob-player-chip">
-                  <div class="ob-chip-av" style="background:rgba(204,102,255,.15);color:#cc66ff">AK</div>
-                  <div class="ob-chip-name">Ahmet</div>
-                  <div class="ob-chip-pos">STP</div>
-                </div>
-              </div>
-              <div class="ob-player-chip">
-                <div class="ob-chip-av" style="background:rgba(255,80,80,.15);color:#ff8080">MY</div>
-                <div class="ob-chip-name">Mehmet</div>
-                <div class="ob-chip-pos">KLC</div>
-              </div>
-            </div>
-            <div style="width:1px;background:rgba(255,255,255,.1);align-self:stretch"></div>
-            <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
-              <div class="ob-player-chip">
-                <div class="ob-chip-av" style="background:rgba(184,247,23,.15);color:var(--lime)">KA</div>
-                <div class="ob-chip-name">Kerem</div>
-                <div class="ob-chip-pos">STR</div>
-              </div>
-              <div style="display:flex;gap:6px">
-                <div class="ob-player-chip">
-                  <div class="ob-chip-av" style="background:rgba(96,168,255,.15);color:#6aacff">OD</div>
-                  <div class="ob-chip-name">Onur</div>
-                  <div class="ob-chip-pos">SKN</div>
-                </div>
-                <div class="ob-player-chip">
-                  <div class="ob-chip-av" style="background:rgba(255,166,35,.15);color:#f5a623">BS</div>
-                  <div class="ob-chip-name">Burak</div>
-                  <div class="ob-chip-pos">MOS</div>
-                </div>
-              </div>
-              <div style="display:flex;gap:6px">
-                <div class="ob-player-chip">
-                  <div class="ob-chip-av" style="background:rgba(204,102,255,.15);color:#cc66ff">CK</div>
-                  <div class="ob-chip-name">Can</div>
-                  <div class="ob-chip-pos">STP</div>
-                </div>
-              </div>
-              <div class="ob-player-chip">
-                <div class="ob-chip-av" style="background:rgba(255,80,80,.15);color:#ff8080">YA</div>
-                <div class="ob-chip-name">Yusuf</div>
-                <div class="ob-chip-pos">KLC</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLAYT 7 -->
-      <div class="ob-slide" id="ob-slide-6">
-        <div class="ob-num">07 / 07 — Medya</div>
-        <div class="ob-title">Pitch Spor <span>& Topluluk</span></div>
-        <div class="ob-desc">Maç biter, şov devam eder! Gazetemizde maçın manşetlerini oku, Forum'da öneri ve şikayetlerini paylaş, tartış. Her gönderiye yorum yapabilirsin!</div>
-
-        <div class="ob-demo">
-          <div class="ob-demo-lbl">Gazete Önizlemesi</div>
-          <div class="ob-newspaper">
-            <div class="ob-paper-head">
-              <div>
-                <div class="ob-paper-logo">⚽ PITCH SPOR</div>
-                <div class="ob-paper-sub">HALI SAHA POSTASI · BAĞIMSIZ SPOR GAZETESİ</div>
-              </div>
-            </div>
-            <div class="ob-paper-body">
-              <div style="font-size:.55rem;color:#c00;font-weight:700;letter-spacing:1px;margin-bottom:4px">★ FLAŞ HABER ★</div>
-              <div class="ob-paper-headline">FURKAN SOYDAN MAÇIN ADAMI! PERFORMANS REKORU KIRILDI</div>
-              <div class="ob-paper-byline">Pitch Spor Muhabiri · Dün · 14. Hafta Karşılaşması</div>
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-top:10px;background:#0a120a;border:1px solid rgba(184,247,23,.12);border-radius:14px;padding:14px;text-align:center">
-          <div style="font-size:1.8rem;margin-bottom:8px">🎉</div>
-          <div style="font-family:'Bebas Neue',cursive;font-size:1rem;letter-spacing:1.5px;color:var(--lime);margin-bottom:6px">Hazırsın! Sahaya Çık!</div>
-          <div style="font-size:.72rem;color:#608060;line-height:1.6">Profilini doldur, maçlara katıl, piyasada yerini al.<br>Efsane olmak için sadece bir adım kaldı.</div>
-        </div>
-      </div>
-
-    </div><!-- /ob-slides -->
-
-    <!-- Alt nav -->
-    <div class="ob-nav">
-      <div class="ob-dots" id="obDots"></div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <button class="ob-btn-prev" id="obPrev" onclick="obPrev()" disabled>◀ Geri</button>
-        <button class="ob-btn-next" id="obNext" onclick="obNext()">İleri ▶</button>
       </div>
     </div>
 
+    <!-- ── SLAYT 2: KART & TİER ── -->
+    <div class="ob-slide" id="ob-slide-1">
+      <div class="ob-slide-header">
+        <div class="ob-slide-num">02 / 07</div>
+        <div class="ob-title">Oyuncu Kartı <span>& Tier Sistemi</span></div>
+        <div class="ob-desc">Kartın senin kimliğindir ve performansına göre evrimleşir. Maçın adamı (MOTM) oldukça veya seri bağladıkça özel tier kartlarının kilidini açarsın.</div>
+      </div>
+      <div class="ob-demo">
+        <div class="ob-demo-label">Canlı Epic Kart — Animasyonlu Gerçek Görünüm</div>
+        <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
+          <!-- Gerçek FC2 Epic Kart -->
+          <div class="fc2-card tier-epic" style="width:130px;flex-shrink:0">
+            <div class="fc2-bg"></div>
+            <div class="fc2-stripe"></div>
+            <div class="fc2-tier-label">★ EPIC ★</div>
+            <div class="fc2-rating">94</div>
+            <div class="fc2-pos">SANTRAFOR</div>
+            <div class="fc2-avatar-wrap">
+              <div class="fc2-avatar">FS</div>
+            </div>
+            <div class="fc2-name">Furkan S.</div>
+            <div class="fc2-divider"></div>
+            <div class="fc2-bons">68,4 M ₺</div>
+            <div class="fc2-scan"></div>
+            <div class="fc2-particles"><span></span><span></span><span></span></div>
+          </div>
+          <!-- Tier listesi -->
+          <div style="flex:1;min-width:140px">
+            <div class="ob-tier-row">
+              <div class="ob-tier-dot" style="background:#e080ff;box-shadow:0 0 6px #e080ff80"></div>
+              <span class="ob-tier-name" style="color:#e080ff">EPIC</span>
+              <span class="ob-tier-cond">5× MOTM seçilmek</span>
+            </div>
+            <div class="ob-tier-row">
+              <div class="ob-tier-dot" style="background:#ffaa44;box-shadow:0 0 6px #ffaa4480"></div>
+              <span class="ob-tier-name" style="color:#ffaa44">LEGEND</span>
+              <span class="ob-tier-cond">Bonservis 50M ₺+</span>
+            </div>
+            <div class="ob-tier-row">
+              <div class="ob-tier-dot" style="background:#ffd700;box-shadow:0 0 6px #ffd70080"></div>
+              <span class="ob-tier-name" style="color:#ffd700">ELİTE</span>
+              <span class="ob-tier-cond">OVR 90 ve üzeri</span>
+            </div>
+            <div class="ob-tier-row">
+              <div class="ob-tier-dot" style="background:#00ee66;box-shadow:0 0 6px #00ee6680"></div>
+              <span class="ob-tier-name" style="color:#00ee66">CHAMPION</span>
+              <span class="ob-tier-cond">10 maç galip serisi</span>
+            </div>
+            <div class="ob-tier-row">
+              <div class="ob-tier-dot" style="background:#ffd060"></div>
+              <span class="ob-tier-name" style="color:#ffd060">GOLD</span>
+              <span class="ob-tier-cond">OVR 75 – 89</span>
+            </div>
+            <div class="ob-tier-row">
+              <div class="ob-tier-dot" style="background:#a0c8e8"></div>
+              <span class="ob-tier-name" style="color:#a0c8e8">SILVER</span>
+              <span class="ob-tier-cond">OVR 60 – 74</span>
+            </div>
+            <div class="ob-tier-row" style="margin-bottom:0">
+              <div class="ob-tier-dot" style="background:#c07840"></div>
+              <span class="ob-tier-name" style="color:#c07840">BRONZE</span>
+              <span class="ob-tier-cond">OVR 59 ve altı</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLAYT 3: MOMENTUM ── -->
+    <div class="ob-slide" id="ob-slide-2">
+      <div class="ob-slide-header">
+        <div class="ob-slide-num">03 / 07</div>
+        <div class="ob-title">Form ve <span>Momentum</span> Sistemi</div>
+        <div class="ob-desc">Reytingler kafaya göre artmaz. Her maç bir <strong>Momentum Puanı</strong>dır. 3 yeşil nokta → Reyting kalıcı +1 artar. 3 kırmızı nokta → Reyting -1 düşer!</div>
+      </div>
+      <div class="ob-demo">
+        <div class="ob-demo-label">Form Çizgisi — Canlı Gösterim</div>
+        <!-- İyi form -->
+        <div class="ob-form-demo">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <span style="font-size:.65rem;font-weight:700;color:#22cc66">+2 Form — Bir kazanmaya kaldı!</span>
+            <span style="font-size:.6rem;color:#446044">3 galibiyet serisi</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="ob-fdots">
+              <div class="ob-fdot ob-fd-pos"></div>
+              <div class="ob-fdot ob-fd-pos2"></div>
+              <div class="ob-fdot ob-fd-empty"></div>
+            </div>
+            <div class="ob-fhist">
+              <div class="ob-fh ob-fh-w">G</div>
+              <div class="ob-fh ob-fh-w">G</div>
+              <div class="ob-fh ob-fh-l">M</div>
+              <div class="ob-fh ob-fh-w">G</div>
+              <div class="ob-fh ob-fh-w">G</div>
+            </div>
+          </div>
+        </div>
+        <!-- Kötü form -->
+        <div class="ob-form-demo">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <span style="font-size:.65rem;font-weight:700;color:#ff5050">-2 Form — Tehlike!</span>
+            <span style="font-size:.6rem;color:#446044">3 mağlubiyet serisi</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="ob-fdots">
+              <div class="ob-fdot ob-fd-neg"></div>
+              <div class="ob-fdot ob-fd-neg2"></div>
+              <div class="ob-fdot ob-fd-empty"></div>
+            </div>
+            <div class="ob-fhist">
+              <div class="ob-fh ob-fh-w">G</div>
+              <div class="ob-fh ob-fh-l">M</div>
+              <div class="ob-fh ob-fh-l">M</div>
+              <div class="ob-fh ob-fh-l">M</div>
+              <div class="ob-fh ob-fh-d">B</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+        <div style="background:#060e06;border:1px solid rgba(34,204,102,.15);border-radius:12px;padding:12px">
+          <div style="font-size:.65rem;color:#22cc66;font-weight:800;margin-bottom:6px;letter-spacing:.5px">KAZANINCA</div>
+          <div style="font-size:.7rem;color:#608060;line-height:1.6">+1 Form noktası<br>Bonservis artar<br>3 üst üste → Reyting +1</div>
+        </div>
+        <div style="background:#060e06;border:1px solid rgba(255,64,64,.12);border-radius:12px;padding:12px">
+          <div style="font-size:.65rem;color:#ff5050;font-weight:800;margin-bottom:6px;letter-spacing:.5px">KAYBEDİNCE</div>
+          <div style="font-size:.7rem;color:#608060;line-height:1.6">-1 Form noktası<br>Bonservis düşer<br>3 üst üste → Reyting -1</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLAYT 4: PİYASA ── -->
+    <div class="ob-slide" id="ob-slide-3">
+      <div class="ob-slide-header">
+        <div class="ob-slide-num">04 / 07</div>
+        <div class="ob-title">Transfer Piyasası <span>& Ekonomi</span></div>
+        <div class="ob-desc">Sahadaki performansın cüzdanını etkiler! Bonservisin reytingine ve formuna göre borsa gibi anlık dalgalanır. Piyasadan herhangi bir oyuncuya tıklayarak profilini, rozetlerini ve form grafiğini görebilirsin.</div>
+      </div>
+      <div class="ob-demo">
+        <div class="ob-demo-label">Canlı Piyasa Verileri — Tıklanabilir Profiller</div>
+        <div class="ob-mrow">
+          <div style="font-family:'Bebas Neue',cursive;font-size:.9rem;color:#2a3a2a;width:20px;text-align:center;flex-shrink:0">1</div>
+          <div class="ob-mav" style="background:rgba(255,208,96,.1);border:1.5px solid rgba(255,208,96,.3);color:#ffd060">FS</div>
+          <div style="flex:1">
+            <div class="ob-mname">Furkan Soydan <span style="font-size:.55rem;background:rgba(184,247,23,.1);color:var(--lime);padding:1px 6px;border-radius:10px;border:1px solid rgba(184,247,23,.2)">MOTM</span></div>
+            <div class="ob-mpos">Santrafor · Gold</div>
+          </div>
+          <div>
+            <div class="ob-mbv" style="color:#ffd060">24,4 M ₺</div>
+            <div class="ob-mchg" style="color:#22cc66">▲ +%8</div>
+          </div>
+        </div>
+        <div class="ob-mrow">
+          <div style="font-family:'Bebas Neue',cursive;font-size:.9rem;color:#2a3a2a;width:20px;text-align:center;flex-shrink:0">2</div>
+          <div class="ob-mav" style="background:rgba(255,208,96,.1);border:1.5px solid rgba(255,208,96,.25);color:#ffd060">ET</div>
+          <div style="flex:1">
+            <div class="ob-mname">Emre Tekin</div>
+            <div class="ob-mpos">Sağ Kanat · Gold</div>
+          </div>
+          <div>
+            <div class="ob-mbv" style="color:#ffd060">19,3 M ₺</div>
+            <div class="ob-mchg" style="color:#22cc66">▲ +%3</div>
+          </div>
+        </div>
+        <div class="ob-mrow">
+          <div style="font-family:'Bebas Neue',cursive;font-size:.9rem;color:#2a3a2a;width:20px;text-align:center;flex-shrink:0">3</div>
+          <div class="ob-mav" style="background:rgba(160,200,232,.08);border:1.5px solid rgba(160,200,232,.2);color:#a0c8e8">AK</div>
+          <div style="flex:1">
+            <div class="ob-mname">Ahmet Kaya</div>
+            <div class="ob-mpos">Stoper · Silver</div>
+          </div>
+          <div>
+            <div class="ob-mbv" style="color:#a0c8e8">13,9 M ₺</div>
+            <div class="ob-mchg" style="color:#ff5050">▼ -%4</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:10px;background:#0a120a;border:1px solid #1a2a1a;border-radius:12px;padding:12px;font-size:.7rem;color:#506050;line-height:1.6">
+        💡 <strong style="color:#c0d8c0">İpucu:</strong> 82 OVR Santrafor ≈ 24M ₺ · 75 OVR Orta Saha ≈ 14M ₺ · 90 OVR → 35M+ ₺
+      </div>
+    </div>
+
+    <!-- ── SLAYT 5: MOTM & BİDON ── -->
+    <div class="ob-slide" id="ob-slide-4">
+      <div class="ob-slide-header">
+        <div class="ob-slide-num">05 / 07</div>
+        <div class="ob-title">MOTM <span>& Bidon</span> Ödülleri</div>
+        <div class="ob-desc">Maç biter bitmez oylama başlar. Her oyuncu hem en iyi hem de en kötü için oy kullanır. Sonuç seni ya zirvene taşır ya da yerle bir eder!</div>
+      </div>
+      <div class="ob-award" style="background:linear-gradient(135deg,#061206,#0a1e0a);border:1px solid rgba(34,204,102,.18);border-radius:16px">
+        <div class="ob-award-icon">🏆</div>
+        <div>
+          <div class="ob-award-title" style="color:var(--lime)">Maçın Adamı (MOTM)</div>
+          <div class="ob-award-pills">
+            <span class="ob-pill" style="background:rgba(34,204,102,.1);color:#22cc66;border-color:rgba(34,204,102,.25)">+2 Form</span>
+            <span class="ob-pill" style="background:rgba(34,204,102,.1);color:#22cc66;border-color:rgba(34,204,102,.25)">Bonservis +%8</span>
+            <span class="ob-pill" style="background:rgba(184,247,23,.08);color:var(--lime);border-color:rgba(184,247,23,.2)">MOTM Rozeti İlerler</span>
+          </div>
+        </div>
+      </div>
+      <div class="ob-award" style="background:linear-gradient(135deg,#120606,#1e0a0a);border:1px solid rgba(255,80,80,.15);border-radius:16px">
+        <div class="ob-award-icon">😬</div>
+        <div>
+          <div class="ob-award-title" style="color:#ff6060">En Kötü (Bidon)</div>
+          <div class="ob-award-pills">
+            <span class="ob-pill" style="background:rgba(255,64,64,.1);color:#ff5050;border-color:rgba(255,64,64,.22)">-2 Form</span>
+            <span class="ob-pill" style="background:rgba(255,64,64,.1);color:#ff5050;border-color:rgba(255,64,64,.22)">Bonservis -%6</span>
+            <span class="ob-pill" style="background:rgba(255,64,64,.08);color:#ff8080;border-color:rgba(255,64,64,.15)">3× En Kötü → Rozet 😈</span>
+          </div>
+        </div>
+      </div>
+      <div style="background:#0a120a;border:1px solid #1a221a;border-radius:14px;padding:12px;display:flex;gap:16px;margin-top:2px">
+        <div style="flex:1;text-align:center;border-right:1px solid #1a221a;padding-right:16px">
+          <div style="font-size:.6rem;color:#446044;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Normal Galibiyet</div>
+          <div style="font-family:'Bebas Neue',cursive;font-size:1.1rem;color:#22cc66">+1 Form</div>
+          <div style="font-size:.6rem;color:#446044">Bonservis %3–5 artar</div>
+        </div>
+        <div style="flex:1;text-align:center">
+          <div style="font-size:.6rem;color:#446044;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Normal Mağlubiyet</div>
+          <div style="font-family:'Bebas Neue',cursive;font-size:1.1rem;color:#ff5050">-1 Form</div>
+          <div style="font-size:.6rem;color:#446044">Bonservis %3–5.5 düşer</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLAYT 6: KADRO & SAHA ── -->
+    <div class="ob-slide" id="ob-slide-5">
+      <div class="ob-slide-header">
+        <div class="ob-slide-num">06 / 07</div>
+        <div class="ob-title">Kadro <span>& Saha</span> Dizilişi</div>
+        <div class="ob-desc">14 kişi tamamlandığında yapay zeka, mevki dengesini ve reyting eşitliğini göz önünde bulundurarak en adaletli iki takımı otomatik oluşturur. Kaptanların ismiyle sahaya çıkıyorsunuz!</div>
+      </div>
+      <div class="ob-demo">
+        <div class="ob-demo-label">Taktik Tahtası — Canlı Saha Önizlemesi</div>
+        <div class="ob-field">
+          <div class="ob-team">
+            <div class="ob-team-name" style="color:rgba(184,247,23,.6)">⚡ Furkan'ın Takımı</div>
+            <div class="ob-pchip">
+              <div class="ob-pchip-av" style="background:rgba(184,247,23,.15);color:var(--lime)">FS</div>
+              <div class="ob-pchip-name">Furkan</div>
+              <div class="ob-pchip-pos">STR</div>
+            </div>
+            <div style="display:flex;gap:5px">
+              <div class="ob-pchip">
+                <div class="ob-pchip-av" style="background:rgba(96,168,255,.15);color:#6aacff">ET</div>
+                <div class="ob-pchip-name">Emre</div>
+                <div class="ob-pchip-pos">SKN</div>
+              </div>
+              <div class="ob-pchip">
+                <div class="ob-pchip-av" style="background:rgba(255,166,35,.15);color:#f5a623">MK</div>
+                <div class="ob-pchip-name">Mert</div>
+                <div class="ob-pchip-pos">MOS</div>
+              </div>
+            </div>
+            <div class="ob-pchip">
+              <div class="ob-pchip-av" style="background:rgba(204,102,255,.15);color:#cc66ff">AK</div>
+              <div class="ob-pchip-name">Ahmet</div>
+              <div class="ob-pchip-pos">STP</div>
+            </div>
+            <div class="ob-pchip">
+              <div class="ob-pchip-av" style="background:rgba(255,80,80,.15);color:#ff8080">MY</div>
+              <div class="ob-pchip-name">Mehmet</div>
+              <div class="ob-pchip-pos">KLC</div>
+            </div>
+          </div>
+          <div style="width:1px;background:rgba(255,255,255,.12);align-self:stretch;margin:0 4px"></div>
+          <div class="ob-team">
+            <div class="ob-team-name" style="color:rgba(255,80,80,.6)">🔥 Kerem'in Takımı</div>
+            <div class="ob-pchip">
+              <div class="ob-pchip-av" style="background:rgba(184,247,23,.15);color:var(--lime)">KA</div>
+              <div class="ob-pchip-name">Kerem</div>
+              <div class="ob-pchip-pos">STR</div>
+            </div>
+            <div style="display:flex;gap:5px">
+              <div class="ob-pchip">
+                <div class="ob-pchip-av" style="background:rgba(96,168,255,.15);color:#6aacff">OD</div>
+                <div class="ob-pchip-name">Onur</div>
+                <div class="ob-pchip-pos">SKN</div>
+              </div>
+              <div class="ob-pchip">
+                <div class="ob-pchip-av" style="background:rgba(255,166,35,.15);color:#f5a623">BS</div>
+                <div class="ob-pchip-name">Burak</div>
+                <div class="ob-pchip-pos">MOS</div>
+              </div>
+            </div>
+            <div class="ob-pchip">
+              <div class="ob-pchip-av" style="background:rgba(204,102,255,.15);color:#cc66ff">CK</div>
+              <div class="ob-pchip-name">Can</div>
+              <div class="ob-pchip-pos">STP</div>
+            </div>
+            <div class="ob-pchip">
+              <div class="ob-pchip-av" style="background:rgba(255,80,80,.15);color:#ff8080">YA</div>
+              <div class="ob-pchip-name">Yusuf</div>
+              <div class="ob-pchip-pos">KLC</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+        <div style="background:#060e06;border:1px solid #1a221a;border-radius:12px;padding:10px;font-size:.68rem;color:#608060;line-height:1.55">
+          👑 Kaptanlar otomatik seçilir, isimleriyle takım adı verilir
+        </div>
+        <div style="background:#060e06;border:1px solid #1a221a;border-radius:12px;padding:10px;font-size:.68rem;color:#608060;line-height:1.55">
+          ↩ Yanlışlıkla katıldıysan "Çık" butonu ile ayrılabilirsin
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLAYT 7: MEDYA & TOPLULUK ── -->
+    <div class="ob-slide" id="ob-slide-6">
+      <div class="ob-slide-header">
+        <div class="ob-slide-num">07 / 07</div>
+        <div class="ob-title">Pitch Spor <span>& Topluluk</span></div>
+        <div class="ob-desc">Maç biter, şov devam eder! Gazetemizde maçın manşetlerini oku, Forum'da öneri ve şikayetlerini paylaş. Her gönderiye yorum yapabilir, oylama yapabilirsin!</div>
+      </div>
+      <div class="ob-demo">
+        <div class="ob-demo-label">Pitch Spor — Canlı Gazete Vitrin</div>
+        <div class="ob-newspaper">
+          <div class="ob-paper-masthead">
+            <div>
+              <div class="ob-paper-logo">⚽ PITCH SPOR</div>
+              <div class="ob-paper-tagline">Bağımsız Halı Saha Spor Gazetesi</div>
+            </div>
+            <div style="font-size:.55rem;color:rgba(255,255,255,.4);text-align:right;font-family:Georgia,serif">14. Hafta<br>Canlı Yayın</div>
+          </div>
+          <div class="ob-paper-flash">
+            <span class="ob-flash-badge">FLAŞ</span>
+            <span class="ob-flash-text">SON DAKİKA: Furkan Soydan hat-trick yaptı, bonservis rekor kırdı!</span>
+          </div>
+          <div class="ob-paper-body">
+            <div class="ob-headline">FURKAN SOYDAN EFSANE OLDU! PITCH APP TARİHİNİN EN İYİ MOTM PERFORMANSI</div>
+            <div class="ob-byline">Pitch Spor Muhabirliği · Bu Haftaki Özel Röportaj · 14. Hafta Karşılaşması</div>
+          </div>
+        </div>
+      </div>
+      <div class="ob-final">
+        <span class="ob-final-icon">🚀</span>
+        <div class="ob-final-title">Hazırsın! Sahaya Çık!</div>
+        <div class="ob-final-desc">
+          Profilini doldur → Maçlara katıl → Kazan → Borsada zirvele<br>
+          <span style="color:rgba(184,247,23,.5);font-size:.72rem">Bu rehbere istediğin zaman side nav'daki ❓ butonundan ulaşabilirsin.</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /ob-body -->
+
+  <!-- FOOTER NAV -->
+  <div class="ob-footer">
+    <div class="ob-dots-wrap" id="obDots"></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="ob-btn-prev" id="obPrev" onclick="obPrev()" disabled>◀ Geri</button>
+      <button class="ob-btn-next" id="obNext" onclick="obNext()">İleri ▶</button>
+    </div>
   </div>
-</div>
+
+</div><!-- /ob-card -->
+</div><!-- /onboardOverlay -->
 
 </body>
 </html>
