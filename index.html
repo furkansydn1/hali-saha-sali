@@ -1789,6 +1789,165 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .page-sub{font-size:.6rem;color:#446044;margin-top:1px}
 .panel{padding:14px;flex:1}
 
+
+/* ══════════════════════════════════════════════════════
+   ONBOARDING REHBER
+══════════════════════════════════════════════════════ */
+#onboardOverlay{
+  position:fixed;inset:0;z-index:9999;
+  background:rgba(0,0,0,.85);
+  backdrop-filter:blur(8px);
+  display:none;align-items:center;justify-content:center;
+  padding:12px;
+}
+#onboardOverlay.open{display:flex;animation:ob-fade-in .35s ease}
+@keyframes ob-fade-in{from{opacity:0}to{opacity:1}}
+
+.ob-card{
+  width:100%;max-width:480px;max-height:92vh;
+  background:#060e06;border:1px solid rgba(184,247,23,.18);
+  border-radius:22px;overflow:hidden;
+  display:flex;flex-direction:column;
+  box-shadow:0 0 60px rgba(184,247,23,.08),0 24px 80px rgba(0,0,0,.7);
+  animation:ob-slide-up .4s ease;
+}
+@keyframes ob-slide-up{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* Üst bar */
+.ob-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px 12px;
+  border-bottom:1px solid #1a221a;
+  background:#040804;flex-shrink:0;
+}
+.ob-logo{font-family:'Bebas Neue',cursive;font-size:.95rem;letter-spacing:3px;color:var(--lime)}
+.ob-logo span{color:rgba(184,247,23,.4)}
+.ob-badge{font-size:.58rem;font-weight:800;padding:2px 9px;border-radius:20px;
+  background:rgba(184,247,23,.1);color:var(--lime);border:1px solid rgba(184,247,23,.2);
+  letter-spacing:1px;text-transform:uppercase}
+.ob-close{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+  color:rgba(255,255,255,.4);width:28px;height:28px;border-radius:50%;
+  cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;
+  transition:all .2s}
+.ob-close:hover{background:rgba(255,60,60,.15);border-color:rgba(255,60,60,.3);color:#ff6060}
+
+/* Progress */
+.ob-progress{height:3px;background:#0e160e;flex-shrink:0}
+.ob-progress-fill{height:100%;background:linear-gradient(90deg,#5ab800,var(--lime));transition:width .4s ease}
+
+/* Slayt alanı */
+.ob-slides{flex:1;overflow:hidden;position:relative}
+.ob-slide{
+  position:absolute;inset:0;overflow-y:auto;
+  padding:20px 18px 16px;scrollbar-width:none;
+  opacity:0;pointer-events:none;transition:all .35s ease;
+  transform:translateX(30px);
+}
+.ob-slide::-webkit-scrollbar{display:none}
+.ob-slide.active{opacity:1;pointer-events:all;transform:translateX(0);position:relative}
+.ob-slide.prev{transform:translateX(-30px)}
+
+/* Slayt içerik */
+.ob-num{font-size:.6rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(184,247,23,.4);margin-bottom:6px}
+.ob-title{font-family:'Bebas Neue',cursive;font-size:1.4rem;letter-spacing:1.5px;
+  color:#fff;line-height:1.1;margin-bottom:10px}
+.ob-title span{color:var(--lime)}
+.ob-desc{font-size:.78rem;color:#608060;line-height:1.7;margin-bottom:14px}
+
+/* Demo bileşen çerçevesi */
+.ob-demo{
+  background:#0a120a;border:1px solid #1a2a1a;border-radius:14px;
+  padding:14px;margin-bottom:4px;overflow:hidden;
+}
+.ob-demo-lbl{font-size:.58rem;font-weight:800;letter-spacing:1.5px;
+  text-transform:uppercase;color:#446044;margin-bottom:10px;
+  display:flex;align-items:center;gap:6px}
+.ob-demo-lbl::before{content:'';width:16px;height:1px;background:#1a2a1a}
+.ob-demo-lbl::after{content:'';flex:1;height:1px;background:#1a2a1a}
+
+/* Mini borsa satırı */
+.ob-borsa-row{display:flex;align-items:center;gap:10px;padding:8px 12px;
+  background:#060e06;border:1px solid #1a221a;border-radius:10px}
+.ob-bav{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;
+  justify-content:center;font-family:'Bebas Neue',cursive;font-size:.9rem;flex-shrink:0}
+.ob-bname{font-size:.8rem;font-weight:700;color:#c0d8c0;flex:1}
+.ob-bpos{font-size:.6rem;color:#446044;margin-top:1px}
+.ob-bval{text-align:right}
+.ob-bprice{font-family:'Bebas Neue',cursive;font-size:1rem}
+.ob-bchg{font-size:.62rem;font-weight:700}
+
+/* Mini form dots */
+.ob-form-row{display:flex;align-items:center;gap:10px;padding:10px 12px;
+  background:#060e06;border:1px solid #1a221a;border-radius:10px}
+.ob-fdot{width:13px;height:13px;border-radius:4px}
+.ob-fd-pos{background:#22cc66;box-shadow:0 0 8px rgba(34,204,102,.6)}
+.ob-fd-pos2{background:#00ff88;box-shadow:0 0 14px rgba(0,255,136,.9);animation:db-fp-pulse .8s ease infinite}
+.ob-fd-empty{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+.ob-form-lbl{font-size:.68rem;font-weight:700;color:#22cc66}
+
+/* Mini gazete */
+.ob-newspaper{border-radius:10px;overflow:hidden;border:1px solid #1a221a}
+.ob-paper-head{background:#c00;padding:8px 14px;display:flex;align-items:center;gap:10px}
+.ob-paper-logo{font-family:Impact,'Arial Black',sans-serif;font-size:1rem;letter-spacing:3px;color:#fff}
+.ob-paper-sub{font-size:.55rem;color:rgba(255,255,255,.6);letter-spacing:1px}
+.ob-paper-body{background:#f5f0e8;padding:10px 14px}
+.ob-paper-headline{font-family:Georgia,serif;font-size:.82rem;font-weight:700;color:#111;line-height:1.3;margin-bottom:5px}
+.ob-paper-byline{font-size:.6rem;color:#666;font-style:italic}
+
+/* Saha demo */
+.ob-field-demo{
+  background:linear-gradient(180deg,#1a6b2a 0%,#1e7a30 40%,#166320 100%);
+  border-radius:10px;overflow:hidden;padding:12px 8px;
+  display:flex;justify-content:space-around;align-items:center;
+  gap:8px;border:1px solid #1a221a;
+}
+.ob-player-chip{
+  background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);
+  border-radius:8px;padding:5px 8px;text-align:center;min-width:50px;
+}
+.ob-chip-av{width:24px;height:24px;border-radius:50%;margin:0 auto 4px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',cursive;font-size:.6rem;font-weight:900}
+.ob-chip-name{font-size:.55rem;font-weight:700;color:#fff;white-space:nowrap}
+.ob-chip-pos{font-size:.48rem;color:rgba(255,255,255,.5);text-transform:uppercase}
+
+/* Alt nav */
+.ob-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 18px;border-top:1px solid #1a221a;
+  background:#040804;flex-shrink:0;
+}
+.ob-dots{display:flex;gap:5px;align-items:center}
+.ob-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.15);
+  cursor:pointer;transition:all .3s}
+.ob-dot.on{background:var(--lime);width:18px;border-radius:3px;
+  box-shadow:0 0 8px rgba(184,247,23,.5)}
+.ob-btn-prev{font-family:'Bebas Neue',cursive;font-size:.85rem;letter-spacing:1px;
+  padding:8px 16px;border:1.5px solid rgba(255,255,255,.12);border-radius:8px;
+  cursor:pointer;background:transparent;color:rgba(255,255,255,.4);transition:all .2s}
+.ob-btn-prev:hover{border-color:rgba(255,255,255,.3);color:#fff}
+.ob-btn-prev:disabled{opacity:.2;cursor:default}
+.ob-btn-next{font-family:'Bebas Neue',cursive;font-size:.85rem;letter-spacing:1px;
+  padding:9px 22px;border:none;border-radius:8px;cursor:pointer;
+  background:linear-gradient(135deg,#5ab800,var(--lime));
+  color:#050e05;font-weight:700;transition:all .2s;
+  box-shadow:0 0 20px rgba(184,247,23,.25)}
+.ob-btn-next:hover{transform:scale(1.03);box-shadow:0 0 30px rgba(184,247,23,.4)}
+
+/* Sn-item'a rehber butonu */
+.sn-guide-btn{
+  width:50px;height:40px;border-radius:12px;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:3px;
+  cursor:pointer;background:rgba(184,247,23,.06);
+  border:1px solid rgba(184,247,23,.15);
+  margin:4px 0;transition:all .2s;
+}
+.sn-guide-btn:hover{background:rgba(184,247,23,.12)}
+.sn-guide-btn .sn-icon{font-size:14px}
+.sn-guide-btn .sn-lbl{color:var(--lime)}
+
 </style>
 </head>
 <body>
@@ -1864,6 +2023,12 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
     <button class="sn-item" onclick="switchTab('tab-past',this)" data-title="Geçmiş Maçlar">
       <span class="sn-icon">📚</span><span class="sn-lbl">Geçmiş</span>
     </button>
+    <!-- Rehber butonu -->
+    <button class="sn-guide-btn" onclick="openOnboard()" title="Nasıl Oynanır?">
+      <span class="sn-icon">❓</span>
+      <span class="sn-lbl" style="color:var(--lime);font-size:.41rem">Rehber</span>
+    </button>
+
     <button class="sn-item" id="tab-admin-btn" style="display:none" onclick="switchTab('tab-admin',this)" data-title="Admin Paneli">
       <span class="sn-icon">⚙️</span><span class="sn-lbl">Admin</span>
     </button>
@@ -2756,7 +2921,74 @@ function goHome(){
   if(!LS.get('patch_v8_seen')){
     setTimeout(()=>openPatchNotes(),700);
   }
+  // Onboarding — ilk girişte
+  if(!LS.get('ob_v12_seen')){
+    setTimeout(()=>openOnboard(), 900);
+  }
 }
+
+
+/* ═══ ONBOARDING REHBER ═══ */
+const OB_TOTAL = 7;
+const OB_KEY = 'ob_v12_seen';
+let _obCurrent = 0;
+
+function openOnboard(){
+  _obCurrent = 0;
+  obRender();
+  const el = document.getElementById('onboardOverlay');
+  if(el){ el.style.display='flex'; requestAnimationFrame(()=>el.classList.add('open')); }
+}
+
+function closeOnboard(){
+  LS.set(OB_KEY, '1');
+  const el = document.getElementById('onboardOverlay');
+  if(el){ el.classList.remove('open'); setTimeout(()=>el.style.display='none', 350); }
+}
+
+function obRender(){
+  // Slaytları göster/gizle
+  for(let i=0;i<OB_TOTAL;i++){
+    const sl = document.getElementById('ob-slide-'+i);
+    if(!sl) continue;
+    sl.classList.remove('active','prev');
+    if(i === _obCurrent) sl.classList.add('active');
+    else if(i < _obCurrent) sl.classList.add('prev');
+  }
+  // Progress
+  const prog = document.getElementById('obProgress');
+  if(prog) prog.style.width = (((_obCurrent+1)/OB_TOTAL)*100)+'%';
+  // Dots
+  const dots = document.getElementById('obDots');
+  if(dots){
+    dots.innerHTML = '';
+    for(let i=0;i<OB_TOTAL;i++){
+      const d = document.createElement('div');
+      d.className = 'ob-dot' + (i===_obCurrent?' on':'');
+      d.onclick = ()=>{ _obCurrent=i; obRender(); };
+      dots.appendChild(d);
+    }
+  }
+  // Butonlar
+  const prev = document.getElementById('obPrev');
+  const next = document.getElementById('obNext');
+  if(prev) prev.disabled = _obCurrent === 0;
+  const isLast = _obCurrent === OB_TOTAL-1;
+  if(next){
+    next.textContent = isLast ? '🚀 Sahaya Çık!' : 'İleri ▶';
+    next.onclick = isLast ? closeOnboard : obNext;
+  }
+}
+
+function obNext(){
+  if(_obCurrent < OB_TOTAL-1){ _obCurrent++; obRender(); }
+}
+function obPrev(){
+  if(_obCurrent > 0){ _obCurrent--; obRender(); }
+}
+
+// goHome'da kontrol — ilk girişte otomatik göster
+const _origGoHome = goHome;
 
 /* ===== PATCH NOTES SLIDER JS ===== */
 let _patchCurrent=0;
@@ -4923,6 +5155,8 @@ function renderUpdates(){
       {icon:'👁',title:'Tıklanabilir Profiller',desc:'Piyasa ve sıralamadan herhangi bir oyuncunun profiline tıkla, detaylı incele.'},
       {icon:'🏠',title:'Ana Sayfa',desc:'Dashboard: hero kart, stat grid, sonraki maç geri sayımı, piyasa ve lig tablosu.'},
       {icon:'↩',title:'Kadradan Çıkış',desc:'Maça yanlışlıkla katıldıysan "↩ Çık" butonuyla kadrodan ayrılabilirsin.'},
+      {icon:'🧭',title:'Side Nav',desc:'Sol taraf navigasyon — tüm sekmeler ikon+etiketle yan panelde. Daha temiz, daha kullanışlı.'},
+      {icon:'💬',title:'Forum V2 — Yorumlar',desc:'Her gönderiye yorum yapılabiliyor. Kategori filtreleri, yorum silme ve Enter ile hızlı gönderim.'},
     ].map(u=>`
       <div style="background:#0a120a;border:1px solid #1a221a;border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start">
         <span style="font-size:1.3rem;flex-shrink:0;margin-top:1px">${u.icon}</span>
@@ -4936,10 +5170,11 @@ function renderUpdates(){
     <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:#f5a623;margin:16px 0 8px">◌ YAKINDA GELİYOR</div>
 
     ${[
-      {icon:'🧭',title:'Side Nav',desc:'Sol taraf navigasyon — tüm sekmeler yan panelde, daha temiz ve kullanışlı.'},
-      {icon:'💬',title:'Forum V2 — Yorumlar',desc:'Her gönderiye yorum yapılabilsin. Maç tartışmaları, öneri ve şikayetler daha sosyal bir platform gibi.'},
-      {icon:'📋',title:'Maç Geçmişi Detayı',desc:'Geçmiş maçlarda kadro ve istatistiklerin detaylı görüntüsü.'},
-      {icon:'🔔',title:'Bildirimler',desc:'Kadro dolarsa, oylama açılırsa, MOTM seçilirsen anlık bildirim.'},
+      {icon:'🃏',title:'Etkinlik Özel Kartlar',desc:'Özel etkinliklere ve turnuvalara özel sınırlı sayıda oyuncu kartları gelecek!'},
+      {icon:'📸',title:'Oyuncu Kartına Fotoğraf',desc:'Yakında kendi fotoğrafını oyuncu kartına ekleyebileceksin.'},
+      {icon:'🎥',title:'Haftanın Golleri',desc:'O haftaki en güzel golleri paylaşabileceğin yeni bir sekme geliyor.'},
+      {icon:'🎮',title:'Yeni Etkinlikler',desc:'Futbol quiz ve daha fazlası — önümüzdeki günlerde sizleri bekliyor!'},
+      {icon:'✨',title:'Ve Daha Fazlası...',desc:'Önümüzdeki günlerde birçok yeni özellik ve sürpriz güncelleme geliyor. Takipte kal!'},
     ].map(u=>`
       <div style="background:#0a0e0a;border:1px solid #141e14;border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;opacity:.7">
         <span style="font-size:1.3rem;flex-shrink:0;margin-top:1px">${u.icon}</span>
@@ -5704,5 +5939,343 @@ tryAutoLogin();
     </div>
   </div>
 </div>
+
+<!-- ══════════════════════════════════════
+     ONBOARDING REHBER MODALI
+══════════════════════════════════════ -->
+<div id="onboardOverlay">
+  <div class="ob-card">
+
+    <!-- Üst bar -->
+    <div class="ob-topbar">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="ob-logo">PITCH <span>APP</span></span>
+        <span class="ob-badge">v1.2 Rehber</span>
+      </div>
+      <button class="ob-close" onclick="closeOnboard()">✕</button>
+    </div>
+
+    <!-- Progress -->
+    <div class="ob-progress">
+      <div class="ob-progress-fill" id="obProgress" style="width:14.28%"></div>
+    </div>
+
+    <!-- Slaytlar -->
+    <div class="ob-slides" id="obSlides">
+
+      <!-- SLAYT 1 -->
+      <div class="ob-slide active" id="ob-slide-0">
+        <div class="ob-num">01 / 07 — Giriş</div>
+        <div class="ob-title">v1.2 <span>Hayatta Kalma</span> Rehberine Hoş Geldin!</div>
+        <div class="ob-desc">Burası sıradan bir halı saha kayıt sitesi değil; kendi ekonomisi, medyası ve efsaneleri olan <strong style="color:#c0d8c0">yaşayan bir futbol meta-evreni</strong>.<br><br>Bu rehber, sahada ve borsada ayakta kalman için gereken her şeyi öğretecek. Hazır mısın?</div>
+
+        <!-- Büyük stat vitrin -->
+        <div class="ob-demo">
+          <div class="ob-demo-lbl">Platform İstatistikleri</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+            <div style="background:#060e06;border:1px solid #1a221a;border-radius:10px;padding:10px;text-align:center">
+              <div style="font-family:'Bebas Neue',cursive;font-size:1.6rem;color:var(--lime);line-height:1">7</div>
+              <div style="font-size:.58rem;color:#446044;text-transform:uppercase;margin-top:2px">Tier Kart</div>
+            </div>
+            <div style="background:#060e06;border:1px solid #1a221a;border-radius:10px;padding:10px;text-align:center">
+              <div style="font-family:'Bebas Neue',cursive;font-size:1.6rem;color:#cc66ff;line-height:1">25</div>
+              <div style="font-size:.58rem;color:#446044;text-transform:uppercase;margin-top:2px">Rozet</div>
+            </div>
+            <div style="background:#060e06;border:1px solid #1a221a;border-radius:10px;padding:10px;text-align:center">
+              <div style="font-family:'Bebas Neue',cursive;font-size:1.6rem;color:#f5a623;line-height:1">∞</div>
+              <div style="font-size:.58rem;color:#446044;text-transform:uppercase;margin-top:2px">Rekabet</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLAYT 2 -->
+      <div class="ob-slide" id="ob-slide-1">
+        <div class="ob-num">02 / 07 — Oyuncu Kartı</div>
+        <div class="ob-title">Kart & <span>Tier</span> Sistemi</div>
+        <div class="ob-desc">Kartın senin kimliğindir — performansına göre evrimleşir. MOTM oldukça veya seri bağladıkça <strong style="color:#e080ff">Epic</strong>, <strong style="color:#ffaa44">Legend</strong> gibi özel tier kartlarının kilidini açarsın.</div>
+
+        <!-- Canlı Epic Kart Demo -->
+        <div class="ob-demo">
+          <div class="ob-demo-lbl">Canlı Kart Önizlemesi</div>
+          <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap">
+            <!-- Epic kart -->
+            <div class="fc2-card tier-epic" style="width:120px;flex-shrink:0">
+              <div class="fc2-bg"></div>
+              <div class="fc2-stripe"></div>
+              <div class="fc2-tier-label">★ EPIC ★</div>
+              <div class="fc2-rating" style="font-size:2.2rem">94</div>
+              <div class="fc2-pos">SANTRAFOR</div>
+              <div class="fc2-avatar-wrap">
+                <div class="fc2-avatar" style="width:44px;height:44px;font-size:.9rem">FS</div>
+              </div>
+              <div class="fc2-name">Furkan S.</div>
+              <div class="fc2-divider"></div>
+              <div class="fc2-bons" style="font-size:.6rem">68,4 M ₺</div>
+              <div class="fc2-scan"></div>
+              <div class="fc2-particles"><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <!-- Tier listesi -->
+            <div style="flex:1;min-width:120px">
+              ${[
+                ['tier-epic','#e080ff','★ EPIC','5× MOTM'],
+                ['tier-legend','#ffaa44','◈ LEGEND','50M ₺+'],
+                ['tier-elite','#ffd700','✦ ELİTE','OVR 90+'],
+                ['tier-champion','#00ee66','🏆 CHAMP','10 Seri'],
+                ['tier-gold','#ffd060','◆ GOLD','Standart'],
+              ].map(([t,c,l,r])=>`
+                <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #0e160e">
+                  <div style="width:8px;height:8px;border-radius:2px;background:${c};flex-shrink:0"></div>
+                  <span style="font-family:'Bebas Neue',cursive;font-size:.72rem;color:${c}">${l}</span>
+                  <span style="font-size:.6rem;color:#446044;margin-left:auto">${r}</span>
+                </div>`).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLAYT 3 -->
+      <div class="ob-slide" id="ob-slide-2">
+        <div class="ob-num">03 / 07 — Momentum</div>
+        <div class="ob-title">Form ve <span>Momentum</span> Sistemi</div>
+        <div class="ob-desc">Reytingler kafaya göre artmaz. Her maç bir <strong style="color:#22cc66">Momentum Puanı</strong>dır. 3 yeşil nokta → Reyting kalıcı +1! 3 kırmızı → Reyting düşer. MOTM olursan +2 form, en kötü seçilirsen -2 form alırsın.</div>
+
+        <div class="ob-demo">
+          <div class="ob-demo-lbl">Form Çizgisi Demo</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <!-- İyi form -->
+            <div class="ob-form-row">
+              <div style="display:flex;gap:5px">
+                <div class="ob-fdot ob-fd-pos"></div>
+                <div class="ob-fdot ob-fd-pos2"></div>
+                <div class="ob-fdot ob-fd-empty"></div>
+              </div>
+              <span class="ob-form-lbl">+2 Form</span>
+              <span style="font-size:.65rem;color:#446044;margin-left:auto">→ Bir daha kazan, reyting atlar!</span>
+            </div>
+            <!-- Kötü form -->
+            <div class="ob-form-row">
+              <div style="display:flex;gap:5px">
+                <div class="ob-fdot" style="background:#ff4040;box-shadow:0 0 8px rgba(255,64,64,.6)"></div>
+                <div class="ob-fdot" style="background:#ff1010;box-shadow:0 0 14px rgba(255,0,0,.9);animation:db-fp-pulse .8s ease infinite"></div>
+                <div class="ob-fdot ob-fd-empty"></div>
+              </div>
+              <span style="font-size:.68rem;font-weight:700;color:#ff5050">-2 Form</span>
+              <span style="font-size:.65rem;color:#446044;margin-left:auto">→ Dikkat! Çöküş yakın.</span>
+            </div>
+            <!-- Maç sonuçları -->
+            <div style="display:flex;gap:6px;margin-top:4px">
+              ${[['G','#22cc66'],['G','#22cc66'],['M','#ff5050'],['G','#22cc66'],['B','#446044']].map(([l,c])=>`
+                <div style="width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;background:${c}18;color:${c};border:1px solid ${c}30">${l}</div>
+              `).join('')}
+              <span style="font-size:.6rem;color:#446044;align-self:center;margin-left:4px">Son 5 maç</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+          <div style="background:#060e06;border:1px solid #1a221a;border-radius:10px;padding:10px">
+            <div style="font-size:.65rem;color:#22cc66;font-weight:700;margin-bottom:3px">🏆 MOTM</div>
+            <div style="font-size:.7rem;color:#608060;line-height:1.5">+2 Form<br>Bonservis +%8</div>
+          </div>
+          <div style="background:#060e06;border:1px solid #1a221a;border-radius:10px;padding:10px">
+            <div style="font-size:.65rem;color:#ff5050;font-weight:700;margin-bottom:3px">😬 En Kötü</div>
+            <div style="font-size:.7rem;color:#608060;line-height:1.5">-2 Form<br>Bonservis -%6</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLAYT 4 -->
+      <div class="ob-slide" id="ob-slide-3">
+        <div class="ob-num">04 / 07 — Ekonomi</div>
+        <div class="ob-title">Transfer Piyasası <span>& Ekonomi</span></div>
+        <div class="ob-desc">Sahadaki performansın cüzdanını etkiler! Bonservisin reytingine ve formuna göre borsa gibi anlık dalgalanır. Piyasadan herhangi bir oyuncuya tıklayarak profilini, form grafiğini ve rozetlerini görebilirsin.</div>
+
+        <div class="ob-demo">
+          <div class="ob-demo-lbl">Canlı Piyasa Satırları</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            ${[
+              ['FS','Furkan Soydan','Santrafor','#ffd060','24,4 M ₺','+%8','#22cc66',true],
+              ['ET','Emre Tekin','Sağ Kanat','#ffd060','19,3 M ₺','+%3','#22cc66',false],
+              ['AK','Ahmet Kaya','Stoper','#a0c8e8','13,9 M ₺','-%4','#ff5050',false],
+            ].map(([av,nm,ps,tc,bv,chg,cc,motm])=>`
+              <div class="ob-borsa-row">
+                <div class="ob-bav" style="background:${tc}18;border:1.5px solid ${tc}40;color:${tc}">${av}</div>
+                <div style="flex:1">
+                  <div class="ob-bname">${nm} ${motm?'<span style="font-size:.55rem;background:rgba(184,247,23,.1);color:var(--lime);padding:1px 6px;border-radius:10px;border:1px solid rgba(184,247,23,.2)">MOTM</span>':''}</div>
+                  <div class="ob-bpos">${ps}</div>
+                </div>
+                <div class="ob-bval">
+                  <div class="ob-bprice" style="color:${tc}">${bv}</div>
+                  <div class="ob-bchg" style="color:${cc}">${chg}</div>
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- SLAYT 5 -->
+      <div class="ob-slide" id="ob-slide-4">
+        <div class="ob-num">05 / 07 — Ödüller</div>
+        <div class="ob-title">MOTM <span>& Bidon</span> Sistemi</div>
+        <div class="ob-desc">Maç biter bitmez oylama başlar. En çok oy alan <strong style="color:var(--lime)">Maçın Adamı (MOTM)</strong> seçilir, en az oy alan ise <strong style="color:#ff5050">Bidon</strong> olur. Bu seçim, bonservisi ve formu doğrudan etkiler!</div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+          <!-- MOTM kartı -->
+          <div style="background:linear-gradient(135deg,#061206,#0a1e0a);border:1px solid rgba(184,247,23,.2);border-radius:14px;padding:14px;display:flex;align-items:center;gap:14px">
+            <div style="font-size:2.2rem;flex-shrink:0">🏆</div>
+            <div>
+              <div style="font-family:'Bebas Neue',cursive;font-size:.85rem;letter-spacing:1.5px;color:var(--lime);margin-bottom:4px">Maçın Adamı (MOTM)</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <span style="background:rgba(34,204,102,.1);color:#22cc66;border:1px solid rgba(34,204,102,.2);border-radius:20px;padding:2px 10px;font-size:.65rem;font-weight:700">+2 Form</span>
+                <span style="background:rgba(34,204,102,.1);color:#22cc66;border:1px solid rgba(34,204,102,.2);border-radius:20px;padding:2px 10px;font-size:.65rem;font-weight:700">Bonservis +%8</span>
+              </div>
+            </div>
+          </div>
+          <!-- Bidon kartı -->
+          <div style="background:linear-gradient(135deg,#120606,#1e0a0a);border:1px solid rgba(255,80,80,.15);border-radius:14px;padding:14px;display:flex;align-items:center;gap:14px">
+            <div style="font-size:2.2rem;flex-shrink:0">😬</div>
+            <div>
+              <div style="font-family:'Bebas Neue',cursive;font-size:.85rem;letter-spacing:1.5px;color:#ff6060;margin-bottom:4px">En Kötü (Bidon)</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <span style="background:rgba(255,64,64,.1);color:#ff5050;border:1px solid rgba(255,64,64,.2);border-radius:20px;padding:2px 10px;font-size:.65rem;font-weight:700">-2 Form</span>
+                <span style="background:rgba(255,64,64,.1);color:#ff5050;border:1px solid rgba(255,64,64,.2);border-radius:20px;padding:2px 10px;font-size:.65rem;font-weight:700">Bonservis -%6</span>
+              </div>
+            </div>
+          </div>
+          <!-- Normal -->
+          <div style="background:#0a120a;border:1px solid #1a221a;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px">
+            <div style="font-size:1.4rem;flex-shrink:0">⚽</div>
+            <div>
+              <div style="font-size:.75rem;font-weight:700;color:#608060;margin-bottom:3px">Normal Maç</div>
+              <div style="display:flex;gap:8px">
+                <span style="font-size:.65rem;color:#22cc66">Galibiyet: +1 Form</span>
+                <span style="font-size:.65rem;color:#ff5050">Mağlubiyet: -1 Form</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLAYT 6 -->
+      <div class="ob-slide" id="ob-slide-5">
+        <div class="ob-num">06 / 07 — Kadro</div>
+        <div class="ob-title">Kadro <span>& Saha</span> Dizilişi</div>
+        <div class="ob-desc">14 kişi tamamlandığında yapay zeka en dengeli iki takımı kurar. Kaptanların isimleriyle sahaya çıkıyorsunuz — "Takım A" ve "Takım B" artık tarih!</div>
+
+        <div class="ob-demo">
+          <div class="ob-demo-lbl">Taktik Tahtası Önizlemesi</div>
+          <div class="ob-field-demo">
+            <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
+              <div class="ob-player-chip">
+                <div class="ob-chip-av" style="background:rgba(184,247,23,.15);color:var(--lime)">FS</div>
+                <div class="ob-chip-name">Furkan</div>
+                <div class="ob-chip-pos">STR</div>
+              </div>
+              <div style="display:flex;gap:6px">
+                <div class="ob-player-chip">
+                  <div class="ob-chip-av" style="background:rgba(96,168,255,.15);color:#6aacff">ET</div>
+                  <div class="ob-chip-name">Emre</div>
+                  <div class="ob-chip-pos">SKN</div>
+                </div>
+                <div class="ob-player-chip">
+                  <div class="ob-chip-av" style="background:rgba(255,166,35,.15);color:#f5a623">MK</div>
+                  <div class="ob-chip-name">Mert</div>
+                  <div class="ob-chip-pos">MOS</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:6px">
+                <div class="ob-player-chip">
+                  <div class="ob-chip-av" style="background:rgba(204,102,255,.15);color:#cc66ff">AK</div>
+                  <div class="ob-chip-name">Ahmet</div>
+                  <div class="ob-chip-pos">STP</div>
+                </div>
+              </div>
+              <div class="ob-player-chip">
+                <div class="ob-chip-av" style="background:rgba(255,80,80,.15);color:#ff8080">MY</div>
+                <div class="ob-chip-name">Mehmet</div>
+                <div class="ob-chip-pos">KLC</div>
+              </div>
+            </div>
+            <div style="width:1px;background:rgba(255,255,255,.1);align-self:stretch"></div>
+            <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
+              <div class="ob-player-chip">
+                <div class="ob-chip-av" style="background:rgba(184,247,23,.15);color:var(--lime)">KA</div>
+                <div class="ob-chip-name">Kerem</div>
+                <div class="ob-chip-pos">STR</div>
+              </div>
+              <div style="display:flex;gap:6px">
+                <div class="ob-player-chip">
+                  <div class="ob-chip-av" style="background:rgba(96,168,255,.15);color:#6aacff">OD</div>
+                  <div class="ob-chip-name">Onur</div>
+                  <div class="ob-chip-pos">SKN</div>
+                </div>
+                <div class="ob-player-chip">
+                  <div class="ob-chip-av" style="background:rgba(255,166,35,.15);color:#f5a623">BS</div>
+                  <div class="ob-chip-name">Burak</div>
+                  <div class="ob-chip-pos">MOS</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:6px">
+                <div class="ob-player-chip">
+                  <div class="ob-chip-av" style="background:rgba(204,102,255,.15);color:#cc66ff">CK</div>
+                  <div class="ob-chip-name">Can</div>
+                  <div class="ob-chip-pos">STP</div>
+                </div>
+              </div>
+              <div class="ob-player-chip">
+                <div class="ob-chip-av" style="background:rgba(255,80,80,.15);color:#ff8080">YA</div>
+                <div class="ob-chip-name">Yusuf</div>
+                <div class="ob-chip-pos">KLC</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLAYT 7 -->
+      <div class="ob-slide" id="ob-slide-6">
+        <div class="ob-num">07 / 07 — Medya</div>
+        <div class="ob-title">Pitch Spor <span>& Topluluk</span></div>
+        <div class="ob-desc">Maç biter, şov devam eder! Gazetemizde maçın manşetlerini oku, Forum'da öneri ve şikayetlerini paylaş, tartış. Her gönderiye yorum yapabilirsin!</div>
+
+        <div class="ob-demo">
+          <div class="ob-demo-lbl">Gazete Önizlemesi</div>
+          <div class="ob-newspaper">
+            <div class="ob-paper-head">
+              <div>
+                <div class="ob-paper-logo">⚽ PITCH SPOR</div>
+                <div class="ob-paper-sub">HALI SAHA POSTASI · BAĞIMSIZ SPOR GAZETESİ</div>
+              </div>
+            </div>
+            <div class="ob-paper-body">
+              <div style="font-size:.55rem;color:#c00;font-weight:700;letter-spacing:1px;margin-bottom:4px">★ FLAŞ HABER ★</div>
+              <div class="ob-paper-headline">FURKAN SOYDAN MAÇIN ADAMI! PERFORMANS REKORU KIRILDI</div>
+              <div class="ob-paper-byline">Pitch Spor Muhabiri · Dün · 14. Hafta Karşılaşması</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:10px;background:#0a120a;border:1px solid rgba(184,247,23,.12);border-radius:14px;padding:14px;text-align:center">
+          <div style="font-size:1.8rem;margin-bottom:8px">🎉</div>
+          <div style="font-family:'Bebas Neue',cursive;font-size:1rem;letter-spacing:1.5px;color:var(--lime);margin-bottom:6px">Hazırsın! Sahaya Çık!</div>
+          <div style="font-size:.72rem;color:#608060;line-height:1.6">Profilini doldur, maçlara katıl, piyasada yerini al.<br>Efsane olmak için sadece bir adım kaldı.</div>
+        </div>
+      </div>
+
+    </div><!-- /ob-slides -->
+
+    <!-- Alt nav -->
+    <div class="ob-nav">
+      <div class="ob-dots" id="obDots"></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="ob-btn-prev" id="obPrev" onclick="obPrev()" disabled>◀ Geri</button>
+        <button class="ob-btn-next" id="obNext" onclick="obNext()">İleri ▶</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 </body>
 </html>
