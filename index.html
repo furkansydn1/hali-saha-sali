@@ -28,22 +28,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 @keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 
 /* TOPBAR */
-.topbar{
-  display:flex;align-items:center;
-  padding:0 16px;height:52px;
-  background:rgba(5,10,5,.92);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  border-bottom:1px solid rgba(184,247,23,.12);
-  position:sticky;top:0;z-index:50;
-  margin:0 -16px;
-  gap:10px;
-}
-.brand{
-  font-family:'Bebas Neue',cursive;font-size:1.3rem;letter-spacing:3px;
-  color:var(--lime);line-height:1;flex-shrink:0;
-  text-shadow:0 0 15px rgba(184,247,23,.35);
-}
-.brand span{color:rgba(184,247,23,.4)}
+.topbar{display:none} /* side nav ile değiştirildi */
+.brand{display:none}
 .brand span{color:var(--text)}
 
 /* BUTTONS */
@@ -120,25 +106,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .admin-badge{background:var(--amber);color:var(--dark);font-size:.62rem;font-weight:700;padding:2px 6px;border-radius:20px}
 
 /* NAV TABS */
-.nav-tabs{
-  display:flex;gap:0;
-  background:rgba(0,0,0,.35);
-  border-bottom:1px solid rgba(184,247,23,.08);
-  overflow-x:auto;scrollbar-width:none;
-  margin:0 -16px;padding:0 16px;
-  position:sticky;top:52px;z-index:49;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-}
-.nav-tabs::-webkit-scrollbar{display:none}
-.nav-tab{
-  flex-shrink:0;padding:10px 12px 8px;border:none;
-  background:transparent;color:#446044;
-  font-family:'DM Sans',sans-serif;font-size:.7rem;font-weight:700;
-  cursor:pointer;transition:all .2s;text-align:center;white-space:nowrap;
-  border-bottom:2px solid transparent;margin-bottom:-1px;letter-spacing:.3px;
-}
-.nav-tab:hover{color:#608060}
-.nav-tab.active{color:var(--lime);border-bottom-color:var(--lime);background:rgba(184,247,23,.04)}
+.nav-tabs{display:none} /* side nav ile değiştirildi */
+.nav-tab{display:none}
 
 .panel{display:none}
 .panel.active{display:block;animation:fadeIn .22s ease}
@@ -1623,6 +1592,245 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
   display:flex;align-items:center;justify-content:center;z-index:10;
 }
 
+
+/* ════════════════════════════════════════
+   SIDE NAV
+════════════════════════════════════════ */
+.app-shell{
+  display:flex;min-height:100vh;max-width:600px;margin:0 auto;
+  background:var(--dark);position:relative;
+}
+
+/* Sidebar */
+.sidenav{
+  width:64px;flex-shrink:0;
+  background:#040804;
+  border-right:1px solid #1a221a;
+  display:flex;flex-direction:column;
+  align-items:center;padding:10px 0 8px;
+  position:fixed;top:0;bottom:0;left:50%;
+  transform:translateX(-300px);
+  z-index:100;
+  overflow-y:auto;scrollbar-width:none;
+}
+.sidenav::-webkit-scrollbar{display:none}
+@media(max-width:600px){
+  .sidenav{left:0;transform:none}
+}
+
+/* Logo */
+.sn-logo{
+  display:flex;flex-direction:column;align-items:center;
+  padding:2px 0 10px;border-bottom:1px solid #1a221a;
+  width:100%;margin-bottom:4px;
+}
+.sn-logo-text{
+  font-family:'Bebas Neue',cursive;
+  font-size:.72rem;letter-spacing:2px;color:var(--lime);line-height:1.1;
+  text-shadow:0 0 10px rgba(184,247,23,.3);
+}
+.sn-logo-sub{font-size:.42rem;color:rgba(184,247,23,.3);letter-spacing:1.5px;margin-top:1px}
+
+/* Nav item */
+.sn-item{
+  width:48px;min-height:48px;border-radius:12px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;cursor:pointer;transition:all .2s;position:relative;
+  background:transparent;border:none;padding:6px 0;
+  flex-shrink:0;
+}
+.sn-item:hover{background:rgba(184,247,23,.05)}
+.sn-item.active{background:rgba(184,247,23,.09);border:1px solid rgba(184,247,23,.18)}
+.sn-item.active::before{
+  content:'';position:absolute;left:0;top:30%;bottom:30%;
+  width:3px;border-radius:0 3px 3px 0;background:var(--lime);
+}
+.sn-icon{font-size:16px;line-height:1;display:block}
+.sn-lbl{
+  font-size:.42rem;font-weight:700;letter-spacing:.3px;
+  text-transform:uppercase;line-height:1;display:block;
+}
+.sn-item.active .sn-lbl{color:var(--lime)}
+.sn-item:not(.active) .sn-lbl{color:#446044}
+.sn-pip{
+  position:absolute;top:5px;right:5px;
+  width:6px;height:6px;border-radius:50%;
+  background:#ff5050;border:1.5px solid #040804;
+}
+
+/* Alt kısım */
+.sn-bottom{
+  margin-top:auto;width:100%;
+  border-top:1px solid #1a221a;
+  padding-top:8px;
+  display:flex;flex-direction:column;
+  align-items:center;gap:5px;
+}
+.sn-av{
+  width:36px;height:36px;border-radius:10px;
+  background:rgba(184,247,23,.1);border:1.5px solid rgba(184,247,23,.22);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',cursive;font-size:.88rem;color:var(--lime);
+  cursor:pointer;
+}
+.sn-rating{
+  font-family:'Bebas Neue',cursive;font-size:.72rem;
+  background:rgba(184,247,23,.07);color:var(--lime);
+  border:1px solid rgba(184,247,23,.15);
+  border-radius:6px;padding:2px 7px;
+}
+.sn-out{
+  width:36px;height:26px;border-radius:7px;
+  background:rgba(255,60,60,.08);border:1px solid rgba(255,60,60,.18);
+  color:#ff6060;font-size:.55rem;font-weight:700;cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+}
+
+/* İçerik alanı */
+.main-content{
+  flex:1;margin-left:64px;
+  display:flex;flex-direction:column;
+  min-height:100vh;
+}
+@media(max-width:600px){
+  .main-content{margin-left:64px}
+}
+
+/* Sayfa başlık barı */
+.page-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 16px 9px;
+  background:rgba(4,8,4,.9);
+  border-bottom:1px solid #1a221a;
+  position:sticky;top:0;z-index:49;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.page-title{font-family:'Bebas Neue',cursive;font-size:.95rem;letter-spacing:2px;color:var(--lime)}
+.page-sub{font-size:.6rem;color:#446044;margin-top:1px}
+
+/* Panel padding */
+.panel{padding:14px}
+
+
+/* ══════════════════════════════════════════
+   APP SHELL + SIDE NAV
+══════════════════════════════════════════ */
+.app-shell{
+  display:flex;min-height:100vh;
+  background:var(--dark);
+}
+.sidenav{
+  width:64px;flex-shrink:0;
+  background:#040804;
+  border-right:1px solid #1a221a;
+  display:flex;flex-direction:column;
+  align-items:center;
+  padding:10px 0 8px;
+  position:fixed;top:0;bottom:0;left:0;
+  z-index:100;
+  overflow-y:auto;scrollbar-width:none;
+}
+.sidenav::-webkit-scrollbar{display:none}
+.sn-logo{
+  display:flex;flex-direction:column;align-items:center;
+  padding:2px 0 10px;border-bottom:1px solid #1a221a;
+  width:100%;margin-bottom:4px;
+}
+.sn-logo-text{
+  font-family:'Bebas Neue',cursive;
+  font-size:.75rem;letter-spacing:2px;
+  color:var(--lime);line-height:1.15;
+  display:block;
+}
+.sn-logo-sub{font-size:.42rem;color:rgba(184,247,23,.3);letter-spacing:2px;margin-top:2px;display:block}
+.sn-item{
+  width:50px;min-height:50px;border-radius:12px;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:3px;
+  cursor:pointer;transition:all .18s;
+  position:relative;background:transparent;
+  border:1px solid transparent;padding:6px 2px;
+  flex-shrink:0;
+}
+.sn-item:hover{background:rgba(184,247,23,.05)}
+.sn-item.active{
+  background:rgba(184,247,23,.09);
+  border-color:rgba(184,247,23,.18);
+}
+.sn-item.active::before{
+  content:'';position:absolute;
+  left:0;top:28%;bottom:28%;
+  width:3px;border-radius:0 3px 3px 0;
+  background:var(--lime);
+}
+.sn-icon{font-size:15px;line-height:1;display:block}
+.sn-lbl{
+  font-size:.41rem;font-weight:700;
+  letter-spacing:.2px;text-transform:uppercase;
+  line-height:1;display:block;text-align:center;
+}
+.sn-item.active .sn-lbl{color:var(--lime)}
+.sn-item:not(.active) .sn-lbl{color:#3a5a3a}
+.sn-pip{
+  position:absolute;top:5px;right:5px;
+  width:6px;height:6px;border-radius:50%;
+  background:#ff5050;border:1.5px solid #040804;
+}
+.sn-bottom{
+  margin-top:auto;width:100%;
+  border-top:1px solid #1a221a;
+  padding-top:8px;
+  display:flex;flex-direction:column;
+  align-items:center;gap:5px;
+}
+.sn-av{
+  width:36px;height:36px;border-radius:10px;
+  background:rgba(184,247,23,.1);
+  border:1.5px solid rgba(184,247,23,.22);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',cursive;font-size:.88rem;color:var(--lime);
+  cursor:pointer;transition:all .2s;
+}
+.sn-av:hover{border-color:rgba(184,247,23,.5)}
+.sn-rating{
+  font-family:'Bebas Neue',cursive;font-size:.72rem;
+  background:rgba(184,247,23,.07);color:var(--lime);
+  border:1px solid rgba(184,247,23,.15);
+  border-radius:6px;padding:2px 7px;
+}
+.sn-out{
+  width:38px;height:26px;border-radius:7px;
+  background:rgba(255,60,60,.08);
+  border:1px solid rgba(255,60,60,.18);
+  color:#ff6060;font-size:.52rem;font-weight:700;
+  cursor:pointer;font-family:'DM Sans',sans-serif;
+  transition:all .2s;
+}
+.sn-out:hover{background:rgba(255,60,60,.15)}
+
+/* Ana içerik alanı */
+.main-content{
+  flex:1;
+  margin-left:64px;
+  display:flex;flex-direction:column;
+  min-height:100vh;
+  max-width:calc(100vw - 64px);
+}
+.page-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 16px 9px;
+  background:rgba(4,8,4,.95);
+  border-bottom:1px solid #1a221a;
+  position:sticky;top:0;z-index:49;
+  backdrop-filter:blur(10px);
+}
+.page-title{
+  font-family:'Bebas Neue',cursive;
+  font-size:.95rem;letter-spacing:2px;color:var(--lime);
+}
+.page-sub{font-size:.6rem;color:#446044;margin-top:1px}
+.panel{padding:14px;flex:1}
+
 </style>
 </head>
 <body>
@@ -1654,53 +1862,100 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 </div>
 
 <!-- ====== HOME ====== -->
-<div id="page-home" class="page">
-  <div class="topbar">
-    <div class="brand">SALI<span>MAÇI</span></div>
-    <div class="user-chip">
-      <div class="avatar" id="home-avatar"></div>
-      <span id="home-username" style="font-size:.74rem;font-weight:700;color:rgba(184,247,23,.85);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1"></span>
-      <span class="rating-badge" id="home-rating"></span>
-      <span class="admin-badge" id="home-admin-badge" style="display:none">ADM</span>
+<div id="page-home" class="page" style="padding:0;max-width:100%">
+<div class="app-shell">
+
+  <!-- ── SIDE NAV ── -->
+  <nav class="sidenav" id="sidenav">
+    <div class="sn-logo">
+      <span class="sn-logo-text">SALI</span>
+      <span class="sn-logo-text">MAÇI</span>
+      <span class="sn-logo-sub">FC</span>
     </div>
-    <button class="logout-btn" onclick="handleLogout()">Çıkış</button>
-  </div>
 
-  <div class="nav-tabs">
-    <button class="nav-tab active" onclick="switchTab('tab-dashboard',this)">🏠</button>
-    <button class="nav-tab"        onclick="switchTab('tab-matches',this)">⚽ Maçlar</button>
-    <button class="nav-tab"        onclick="switchTab('tab-lineup',this)">👕 Kadro</button>
-    <button class="nav-tab"        onclick="switchTab('tab-profile',this)">👤 Profil</button>
-    <button class="nav-tab"        onclick="switchTab('tab-vote',this)">🏅 Oy</button>
-    <button class="nav-tab"        onclick="switchTab('tab-lb',this)">🏆 Liste</button>
-    <button class="nav-tab"        onclick="switchTab('tab-news',this)">📰 Gazete</button>
-    <button class="nav-tab"        onclick="switchTab('tab-forum',this)">💬 Forum</button>
-    <button class="nav-tab"        onclick="switchTab('tab-borsa',this)">📈 Piyasa</button>
-    <button class="nav-tab"        onclick="switchTab('tab-past',this)">📚 Geçmiş</button>
-    <button class="nav-tab" id="tab-admin-btn" style="display:none" onclick="switchTab('tab-admin',this)">⚙️ Admin</button>
-  </div>
+    <button class="sn-item active" onclick="switchTab('tab-dashboard',this)" data-title="Ana Sayfa">
+      <span class="sn-icon">🏠</span><span class="sn-lbl">Ana</span>
+    </button>
+    <button class="sn-item" onclick="switchTab('tab-matches',this)" data-title="Maçlar">
+      <span class="sn-icon">⚽</span><span class="sn-lbl">Maçlar</span>
+    </button>
+    <button class="sn-item" onclick="switchTab('tab-lineup',this)" data-title="Kadro">
+      <span class="sn-icon">👕</span><span class="sn-lbl">Kadro</span>
+    </button>
+    <button class="sn-item" onclick="switchTab('tab-profile',this)" data-title="Profil">
+      <span class="sn-icon">👤</span><span class="sn-lbl">Profil</span>
+    </button>
+    <button class="sn-item" onclick="switchTab('tab-vote',this)" data-title="Oylama">
+      <span class="sn-icon">🏅</span><span class="sn-lbl">Oylama</span>
+    </button>
+    <button class="sn-item" onclick="switchTab('tab-lb',this)" data-title="Sıralama">
+      <span class="sn-icon">🏆</span><span class="sn-lbl">Sıralama</span>
+    </button>
+    <button class="sn-item" onclick="switchTab('tab-forum',this)" data-title="Forum">
+      <span class="sn-icon">💬</span><span class="sn-lbl">Forum</span>
+    </button>
+    <button class="sn-item" onclick="switchTab('tab-borsa',this)" data-title="Transfer Piyasası">
+      <span class="sn-icon">📈</span><span class="sn-lbl">Piyasa</span>
+    </button>
+    <button class="sn-item" onclick="switchTab('tab-news',this)" data-title="Gazete">
+      <span class="sn-icon">📰</span><span class="sn-lbl">Gazete</span>
+    </button>
+    <button class="sn-item" onclick="switchTab('tab-updates',this)" data-title="Yama Notları">
+      <span class="sn-icon">🆕</span><span class="sn-lbl">Yamalar</span>
+    </button>
+    <button class="sn-item" onclick="switchTab('tab-past',this)" data-title="Geçmiş Maçlar">
+      <span class="sn-icon">📚</span><span class="sn-lbl">Geçmiş</span>
+    </button>
+    <button class="sn-item" id="tab-admin-btn" style="display:none" onclick="switchTab('tab-admin',this)" data-title="Admin Paneli">
+      <span class="sn-icon">⚙️</span><span class="sn-lbl">Admin</span>
+    </button>
 
-  <div id="tab-dashboard" class="panel active"><div id="dashboard-content"></div></div>
-  <div id="tab-matches" class="panel">
-    <div style="display:flex;flex-direction:column;align-items:center;padding:36px 0 22px;text-align:center;gap:12px">
-      <p style="font-size:.86rem;color:var(--text-muted);max-width:260px;line-height:1.6">Yaklaşan maçlara katıl, kadroyu doldur.</p>
-      <button class="btn btn-primary btn-big" onclick="findMatch()">⚽ Maç Bul</button>
+    <div class="sn-bottom">
+      <div class="sn-av" id="home-avatar" onclick="switchTab('tab-profile',document.querySelector('.sn-item[data-title=Profil]'))"></div>
+      <div class="sn-rating" id="home-rating">—</div>
+      <button class="sn-out" onclick="handleLogout()">Çıkış</button>
     </div>
-    <div id="match-display"></div>
-  </div>
+  </nav>
 
-  <div id="tab-lineup"  class="panel"><div id="lineup-content"></div></div>
-  <div id="tab-profile" class="panel"><div id="profile-content"></div></div>
-  <div id="tab-vote"    class="panel"><div id="vote-content"></div></div>
-  <div id="tab-lb"      class="panel"><div id="lb-content"></div></div>
-  <div id="tab-news"    class="panel"><div id="news-content"></div></div>
-  <div id="tab-forum"   class="panel"><div id="forum-content"></div></div>
-  <div id="tab-borsa"   class="panel"><div id="borsa-content"></div></div>
-  <div id="tab-past"    class="panel"><div id="past-matches-list"></div></div>
-  <div id="tab-admin"   class="panel"><div id="admin-content"></div></div>
+  <!-- ── ANA İÇERİK ── -->
+  <div class="main-content">
+
+    <!-- Sayfa başlık barı -->
+    <div class="page-topbar">
+      <div>
+        <div class="page-title" id="page-title-text">Ana Sayfa</div>
+        <div class="page-sub" id="home-username"></div>
+      </div>
+      <span class="admin-badge" id="home-admin-badge" style="display:none">ADMİN</span>
+    </div>
+
+    <!-- Paneller -->
+    <div id="tab-dashboard" class="panel active"><div id="dashboard-content"></div></div>
+
+    <div id="tab-matches" class="panel">
+      <div style="display:flex;flex-direction:column;align-items:center;padding:36px 0 22px;text-align:center;gap:12px">
+        <p style="font-size:.86rem;color:var(--text-muted);max-width:260px;line-height:1.6">Yaklaşan maçlara katıl, kadroyu doldur.</p>
+        <button class="btn btn-primary btn-big" onclick="findMatch()">⚽ Maç Bul</button>
+      </div>
+      <div id="match-display"></div>
+    </div>
+
+    <div id="tab-lineup"  class="panel"><div id="lineup-content"></div></div>
+    <div id="tab-profile" class="panel"><div id="profile-content"></div></div>
+    <div id="tab-vote"    class="panel"><div id="vote-content"></div></div>
+    <div id="tab-lb"      class="panel"><div id="lb-content"></div></div>
+    <div id="tab-forum"   class="panel" style="padding:0"><div id="forum-content"></div></div>
+    <div id="tab-borsa"   class="panel"><div id="borsa-content"></div></div>
+    <div id="tab-news"    class="panel"><div id="news-content"></div></div>
+    <div id="tab-updates" class="panel"><div id="updates-content"></div></div>
+    <div id="tab-past"    class="panel"><div id="past-matches-list"></div></div>
+    <div id="tab-admin"   class="panel"><div id="admin-content"></div></div>
+
+  </div>
+</div>
 </div>
 
-</div>
+<div style="display:none"><!-- eski kapat --></div>
 
 <!-- MODAL: REGISTER -->
 <div id="modal-register" class="modal-overlay">
@@ -2528,9 +2783,12 @@ function goHome(){
   const fresh=Object.values(_users).find(u=>u.id===currentUser.id);
   if(fresh)currentUser=fresh;
   const rating=currentUser?calcRating(currentUser,currentUser.pos):50;
-  document.getElementById('home-username').textContent=currentUser.name;
-  document.getElementById('home-rating').textContent=rating||'?';
-  document.getElementById('home-avatar').textContent=initials(currentUser.name);
+  const unEl=document.getElementById('home-username');
+  if(unEl) unEl.textContent=currentUser.name;
+  const rEl=document.getElementById('home-rating');
+  if(rEl) rEl.textContent=rating||'?';
+  const avEl=document.getElementById('home-avatar');
+  if(avEl) avEl.textContent=initials(currentUser.name);
   document.getElementById('home-admin-badge').style.display=isAdmin(currentUser)?'inline-block':'none';
   document.getElementById('tab-admin-btn').style.display=isAdmin(currentUser)?'flex':'none';
   showPage('page-home');
@@ -2613,6 +2871,27 @@ function patchPrev(){
 function switchTab(tabId,btn){
   stopLineupTimer();
   if(_dbTimer&&tabId!=='tab-dashboard'){clearInterval(_dbTimer);_dbTimer=null;}
+  // Side nav active
+  document.querySelectorAll('.sn-item').forEach(b=>b.classList.remove('active'));
+  if(btn&&btn.classList.contains('sn-item')) btn.classList.add('active');
+  else{
+    const found=document.querySelector(`.sn-item[data-title]`);
+    // title'dan bul
+    document.querySelectorAll('.sn-item').forEach(b=>{
+      const tabMap={'tab-dashboard':'Ana','tab-matches':'Maçlar','tab-lineup':'Kadro',
+        'tab-profile':'Profil','tab-vote':'Oylama','tab-lb':'Sıralama','tab-forum':'Forum',
+        'tab-borsa':'Piyasa','tab-news':'Gazete','tab-updates':'Yamalar',
+        'tab-past':'Geçmiş','tab-admin':'Admin'};
+      if(b.querySelector('.sn-lbl')?.textContent===tabMap[tabId]) b.classList.add('active');
+    });
+  }
+  // Sayfa başlığı
+  const titles={'tab-dashboard':'Ana Sayfa','tab-matches':'Maçlar','tab-lineup':'Kadro',
+    'tab-profile':'Profil','tab-vote':'Oylama','tab-lb':'Sıralama','tab-forum':'Forum',
+    'tab-borsa':'Transfer Piyasası','tab-news':'Gazete','tab-updates':'Yama Notları',
+    'tab-past':'Geçmiş Maçlar','tab-admin':'Admin Paneli'};
+  const titleEl=document.getElementById('page-title-text');
+  if(titleEl) titleEl.textContent=titles[tabId]||'';
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
   document.getElementById(tabId).classList.add('active');btn.classList.add('active');
@@ -2622,6 +2901,7 @@ function switchTab(tabId,btn){
   if(tabId==='tab-lineup')renderLineup();
   if(tabId==='tab-news')renderNewsTab();
   if(tabId==='tab-admin')renderAdmin();
+  if(tabId==='tab-updates')renderUpdates();
   if(tabId==='tab-dashboard')renderDashboard();
   if(tabId==='tab-profile')renderProfile();
   if(tabId==='tab-forum')renderForum();
@@ -4650,6 +4930,248 @@ async function renderForum(){
       </div>
     </div>`;
   }).join('');
+}
+
+
+/* ═══ YAMA NOTLARI SEKMESİ ═══ */
+function renderUpdates(){
+  const el=document.getElementById('updates-content');
+  if(!el)return;
+  el.innerHTML=`
+  <div style="padding:4px 0 16px">
+
+    <!-- Versiyon header -->
+    <div style="background:linear-gradient(135deg,#0a150a,#0e1e0e);border:1px solid rgba(184,247,23,.15);border-radius:16px;padding:16px;margin-bottom:14px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(184,247,23,.06),transparent 70%)"></div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:.65rem;letter-spacing:2px;color:rgba(184,247,23,.4);margin-bottom:4px">MEVCUT VERSİYON</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:var(--lime);line-height:1;margin-bottom:6px">v3.1</div>
+      <div style="font-size:.72rem;color:#608060">Pitch App — Salı Maçı Platform</div>
+      <div style="font-size:.62rem;color:#446044;margin-top:4px">Son güncelleme: Bugün</div>
+    </div>
+
+    <!-- Bugünkü güncellemeler -->
+    <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:var(--lime);margin-bottom:8px">● YENİ — v3.1</div>
+
+    ${[
+      {icon:'🃏',title:'Tier Kart Sistemi',desc:'7 farklı tier — Common, Bronze, Silver, Gold, Epic, Legend, Elite, Champion. Her birinin kendine özel animasyonu var.'},
+      {icon:'💜',title:'Epic Kart',desc:'5× MOTM seçilince mor holografik kart. Dönen border glow + ışın efekti.'},
+      {icon:'🔥',title:'Legend Kart',desc:'Bonservis 50M ₺+ olunca ateş efektli kart aktif olur.'},
+      {icon:'⭐',title:'Elite Kart',desc:'OVR 90+ olan oyuncular altın elektrik efektli kart kazanır.'},
+      {icon:'🏆',title:'Champion Kart',desc:'10 maç galibiyet serisi — altın/yeşil konfeti efekti.'},
+      {icon:'📊',title:'Momentum Sistemi',desc:'MOTM → +2 form +%8 bonservis. En Kötü → -2 form -%6 bonservis. 3 üst üste galibiyet reytingi kalıcı artırır.'},
+      {icon:'👤',title:'Profil V2',desc:'Hero bölümü, animasyonlu FC2 kart, form şeridi, 6 stat kutusu, parametreler ve 25 rozet.'},
+      {icon:'🎖️',title:'25 Rozet Sistemi',desc:'Performans, seri, deneyim, piyasa ve eğlence kategorilerinde 25 başarım rozeti.'},
+      {icon:'📈',title:'Bonservis Revizyonu',desc:'82 OVR Santrafor artık 24M ₺. Gerçekçi piyasa değerleri.'},
+      {icon:'👁',title:'Tıklanabilir Profiller',desc:'Piyasa ve sıralamadan herhangi bir oyuncunun profiline tıkla, detaylı incele.'},
+      {icon:'🏠',title:'Ana Sayfa',desc:'Dashboard: hero kart, stat grid, sonraki maç geri sayımı, piyasa ve lig tablosu.'},
+      {icon:'↩',title:'Kadradan Çıkış',desc:'Maça yanlışlıkla katıldıysan "↩ Çık" butonuyla kadrodan ayrılabilirsin.'},
+    ].map(u=>`
+      <div style="background:#0a120a;border:1px solid #1a221a;border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start">
+        <span style="font-size:1.3rem;flex-shrink:0;margin-top:1px">${u.icon}</span>
+        <div>
+          <div style="font-size:.82rem;font-weight:700;color:#c0d8c0;margin-bottom:3px">${u.title}</div>
+          <div style="font-size:.7rem;color:#506050;line-height:1.55">${u.desc}</div>
+        </div>
+      </div>`).join('')}
+
+    <!-- Yakında -->
+    <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:#f5a623;margin:16px 0 8px">◌ YAKINDA GELİYOR</div>
+
+    ${[
+      {icon:'🧭',title:'Side Nav',desc:'Sol taraf navigasyon — tüm sekmeler yan panelde, daha temiz ve kullanışlı.'},
+      {icon:'💬',title:'Forum V2 — Yorumlar',desc:'Her gönderiye yorum yapılabilsin. Maç tartışmaları, öneri ve şikayetler daha sosyal bir platform gibi.'},
+      {icon:'📋',title:'Maç Geçmişi Detayı',desc:'Geçmiş maçlarda kadro ve istatistiklerin detaylı görüntüsü.'},
+      {icon:'🔔',title:'Bildirimler',desc:'Kadro dolarsa, oylama açılırsa, MOTM seçilirsen anlık bildirim.'},
+    ].map(u=>`
+      <div style="background:#0a0e0a;border:1px solid #141e14;border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;opacity:.7">
+        <span style="font-size:1.3rem;flex-shrink:0;margin-top:1px">${u.icon}</span>
+        <div>
+          <div style="font-size:.82rem;font-weight:700;color:#608060;margin-bottom:3px">${u.title}</div>
+          <div style="font-size:.7rem;color:#3a4e3a;line-height:1.55">${u.desc}</div>
+        </div>
+      </div>`).join('')}
+
+  </div>`;
+}
+
+/* ═══ FORUM V2 — YORUMLU SİSTEM ═══ */
+let _forumFilter='all';
+
+async function renderForum(){
+  const el=document.getElementById('forum-content');
+  if(!el)return;
+
+  el.innerHTML=`
+  <div style="position:sticky;top:44px;z-index:40;background:rgba(4,8,4,.95);backdrop-filter:blur(8px);border-bottom:1px solid #1a221a;padding:10px 14px">
+    <div style="display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:10px">
+      ${['all','oneri','sikayet','genel','bug'].map(c=>`
+        <button onclick="setForumFilter('${c}')" id="ff-${c}"
+          style="flex-shrink:0;padding:5px 12px;border-radius:20px;border:1px solid;font-size:.65rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;
+          ${c===_forumFilter?'background:rgba(184,247,23,.12);border-color:rgba(184,247,23,.3);color:var(--lime)':'background:transparent;border-color:#1a2a1a;color:#446044'}">
+          ${{all:'Tümü',oneri:'💡 Öneri',sikayet:'😤 Şikayet',genel:'💬 Genel',bug:'🐛 Bug'}[c]}
+        </button>`).join('')}
+    </div>
+    <button class="fm-new-btn" onclick="openModal('modal-forum-post')" style="margin-bottom:0">
+      ✏️ Yeni Gönderi Yaz
+    </button>
+  </div>
+
+  <div id="forum-list" style="padding:10px 14px">
+    <div style="text-align:center;padding:32px;color:#446044">
+      <div style="font-size:2rem;margin-bottom:8px">💬</div>
+      <div style="font-size:.8rem">Yükleniyor...</div>
+    </div>
+  </div>`;
+
+  await loadForumPosts();
+}
+
+async function loadForumPosts(){
+  const listEl=document.getElementById('forum-list');
+  if(!listEl)return;
+
+  const snap=await db.ref('forum').orderByChild('score').once('value');
+  const val=snap.val()||{};
+  window._forumCache=Object.entries(val).map(([id,p])=>({id,...p}));
+  let posts=window._forumCache.sort((a,b)=>(b.score||0)-(a.score||0));
+  if(_forumFilter!=='all') posts=posts.filter(p=>p.cat===_forumFilter);
+
+  if(!posts.length){
+    listEl.innerHTML=`<div style="text-align:center;padding:40px 20px;color:#446044">
+      <div style="font-size:2.5rem;margin-bottom:12px">💬</div>
+      <div style="font-size:.85rem;font-weight:700;color:#608060;margin-bottom:4px">Gönderi yok</div>
+      <div style="font-size:.72rem">Bu kategoride henüz gönderi yok.</div>
+    </div>`;
+    return;
+  }
+
+  const catCls={oneri:'oneri',sikayet:'sikayet',genel:'genel',bug:'bug'};
+  const catLabel={oneri:'Öneri',sikayet:'Şikayet',genel:'Genel',bug:'Bug'};
+  const catIcon={oneri:'💡',sikayet:'😤',genel:'💬',bug:'🐛'};
+
+  listEl.innerHTML=posts.map((p,idx)=>{
+    const myVote=(p.votes&&p.votes[currentUser.id])||0;
+    const score=p.score||0;
+    const cat=p.cat||'genel';
+    const scoreClass=score>0?'pos':score<0?'neg':'zero';
+    const authorInitials=(p.author||'?').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+    const commentCount=Object.keys(p.comments||{}).length;
+    return`<div class="fm-post" style="animation-delay:${idx*.04}s">
+      <div class="fm-post-inner">
+        <div class="fm-vote-col">
+          <button class="fm-vote-btn up ${myVote===1?'voted-up':''}" onclick="forumVote('${p.id}',1)">▲</button>
+          <div class="fm-score ${scoreClass}">${score>0?'+':''}${score}</div>
+          <button class="fm-vote-btn down ${myVote===-1?'voted-down':''}" onclick="forumVote('${p.id}',-1)">▼</button>
+        </div>
+        <div class="fm-body">
+          <div class="fm-cats">
+            <span class="fm-cat ${catCls[cat]}">${catIcon[cat]} ${catLabel[cat]||'Genel'}</span>
+          </div>
+          <div class="fm-title">${p.title||''}</div>
+          ${p.body?`<div class="fm-text">${p.body}</div>`:''}
+          <div class="fm-meta">
+            <div class="fm-meta-av">${authorInitials}</div>
+            <span>${p.author||'?'}</span>
+            <span style="color:#1e2e1e">·</span>
+            <span>${p.date||''}</span>
+          </div>
+          <!-- Yorum butonu -->
+          <button onclick="toggleComments('${p.id}')"
+            style="margin-top:8px;background:rgba(184,247,23,.06);border:1px solid #1a2a1a;border-radius:8px;padding:5px 10px;font-size:.65rem;color:#446044;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:700;transition:all .2s;display:flex;align-items:center;gap:5px">
+            💬 ${commentCount>0?commentCount+' yorum':'Yorum yap'}
+          </button>
+          <!-- Yorum alanı (kapalı başlar) -->
+          <div id="comments-${p.id}" style="display:none;margin-top:10px">
+            <div id="comment-list-${p.id}"></div>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <input id="comment-input-${p.id}" type="text" placeholder="Yorumunu yaz..."
+                style="flex:1;background:#0a120a;border:1px solid #1a2a1a;border-radius:8px;padding:7px 10px;color:var(--text);font-size:.72rem;outline:none;font-family:'DM Sans',sans-serif"
+                onkeydown="if(event.key==='Enter')submitComment('${p.id}')">
+              <button onclick="submitComment('${p.id}')"
+                style="background:rgba(184,247,23,.1);border:1px solid rgba(184,247,23,.2);border-radius:8px;padding:7px 12px;color:var(--lime);font-size:.72rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
+                Gönder
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setForumFilter(cat){
+  _forumFilter=cat;
+  renderForum();
+}
+
+async function toggleComments(postId){
+  const el=document.getElementById('comments-'+postId);
+  if(!el)return;
+  if(el.style.display==='none'){
+    el.style.display='block';
+    await loadComments(postId);
+  } else {
+    el.style.display='none';
+  }
+}
+
+async function loadComments(postId){
+  const listEl=document.getElementById('comment-list-'+postId);
+  if(!listEl)return;
+  const snap=await db.ref('forum/'+postId+'/comments').once('value');
+  const val=snap.val()||{};
+  const comments=Object.entries(val).map(([id,c])=>({id,...c}))
+    .sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
+  if(!comments.length){
+    listEl.innerHTML=`<div style="font-size:.68rem;color:#3a4e3a;padding:4px 0">Henüz yorum yok. İlk yorumu sen yap!</div>`;
+    return;
+  }
+  listEl.innerHTML=comments.map(c=>{
+    const initials2=(c.author||'?').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+    const isOwn=c.authorId===currentUser.id;
+    return`<div style="display:flex;gap:8px;padding:7px 0;border-bottom:1px solid #0e160e;align-items:flex-start">
+      <div style="width:22px;height:22px;border-radius:6px;background:rgba(184,247,23,.08);border:1px solid rgba(184,247,23,.15);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',cursive;font-size:.55rem;color:var(--lime);flex-shrink:0">${initials2}</div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+          <span style="font-size:.68rem;font-weight:700;color:#c0d8c0">${c.author||'?'}</span>
+          <span style="font-size:.58rem;color:#2a3a2a">${c.date||''}</span>
+          ${isOwn?`<button onclick="deleteComment('${postId}','${c.id}')" style="margin-left:auto;background:none;border:none;color:#2a3a2a;font-size:.6rem;cursor:pointer;font-family:'DM Sans',sans-serif">✕</button>`:''}
+        </div>
+        <div style="font-size:.72rem;color:#506050;line-height:1.5">${c.text||''}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function submitComment(postId){
+  const input=document.getElementById('comment-input-'+postId);
+  if(!input)return;
+  const text=input.value.trim();
+  if(!text)return;
+  const commentId=uid();
+  const comment={
+    text,
+    author:currentUser.name,
+    authorId:currentUser.id,
+    date:new Date().toLocaleDateString('tr-TR'),
+    createdAt:new Date().toISOString()
+  };
+  await db.ref('forum/'+postId+'/comments/'+commentId).set(comment);
+  input.value='';
+  await loadComments(postId);
+  // Yorum sayısını güncelle
+  const btn=document.querySelector(`button[onclick="toggleComments('${postId}')"]`);
+  if(btn){
+    const snap=await db.ref('forum/'+postId+'/comments').once('value');
+    const cnt=Object.keys(snap.val()||{}).length;
+    btn.innerHTML=`💬 ${cnt} yorum`;
+  }
+}
+
+async function deleteComment(postId,commentId){
+  if(!confirm('Yorumu sil?'))return;
+  await db.ref('forum/'+postId+'/comments/'+commentId).remove();
+  await loadComments(postId);
 }
 
 async function submitForumPost(){
