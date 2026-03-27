@@ -2102,26 +2102,24 @@ const LS = {
   remove: k => { try{ localStorage.removeItem(k); sessionStorage.removeItem(k); }catch(e){} }
 };
 
-// Firebase config
-const firebaseConfig = {
-  apiKey: "AIzaSyBc_JhGF0Axeey-pPyUQsV6RZ3UIXd2WIc",
-  authDomain: "sali-maci.firebaseapp.com",
-  databaseURL: "https://sali-maci-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "sali-maci",
-  storageBucket: "sali-maci.appspot.com",
-  messagingSenderId: "1234567890",
-  appId: "1:sali-maci:web:abcdef"
+// ── Firebase Config & Init ──
+const firebaseConfig={
+  apiKey:"AIzaSyBc_JhGF0Axeey-pPyUQsV6RZ3UIXd2WIc",
+  authDomain:"sali-maci.firebaseapp.com",
+  databaseURL:"https://sali-maci-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"sali-maci",storageBucket:"sali-maci.appspot.com",
+  messagingSenderId:"874498878352",appId:"1:874498878352:web:abc123"
 };
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+const db=firebase.database();
 
-// State
-let _users = {}, _matches = [], _news = [];
-let currentUser = null, activeMatchId = null;
-let scoreTargetId = null, deleteTargetId = null;
-let selectedWinner = null, _pendingDeleteKey = null;
-const KADRO_LIMIT = 14;
-const ADMIN_KEY = 'furkan soydan';
+// ── State ──
+let _users={},_matches=[],_news=[];
+let currentUser=null,activeMatchId=null;
+let scoreTargetId=null,deleteTargetId=null;
+let selectedWinner=null,_pendingDeleteKey=null;
+const KADRO_LIMIT=14;
+const ADMIN_KEY='furkan soydan';
 
 
 // Yardımcı
@@ -2548,7 +2546,6 @@ function goHome(){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   const dashPanel=document.getElementById('tab-dashboard');
   if(dashPanel) dashPanel.classList.add('active');
-  renderDashboard();
   renderPastMatches();renderLeaderboard();
   // Patch notes - ilk girişte göster
   if(!LS.get('patch_v8_seen')){
@@ -2732,7 +2729,7 @@ function switchTab(tabId,btn){
   if(tabId==='tab-news')renderNewsTab();
   if(tabId==='tab-admin')renderAdmin();
   if(tabId==='tab-updates')renderUpdates();
-  if(tabId==='tab-dashboard')renderDashboard();
+  
   if(tabId==='tab-profile')renderProfile();
   if(tabId==='tab-forum')renderForum();
   if(tabId==='tab-borsa')renderBorsa();
