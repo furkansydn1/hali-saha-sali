@@ -1503,6 +1503,122 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 /* patch-slide padding azalt kart slaytları için */
 .patch-slide.card-slide{padding:12px 16px 8px;align-items:flex-start}
 
+
+/* ══════════════════════════════════════════════════════
+   PROFİL V2 — MODERN OYUNCU KARTI
+══════════════════════════════════════════════════════ */
+.pv2-wrap{padding:0 0 20px}
+
+/* Hero bölümü */
+.pv2-hero{
+  position:relative;overflow:hidden;
+  padding:20px 16px 16px;
+  background:linear-gradient(160deg,#0a150a 0%,#0e1e0e 60%,#060e06 100%);
+  border-bottom:1px solid rgba(184,247,23,.12);
+  margin:0 -16px;
+}
+.pv2-hero-bg{
+  position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 80% 0%,rgba(184,247,23,.06) 0%,transparent 60%);
+}
+.pv2-hero-top{display:flex;gap:14px;align-items:flex-start;position:relative;z-index:1}
+.pv2-avatar-wrap{position:relative;flex-shrink:0}
+.pv2-avatar{
+  width:72px;height:72px;border-radius:18px;
+  background:rgba(184,247,23,.1);border:2px solid rgba(184,247,23,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',cursive;font-size:1.8rem;color:var(--lime);
+}
+.pv2-tier-badge{
+  position:absolute;bottom:-6px;right:-6px;
+  font-size:.5rem;font-weight:900;padding:2px 7px;
+  border-radius:20px;border:1.5px solid;letter-spacing:.5px;
+  background:#0a150a;
+}
+.pv2-hero-info{flex:1;min-width:0}
+.pv2-name{
+  font-family:'Bebas Neue',cursive;font-size:1.5rem;
+  letter-spacing:1.5px;color:#fff;line-height:1;margin-bottom:3px;
+}
+.pv2-pos-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.pv2-pos{font-size:.7rem;color:#608060;font-weight:700}
+.pv2-ayak{font-size:.62rem;color:#3a5a3a;padding:1px 6px;background:rgba(184,247,23,.06);border:1px solid rgba(184,247,23,.1);border-radius:10px}
+.pv2-rating-block{display:flex;align-items:baseline;gap:6px}
+.pv2-ovr-lbl{font-size:.55rem;color:#446044;text-transform:uppercase;letter-spacing:1px}
+.pv2-ovr{font-family:'Bebas Neue',cursive;font-size:2.8rem;line-height:1}
+.pv2-bons-row{display:flex;align-items:center;gap:8px;margin-top:8px}
+.pv2-bons-val{font-family:'Bebas Neue',cursive;font-size:1rem;color:var(--lime)}
+.pv2-bons-chg{font-size:.65rem;font-weight:700}
+.pv2-bons-chg.up{color:#22cc66}.pv2-bons-chg.down{color:#ff5050}.pv2-bons-chg.flat{color:#446044}
+
+/* Form şeridi */
+.pv2-form-strip{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 16px;
+  background:rgba(0,0,0,.2);
+  border-bottom:1px solid rgba(184,247,23,.06);
+  position:relative;z-index:1;
+}
+.pv2-form-lbl{font-size:.6rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#446044;flex-shrink:0}
+.pv2-fp-dots{display:flex;gap:5px}
+.pv2-fp-dot{width:10px;height:10px;border-radius:3px;transition:all .3s}
+.pv2-fp-empty{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+.pv2-fp-pos{background:#22cc66;border:1px solid #44ee88;box-shadow:0 0 8px rgba(34,204,102,.5)}
+.pv2-fp-pos2{background:#00ff88;box-shadow:0 0 14px rgba(0,255,136,.9);animation:pv2-pulse .8s ease infinite}
+.pv2-fp-neg{background:#ff4040;border:1px solid #ff6060;box-shadow:0 0 8px rgba(255,64,64,.5)}
+.pv2-fp-neg2{background:#ff1010;box-shadow:0 0 14px rgba(255,0,0,.9);animation:pv2-pulse .8s ease infinite}
+@keyframes pv2-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+.pv2-form-hist{display:flex;gap:3px;margin-left:auto}
+.pv2-form-hist span{width:18px;height:18px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:900}
+.pv2-fh-w{background:rgba(34,204,102,.15);color:#22cc66;border:1px solid rgba(34,204,102,.25)}
+.pv2-fh-l{background:rgba(255,64,64,.12);color:#ff5050;border:1px solid rgba(255,64,64,.2)}
+.pv2-fh-d{background:rgba(255,255,255,.05);color:#446044;border:1px solid rgba(255,255,255,.1)}
+
+/* İstatistik grid */
+.pv2-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 16px;background:#0a120a;border-bottom:1px solid #141e14}
+.pv2-stat-box{background:#060e06;border:1px solid #1a221a;border-radius:10px;padding:8px;text-align:center}
+.pv2-stat-num{font-family:'Bebas Neue',cursive;font-size:1.4rem;line-height:1}
+.pv2-stat-num.lime{color:var(--lime)}.pv2-stat-num.amber{color:#f5a623}.pv2-stat-num.blue{color:#60a8ff}.pv2-stat-num.purple{color:#cc66ff}.pv2-stat-num.teal{color:#00ccaa}.pv2-stat-num.red{color:#ff5050}
+.pv2-stat-lbl{font-size:.58rem;color:#446044;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+/* Sekme sistemi */
+.pv2-tabs{display:flex;background:#060e06;border-bottom:1px solid #141e14}
+.pv2-tab{flex:1;padding:10px 8px;border:none;background:transparent;color:#446044;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;font-family:'DM Sans',sans-serif}
+.pv2-tab.on{color:var(--lime);border-bottom-color:var(--lime)}
+
+/* Parametre barları */
+.pv2-params{padding:12px 16px}
+.pv2-param-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #0e160e}
+.pv2-param-row:last-child{border-bottom:none}
+.pv2-param-lbl{font-size:.68rem;font-weight:700;color:#446044;width:82px;flex-shrink:0}
+.pv2-param-bar{flex:1;height:6px;background:#0e160e;border-radius:3px;overflow:hidden;position:relative}
+.pv2-param-fill{height:100%;border-radius:3px;transition:width .6s ease}
+.pv2-param-val{font-family:'Bebas Neue',cursive;font-size:1rem;width:28px;text-align:right;flex-shrink:0}
+
+/* Rozetler */
+.pv2-badges{padding:12px 16px}
+.pv2-badge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pv2-badge{text-align:center;cursor:help;transition:transform .2s}
+.pv2-badge:hover{transform:scale(1.08)}
+.pv2-badge-icon{width:44px;height:44px;border-radius:12px;margin:0 auto 4px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;transition:all .2s}
+.pv2-badge-icon.on{background:rgba(184,247,23,.08);border:1px solid rgba(184,247,23,.2);box-shadow:0 0 10px rgba(184,247,23,.08)}
+.pv2-badge-icon.off{background:#0a120a;border:1px solid #1a221a;opacity:.3;filter:grayscale(1)}
+.pv2-badge-lbl{font-size:.54rem;font-weight:700;line-height:1.2}
+.pv2-badge-lbl.on{color:var(--lime)}.pv2-badge-lbl.off{color:#2a3a2a}
+
+/* Modal: Oyuncu profil görüntüleme */
+#modal-player-profile .modal-box{
+  max-width:480px;padding:0;overflow:hidden;
+  background:#060e06;border:1px solid #1a2a1a;
+}
+.pv2-modal-close{
+  position:absolute;top:12px;right:12px;
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+  color:rgba(255,255,255,.5);font-size:.9rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;z-index:10;
+}
+
 </style>
 </head>
 <body>
@@ -1735,7 +1851,7 @@ function startListeners(){
         const un=document.getElementById('home-username');
         const ur=document.getElementById('home-rating');
         if(un)un.textContent=fresh.name;
-        if(ur)ur.textContent=fresh.rating;
+        if(ur)ur.textContent=calcRating(fresh,fresh.pos)||'?';
       }
     }
     if(document.getElementById('tab-cards')?.classList.contains('active'))renderCards();
@@ -2162,18 +2278,36 @@ function renderDashboard(){
 
 /* ===== ROZET / BAŞARIM SİSTEMİ ===== */
 const BADGE_DEFS=[
-  {id:'first_match',icon:'⚽',label:'İlk Maç',desc:'İlk maçına katıldın!',check:u=>(u.matches||0)>=1},
-  {id:'hat_trick_motm',icon:'🎩',label:'Hat-trick MOTM',desc:'3 kez Maçın Adamı',check:u=>(u.motm||0)>=3},
-  {id:'epic_motm',icon:'💜',label:'Epic MOTM',desc:'5 kez Maçın Adamı',check:u=>(u.motm||0)>=5},
-  {id:'win_streak_5',icon:'🔥',label:'5 Seri Galibiyet',desc:'5 maç üst üste kazandın',check:u=>(u.winStreak||0)>=5},
-  {id:'win_streak_10',icon:'🏆',label:'Şampiyon Serisi',desc:'10 maç üst üste kazandın',check:u=>(u.winStreak||0)>=10},
-  {id:'veteran',icon:'🎖️',label:'Veteran',desc:'10 maç oynadın',check:u=>(u.matches||0)>=10},
-  {id:'legend_bons',icon:'💰',label:'Para Babası',desc:'Bonservis 50M+ ₺',check:u=>(u.bonservisOverride||0)>=50000000},
-  {id:'top_rating',icon:'⭐',label:'Yıldız Oyuncu',desc:'Reyting 90+',check:u=>calcRating(u,u.pos)>=90},
-  {id:'comeback',icon:'🦅',label:'Geri Dönüş',desc:'-2 formdan galibiyet',check:u=>(u.lastResult==='W'&&(u.formPuani||0)>0)},
-  {id:'loyal',icon:'🏅',label:'Sadık Üye',desc:'20 maç oynadın',check:u=>(u.matches||0)>=20},
-  {id:'golden_boot',icon:'👟',label:'Altın Bot',desc:'Reyting 85+',check:u=>calcRating(u,u.pos)>=85},
-  {id:'iron_wall',icon:'🧱',label:'Demir Duvar',desc:'Defans 85+ (Stoper/DOS)',check:u=>(['Stoper','DOS'].includes(u.pos))&&(u.defans||0)>=85},
+  // ── Performans ──
+  {id:'first_match',   icon:'⚽', label:'İlk Maç',        desc:'İlk maçına katıldın!',                        check:u=>(u.matches||0)>=1},
+  {id:'hat_trick_motm',icon:'🎩', label:'Hat-trick MOTM', desc:'3 kez Maçın Adamı seçildin',                  check:u=>(u.motm||0)>=3},
+  {id:'epic_motm',     icon:'💜', label:'Epic MOTM',       desc:'5 kez Maçın Adamı seçildin',                  check:u=>(u.motm||0)>=5},
+  {id:'captain',       icon:'👑', label:'Kaptan',          desc:'3 kez kaptan seçildin',                       check:u=>(u.captainCount||0)>=3},
+  {id:'consistent',    icon:'🎯', label:'Tutarlı',         desc:'10 maçta hiç en kötü seçilmedin',             check:u=>(u.matches||0)>=10&&(u.worst||0)===0},
+  {id:'fast_rise',     icon:'⚡', label:'Hızlı Yükseliş', desc:'5 maçta reyting +3 artış',                    check:u=>calcRating(u,u.pos)>=53},
+  // ── Seri ──
+  {id:'win_streak_5',  icon:'🔥', label:'5 Seri Galibiyet',desc:'5 maç üst üste kazandın',                    check:u=>(u.winStreak||0)>=5},
+  {id:'win_streak_10', icon:'🏆', label:'Şampiyon Serisi', desc:'10 maç üst üste kazandın',                   check:u=>(u.winStreak||0)>=10},
+  {id:'team_player',   icon:'🤝', label:'Takım Oyuncusu', desc:'Kazanan takımda 5 kez oldu',                  check:u=>(u.wins||0)>=5},
+  {id:'bad_boy',       icon:'😈', label:'Kötü Adam',       desc:'3 kez en kötü seçildin',                     check:u=>(u.worst||0)>=3},
+  // ── Deneyim ──
+  {id:'veteran',       icon:'🎖️', label:'Veteran',         desc:'10 maç oynadın',                              check:u=>(u.matches||0)>=10},
+  {id:'loyal',         icon:'🏅', label:'Sadık Üye',       desc:'20 maç oynadın',                              check:u=>(u.matches||0)>=20},
+  {id:'legend_player', icon:'🌟', label:'Emektar',         desc:'30+ maç oynadın',                             check:u=>(u.matches||0)>=30},
+  // ── Piyasa ──
+  {id:'investor',      icon:'📈', label:'Yatırımcı',       desc:'Bonservis 30M+ ₺',                            check:u=>(u.bonservisOverride||calcBonservisRaw(calcRating(u,u.pos),u.pos))>=30000000},
+  {id:'legend_bons',   icon:'💰', label:'Para Babası',      desc:'Bonservis 50M+ ₺',                            check:u=>(u.bonservisOverride||calcBonservisRaw(calcRating(u,u.pos),u.pos))>=50000000},
+  {id:'rocket',        icon:'🚀', label:'Roket',            desc:'Bonservis tek seferde 2M+ arttı',             check:u=>(u.bonservisChange||0)>=2000000},
+  {id:'crash',         icon:'📉', label:'Çöküş',           desc:'Bonservis 3 maç üst üste düştü',              check:u=>(u.loseStreak||0)>=3},
+  // ── Rating ──
+  {id:'golden_boot',   icon:'👟', label:'Altın Bot',        desc:'Reyting 85+',                                 check:u=>calcRating(u,u.pos)>=85},
+  {id:'top_rating',    icon:'⭐', label:'Yıldız Oyuncu',   desc:'Reyting 90+',                                 check:u=>calcRating(u,u.pos)>=90},
+  {id:'iron_wall',     icon:'🧱', label:'Demir Duvar',      desc:'Defans 85+ (Stoper/DOS)',                     check:u=>(['Stoper','DOS'].includes(u.pos))&&(u.defans||0)>=85},
+  // ── Eğlenceli ──
+  {id:'comeback',      icon:'🦅', label:'Geri Dönüş',      desc:'Kötü formdan galibiyetle çıktın',             check:u=>(u.lastResult==='W'&&(u.formPuani||0)>0)},
+  {id:'all_star',      icon:'🌈', label:'All-Star',         desc:'Hem MOTM hem En Kötü kazandın',               check:u=>(u.motm||0)>=1&&(u.worst||0)>=1},
+  {id:'last_minute',   icon:'🕐', label:'Son Dakika',       desc:'Son dakikacı — geç katılım ustası',           check:u=>(u.lateJoin||0)>=3},
+  {id:'bench_king',    icon:'🪑', label:'Yedek Kral',       desc:'5 kez maça katılmayıp bahane yazdın',         check:u=>(u.absent||0)>=5},
 ];
 
 function getUserBadges(user){
@@ -2184,11 +2318,209 @@ function getEarnedBadgeCount(user){
   return BADGE_DEFS.filter(b=>b.check(user)).length;
 }
 
+
+/* ═══ OYUNCU PROFİL OLUŞTURUCU ═══ */
+
+function buildAdminParamsHTML(u){
+  const sColor = v => v>=85?'#b8f717':v>=70?'#f5a623':v>=55?'#60a8ff':'#ff6060';
+  const params = [
+    ['pf-hiz','Hız',u.hiz||50],['pf-sut','Şut',u.sut||50],
+    ['pf-pas','Pas',u.pas||50],['pf-fizik','Fizik',u.fizik||50],
+    ['pf-defans','Defans',u.defans||50],['pf-kalecilik','Kalecilik',u.kalecilik||50],
+    ['pf-topkontrol','Top Kontrolü',u.topKontrol||50],['pf-dribling','Dribling',u.dribling||50],
+  ];
+  const posOptions = MEVKILER.map(m=>`<option value="${m}"${u.pos===m?' selected':''}>${m}</option>`).join('');
+  const altOpts = (key) => `<option value="">—</option>`+MEVKILER.map(p=>`<option value="${p}"${u[key]===p?' selected':''}>${p}</option>`).join('');
+
+  return `
+  <div style="padding:12px 16px">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+      <div class="pf-field"><label>Ana Mevki</label><select id="pf-pos" onchange="updateProfilePreview()">${posOptions}</select></div>
+      <div class="pf-field"><label>Alt Mevki 1</label><select id="pf-alt1" onchange="updateProfilePreview()">${altOpts('altPos1')}</select></div>
+      <div class="pf-field"><label>Alt Mevki 2</label><select id="pf-alt2" onchange="updateProfilePreview()">${altOpts('altPos2')}</select></div>
+    </div>
+    <div class="pf-field"><label>Ayak</label><select id="pf-ayak" onchange="updateProfilePreview()">
+      <option${u.ayak==='Sağ'?' selected':''}>Sağ</option>
+      <option${u.ayak==='Sol'?' selected':''}>Sol</option>
+      <option${u.ayak==='İki Ayak'?' selected':''}>İki Ayak</option>
+    </select></div>
+    ${params.map(([id,lbl,val])=>`
+    <div class="pv2-param-row">
+      <span class="pv2-param-lbl">${lbl}</span>
+      <input type="range" id="${id}" min="1" max="100" value="${val}" style="flex:1;accent-color:${sColor(val)}"
+        oninput="document.getElementById('${id}-v').textContent=this.value;updateProfilePreview()">
+      <span class="pv2-param-val" id="${id}-v" style="color:${sColor(val)}">${val}</span>
+    </div>`).join('')}
+    <button class="pf-save-btn" style="margin-top:12px" onclick="saveProfile()">💾 Kaydet</button>
+  </div>`;
+}
+
+function buildPlayerProfileHTML(u, isOwn){
+  const rating = calcRating(u, u.pos)||50;
+  const tier   = cardTier(rating, u);
+  const tierColors = {
+    'tier-epic':'#e080ff','tier-legend':'#ffaa44','tier-elite':'#ffd700',
+    'tier-champion':'#00ee66','tier-gold':'#ffd060','tier-silver':'#a0c8e8',
+    'tier-bronze':'#c07840','tier-common':'#608060'
+  };
+  const tierLabels = {
+    'tier-epic':'EPIC','tier-legend':'LEGEND','tier-elite':'ELİTE',
+    'tier-champion':'CHAMP','tier-gold':'GOLD','tier-silver':'SILVER',
+    'tier-bronze':'BRONZE','tier-common':'COMMON'
+  };
+  const tc = tierColors[tier]||'#608060';
+  const tl = tierLabels[tier]||'COMMON';
+
+  const bv  = u.bonservisOverride||calcBonservisRaw(rating, u.pos);
+  const bvF = formatBonservis(bv);
+  const ch  = u.bonservisChange||0;
+  const chHtml = ch !== 0
+    ? `<span class="pv2-bons-chg ${ch>0?'up':'down'}">${ch>0?'▲':'▼'} ${formatBonservis(Math.abs(ch))}</span>`
+    : `<span class="pv2-bons-chg flat">— değişim yok</span>`;
+
+  // Form puanı
+  const fp = u.formPuani||0;
+  const fpDots = [1,2,3].map(i => {
+    if(fp >= i) return `<div class="pv2-fp-dot pv2-fp-pos${fp===2&&i===2?'2':''}"></div>`;
+    if(fp <= -i) return `<div class="pv2-fp-dot pv2-fp-neg${Math.abs(fp)===2&&i===2?'2':''}"></div>`;
+    return `<div class="pv2-fp-dot pv2-fp-empty"></div>`;
+  }).join('');
+
+  // Son 5 maç geçmişi
+  const hist = (u.formHistory||[]).slice(-5);
+  const histHtml = hist.map(r =>
+    `<span class="pv2-fh-${r}">${r==='w'?'G':r==='l'?'M':'B'}</span>`
+  ).join('');
+
+  // Stat rengi
+  const sColor = v => v>=85?'#b8f717':v>=70?'#f5a623':v>=55?'#60a8ff':'#ff6060';
+  const params = [
+    ['Hız',u.hiz||50],['Şut',u.sut||50],['Pas',u.pas||50],
+    ['Fizik',u.fizik||50],['Defans',u.defans||50],['Kalecilik',u.kalecilik||50],
+    ['Top Kont.',u.topKontrol||50],['Dribling',u.dribling||50],
+  ];
+
+  // Rozetler
+  const badges = getUserBadges(u);
+  const earned = badges.filter(b=>b.earned).length;
+
+  // Win rate
+  const wr = (u.matches||0) > 0 ? Math.round((u.wins||0)/(u.matches||1)*100) : 0;
+
+  const paramsHtml = params.map(([lbl,val]) => `
+    <div class="pv2-param-row">
+      <span class="pv2-param-lbl">${lbl}</span>
+      <div class="pv2-param-bar">
+        <div class="pv2-param-fill" style="width:${val}%;background:${sColor(val)}"></div>
+      </div>
+      <span class="pv2-param-val" style="color:${sColor(val)}">${val}</span>
+    </div>`).join('');
+
+  const badgesHtml = `<div class="pv2-badge-grid">${
+    badges.map(b => `
+      <div class="pv2-badge" title="${b.desc}">
+        <div class="pv2-badge-icon ${b.earned?'on':'off'}">${b.icon}</div>
+        <div class="pv2-badge-lbl ${b.earned?'on':'off'}">${b.label}</div>
+      </div>`).join('')
+  }</div>`;
+
+  // Alt mevkiler
+  const altPos = [u.altPos1, u.altPos2].filter(Boolean);
+  const altPosHtml = altPos.length
+    ? altPos.map(p=>`<span class="pv2-ayak">${p}</span>`).join('')
+    : '';
+
+  return `
+  <div class="pv2-wrap">
+    <!-- HERO -->
+    <div class="pv2-hero">
+      <div class="pv2-hero-bg"></div>
+      <div class="pv2-hero-top">
+        <div class="pv2-avatar-wrap">
+          <div class="pv2-avatar">${initials(u.name)}</div>
+          <div class="pv2-tier-badge" style="color:${tc};border-color:${tc}60">${tl}</div>
+        </div>
+        <div class="pv2-hero-info">
+          <div class="pv2-name">${u.name.toUpperCase()}</div>
+          <div class="pv2-pos-row">
+            <span class="pv2-pos">${u.pos||'Mevki yok'}</span>
+            ${u.ayak?`<span class="pv2-ayak">${u.ayak} Ayak</span>`:''}
+            ${altPosHtml}
+          </div>
+          <div class="pv2-rating-block">
+            <span class="pv2-ovr-lbl">OVR</span>
+            <span class="pv2-ovr" style="color:${tc}">${rating}</span>
+          </div>
+          <div class="pv2-bons-row">
+            <span class="pv2-bons-val">${bvF}</span>
+            ${chHtml}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM ŞERİDİ -->
+    <div class="pv2-form-strip">
+      <span class="pv2-form-lbl">Form</span>
+      <div class="pv2-fp-dots">${fpDots}</div>
+      <span style="font-size:.6rem;font-weight:700;color:${fp>0?'#22cc66':fp<0?'#ff5050':'#446044'};margin-left:2px">${fp>0?'+'+fp:fp}</span>
+      ${histHtml?`<div class="pv2-form-hist">${histHtml}</div>`:''}
+    </div>
+
+    <!-- İSTATİSTİK GRID -->
+    <div class="pv2-stats-grid">
+      <div class="pv2-stat-box"><div class="pv2-stat-num lime">${u.matches||0}</div><div class="pv2-stat-lbl">Maç</div></div>
+      <div class="pv2-stat-box"><div class="pv2-stat-num teal">${u.wins||0}</div><div class="pv2-stat-lbl">Galibiyet</div></div>
+      <div class="pv2-stat-box"><div class="pv2-stat-num amber">%${wr}</div><div class="pv2-stat-lbl">Oran</div></div>
+      <div class="pv2-stat-box"><div class="pv2-stat-num purple">${u.motm||0}</div><div class="pv2-stat-lbl">MOTM</div></div>
+      <div class="pv2-stat-box"><div class="pv2-stat-num blue">${earned}</div><div class="pv2-stat-lbl">Rozet</div></div>
+      <div class="pv2-stat-box"><div class="pv2-stat-num red">${u.winStreak||0}</div><div class="pv2-stat-lbl">Seri</div></div>
+    </div>
+
+    <!-- SEKMELER -->
+    <div class="pv2-tabs">
+      <button class="pv2-tab on" onclick="pv2SwitchTab(this,'pv2-params-sec')">📊 Parametreler</button>
+      <button class="pv2-tab" onclick="pv2SwitchTab(this,'pv2-badges-sec')">🎖️ Rozetler (${earned})</button>
+    </div>
+
+    <!-- Parametreler -->
+    <div id="pv2-params-sec" class="pv2-params">${paramsHtml}</div>
+
+    <!-- Rozetler -->
+    <div id="pv2-badges-sec" class="pv2-badges" style="display:none">${badgesHtml}</div>
+
+    ${isOwn ? `
+    <div style="padding:0 16px 4px">
+      <button class="pf-save-btn" onclick="closeModal('modal-player-profile')">✏️ Profili Düzenle</button>
+    </div>` : ''}
+  </div>`;
+}
+
+function pv2SwitchTab(btn, secId){
+  const wrap = btn.closest('.pv2-wrap')||btn.closest('.modal-box');
+  if(!wrap)return;
+  wrap.querySelectorAll('.pv2-tab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  wrap.querySelectorAll('.pv2-params,.pv2-badges').forEach(s=>s.style.display='none');
+  const sec = wrap.querySelector('#'+secId) || document.getElementById(secId);
+  if(sec) sec.style.display='block';
+}
+
+function openPlayerProfile(userId){
+  const users = getUsers();
+  const u = Object.values(users).find(x=>x.id===userId);
+  if(!u) return showNotif('Oyuncu bulunamadı','error');
+  const isOwn = currentUser && currentUser.id === userId;
+  const el = document.getElementById('modal-player-profile-body');
+  if(el) el.innerHTML = buildPlayerProfileHTML(u, isOwn);
+  openModal('modal-player-profile');
+}
+
 function goHome(){
   stopLineupTimer();
   const fresh=Object.values(_users).find(u=>u.id===currentUser.id);
   if(fresh)currentUser=fresh;
-  const rating=currentUser?calcRating(currentUser):50;
+  const rating=currentUser?calcRating(currentUser,currentUser.pos):50;
   document.getElementById('home-username').textContent=currentUser.name;
   document.getElementById('home-rating').textContent=rating||'?';
   document.getElementById('home-avatar').textContent=initials(currentUser.name);
@@ -3940,6 +4272,17 @@ function buildFC2Card(user,mevki){
 function renderProfile(){
   const el=document.getElementById('profile-content');if(!el)return;
   const u=currentUser;
+  if(!u)return;
+  // Modern profil göster
+  el.innerHTML=buildPlayerProfileHTML(u, true);
+  // Admin ise parametre editörü göster
+  if(isAdmin(u)){
+    const paramSec=el.querySelector('#pv2-params-sec');
+    if(paramSec) paramSec.innerHTML=buildAdminParamsHTML(u);
+  }
+  return;
+  // (eski kod aşağıda — artık kullanılmıyor)
+  const _u=currentUser;
   const suggestedPos=aiSuggestPos(u);
   const currentRating=calcRating(u,u.pos||suggestedPos);
   const tier=cardTier(currentRating,u);
@@ -4137,7 +4480,8 @@ async function saveProfile(){
     await saveUsers(users);
     currentUser=users[key];
     hideLoading();
-    document.getElementById('home-rating').textContent=rating;
+    const newR=calcRating(currentUser,currentUser.pos);
+    document.getElementById('home-rating').textContent=newR;
     showNotif('Profil kaydedildi! Reyting: '+rating+' ⭐');
   } else {
     // Normal kullanıcı — sadece pos/ayak/altPos kaydeder
@@ -4452,7 +4796,7 @@ function renderBorsa(){
     const formArrow=getFormArrow(u);
     const dots=getFormDots(u);
 
-    html+=`<div class="borsa-row">
+    html+=`<div class="borsa-row" style="cursor:pointer" onclick="openPlayerProfile('${u.id}')" title="${u.name} profilini gör">
       <div class="borsa-rank ${rankCls}">${rankIcon}</div>
       <div class="borsa-avatar" style="background:${col}22;border:2px solid ${col};color:${col}">${initials(u.name)}</div>
       <div class="borsa-info">
@@ -4708,6 +5052,14 @@ tryAutoLogin();
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- MODAL: OYUNCU PROFİL -->
+<div id="modal-player-profile" class="modal-overlay">
+  <div class="modal-box" style="max-width:480px;padding:0;overflow:hidden;background:#060e06;border:1px solid #1a2a1a;max-height:90vh;overflow-y:auto">
+    <button class="pv2-modal-close" onclick="closeModal('modal-player-profile')">✕</button>
+    <div id="modal-player-profile-body"></div>
   </div>
 </div>
 
