@@ -1150,6 +1150,133 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .db-ticker-item .down{color:#ff5050}
 
 
+
+/* ═══ MODERN FORUM ═══ */
+.fm-wrap{padding:0}
+.fm-new-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:13px;border:1.5px dashed rgba(184,247,23,.25);
+  border-radius:14px;background:rgba(184,247,23,.04);color:var(--lime);
+  font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s;
+  font-family:'DM Sans',sans-serif;letter-spacing:.3px;margin-bottom:14px;
+}
+.fm-new-btn:hover{background:rgba(184,247,23,.08);border-color:rgba(184,247,23,.4)}
+.fm-post{
+  background:#0a120a;border:1px solid #1a221a;border-radius:14px;
+  margin-bottom:10px;overflow:hidden;transition:border-color .2s;
+  animation:fm-fadein .3s ease both;
+}
+.fm-post:hover{border-color:#2a3a2a}
+@keyframes fm-fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.fm-post-inner{display:flex;gap:0}
+.fm-vote-col{
+  display:flex;flex-direction:column;align-items:center;
+  padding:14px 10px;gap:4px;background:rgba(0,0,0,.15);
+  border-right:1px solid #1a221a;min-width:48px;
+}
+.fm-vote-btn{
+  width:28px;height:28px;border-radius:8px;border:1px solid #1e2e1e;
+  background:transparent;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;font-size:.85rem;transition:all .2s;
+}
+.fm-vote-btn:hover{transform:scale(1.1)}
+.fm-vote-btn.up:hover,.fm-vote-btn.voted-up{background:rgba(34,180,80,.15);border-color:rgba(34,180,80,.3)}
+.fm-vote-btn.down:hover,.fm-vote-btn.voted-down{background:rgba(255,64,64,.1);border-color:rgba(255,64,64,.25)}
+.fm-score{font-family:'Bebas Neue',cursive;font-size:1.1rem;line-height:1}
+.fm-score.pos{color:#22cc66}
+.fm-score.neg{color:#ff5050}
+.fm-score.zero{color:#2a3a2a}
+.fm-body{padding:12px 14px;flex:1;min-width:0}
+.fm-cats{display:flex;gap:6px;align-items:center;margin-bottom:7px;flex-wrap:wrap}
+.fm-cat{font-size:.58rem;font-weight:800;padding:2px 8px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase}
+.fm-cat.oneri{background:rgba(34,180,80,.12);color:#22cc66;border:1px solid rgba(34,180,80,.2)}
+.fm-cat.sikayet{background:rgba(255,64,64,.1);color:#ff6060;border:1px solid rgba(255,64,64,.2)}
+.fm-cat.genel{background:rgba(255,255,255,.05);color:#506050;border:1px solid #1e2e1e}
+.fm-cat.bug{background:rgba(245,166,35,.1);color:#f5a623;border:1px solid rgba(245,166,35,.2)}
+.fm-title{font-size:.88rem;font-weight:700;color:#d0e8d0;margin-bottom:5px;line-height:1.3}
+.fm-text{font-size:.76rem;color:#607060;line-height:1.65;margin-bottom:8px}
+.fm-meta{display:flex;align-items:center;gap:8px;font-size:.6rem;color:#384838}
+.fm-meta-av{width:18px;height:18px;border-radius:5px;background:#1a2a1a;display:flex;align-items:center;justify-content:center;font-size:.5rem;font-family:'Bebas Neue',cursive;color:#608060;flex-shrink:0}
+
+/* ═══ MODERN PROFİL ═══ */
+.pf-wrap{padding:0}
+.pf-hero{
+  background:linear-gradient(135deg,#0a150a,#0e1e0e);
+  border:1px solid #1a2a1a;border-radius:18px;
+  padding:16px;margin-bottom:12px;
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+}
+.pf-card-wrap{width:100%;max-width:200px}
+.pf-ai{
+  width:100%;background:linear-gradient(135deg,#0d0a1a,#1a0d2e);
+  border:1px solid rgba(160,100,255,.2);border-radius:12px;
+  padding:12px 14px;
+}
+.pf-ai-title{font-size:.62rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#9060e0;margin-bottom:6px}
+.pf-ai-main{display:flex;align-items:center;justify-content:space-between}
+.pf-ai-pos{font-family:'Bebas Neue',cursive;font-size:1rem;letter-spacing:1px;color:#cc88ff}
+.pf-ai-rating{font-family:'Bebas Neue',cursive;font-size:1.4rem;color:#cc88ff}
+
+.pf-section{
+  background:#0a120a;border:1px solid #1a221a;border-radius:14px;
+  overflow:hidden;margin-bottom:10px;
+}
+.pf-section-head{
+  display:flex;align-items:center;gap:8px;
+  padding:11px 14px;border-bottom:1px solid #141e14;
+}
+.pf-section-icon{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.pf-section-icon.lime{background:rgba(184,247,23,.1);border:1px solid rgba(184,247,23,.18)}
+.pf-section-icon.purple{background:rgba(160,100,255,.1);border:1px solid rgba(160,100,255,.2)}
+.pf-section-icon.amber{background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.18)}
+.pf-section-title{font-family:'Bebas Neue',cursive;font-size:.85rem;letter-spacing:1.5px}
+.pf-section-title.lime{color:var(--lime)}
+.pf-section-title.purple{color:#cc88ff}
+.pf-section-title.amber{color:#f5a623}
+.pf-section-body{padding:12px 14px}
+
+.pf-field{margin-bottom:10px}
+.pf-field:last-child{margin-bottom:0}
+.pf-field label{font-size:.6rem;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#446044;display:block;margin-bottom:5px}
+.pf-field select,.pf-field input[type=range]{width:100%}
+.pf-field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.pf-stat-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #0e160e}
+.pf-stat-row:last-child{border-bottom:none}
+.pf-stat-lbl{font-size:.68rem;font-weight:700;color:#446044;width:80px;flex-shrink:0}
+.pf-stat-bar{flex:1;height:6px;background:#0e160e;border-radius:3px;overflow:hidden}
+.pf-stat-fill{height:100%;border-radius:3px;transition:width .5s ease}
+.pf-stat-val{font-family:'Bebas Neue',cursive;font-size:1rem;width:28px;text-align:right;flex-shrink:0}
+
+.pf-slider-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #0e160e}
+.pf-slider-row:last-child{border-bottom:none}
+.pf-slider-lbl{font-size:.68rem;font-weight:700;color:#446044;width:80px;flex-shrink:0}
+.pf-slider-val{font-family:'Bebas Neue',cursive;font-size:1rem;width:28px;text-align:right;flex-shrink:0;color:var(--lime)}
+
+.pf-save-btn{
+  width:100%;padding:13px;border:none;border-radius:12px;
+  background:linear-gradient(135deg,#5aa000,var(--lime));
+  color:#050e05;font-size:.85rem;font-weight:900;
+  cursor:pointer;font-family:'DM Sans',sans-serif;
+  letter-spacing:.3px;transition:all .2s;margin-top:10px;
+}
+.pf-save-btn:hover{opacity:.92;transform:scale(.99)}
+
+/* Rozet bölümü profilde */
+.pf-badge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px 14px}
+.pf-badge{text-align:center;cursor:help}
+.pf-badge-icon{
+  width:42px;height:42px;border-radius:11px;margin:0 auto 4px;
+  display:flex;align-items:center;justify-content:center;font-size:1.2rem;
+  transition:transform .2s;
+}
+.pf-badge:hover .pf-badge-icon{transform:scale(1.1)}
+.pf-badge-icon.earned{background:rgba(184,247,23,.1);border:1px solid rgba(184,247,23,.22);box-shadow:0 0 10px rgba(184,247,23,.1)}
+.pf-badge-icon.locked{background:#0a120a;border:1px solid #1a221a;opacity:.35;filter:grayscale(1)}
+.pf-badge-lbl{font-size:.54rem;font-weight:700;line-height:1.2}
+.pf-badge-lbl.earned{color:var(--lime)}
+.pf-badge-lbl.locked{color:#2a3a2a}
+
 </style>
 </head>
 <body>
@@ -2880,16 +3007,17 @@ async function confirmDeleteUser(){
   closeModal('modal-delete-user');
   showLoading('Gizleniyor...');
   try{
-    // Firebase'de hidden flag koy
-    await db.ref('users/'+key+'/hidden').set(true);
-    // Cache güncelle
-    if(_users[key]) _users[key].hidden=true;
+    // _users cache'den al, hidden flag ekle, saveUsers ile kaydet
+    const allUsers=Object.assign({},_users);
+    if(!allUsers[key]){hideLoading();showNotif('Kullanıcı bulunamadı!','error');return;}
+    allUsers[key]=Object.assign({},allUsers[key],{hidden:true});
+    await saveUsers(allUsers);
     hideLoading();
     showNotif('Kullanıcı gizlendi! 👻');
   }catch(e){
     hideLoading();
     showNotif('Hata: '+e.message,'error');
-    console.error('deleteUser error:',e);
+    console.error('confirmDeleteUser error:',e);
   }
   renderAdmin();
 }
@@ -2899,8 +3027,12 @@ async function unhideUser(nameKey){
   if(!isAdmin(currentUser))return;
   showLoading('Geri alınıyor...');
   try{
-    await db.ref('users/'+nameKey+'/hidden').remove();
-    if(_users[nameKey]) _users[nameKey].hidden=false;
+    const allUsers=Object.assign({},_users);
+    if(!allUsers[nameKey]){hideLoading();showNotif('Kullanıcı bulunamadı!','error');return;}
+    const u=Object.assign({},allUsers[nameKey]);
+    delete u.hidden;
+    allUsers[nameKey]=u;
+    await saveUsers(allUsers);
     hideLoading();
     showNotif('Kullanıcı tekrar görünür! 👁');
   }catch(e){
@@ -3647,89 +3779,139 @@ function renderProfile(){
   const u=currentUser;
   const suggestedPos=aiSuggestPos(u);
   const currentRating=calcRating(u,u.pos||suggestedPos);
+  const tier=cardTier(currentRating,u);
+  const tierColors={'tier-epic':'#e080ff','tier-legend':'#ffaa44','tier-elite':'#ffd700','tier-champion':'#00ee66','tier-gold':'#ffd060','tier-silver':'#a0c8e8','tier-bronze':'#c07840','tier-common':'#608060'};
+  const tc=tierColors[tier]||'#608060';
+
   const posOptions=MEVKILER.map(m=>`<option value="${m}"${u.pos===m?' selected':''}>${m}</option>`).join('');
   const altPosOptions=m=>`<option value="">—</option>`+MEVKILER.map(p=>`<option value="${p}"${u[m]===p?' selected':''}>${p}</option>`).join('');
 
+  // Stat bar rengi
+  const statColor=v=>{
+    if(v>=85)return'#b8f717';
+    if(v>=70)return'#f5a623';
+    if(v>=55)return'#60a8ff';
+    return'#ff6060';
+  };
+
+  const stats=[
+    ['Hız',u.hiz||50],['Şut',u.sut||50],['Pas',u.pas||50],
+    ['Fizik',u.fizik||50],['Defans',u.defans||50],
+    ['Kalecilik',u.kalecilik||50],['Top Kontrolü',u.topKontrol||50],
+    ['Dribling',u.dribling||50],
+  ];
+
+  const adminStats=[
+    ['pf-hiz','Hız',u.hiz||50],['pf-sut','Şut',u.sut||50],
+    ['pf-pas','Pas',u.pas||50],['pf-fizik','Fizik',u.fizik||50],
+    ['pf-defans','Defans',u.defans||50],['pf-kalecilik','Kalecilik',u.kalecilik||50],
+    ['pf-topkontrol','Top Kontrolü',u.topKontrol||50],['pf-dribling','Dribling',u.dribling||50],
+  ];
+
+  // Rozetler
+  const allBadges=getUserBadges(u);
+  const earned=allBadges.filter(b=>b.earned).length;
+
   el.innerHTML=`
-    <div class="section-title">Profil</div>
+  <div class="pf-wrap">
 
-    <!-- FC Card preview + AI badge -->
-    <div style="margin-bottom:16px">
-      ${buildFC2Card(u,u.pos)}
-    </div>
-
-    <div class="ai-badge" style="margin-bottom:14px">
-      <div class="ai-title">🤖 Yapay Zeka Analizi</div>
-      <div class="ai-result">Sana En İdeal Mevki → ${suggestedPos}</div>
-      <div style="font-size:.7rem;color:#8080cc;margin-top:4px">Ana mevkinde reyting: <strong style="color:#b0b0ff">${currentRating}</strong></div>
-    </div>
-
-    <div class="profile-form-card" style="margin-bottom:12px">
-      <h3>⚙️ Temel Bilgiler</h3>
-      <div class="form-group">
-        <label>Kullandığın Ayak</label>
-        <select id="pf-ayak" onchange="updateProfilePreview()">
-          <option${u.ayak==='Sağ'?' selected':''}>Sağ</option>
-          <option${u.ayak==='Sol'?' selected':''}>Sol</option>
-          <option${u.ayak==='İki Ayak'?' selected':''}>İki Ayak</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Ana Mevki</label>
-        <select id="pf-pos" onchange="updateProfilePreview()">${posOptions}</select>
-      </div>
-      <div class="form-row">
-        <div class="form-group" style="margin-bottom:0">
-          <label>Alt Mevki 1</label>
-          <select id="pf-alt1" onchange="updateProfilePreview()">${altPosOptions('altPos1')}</select>
-        </div>
-        <div class="form-group" style="margin-bottom:0">
-          <label>Alt Mevki 2</label>
-          <select id="pf-alt2" onchange="updateProfilePreview()">${altPosOptions('altPos2')}</select>
-        </div>
-      </div>
-    </div>
-
-    ${isAdmin(currentUser)?`
-    <div class="profile-form-card" style="margin-bottom:14px">
-      <h3>📊 Özellikler (1–100) <span style="font-size:.65rem;color:var(--amber);font-family:'DM Sans',sans-serif;font-weight:400">— Admin Olarak Düzenliyorsun</span></h3>
-      ${[
-        ['pf-hiz','Hız',u.hiz||50],
-        ['pf-sut','Şut',u.sut||50],
-        ['pf-pas','Pas',u.pas||50],
-        ['pf-fizik','Fizik',u.fizik||50],
-        ['pf-defans','Defans',u.defans||50],
-        ['pf-kalecilik','Kalecilik',u.kalecilik||50],
-        ['pf-topkontrol','Top Kontrolü',u.topKontrol||50],
-        ['pf-dribling','Dribling',u.dribling||50],
-      ].map(([id,lbl,val])=>`
-        <div class="stat-row">
-          <label>${lbl}</label>
-          <input type="range" id="${id}" min="1" max="100" value="${val}" oninput="updateProfilePreview()">
-          <span class="stat-val-badge" id="${id}-val">${val}</span>
-        </div>`).join('')}
-    </div>`:`
-    <div class="profile-form-card" style="margin-bottom:14px">
-      <h3>📊 Özellikler</h3>
-      <p style="font-size:.76rem;color:var(--amber);margin-bottom:12px">⚠️ Özelliklerini sadece admin belirleyebilir.</p>
-      ${[
-        ['Hız',u.hiz||50],['Şut',u.sut||50],['Pas',u.pas||50],
-        ['Fizik',u.fizik||50],['Defans',u.defans||50],['Kalecilik',u.kalecilik||50],
-        ['Top Kontrolü',u.topKontrol||50],['Dribling',u.dribling||50],
-      ].map(([lbl,val])=>`
-        <div class="stat-row">
-          <label>${lbl}</label>
-          <div style="flex:1;background:var(--dark-3);border-radius:20px;height:8px;overflow:hidden">
-            <div style="height:100%;width:${val}%;background:var(--lime);border-radius:20px;transition:width .4s"></div>
+    <!-- Hero: Kart + AI -->
+    <div class="pf-hero">
+      <div class="pf-card-wrap">${buildFC2Card(u,u.pos)}</div>
+      <div class="pf-ai" style="width:100%">
+        <div class="pf-ai-title">🤖 Yapay Zeka Analizi</div>
+        <div class="pf-ai-main">
+          <div>
+            <div style="font-size:.58rem;color:#9060e0;margin-bottom:3px">İdeal Mevki</div>
+            <div class="pf-ai-pos">${suggestedPos}</div>
           </div>
-          <span class="stat-val-badge">${val}</span>
-        </div>`).join('')}
-    </div>`}
+          <div style="text-align:right">
+            <div style="font-size:.58rem;color:#9060e0;margin-bottom:3px">Rating</div>
+            <div class="pf-ai-rating" style="color:${tc}">${currentRating}</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <button class="btn btn-primary" style="width:100%" onclick="saveProfile()">💾 Mevki & Ayak Kaydet</button>
-  `;
+    <!-- Temel Bilgiler -->
+    <div class="pf-section">
+      <div class="pf-section-head">
+        <div class="pf-section-icon lime">⚙️</div>
+        <span class="pf-section-title lime">Temel Bilgiler</span>
+      </div>
+      <div class="pf-section-body">
+        <div class="pf-field">
+          <label>Kullandığın Ayak</label>
+          <select id="pf-ayak" onchange="updateProfilePreview()">
+            <option${u.ayak==='Sağ'?' selected':''}>Sağ</option>
+            <option${u.ayak==='Sol'?' selected':''}>Sol</option>
+            <option${u.ayak==='İki Ayak'?' selected':''}>İki Ayak</option>
+          </select>
+        </div>
+        <div class="pf-field">
+          <label>Ana Mevki</label>
+          <select id="pf-pos" onchange="updateProfilePreview()">${posOptions}</select>
+        </div>
+        <div class="pf-field-row">
+          <div class="pf-field">
+            <label>Alt Mevki 1</label>
+            <select id="pf-alt1" onchange="updateProfilePreview()">${altPosOptions('altPos1')}</select>
+          </div>
+          <div class="pf-field">
+            <label>Alt Mevki 2</label>
+            <select id="pf-alt2" onchange="updateProfilePreview()">${altPosOptions('altPos2')}</select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- İstatistikler -->
+    <div class="pf-section">
+      <div class="pf-section-head">
+        <div class="pf-section-icon ${isAdmin(currentUser)?'amber':'lime'}">📊</div>
+        <span class="pf-section-title ${isAdmin(currentUser)?'amber':'lime'}">
+          Özellikler ${isAdmin(currentUser)?'<span style="font-size:.6rem;font-weight:400;color:#888">— Admin modu</span>':''}
+        </span>
+      </div>
+      <div class="pf-section-body" style="padding:8px 14px">
+        ${isAdmin(currentUser)?
+          adminStats.map(([id,lbl,val])=>`
+            <div class="pf-slider-row">
+              <span class="pf-slider-lbl">${lbl}</span>
+              <input type="range" id="${id}" min="1" max="100" value="${val}"
+                style="flex:1;accent-color:${statColor(val)}"
+                oninput="document.getElementById('${id}-v').textContent=this.value;updateProfilePreview()">
+              <span class="pf-slider-val" id="${id}-v" style="color:${statColor(val)}">${val}</span>
+            </div>`).join(''):
+          stats.map(([lbl,val])=>`
+            <div class="pf-stat-row">
+              <span class="pf-stat-lbl">${lbl}</span>
+              <div class="pf-stat-bar"><div class="pf-stat-fill" style="width:${val}%;background:${statColor(val)}"></div></div>
+              <span class="pf-stat-val" style="color:${statColor(val)}">${val}</span>
+            </div>`).join('')
+        }
+      </div>
+    </div>
+
+    <!-- Rozetler -->
+    <div class="pf-section">
+      <div class="pf-section-head">
+        <div class="pf-section-icon purple">🎖️</div>
+        <span class="pf-section-title purple">Rozetler</span>
+        <span style="margin-left:auto;font-size:.65rem;color:#9060e0">${earned}/${BADGE_DEFS.length} kazanıldı</span>
+      </div>
+      <div class="pf-badge-grid">
+        ${allBadges.map(b=>`
+          <div class="pf-badge" title="${b.desc}">
+            <div class="pf-badge-icon ${b.earned?'earned':'locked'}">${b.icon}</div>
+            <div class="pf-badge-lbl ${b.earned?'earned':'locked'}">${b.label}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <button class="pf-save-btn" onclick="saveProfile()">💾 Kaydet</button>
+  </div>`;
 }
-
 function updateProfilePreview(){
   const el=document.getElementById('profile-content');if(!el)return;
   // Update range value badges
@@ -3817,32 +3999,65 @@ function renderCards(){
 /* ===================== FORUM ===================== */
 async function renderForum(){
   const el=document.getElementById('forum-content');if(!el)return;
-  el.innerHTML=`<div class="section-title">Topluluk Forumu</div>
-    <button class="btn btn-primary" style="width:100%;margin-bottom:14px" onclick="openModal('modal-forum-post')">+ Yeni Gönderi</button>
-    <div id="forum-list"><div class="no-match-box"><span class="nm-icon">💬</span><p>Yükleniyor...</p></div></div>`;
+  el.innerHTML=`
+    <div class="fm-wrap">
+      <button class="fm-new-btn" onclick="openModal('modal-forum-post')">
+        <span style="font-size:1.1rem">✏️</span> Yeni Gönderi Yaz
+      </button>
+      <div id="forum-list">
+        <div style="text-align:center;padding:32px;color:#446044">
+          <div style="font-size:2rem;margin-bottom:8px">💬</div>
+          <div style="font-size:.8rem">Yükleniyor...</div>
+        </div>
+      </div>
+    </div>`;
+
   const snap=await db.ref('forum').orderByChild('score').once('value');
   const val=snap.val()||{};
-  const posts=Object.entries(val).map(([id,p])=>({id,...p})).sort((a,b)=>(b.score||0)-(a.score||0));
+  window._forumCache=Object.entries(val).map(([id,p])=>({id,...p}));
+  const posts=window._forumCache.sort((a,b)=>(b.score||0)-(a.score||0));
   const listEl=document.getElementById('forum-list');if(!listEl)return;
+
   if(!posts.length){
-    listEl.innerHTML='<div class="no-match-box"><span class="nm-icon">💬</span><p>Henüz gönderi yok. İlk yorumu sen yap!</p></div>';return;
+    listEl.innerHTML=`<div style="text-align:center;padding:40px 20px;color:#446044">
+      <div style="font-size:2.5rem;margin-bottom:12px">💬</div>
+      <div style="font-size:.85rem;font-weight:700;color:#608060;margin-bottom:4px">Henüz gönderi yok</div>
+      <div style="font-size:.72rem">İlk yorumu sen yap!</div>
+    </div>`;
+    return;
   }
-  const catLabel={oneri:'💡 Öneri',sikayet:'😤 Şikayet',genel:'💬 Genel',bug:'🐛 Bug'};
-  listEl.innerHTML=posts.map(p=>{
+
+  const catCls={oneri:'oneri',sikayet:'sikayet',genel:'genel',bug:'bug'};
+  const catLabel={oneri:'Öneri',sikayet:'Şikayet',genel:'Genel',bug:'Bug'};
+  const catIcon={oneri:'💡',sikayet:'😤',genel:'💬',bug:'🐛'};
+
+  listEl.innerHTML=posts.map((p,idx)=>{
     const myVote=(p.votes&&p.votes[currentUser.id])||0;
     const score=p.score||0;
-    const upCount=Object.values(p.votes||{}).filter(v=>v===1).length;
-    const downCount=Object.values(p.votes||{}).filter(v=>v===-1).length;
-    return`<div class="forum-post" style="flex-direction:column;gap:0">
-      <div class="forum-body" style="width:100%">
-        <span class="forum-cat forum-cat-${p.cat||'genel'}">${catLabel[p.cat]||'💬 Genel'}</span>
-        <div class="forum-title">${p.title||''}</div>
-        <div class="forum-text">${p.body||''}</div>
-        <div class="forum-meta">👤 ${p.author||'?'} &nbsp;•&nbsp; ${p.date||''}</div>
-        <div class="forum-votes">
-          <button class="forum-vote-btn${myVote===1?' voted-up':''}" onclick="forumVote('${p.id}',1)">👍 Beğendim${upCount>0?' ('+upCount+')':''}</button>
-          <button class="forum-vote-btn${myVote===-1?' voted-down':''}" onclick="forumVote('${p.id}',-1)">👎 Beğenmedim${downCount>0?' ('+downCount+')':''}</button>
-          <span style="font-size:.68rem;color:var(--text-muted)">${score>0?'+'+score:score} puan</span>
+    const cat=p.cat||'genel';
+    const scoreClass=score>0?'pos':score<0?'neg':'zero';
+    const authorInitials=(p.author||'?').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+    return`<div class="fm-post" style="animation-delay:${idx*.05}s">
+      <div class="fm-post-inner">
+        <!-- Oy kolonu -->
+        <div class="fm-vote-col">
+          <button class="fm-vote-btn up ${myVote===1?'voted-up':''}" onclick="forumVote('${p.id}',1)" title="Beğen">▲</button>
+          <div class="fm-score ${scoreClass}">${score>0?'+':''  }${score}</div>
+          <button class="fm-vote-btn down ${myVote===-1?'voted-down':''}" onclick="forumVote('${p.id}',-1)" title="Beğenme">▼</button>
+        </div>
+        <!-- İçerik -->
+        <div class="fm-body">
+          <div class="fm-cats">
+            <span class="fm-cat ${catCls[cat]}">${catIcon[cat]} ${catLabel[cat]||'Genel'}</span>
+          </div>
+          <div class="fm-title">${p.title||''}</div>
+          ${p.body?`<div class="fm-text">${p.body}</div>`:''}
+          <div class="fm-meta">
+            <div class="fm-meta-av">${authorInitials}</div>
+            <span>${p.author||'?'}</span>
+            <span style="color:#1e2e1e">·</span>
+            <span>${p.date||''}</span>
+          </div>
         </div>
       </div>
     </div>`;
