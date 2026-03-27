@@ -5161,6 +5161,119 @@ function renderPastMatches(){
 
 
 
+/* ===================== DASHBOARD ===================== */
+function renderDashboard(){
+  const el=document.getElementById('dashboard-content');if(!el)return;
+  if(!currentUser){el.innerHTML='';return;}
+
+  const users=Object.values(getUsers());
+  const matches=getMatches();
+
+  // Yaklaşan maçlar (henüz bitmemiş, tarihe göre sıralı)
+  const now=Date.now();
+  const upcoming=matches
+    .filter(m=>!m.finished && new Date(m.datetime).getTime()>now)
+    .sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
+  const nextMatch=upcoming[0]||null;
+
+  // Kullanıcı istatistikleri
+  const u=Object.values(_users).find(x=>x.id===currentUser.id)||currentUser;
+  const wins=u.wins||0;const totalMatches=u.matches||0;
+  const motm=u.motm||0;const rating=u.rating||50;
+  const winRate=totalMatches>0?Math.round((wins/totalMatches)*100):0;
+
+  // Liderlik sırası (rating)
+  const sorted=[...users].sort((a,b)=>b.rating-a.rating);
+  const rank=sorted.findIndex(x=>x.id===u.id)+1;
+
+  // Geri sayım
+  function countdown(dt){
+    const diff=new Date(dt).getTime()-now;
+    if(diff<=0)return'Başladı!';
+    const d=Math.floor(diff/86400000);
+    const h=Math.floor((diff%86400000)/3600000);
+    const m=Math.floor((diff%3600000)/60000);
+    if(d>0)return`${d}g ${h}s`;
+    if(h>0)return`${h}s ${m}dk`;
+    return`${m}dk`;
+  }
+
+  // Katılım durumu
+  const attending=nextMatch?(nextMatch.attending||[]):[];
+  const iAttend=nextMatch&&attending.find(p=>p.id===u.id);
+
+  // Top 3 oyuncu (rating)
+  const top3=sorted.slice(0,3);
+
+  el.innerHTML=`
+  <div style="padding:4px 0 16px">
+
+    <!-- Hoş geldin kartı -->
+    <div style="background:linear-gradient(135deg,var(--grass) 0%,var(--dark-3) 100%);border-radius:var(--radius);padding:18px 20px 16px;margin-bottom:13px;position:relative;overflow:hidden;box-shadow:var(--shadow)">
+      <div style="position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:3rem;opacity:.15">⚽</div>
+      <div style="font-size:.7rem;font-weight:700;letter-spacing:1.5px;color:rgba(184,247,23,.7);text-transform:uppercase;margin-bottom:4px">Hoş Geldin</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:1.9rem;letter-spacing:1px;line-height:1">${u.name}</div>
+      <div style="font-size:.76rem;color:var(--text-muted);margin-top:4px">${u.pos||'Mevki belirsiz'} • Rating <span style="color:var(--lime);font-weight:700">${rating}</span> • Sıra <span style="color:var(--amber);font-weight:700">${rank>0?'#'+rank:'-'}</span></div>
+    </div>
+
+    <!-- Stat grid -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:13px">
+      ${[
+        {icon:'🏆',val:wins,lbl:'Galibiyet'},
+        {icon:'📅',val:totalMatches,lbl:'Maç'},
+        {icon:'⭐',val:motm,lbl:'MOTM'},
+        {icon:'📈',val:winRate+'%',lbl:'Kazanma'},
+      ].map(s=>`<div style="background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);padding:12px 8px;text-align:center">
+        <div style="font-size:1.2rem">${s.icon}</div>
+        <div style="font-family:'Bebas Neue',cursive;font-size:1.4rem;color:var(--lime);line-height:1.1">${s.val}</div>
+        <div style="font-size:.6rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;margin-top:2px">${s.lbl}</div>
+      </div>`).join('')}
+    </div>
+
+    <!-- Sonraki maç -->
+    <div style="margin-bottom:13px">
+      <div class="section-title">Sonraki Maç</div>
+      ${nextMatch?`
+      <div style="background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius);padding:15px 18px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">
+          <div>
+            <div style="font-family:'Bebas Neue',cursive;font-size:1.25rem;letter-spacing:1px">${nextMatch.name||'Maç'}</div>
+            <div style="font-size:.76rem;color:var(--text-muted);margin-top:3px">📍 ${nextMatch.venue||'?'} &nbsp;•&nbsp; 📅 ${new Date(nextMatch.datetime).toLocaleDateString('tr-TR',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</div>
+          </div>
+          <div style="background:rgba(184,247,23,.1);border:1px solid rgba(184,247,23,.25);border-radius:8px;padding:6px 12px;text-align:center;flex-shrink:0">
+            <div style="font-family:'Bebas Neue',cursive;font-size:1.1rem;color:var(--lime)">${countdown(nextMatch.datetime)}</div>
+            <div style="font-size:.58rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Kalan</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap">
+          <div style="font-size:.76rem;color:var(--text-muted)">👥 ${attending.length}/${14} oyuncu</div>
+          ${iAttend?`<div style="background:rgba(184,247,23,.1);color:var(--lime);border:1px solid rgba(184,247,23,.25);border-radius:20px;font-size:.7rem;font-weight:700;padding:3px 10px">✓ Katılıyorsun</div>`:''}
+        </div>
+      </div>`:`
+      <div style="background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius);padding:22px;text-align:center;color:var(--text-muted);font-size:.84rem">
+        📭 Yaklaşan maç yok
+      </div>`}
+    </div>
+
+    <!-- Top 3 -->
+    <div>
+      <div class="section-title">Bu Haftanın Zirvesi</div>
+      <div style="display:flex;flex-direction:column;gap:7px">
+        ${top3.map((p,i)=>`
+        <div style="background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);padding:10px 14px;display:flex;align-items:center;gap:10px">
+          <div style="font-size:1.3rem">${['🥇','🥈','🥉'][i]}</div>
+          <div style="flex:1">
+            <div style="font-weight:600;font-size:.84rem${p.id===u.id?';color:var(--amber)':''}">${p.name}${p.id===u.id?' (Sen)':''}</div>
+            <div style="font-size:.68rem;color:var(--text-muted)">${p.pos||'-'} • ${p.matches||0} maç</div>
+          </div>
+          <div style="font-family:'Bebas Neue',cursive;font-size:1.35rem;color:var(--lime)">${p.rating}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+
+  </div>`;
+}
+
 /* ===================== TRANSFER PIYASASI ===================== */
 function renderBorsa(){
   const el=document.getElementById('borsa-content');if(!el)return;
