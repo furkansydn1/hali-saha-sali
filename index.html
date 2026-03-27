@@ -526,82 +526,180 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 @media(max-width:500px){.profile-wrap{grid-template-columns:1fr}}
 
 /* FC Card v2 - bigger, richer */
-.fc2-card{position:relative;width:100%;max-width:220px;margin:0 auto;aspect-ratio:3/4;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;align-items:center;padding:16px 12px 12px;cursor:default}
-.fc2-card .fc2-bg{position:absolute;inset:0;z-index:0}
-.fc2-card>*{position:relative;z-index:1}
-.fc2-card.tier-gold .fc2-bg{background:linear-gradient(150deg,#8b6010 0%,#f5c842 35%,#c8860a 70%,#7a4a00 100%)}
-.fc2-card.tier-silver .fc2-bg{background:linear-gradient(150deg,#4a5a6a 0%,#a0b8cc 35%,#7090a8 70%,#304050 100%)}
-.fc2-card.tier-bronze .fc2-bg{background:linear-gradient(150deg,#5a3010 0%,#c07838 35%,#8a4818 70%,#3a1800 100%)}
-.fc2-card.tier-rare .fc2-bg{background:linear-gradient(150deg,#1a1a4a 0%,#3a4aaa 35%,#1a2888 70%,#080820 100%)}
-.fc2-card.tier-common .fc2-bg{background:linear-gradient(150deg,#0a1a0a 0%,#1a3a20 35%,#0a2010 70%,#050f05 100%)}
-.fc2-shine{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15) 0%,transparent 50%,rgba(255,255,255,.05) 100%);z-index:2;pointer-events:none}
-.fc2-rating{font-family:'Bebas Neue',cursive;font-size:2.8rem;line-height:1;text-align:left;width:100%;letter-spacing:-1px}
-.fc2-pos{font-family:'Bebas Neue',cursive;font-size:.85rem;letter-spacing:2px;text-align:left;width:100%;margin-top:-4px;opacity:.85}
-.fc2-avatar{width:90px;height:90px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:8px 0 6px;border:3px solid rgba(255,255,255,.3);font-family:'Bebas Neue',cursive;font-size:2.2rem;letter-spacing:1px}
-.fc2-name{font-weight:700;font-size:.75rem;letter-spacing:1px;text-transform:uppercase;text-align:center;margin-bottom:8px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fc2-divider{width:100%;height:1px;background:rgba(255,255,255,.25);margin-bottom:8px}
-.fc2-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;width:100%}
-.fc2-stat{display:flex;flex-direction:column;align-items:center;gap:1px}
-.fc2-stat-val{font-family:'Bebas Neue',cursive;font-size:1.1rem;line-height:1}
-.fc2-stat-lbl{font-size:.5rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;opacity:.8}
-.fc2-foot{font-size:.6rem;letter-spacing:.5px;margin-top:4px;opacity:.75;text-align:center}
+.fc2-card{position:relative;width:100%;max-width:220px;margin:0 auto;border-radius:18px;overflow:visible;display:flex;flex-direction:column;align-items:center;padding:14px 12px 12px;cursor:default;transition:transform .2s}
+.fc2-card:hover{transform:translateY(-6px) scale(1.02)}
+.fc2-card .fc2-bg{position:absolute;inset:0;z-index:0;border-radius:18px;overflow:hidden}
+.fc2-card>*{position:relative;z-index:2}
 
-/* tier colors */
-.fc2-card.tier-gold .fc2-rating,.fc2-card.tier-bronze .fc2-rating{color:#1a0800}
-.fc2-card.tier-silver .fc2-rating{color:#0a1a2a}
-.fc2-card.tier-rare .fc2-rating,.fc2-card.tier-common .fc2-rating{color:#c8f520}
-.fc2-card.tier-gold .fc2-pos,.fc2-card.tier-bronze .fc2-pos{color:#3a1800}
-.fc2-card.tier-silver .fc2-pos{color:#1a2a3a}
-.fc2-card.tier-rare .fc2-pos,.fc2-card.tier-common .fc2-pos{color:#90c060}
-.fc2-card.tier-gold .fc2-avatar,.fc2-card.tier-bronze .fc2-avatar{background:rgba(180,100,0,.3);color:#1a0800}
-.fc2-card.tier-silver .fc2-avatar{background:rgba(80,120,160,.3);color:#0a1a2a}
-.fc2-card.tier-rare .fc2-avatar,.fc2-card.tier-common .fc2-avatar{background:rgba(20,60,20,.4);color:#c8f520}
-.fc2-card.tier-gold .fc2-name,.fc2-card.tier-bronze .fc2-name{color:#1a0800}
-.fc2-card.tier-silver .fc2-name{color:#0a1a2a}
-.fc2-card.tier-rare .fc2-name,.fc2-card.tier-common .fc2-name{color:#e8f5eb}
-.fc2-card.tier-gold .fc2-stat-val,.fc2-card.tier-gold .fc2-stat-lbl,.fc2-card.tier-bronze .fc2-stat-val,.fc2-card.tier-bronze .fc2-stat-lbl{color:#1a0800}
-.fc2-card.tier-silver .fc2-stat-val,.fc2-card.tier-silver .fc2-stat-lbl{color:#0a1a2a}
-.fc2-card.tier-rare .fc2-stat-val,.fc2-card.tier-rare .fc2-stat-lbl,.fc2-card.tier-common .fc2-stat-val,.fc2-card.tier-common .fc2-stat-lbl{color:#c8f520}
-.fc2-card.tier-gold .fc2-foot,.fc2-card.tier-bronze .fc2-foot{color:#3a1800}
-.fc2-card.tier-silver .fc2-foot{color:#1a2a3a}
-.fc2-card.tier-rare .fc2-foot,.fc2-card.tier-common .fc2-foot{color:#90c060}
+/* ── STANDART TİER ARKA PLANLAR ── */
+.fc2-card.tier-gold .fc2-bg{background:linear-gradient(150deg,#2a1800,#6a3a00 35%,#c8860a 65%,#8b5e00 100%)}
+.fc2-card.tier-silver .fc2-bg{background:linear-gradient(150deg,#0d1a28,#1e3a50 35%,#3a6080 65%,#162030 100%)}
+.fc2-card.tier-bronze .fc2-bg{background:linear-gradient(150deg,#1a0c04,#4a2010 35%,#8a4420 65%,#3a1800 100%)}
+.fc2-card.tier-common .fc2-bg{background:linear-gradient(150deg,#080e08,#0e180e 35%,#162016 65%,#0a100a 100%)}
 
-/* AI suggestion badge */
-.ai-badge{background:linear-gradient(135deg,#1a1a3a,#2a2a5a);border:1px solid rgba(100,100,255,.4);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:12px;font-size:.82rem}
-.ai-badge .ai-title{font-size:.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8080ff;margin-bottom:5px}
-.ai-badge .ai-result{font-family:'Bebas Neue',cursive;font-size:1.3rem;letter-spacing:1.5px;color:#b0b0ff}
+/* ── ÖZEL TİER ARKA PLANLAR ── */
+.fc2-card.tier-epic .fc2-bg{background:linear-gradient(150deg,#0d0020,#1e0055,#2a0075,#150040,#0a0018)}
+.fc2-card.tier-legend .fc2-bg{background:linear-gradient(150deg,#180400,#3a0e00,#5a1800,#380800,#140300)}
+.fc2-card.tier-elite .fc2-bg{background:linear-gradient(150deg,#0a0900,#1c1700,#2e2500,#1a1500,#080700)}
+.fc2-card.tier-champion .fc2-bg{background:linear-gradient(150deg,#001a03,#003308,#005512,#003008,#001203)}
 
-/* Stat slider input */
-.stat-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.stat-row label{width:80px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);flex-shrink:0}
-.stat-row input[type=range]{flex:1;accent-color:var(--lime)}
-.stat-val-badge{width:36px;text-align:center;font-family:'Bebas Neue',cursive;font-size:1.1rem;color:var(--lime);flex-shrink:0}
+/* ── DÖNEN HALKALAR ── */
+.fc2-ring{position:absolute;border-radius:50%;border:2px solid transparent;z-index:1;pointer-events:none}
+@keyframes fc2spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes fc2spinr{from{transform:rotate(360deg)}to{transform:rotate(0deg)}}
 
-/* FORUM */
-.forum-post{background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);padding:13px 15px;margin-bottom:8px;display:flex;gap:12px}
-.forum-votes{display:flex;flex-direction:row;align-items:center;gap:6px;margin-top:8px}
-.forum-vote-btn{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:20px;border:1.5px solid var(--surface-3);background:var(--dark-3);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:600;color:var(--text-muted);transition:all .15s;line-height:1}
-.forum-vote-btn:hover{background:var(--surface-2)}
-.forum-vote-btn.voted-up{color:var(--lime);border-color:rgba(184,247,23,.4);background:rgba(184,247,23,.08)}
-.forum-vote-btn.voted-down{color:var(--red);border-color:rgba(255,64,64,.4);background:rgba(255,64,64,.08)}
-.forum-score{font-family:'Bebas Neue',cursive;font-size:1rem;color:var(--text);min-width:20px;text-align:center}
-.forum-score{font-family:'Bebas Neue',cursive;font-size:1.1rem;color:var(--text)}
-.forum-body{flex:1;min-width:0}
-.forum-cat{display:inline-block;font-size:.6rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:2px 7px;border-radius:20px;margin-bottom:5px}
-.forum-cat-oneri{background:rgba(184,247,23,.15);color:var(--lime);border:1px solid rgba(184,247,23,.3)}
-.forum-cat-sikayet{background:rgba(255,64,64,.15);color:var(--red);border:1px solid rgba(255,64,64,.3)}
-.forum-cat-genel{background:rgba(255,255,255,.08);color:var(--text-muted);border:1px solid rgba(255,255,255,.15)}
-.forum-cat-bug{background:rgba(245,166,35,.15);color:var(--amber);border:1px solid rgba(245,166,35,.3)}
-.forum-title{font-weight:600;font-size:.9rem;margin-bottom:3px;color:var(--text)}
-.forum-text{font-size:.78rem;color:var(--text-muted);line-height:1.55}
-.forum-meta{font-size:.65rem;color:var(--text-muted);margin-top:6px}
+/* Epic halkaları */
+.fc2-ring-outer{inset:-14px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 0deg,#ff00ff,#8000ff,#00ffff,#8000ff,#ff00ff) border-box;animation:fc2spin 3s linear infinite}
+.fc2-ring-inner{inset:-7px;border-width:1.5px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 180deg,#00ffff,#ff00ff,#8000ff,#ff00ff,#00ffff) border-box;animation:fc2spinr 2s linear infinite}
 
-/* patch slider css is below */
+/* Legend halkalar */
+.fc2-fire-ring1{inset:-13px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 0deg,#ff3300,#ffaa00,#ff6600,#ffdd00,#ff3300) border-box;animation:fc2spin 2.5s linear infinite}
+.fc2-fire-ring2{inset:-6px;border-width:1.5px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 90deg,#ffdd00,#ff3300,#ffaa00,#ff3300,#ffdd00) border-box;animation:fc2spinr 1.8s linear infinite}
 
-/* Profile form card */
-.profile-form-card{background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius);padding:18px}
-.profile-form-card h3{font-family:'Bebas Neue',cursive;font-size:1.1rem;letter-spacing:1.5px;color:var(--lime);margin-bottom:14px}
+/* Elite halka */
+.fc2-star-ring{inset:-13px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 0deg,#ffd700,#fff5a0,#ffd700,#ffe450,#ffd700) border-box;animation:fc2spin 4s linear infinite}
 
+/* Champion halkalar */
+.fc2-champ-ring1{inset:-14px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 0deg,#ffd700,#00cc44,#ffd700,#00ff66,#ffd700) border-box;animation:fc2spin 3.5s linear infinite}
+.fc2-champ-ring2{inset:-7px;border-width:1.5px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 270deg,#00ff66,#ffd700,#00cc44,#ffd700,#00ff66) border-box;animation:fc2spinr 2s linear infinite}
+
+/* ── SCAN + PARTİKÜLLER ── */
+.fc2-scan{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,rgba(180,0,255,.12) 49%,rgba(180,0,255,.2) 50%,rgba(180,0,255,.12) 51%,transparent 100%);background-size:100% 200%;animation:fc2scanmove 3s ease infinite;pointer-events:none;z-index:3;border-radius:18px}
+@keyframes fc2scanmove{0%{background-position:0% -100%}100%{background-position:0% 300%}}
+
+.fc2-particles,.fc2-fire-pts,.fc2-bolts,.fc2-confetti{position:absolute;inset:0;pointer-events:none;z-index:4;overflow:hidden;border-radius:18px}
+
+/* Epic partiküller */
+.fc2-particles span{position:absolute;border-radius:50%;animation:fc2ptup linear infinite}
+.fc2-particles span:nth-child(1){left:12%;width:3px;height:3px;background:#ff00ff;animation-duration:2.8s;animation-delay:0s}
+.fc2-particles span:nth-child(2){left:33%;width:2px;height:2px;background:#8000ff;animation-duration:3.3s;animation-delay:.6s}
+.fc2-particles span:nth-child(3){left:55%;width:3px;height:3px;background:#00ffff;animation-duration:2.5s;animation-delay:1.1s}
+.fc2-particles span:nth-child(4){left:74%;width:2px;height:2px;background:#ff00ff;animation-duration:3.6s;animation-delay:.3s}
+.fc2-particles span:nth-child(5){left:88%;width:3px;height:3px;background:#8000ff;animation-duration:2.2s;animation-delay:1.7s}
+@keyframes fc2ptup{0%{bottom:-6px;opacity:0}10%{opacity:1}80%{opacity:.6}100%{bottom:110%;opacity:0}}
+
+/* Legend ateş partikülleri */
+.fc2-fire-pts span{position:absolute;border-radius:50% 50% 30% 30%;animation:fc2ptup linear infinite}
+.fc2-fire-pts span:nth-child(1){left:18%;width:5px;height:7px;background:#ff5500;animation-duration:1.5s;animation-delay:0s}
+.fc2-fire-pts span:nth-child(2){left:38%;width:4px;height:6px;background:#ffaa00;animation-duration:1.8s;animation-delay:.4s}
+.fc2-fire-pts span:nth-child(3){left:58%;width:5px;height:7px;background:#ff3300;animation-duration:1.4s;animation-delay:.8s}
+.fc2-fire-pts span:nth-child(4){left:78%;width:4px;height:5px;background:#ffcc00;animation-duration:2s;animation-delay:.2s}
+
+/* Elite elektrik */
+.fc2-bolts span{position:absolute;width:1.5px;background:linear-gradient(to bottom,transparent,#ffd700,transparent);animation:fc2bflash linear infinite}
+.fc2-bolts span:nth-child(1){left:25%;height:40%;animation-duration:2.3s;animation-delay:0s}
+.fc2-bolts span:nth-child(2){left:70%;height:55%;animation-duration:3.1s;animation-delay:.9s}
+@keyframes fc2bflash{0%,83%,100%{opacity:0;top:-5%}84%{opacity:1;top:10%}94%{opacity:1;top:100%}95%{opacity:0}}
+
+/* Champion konfeti */
+.fc2-confetti span{position:absolute;animation:fc2ptup linear infinite}
+.fc2-confetti span:nth-child(1){left:8%;width:5px;height:5px;border-radius:1px;background:#ffd700;animation-duration:2.2s;animation-delay:0s}
+.fc2-confetti span:nth-child(2){left:30%;width:4px;height:6px;border-radius:1px;background:#00ff66;animation-duration:2.9s;animation-delay:.5s}
+.fc2-confetti span:nth-child(3){left:52%;width:5px;height:4px;border-radius:50%;background:#ffd700;animation-duration:2s;animation-delay:1s}
+.fc2-confetti span:nth-child(4){left:76%;width:4px;height:5px;border-radius:1px;background:#00cc44;animation-duration:2.6s;animation-delay:.3s}
+
+/* ── KART İÇİ ELEMENTLER ── */
+.fc2-top-stripe{width:calc(100% + 24px);height:4px;margin:-14px -12px 10px;background-size:200%;animation:fc2shimmer 2s linear infinite;border-radius:18px 18px 0 0}
+@keyframes fc2shimmer{0%{background-position:0%}100%{background-position:200%}}
+
+.tier-gold .fc2-top-stripe{background:linear-gradient(90deg,#aa7000,#ffd700,#ffee80,#ffd700,#aa7000)}
+.tier-silver .fc2-top-stripe{background:linear-gradient(90deg,#406080,#90b8d8,#c0ddf0,#90b8d8,#406080)}
+.tier-bronze .fc2-top-stripe{background:linear-gradient(90deg,#6a3010,#c07840,#e09060,#c07840,#6a3010)}
+.tier-common .fc2-top-stripe{background:linear-gradient(90deg,#1a3020,#306040,#487060,#306040,#1a3020)}
+.tier-epic .fc2-top-stripe{background:linear-gradient(90deg,#ff00ff,#8000ff,#00ffff,#8000ff,#ff00ff)}
+.tier-legend .fc2-top-stripe{background:linear-gradient(90deg,#ff3300,#ffcc00,#ff6600,#ffaa00,#ff3300)}
+.tier-elite .fc2-top-stripe{background:linear-gradient(90deg,#aa8800,#ffd700,#ffe880,#ffd700,#aa8800)}
+.tier-champion .fc2-top-stripe{background:linear-gradient(90deg,#ffd700,#00cc44,#00ff88,#00cc44,#ffd700)}
+
+.fc2-header{width:100%;display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.fc2-rating{font-family:'Bebas Neue',Impact,cursive;font-size:2.2rem;line-height:1;letter-spacing:-2px}
+.tier-gold .fc2-rating{color:#ffd060;text-shadow:0 0 12px rgba(255,200,0,.5)}
+.tier-silver .fc2-rating{color:#a0c8e8;text-shadow:0 0 10px rgba(120,180,220,.4)}
+.tier-bronze .fc2-rating{color:#c07840}
+.tier-common .fc2-rating{color:#b8f717}
+.tier-epic .fc2-rating{color:#e080ff;animation:fc2epglow 2s ease infinite}
+@keyframes fc2epglow{0%,100%{text-shadow:0 0 15px rgba(180,0,255,.5)}50%{text-shadow:0 0 35px rgba(200,0,255,1),0 0 60px rgba(180,0,255,.4)}}
+.tier-legend .fc2-rating{color:#ffaa44;animation:fc2fglow 1.6s ease infinite}
+@keyframes fc2fglow{0%,100%{text-shadow:0 0 15px rgba(255,100,0,.5)}50%{text-shadow:0 0 35px rgba(255,140,0,1),0 0 70px rgba(255,80,0,.4)}}
+.tier-elite .fc2-rating{color:#ffd700;animation:fc2sglow 2.5s ease infinite}
+@keyframes fc2sglow{0%,100%{text-shadow:0 0 12px rgba(255,200,0,.4)}50%{text-shadow:0 0 30px rgba(255,220,0,1),0 0 60px rgba(255,180,0,.3)}}
+.tier-champion .fc2-rating{color:#00ee66;animation:fc2cglow 2s ease infinite}
+@keyframes fc2cglow{0%,100%{text-shadow:0 0 15px rgba(0,210,60,.4)}50%{text-shadow:0 0 35px rgba(0,255,80,1),0 0 70px rgba(0,200,50,.4)}}
+
+.fc2-pos{font-size:.55rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;opacity:.8;margin-top:2px}
+.tier-gold .fc2-pos,.tier-elite .fc2-pos{color:#ccaa44}
+.tier-silver .fc2-pos{color:#6090b0}
+.tier-bronze .fc2-pos{color:#906040}
+.tier-common .fc2-pos{color:#508050}
+.tier-epic .fc2-pos{color:#bb55ee}
+.tier-legend .fc2-pos{color:#dd7722}
+.tier-champion .fc2-pos{color:#009944}
+
+.fc2-tier-badge{font-size:.52rem;font-weight:800;letter-spacing:1.5px;padding:2px 6px;border-radius:20px;border:1px solid;margin-bottom:4px;text-align:center}
+.fc2-ayak{font-size:.6rem;opacity:.6;text-align:right}
+
+.fc2-avatar{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',Impact,cursive;font-size:1.3rem;font-weight:900;margin:6px 0;border:2px solid;animation:fc2spin 6s linear infinite}
+.tier-gold .fc2-avatar{background:conic-gradient(from 0deg,#aa7000,#ffd700,#aa7000);color:#ffe080;border-color:transparent}
+.tier-silver .fc2-avatar{background:conic-gradient(from 0deg,#406080,#90b8d8,#406080);color:#c0ddf0;border-color:transparent}
+.tier-bronze .fc2-avatar{background:conic-gradient(from 0deg,#6a3010,#c07840,#6a3010);color:#e0a070;border-color:transparent}
+.tier-common .fc2-avatar{background:rgba(20,50,20,.5);color:#b8f717;border-color:rgba(184,247,23,.3);animation:none}
+.tier-epic .fc2-avatar{background:conic-gradient(from 0deg,#ff00ff,#8000ff,#00ffff,#8000ff,#ff00ff);color:#e080ff;border-color:transparent}
+.tier-legend .fc2-avatar{background:conic-gradient(from 0deg,#ff3300,#ffcc00,#ff6600,#ff3300);color:#ffaa44;border-color:transparent}
+.tier-elite .fc2-avatar{background:conic-gradient(from 0deg,#ffd700,#fff8a0,#ffd700,#aa8800,#ffd700);color:#ffd700;border-color:transparent}
+.tier-champion .fc2-avatar{background:conic-gradient(from 0deg,#ffd700,#00ff66,#ffd700,#00cc44,#ffd700);color:#00ff66;border-color:transparent}
+
+/* Avatar inner (özel tierlar için) */
+.fc2-card.tier-epic .fc2-avatar,.fc2-card.tier-legend .fc2-avatar,.fc2-card.tier-elite .fc2-avatar,.fc2-card.tier-champion .fc2-avatar{position:relative}
+
+.fc2-name{font-family:'Bebas Neue',Impact,cursive;font-size:.88rem;letter-spacing:1.5px;text-align:center;margin-bottom:4px}
+.tier-gold .fc2-name{color:#ffe080}
+.tier-silver .fc2-name{color:#c0ddf0}
+.tier-bronze .fc2-name{color:#e0a070}
+.tier-common .fc2-name{color:#c0e0c0}
+.tier-epic .fc2-name{color:#e080ff}
+.tier-legend .fc2-name{color:#ffaa44}
+.tier-elite .fc2-name{color:#ffd700}
+.tier-champion .fc2-name{color:#00ee66}
+
+/* ── FORM PUANI NOKTALARI ── */
+.fc2-form-row{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:5px}
+.fc2-fp-dots{display:flex;gap:4px;align-items:center}
+.fp-dot{width:9px;height:9px;border-radius:3px;transition:all .3s}
+.fp-empty{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+.fp-pos{background:#22cc66;border:1px solid #44ee88;box-shadow:0 0 6px rgba(34,204,102,.6)}
+.fp-pos.fp-danger-pos{background:#00ff88;border-color:#00ffaa;box-shadow:0 0 10px rgba(0,255,136,.8);animation:fp-pulse-pos .8s ease infinite}
+@keyframes fp-pulse-pos{0%,100%{box-shadow:0 0 6px rgba(0,255,100,.6)}50%{box-shadow:0 0 16px rgba(0,255,100,1)}}
+.fp-neg{background:#ff4040;border:1px solid #ff6060;box-shadow:0 0 6px rgba(255,64,64,.6)}
+.fp-neg.fp-danger-neg{background:#ff2020;border-color:#ff0000;box-shadow:0 0 10px rgba(255,0,0,.8);animation:fp-pulse-neg .8s ease infinite}
+@keyframes fp-pulse-neg{0%,100%{box-shadow:0 0 6px rgba(255,0,0,.6)}50%{box-shadow:0 0 16px rgba(255,0,0,1)}}
+.fc2-fp-label{font-size:.5rem;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+
+.fc2-divider{width:100%;border-top:1px solid rgba(255,255,255,.12);margin:4px 0 6px}
+.fc2-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;width:100%;margin-bottom:6px}
+.fc2-stat{display:flex;flex-direction:column;align-items:center}
+.fc2-stat-val{font-family:'Bebas Neue',Impact,cursive;font-size:.9rem;line-height:1}
+.fc2-stat-lbl{font-size:.44rem;font-weight:700;letter-spacing:.3px;text-transform:uppercase;opacity:.65;margin-top:1px}
+.tier-gold .fc2-stat-val,.tier-gold .fc2-stat-lbl{color:#ffd060}
+.tier-silver .fc2-stat-val,.tier-silver .fc2-stat-lbl{color:#a0c8e8}
+.tier-bronze .fc2-stat-val,.tier-bronze .fc2-stat-lbl{color:#c07840}
+.tier-common .fc2-stat-val,.tier-common .fc2-stat-lbl{color:#b8f717}
+.tier-epic .fc2-stat-val,.tier-epic .fc2-stat-lbl{color:#e080ff}
+.tier-legend .fc2-stat-val,.tier-legend .fc2-stat-lbl{color:#ffaa44}
+.tier-elite .fc2-stat-val,.tier-elite .fc2-stat-lbl{color:#ffd700}
+.tier-champion .fc2-stat-val,.tier-champion .fc2-stat-lbl{color:#00ee66}
+
+.fc2-bons{width:100%;padding:4px 6px;background:rgba(0,0,0,.3);border-radius:6px;text-align:center;font-family:'Bebas Neue',Impact,cursive;font-size:.88rem;letter-spacing:1px}
+.tier-gold .fc2-bons{color:#ffd060}
+.tier-silver .fc2-bons{color:#a0c8e8}
+.tier-bronze .fc2-bons{color:#c07840}
+.tier-common .fc2-bons{color:#b8f717}
+.tier-epic .fc2-bons{color:#e080ff}
+.tier-legend .fc2-bons{color:#ffaa44}
+.tier-elite .fc2-bons{color:#ffd700}
+.tier-champion .fc2-bons{color:#00ee66}
+
+/* Kaptan rozeti */
+.fc2-capt-badge{position:absolute;top:-8px;right:-4px;width:22px;height:22px;border-radius:50%;background:#ffd700;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;color:#000;font-family:Impact,cursive;border:2px solid rgba(0,0,0,.4);z-index:10}
 
 /* ===================== TRANSFER PIYASASI ===================== */
 .borsa-row{display:flex;align-items:center;gap:12px;padding:11px 15px;background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);margin-bottom:7px;transition:border-color .2s}
@@ -780,6 +878,278 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
   border-radius:2px;transition:width .4s ease;
 }
 
+.fc2-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;padding:4px}
+
+/* ═══════════════════════════════════════════════════════════
+   DASHBOARD
+═══════════════════════════════════════════════════════════ */
+.db{padding:12px;display:flex;flex-direction:column;gap:10px}
+
+/* Karşılama kartı */
+.db-hero{
+  background:linear-gradient(135deg,#0d1a0d 0%,#142814 40%,#0a1a10 100%);
+  border:1px solid rgba(184,247,23,.2);
+  border-radius:18px;
+  padding:18px 16px;
+  position:relative;
+  overflow:hidden;
+}
+.db-hero::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:140px;height:140px;border-radius:50%;
+  background:radial-gradient(circle,rgba(184,247,23,.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.db-hero::after{
+  content:'';position:absolute;bottom:-20px;left:20px;
+  width:80px;height:80px;border-radius:50%;
+  background:radial-gradient(circle,rgba(184,247,23,.04) 0%,transparent 70%);
+  pointer-events:none;
+}
+.db-hero-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.db-avatar{
+  width:52px;height:52px;border-radius:14px;
+  background:rgba(184,247,23,.1);border:2px solid rgba(184,247,23,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',cursive;font-size:1.3rem;color:var(--lime);
+  flex-shrink:0;position:relative;
+}
+.db-avatar-tier{
+  position:absolute;bottom:-5px;right:-5px;
+  font-size:.5rem;font-weight:800;padding:1px 5px;
+  border-radius:20px;border:1px solid;
+}
+.db-hero-name{font-family:'Bebas Neue',cursive;font-size:1.3rem;letter-spacing:1.5px;color:#fff;line-height:1}
+.db-hero-sub{font-size:.68rem;color:rgba(255,255,255,.45);margin-top:3px}
+.db-hero-rating{
+  margin-left:auto;text-align:right;
+  font-family:'Bebas Neue',cursive;font-size:2.2rem;color:var(--lime);
+  line-height:1;text-shadow:0 0 20px rgba(184,247,23,.4);
+}
+.db-hero-rating-lbl{font-size:.55rem;color:rgba(184,247,23,.5);letter-spacing:1px;text-transform:uppercase}
+
+/* Form noktaları hero'da */
+.db-form-row{display:flex;align-items:center;gap:10px}
+.db-form-dots{display:flex;gap:5px}
+.db-form-dot{width:11px;height:11px;border-radius:4px;transition:all .3s}
+.db-fd-empty{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+.db-fd-pos{background:#22cc66;border:1px solid #44ee88;box-shadow:0 0 8px rgba(34,204,102,.6)}
+.db-fd-pos2{background:#00ff88;border:1px solid #00ffaa;box-shadow:0 0 14px rgba(0,255,136,1);animation:db-fp-pulse .8s ease infinite}
+.db-fd-neg{background:#ff4040;border:1px solid #ff6060;box-shadow:0 0 8px rgba(255,64,64,.6)}
+.db-fd-neg2{background:#ff1010;border:1px solid #ff0000;box-shadow:0 0 14px rgba(255,0,0,1);animation:db-fp-pulse .8s ease infinite}
+@keyframes db-fp-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
+.db-form-lbl{font-size:.65rem;font-weight:700;letter-spacing:.5px}
+.db-bonservis{font-size:.72rem;color:rgba(255,255,255,.4);margin-left:auto}
+.db-bons-val{color:var(--lime);font-weight:700}
+
+/* Stat grid */
+.db-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.db-stat{
+  background:#0a120a;border:1px solid #1a221a;border-radius:12px;
+  padding:10px 8px;text-align:center;position:relative;overflow:hidden;
+}
+.db-stat::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+}
+.db-stat.lime::before{background:linear-gradient(90deg,transparent,var(--lime),transparent)}
+.db-stat.amber::before{background:linear-gradient(90deg,transparent,#f5a623,transparent)}
+.db-stat.red::before{background:linear-gradient(90deg,transparent,#ff5050,transparent)}
+.db-stat.blue::before{background:linear-gradient(90deg,transparent,#60b8ff,transparent)}
+.db-stat.purple::before{background:linear-gradient(90deg,transparent,#cc66ff,transparent)}
+.db-stat.teal::before{background:linear-gradient(90deg,transparent,#00ccaa,transparent)}
+.db-stat-num{font-family:'Bebas Neue',cursive;font-size:1.6rem;line-height:1}
+.db-stat.lime .db-stat-num{color:var(--lime)}
+.db-stat.amber .db-stat-num{color:#f5a623}
+.db-stat.red .db-stat-num{color:#ff5050}
+.db-stat.blue .db-stat-num{color:#60b8ff}
+.db-stat.purple .db-stat-num{color:#cc66ff}
+.db-stat.teal .db-stat-num{color:#00ccaa}
+.db-stat-lbl{font-size:.6rem;color:#446044;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+/* Widget başlık */
+.db-widget{
+  background:#0a120a;border:1px solid #1a221a;border-radius:16px;
+  overflow:hidden;
+}
+.db-whead{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 14px;border-bottom:1px solid #141e14;
+}
+.db-wtitle{font-family:'Bebas Neue',cursive;font-size:.9rem;letter-spacing:2px}
+.db-wtitle.lime{color:var(--lime)}
+.db-wtitle.amber{color:#f5a623}
+.db-wtitle.blue{color:#60b8ff}
+.db-wtitle.red{color:#ff5050}
+.db-wtitle.purple{color:#cc66ff}
+.db-waction{font-size:.62rem;color:#446044;cursor:pointer;border:1px solid #1a2a1a;
+  padding:3px 8px;border-radius:6px;background:transparent;font-family:'DM Sans',sans-serif;transition:all .2s}
+.db-waction:hover{border-color:var(--lime);color:var(--lime)}
+.db-wbody{padding:12px 14px}
+
+/* Maç geri sayım widget */
+.db-countdown{display:flex;gap:6px;justify-content:center;margin:8px 0 10px}
+.db-cd-box{
+  background:#060e06;border:1px solid #1a2a1a;border-radius:10px;
+  padding:10px 8px;text-align:center;flex:1;position:relative;overflow:hidden;
+}
+.db-cd-box::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--lime),transparent);
+  animation:db-scanline 2s ease infinite;
+}
+@keyframes db-scanline{0%,100%{opacity:.3}50%{opacity:1}}
+.db-cd-num{
+  font-family:'Bebas Neue',cursive;font-size:1.8rem;color:var(--lime);
+  line-height:1;text-shadow:0 0 15px rgba(184,247,23,.4);
+}
+.db-cd-lbl{font-size:.55rem;color:#446044;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.db-cd-sep{
+  font-family:'Bebas Neue',cursive;font-size:1.8rem;
+  color:rgba(255,255,255,.15);padding-top:10px;flex-shrink:0;
+}
+.db-match-name{font-size:.78rem;font-weight:700;color:#c0d8c0;margin-bottom:4px}
+.db-match-meta{font-size:.62rem;color:#446044;display:flex;gap:10px;flex-wrap:wrap}
+.db-kadro-bar{margin-top:10px}
+.db-kadro-lbl{display:flex;justify-content:space-between;margin-bottom:4px}
+.db-kadro-lbl span{font-size:.6rem}
+.db-kadro-lbl span:first-child{color:#446044}
+.db-kadro-lbl span:last-child{color:var(--lime);font-weight:700}
+.db-kadro-track{height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
+.db-kadro-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#5ab800,var(--lime));transition:width .6s ease}
+
+/* Piyasa widget */
+.db-market-row{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 0;border-bottom:1px solid #0e160e;
+}
+.db-market-row:last-child{border-bottom:none}
+.db-market-rank{
+  font-family:'Bebas Neue',cursive;font-size:1rem;color:#2a3a2a;
+  width:18px;text-align:center;flex-shrink:0;
+}
+.db-market-av{
+  width:30px;height:30px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',cursive;font-size:.7rem;font-weight:900;
+}
+.db-market-name{font-size:.78rem;font-weight:700;color:#c0d8c0;flex:1}
+.db-market-pos{font-size:.58rem;color:#446044;margin-top:1px}
+.db-market-val{text-align:right}
+.db-market-bv{font-size:.78rem;font-weight:700}
+.db-market-chg{font-size:.6rem;margin-top:1px}
+.db-market-chg.up{color:#22cc66}
+.db-market-chg.down{color:#ff5050}
+.db-market-chg.flat{color:#446044}
+
+/* Lig tablosu */
+.db-lg-row{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 0;border-bottom:1px solid #0e160e;font-size:.78rem;
+}
+.db-lg-row:last-child{border-bottom:none}
+.db-lg-pos{width:18px;text-align:center;font-weight:700;color:#446044;flex-shrink:0}
+.db-lg-pos.gold{color:#ffd060}
+.db-lg-pos.silver{color:#a0c8e8}
+.db-lg-pos.bronze{color:#c07840}
+.db-lg-av{
+  width:26px;height:26px;border-radius:7px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',cursive;font-size:.6rem;font-weight:900;
+}
+.db-lg-name{flex:1;font-weight:700;color:#c0d8c0}
+.db-lg-pts{font-family:'Bebas Neue',cursive;font-size:1rem;color:var(--lime);min-width:24px;text-align:right}
+.db-lg-wdl{font-size:.58rem;color:#446044;min-width:48px;text-align:right}
+
+/* Forum widget */
+.db-forum-row{
+  padding:8px 0;border-bottom:1px solid #0e160e;
+  display:flex;gap:10px;align-items:flex-start;
+}
+.db-forum-row:last-child{border-bottom:none}
+.db-forum-score{
+  display:flex;flex-direction:column;align-items:center;
+  min-width:24px;flex-shrink:0;
+}
+.db-forum-pts{font-family:'Bebas Neue',cursive;font-size:1rem;color:var(--lime)}
+.db-forum-arrows{font-size:.55rem;color:#446044}
+.db-forum-cat{
+  font-size:.55rem;font-weight:700;padding:1px 6px;border-radius:20px;
+  margin-bottom:3px;display:inline-block;
+}
+.db-fcat-oneri{background:rgba(34,180,80,.1);color:#22cc66;border:1px solid rgba(34,180,80,.2)}
+.db-fcat-sikayet{background:rgba(255,64,64,.1);color:#ff6060;border:1px solid rgba(255,64,64,.2)}
+.db-fcat-genel{background:rgba(255,255,255,.05);color:#446044;border:1px solid #1a2a1a}
+.db-forum-title{font-size:.75rem;font-weight:700;color:#c0d8c0;line-height:1.35}
+.db-forum-meta{font-size:.6rem;color:#446044;margin-top:2px}
+
+/* Son maç widget */
+.db-last-match{
+  background:linear-gradient(135deg,#0a120a,#0e1a0e);
+  border-radius:12px;padding:12px;margin-bottom:10px;
+}
+.db-lm-teams{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.db-lm-team{text-align:center;flex:1}
+.db-lm-tname{font-family:'Bebas Neue',cursive;font-size:.8rem;letter-spacing:1px;color:#c0d8c0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.db-lm-score{font-family:'Bebas Neue',cursive;font-size:2rem;color:var(--lime);letter-spacing:3px;text-shadow:0 0 15px rgba(184,247,23,.3)}
+.db-lm-sep{font-size:.7rem;color:#446044;padding:0 4px}
+
+.db-awards{display:flex;gap:8px}
+.db-award{
+  flex:1;background:#060e06;border:1px solid #1a2a1a;border-radius:10px;
+  padding:8px 10px;display:flex;align-items:center;gap:8px;
+}
+.db-award-icon{font-size:1.1rem;flex-shrink:0}
+.db-award-name{font-size:.72rem;font-weight:700;color:#c0d8c0}
+.db-award-lbl{font-size:.58rem;color:#446044;margin-top:1px}
+
+/* Rozet widget */
+.db-badges-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px 14px}
+.db-badge-item{text-align:center;cursor:default}
+.db-badge-icon{
+  width:44px;height:44px;border-radius:12px;margin:0 auto 5px;
+  display:flex;align-items:center;justify-content:center;font-size:1.3rem;
+  position:relative;
+}
+.db-badge-icon.earned{
+  background:rgba(184,247,23,.1);border:1px solid rgba(184,247,23,.25);
+}
+.db-badge-icon.locked{
+  background:rgba(255,255,255,.04);border:1px solid #1a2a1a;
+  opacity:.4;filter:grayscale(1);
+}
+.db-badge-lbl{font-size:.56rem;color:#446044;font-weight:700;line-height:1.2}
+.db-badge-lbl.earned{color:var(--lime)}
+
+/* Animasyonlar */
+@keyframes db-fade-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.db-widget,.db-hero,.db-stats{animation:db-fade-in .4s ease both}
+.db-widget:nth-child(2){animation-delay:.05s}
+.db-widget:nth-child(3){animation-delay:.1s}
+.db-widget:nth-child(4){animation-delay:.15s}
+.db-widget:nth-child(5){animation-delay:.2s}
+
+/* Canlı ticker */
+.db-ticker{
+  background:#060e06;border-top:1px solid #1a2a1a;
+  overflow:hidden;white-space:nowrap;padding:6px 0;
+}
+.db-ticker-inner{
+  display:inline-flex;gap:0;
+  animation:db-ticker-scroll 20s linear infinite;
+}
+.db-ticker-inner:hover{animation-play-state:paused}
+@keyframes db-ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.db-ticker-item{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:0 20px;border-right:1px solid #1a2a1a;
+  font-size:.65rem;color:#446044;flex-shrink:0;
+}
+.db-ticker-item .name{color:#c0d8c0;font-weight:700}
+.db-ticker-item .val{font-weight:700}
+.db-ticker-item .up{color:#22cc66}
+.db-ticker-item .down{color:#ff5050}
+
+
 </style>
 </head>
 <body>
@@ -826,7 +1196,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
   </div>
 
   <div class="nav-tabs">
-    <button class="nav-tab active" onclick="switchTab('tab-matches',this)">📋 Maçlar</button>
+    <button class="nav-tab active" onclick="switchTab('tab-dashboard',this)">🏠 Ana</button>
+    <button class="nav-tab"        onclick="switchTab('tab-matches',this)">📋 Maçlar</button>
     <button class="nav-tab"        onclick="switchTab('tab-lineup',this)">👕 Kadro</button>
     <button class="nav-tab"        onclick="switchTab('tab-profile',this)">👤 Profil</button>
     <button class="nav-tab"        onclick="switchTab('tab-vote',this)">🏅 Oylama</button>
@@ -838,7 +1209,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
     <button class="nav-tab" id="tab-admin-btn" style="display:none" onclick="switchTab('tab-admin',this)">⚙️ Admin</button>
   </div>
 
-  <div id="tab-matches" class="panel active">
+  <div id="tab-dashboard" class="panel active"><div id="dashboard-content"></div></div>
+  <div id="tab-matches" class="panel">
     <div style="display:flex;flex-direction:column;align-items:center;padding:36px 0 22px;text-align:center;gap:12px">
       <p style="font-size:.86rem;color:var(--text-muted);max-width:260px;line-height:1.6">Yaklaşan maçlara katıl, kadroyu doldur.</p>
       <button class="btn btn-primary btn-big" onclick="findMatch()">⚽ Maç Bul</button>
@@ -1162,6 +1534,303 @@ async function tryAutoLogin(){
 /* ====== PAGES ====== */
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');}
 
+
+/* ===== DASHBOARD ===== */
+let _dbTimer=null;
+
+function renderDashboard(){
+  const el=document.getElementById('dashboard-content');
+  if(!el)return;
+  if(_dbTimer){clearInterval(_dbTimer);_dbTimer=null;}
+
+  const users=Object.values(getUsers());
+  const matches=getMatches();
+  const u=currentUser;
+  const rating=calcRating(u,u.pos)||50;
+  const tier=cardTier(rating,u);
+  const tierLabels={'tier-epic':'EPIC','tier-legend':'LEGEND','tier-elite':'ELITE','tier-champion':'CHAMP','tier-gold':'GOLD','tier-silver':'SILVER','tier-bronze':'BRONZE','tier-common':'COMMON'};
+  const tierColors={'tier-epic':'#e080ff','tier-legend':'#ffaa44','tier-elite':'#ffd700','tier-champion':'#00ee66','tier-gold':'#ffd060','tier-silver':'#a0c8e8','tier-bronze':'#c07840','tier-common':'#608060'};
+  const tc=tierColors[tier]||'#608060';
+  const tl=tierLabels[tier]||'COMMON';
+
+  // Form puanı gösterge
+  const fp=u.formPuani||0;
+  const fpDots=[1,2,3].map(i=>{
+    if(fp>=i) return `<div class="db-form-dot db-fd-pos${fp===2&&i===2?'2':''}"></div>`;
+    if(fp<=-i) return `<div class="db-form-dot db-fd-neg${Math.abs(fp)===2&&i===2?'2':''}"></div>`;
+    return `<div class="db-form-dot db-fd-empty"></div>`;
+  }).join('');
+
+  // Bonservis
+  const bv=u.bonservisOverride||calcBonservisRaw(rating,u.pos);
+  const bvFmt=formatBonservis(bv);
+  const bvChg=u.bonservisChange||0;
+  const bvChgStr=bvChg>0?`<span style="color:#22cc66;font-size:.6rem">▲ ${formatBonservis(Math.abs(bvChg))}</span>`:
+                 bvChg<0?`<span style="color:#ff5050;font-size:.6rem">▼ ${formatBonservis(Math.abs(bvChg))}</span>`:'';
+
+  // Sonraki maç
+  const upcoming=matches.filter(m=>!m.finished).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
+  const nextMatch=upcoming[0];
+
+  // Geçmiş maçlardan son maç
+  const finished=matches.filter(m=>m.finished&&m.score).sort((a,b)=>new Date(b.datetime)-new Date(a.datetime));
+  const lastMatch=finished[0];
+
+  // Lig tablosu — kazanma + beraberlik puanı
+  const lgUsers=[...users].map(u2=>{
+    const won=matches.filter(m=>m.finished&&(
+      (m.winner==='A'&&(m.lineup?Object.entries(m.lineup).some(([pid,sl])=>sl.startsWith('A')&&pid===u2.id):false))||
+      (m.winner==='B'&&(m.lineup?Object.entries(m.lineup).some(([pid,sl])=>sl.startsWith('B')&&pid===u2.id):false))
+    )).length;
+    const played=u2.matches||0;
+    return{...u2,lgPts:(u2.wins||0)*3,lgPlayed:played,lgWins:u2.wins||0};
+  }).sort((a,b)=>b.lgPts-a.lgPts||b.lgWins-a.lgWins).slice(0,5);
+
+  // Top 4 piyasa
+  const topMarket=[...users].filter(u2=>u2.name).map(u2=>{
+    const r2=calcRating(u2,u2.pos)||50;
+    const bv2=u2.bonservisOverride||calcBonservisRaw(r2,u2.pos);
+    return{...u2,bv:bv2};
+  }).sort((a,b)=>b.bv-a.bv).slice(0,4);
+
+  // Forum son 3
+  const forumSnap=window._forumCache||[];
+
+  // Rozetler
+  const allBadges=getUserBadges(u);
+  const earnedCount=allBadges.filter(b=>b.earned).length;
+
+  // Maç istatistikleri
+  const wins=u.wins||0;
+  const totalMatches=u.matches||0;
+  const winRate=totalMatches>0?Math.round(wins/totalMatches*100):0;
+  const motmCount=u.motm||0;
+
+  const pad=v=>String(v).padStart(2,'0');
+  function cdHtml(ms){
+    if(ms<=0)return`<div class="db-cd-num" style="font-size:1.1rem">BAŞLIYOR!</div>`;
+    const tot=Math.floor(ms/1000);
+    const h=Math.floor(tot/3600),m2=Math.floor((tot%3600)/60),s=tot%60;
+    return`
+      <div class="db-cd-box"><div class="db-cd-num">${pad(h)}</div><div class="db-cd-lbl">SAAT</div></div>
+      <div class="db-cd-sep">:</div>
+      <div class="db-cd-box"><div class="db-cd-num">${pad(m2)}</div><div class="db-cd-lbl">DAKİKA</div></div>
+      <div class="db-cd-sep">:</div>
+      <div class="db-cd-box"><div class="db-cd-num">${pad(s)}</div><div class="db-cd-lbl">SANİYE</div></div>`;
+  }
+
+  const matchWidget=nextMatch?`
+    <div class="db-widget">
+      <div class="db-whead">
+        <span class="db-wtitle lime">Sonraki Maç</span>
+        <button class="db-waction" onclick="switchTab('tab-matches',document.querySelector('[onclick*=tab-matches]'))">Katıl →</button>
+      </div>
+      <div class="db-wbody">
+        <div class="db-match-name">${nextMatch.name}</div>
+        <div class="db-match-meta"><span>📍 ${nextMatch.venue}</span><span>🕐 ${new Date(nextMatch.datetime).toLocaleString('tr-TR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}</span></div>
+        <div class="db-countdown" id="db-countdown">${cdHtml(new Date(nextMatch.datetime)-new Date())}</div>
+        <div class="db-kadro-bar">
+          <div class="db-kadro-lbl"><span>Kadro Doluluk</span><span>${(nextMatch.attending||[]).length} / 14</span></div>
+          <div class="db-kadro-track"><div class="db-kadro-fill" style="width:${Math.min(100,Math.round((nextMatch.attending||[]).length/14*100))}%"></div></div>
+        </div>
+      </div>
+    </div>`:`
+    <div class="db-widget">
+      <div class="db-whead"><span class="db-wtitle lime">Sonraki Maç</span></div>
+      <div class="db-wbody" style="text-align:center;padding:20px 14px;color:#446044;font-size:.8rem">Henüz planlanmış maç yok ⚽</div>
+    </div>`;
+
+  const lastMatchWidget=lastMatch?`
+    <div class="db-widget">
+      <div class="db-whead">
+        <span class="db-wtitle amber">Son Maç</span>
+        <button class="db-waction" onclick="switchTab('tab-past',document.querySelector('[onclick*=tab-past]'))">Tümü →</button>
+      </div>
+      <div class="db-wbody">
+        <div class="db-last-match">
+          <div class="db-lm-teams">
+            <div class="db-lm-team"><div class="db-lm-tname">${lastMatch.teamAName||'Takım A'}</div></div>
+            <div style="text-align:center">
+              <div class="db-lm-score">${lastMatch.score||'—'}</div>
+              <div style="font-size:.55rem;color:#446044">${lastMatch.winner==='draw'?'🤝 Berabere':lastMatch.winner==='A'?`🏆 ${lastMatch.teamAName||'A'} Kazandı`:`🏆 ${lastMatch.teamBName||'B'} Kazandı`}</div>
+            </div>
+            <div class="db-lm-team"><div class="db-lm-tname" style="text-align:right">${lastMatch.teamBName||'Takım B'}</div></div>
+          </div>
+        </div>
+        <div class="db-awards">
+          ${lastMatch.motmId?`<div class="db-award">
+            <span class="db-award-icon">🏆</span>
+            <div><div class="db-award-name">${users.find(u2=>u2.id===lastMatch.motmId)?.name?.split(' ')[0]||'?'}</div><div class="db-award-lbl">Maçın Adamı</div></div>
+          </div>`:''}
+          ${lastMatch.worstId?`<div class="db-award">
+            <span class="db-award-icon">😬</span>
+            <div><div class="db-award-name">${users.find(u2=>u2.id===lastMatch.worstId)?.name?.split(' ')[0]||'?'}</div><div class="db-award-lbl">En Kötü</div></div>
+          </div>`:''}
+        </div>
+      </div>
+    </div>`:'';
+
+  const marketWidget=`
+    <div class="db-widget">
+      <div class="db-whead">
+        <span class="db-wtitle blue">Transfer Piyasası</span>
+        <button class="db-waction" onclick="switchTab('tab-borsa',document.querySelector('[onclick*=tab-borsa]'))">Tümü →</button>
+      </div>
+      <div class="db-wbody">
+        ${topMarket.map((p,i)=>{
+          const r2=calcRating(p,p.pos)||50;
+          const pTc=tierColors[cardTier(r2,p)]||'#608060';
+          const chg=p.bonservisChange||0;
+          return`<div class="db-market-row">
+            <div class="db-market-rank">${i+1}</div>
+            <div class="db-market-av" style="background:${pTc}18;color:${pTc}">${initials(p.name)}</div>
+            <div style="flex:1"><div class="db-market-name">${p.name.split(' ')[0]}</div><div class="db-market-pos">${p.pos||'?'}</div></div>
+            <div class="db-market-val">
+              <div class="db-market-bv" style="color:${pTc}">${formatBonservis(p.bv)}</div>
+              <div class="db-market-chg ${chg>0?'up':chg<0?'down':'flat'}">${chg>0?'▲':chg<0?'▼':'—'} ${chg!==0?formatBonservis(Math.abs(chg)):''}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+
+  const leagueWidget=`
+    <div class="db-widget">
+      <div class="db-whead">
+        <span class="db-wtitle lime">Lig Tablosu</span>
+        <button class="db-waction" onclick="switchTab('tab-lb',document.querySelector('[onclick*=tab-lb]'))">Tümü →</button>
+      </div>
+      <div class="db-wbody">
+        ${lgUsers.map((p,i)=>{
+          const posClass=i===0?'gold':i===1?'silver':i===2?'bronze':'';
+          const r2=calcRating(p,p.pos)||50;
+          const pTc=tierColors[cardTier(r2,p)]||'#608060';
+          const isMe=p.id===u.id;
+          return`<div class="db-lg-row" style="${isMe?'background:rgba(184,247,23,.04);border-radius:8px;padding:7px 6px;margin:0 -6px':''}">
+            <div class="db-lg-pos ${posClass}">${i+1}</div>
+            <div class="db-lg-av" style="background:${pTc}18;color:${pTc}">${initials(p.name)}</div>
+            <div class="db-lg-name">${p.name.split(' ')[0]}${isMe?' <span style="color:var(--lime);font-size:.55rem">(sen)</span>':''}</div>
+            <div class="db-lg-wdl">${p.lgWins}G ${p.lgPlayed-p.lgWins}M</div>
+            <div class="db-lg-pts">${p.lgPts}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+
+  // Rozet showcase — ilk 8
+  const badgeWidget=`
+    <div class="db-widget">
+      <div class="db-whead">
+        <span class="db-wtitle purple">Rozetler</span>
+        <span style="font-size:.65rem;color:#cc66ff">${earnedCount}/${BADGE_DEFS.length}</span>
+      </div>
+      <div class="db-badges-grid">
+        ${allBadges.slice(0,8).map(b=>`
+          <div class="db-badge-item" title="${b.desc}">
+            <div class="db-badge-icon ${b.earned?'earned':'locked'}" style="${b.earned?`box-shadow:0 0 12px ${tc}30`:''}">
+              ${b.icon}
+              ${b.earned?`<div style="position:absolute;top:-3px;right:-3px;width:10px;height:10px;border-radius:50%;background:var(--lime);border:1.5px solid #0a120a"></div>`:''}
+            </div>
+            <div class="db-badge-lbl ${b.earned?'earned':''}">${b.label}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+
+  // Ticker için piyasa verisi
+  const tickerItems=topMarket.map(p=>{
+    const chg=p.bonservisChange||0;
+    return`<div class="db-ticker-item">
+      <span class="name">${p.name.split(' ')[0]}</span>
+      <span style="color:#446044">${p.pos||'?'}</span>
+      <span class="val" style="color:${tierColors[cardTier(calcRating(p,p.pos),p)]||'#608060'}">${formatBonservis(p.bv)}</span>
+      <span class="${chg>0?'up':chg<0?'down':'flat'}">${chg>0?'▲':chg<0?'▼':'—'}</span>
+    </div>`;
+  }).join('');
+
+  el.innerHTML=`
+  <div class="db">
+
+    <!-- Karşılama hero -->
+    <div class="db-hero">
+      <div class="db-hero-top">
+        <div class="db-avatar">
+          ${initials(u.name)}
+          <div class="db-avatar-tier" style="color:${tc};border-color:${tc}50;background:${tc}15">${tl}</div>
+        </div>
+        <div>
+          <div class="db-hero-name">${u.name.toUpperCase()}</div>
+          <div class="db-hero-sub">${u.pos||'Mevki belirlenmedi'} · ${earnedCount} rozet · ${totalMatches} maç</div>
+        </div>
+        <div style="margin-left:auto;text-align:right">
+          <div class="db-hero-rating" style="color:${tc}">${rating}</div>
+          <div class="db-hero-rating-lbl">OVR</div>
+        </div>
+      </div>
+      <div class="db-form-row">
+        <div class="db-form-dots">${fpDots}</div>
+        <div class="db-form-lbl" style="color:${fp>0?'#22cc66':fp<0?'#ff5050':'#446044'}">FORM ${fp>0?'+'+fp:fp}</div>
+        <div class="db-bonservis">Bonservis: <span class="db-bons-val">${bvFmt}</span> ${bvChgStr}</div>
+      </div>
+    </div>
+
+    <!-- Stat grid -->
+    <div class="db-stats">
+      <div class="db-stat lime"><div class="db-stat-num">${totalMatches}</div><div class="db-stat-lbl">Maç</div></div>
+      <div class="db-stat teal"><div class="db-stat-num">${wins}</div><div class="db-stat-lbl">Galibiyet</div></div>
+      <div class="db-stat amber"><div class="db-stat-num">%${winRate}</div><div class="db-stat-lbl">Oran</div></div>
+      <div class="db-stat purple"><div class="db-stat-num">${motmCount}</div><div class="db-stat-lbl">MOTM</div></div>
+      <div class="db-stat blue"><div class="db-stat-num">${earnedCount}</div><div class="db-stat-lbl">Rozet</div></div>
+      <div class="db-stat red"><div class="db-stat-num">${u.winStreak||0}</div><div class="db-stat-lbl">Seri</div></div>
+    </div>
+
+    ${matchWidget}
+    ${lastMatchWidget}
+    ${marketWidget}
+    ${leagueWidget}
+    ${badgeWidget}
+
+  </div>
+
+  <!-- Canlı piyasa ticker -->
+  ${topMarket.length?`<div class="db-ticker">
+    <div class="db-ticker-inner">${tickerItems}${tickerItems}</div>
+  </div>`:''}`;
+
+  // Geri sayım timer — sadece maç varsa
+  if(nextMatch){
+    _dbTimer=setInterval(()=>{
+      const cdEl=document.getElementById('db-countdown');
+      if(!cdEl){clearInterval(_dbTimer);_dbTimer=null;return;}
+      const ms=new Date(nextMatch.datetime)-new Date();
+      cdEl.innerHTML=cdHtml(ms);
+    },1000);
+  }
+}
+
+/* ===== ROZET / BAŞARIM SİSTEMİ ===== */
+const BADGE_DEFS=[
+  {id:'first_match',icon:'⚽',label:'İlk Maç',desc:'İlk maçına katıldın!',check:u=>(u.matches||0)>=1},
+  {id:'hat_trick_motm',icon:'🎩',label:'Hat-trick MOTM',desc:'3 kez Maçın Adamı',check:u=>(u.motm||0)>=3},
+  {id:'epic_motm',icon:'💜',label:'Epic MOTM',desc:'5 kez Maçın Adamı',check:u=>(u.motm||0)>=5},
+  {id:'win_streak_5',icon:'🔥',label:'5 Seri Galibiyet',desc:'5 maç üst üste kazandın',check:u=>(u.winStreak||0)>=5},
+  {id:'win_streak_10',icon:'🏆',label:'Şampiyon Serisi',desc:'10 maç üst üste kazandın',check:u=>(u.winStreak||0)>=10},
+  {id:'veteran',icon:'🎖️',label:'Veteran',desc:'10 maç oynadın',check:u=>(u.matches||0)>=10},
+  {id:'legend_bons',icon:'💰',label:'Para Babası',desc:'Bonservis 50M+ ₺',check:u=>(u.bonservisOverride||0)>=50000000},
+  {id:'top_rating',icon:'⭐',label:'Yıldız Oyuncu',desc:'Reyting 90+',check:u=>calcRating(u,u.pos)>=90},
+  {id:'comeback',icon:'🦅',label:'Geri Dönüş',desc:'-2 formdan galibiyet',check:u=>(u.lastResult==='W'&&(u.formPuani||0)>0)},
+  {id:'loyal',icon:'🏅',label:'Sadık Üye',desc:'20 maç oynadın',check:u=>(u.matches||0)>=20},
+  {id:'golden_boot',icon:'👟',label:'Altın Bot',desc:'Reyting 85+',check:u=>calcRating(u,u.pos)>=85},
+  {id:'iron_wall',icon:'🧱',label:'Demir Duvar',desc:'Defans 85+ (Stoper/DOS)',check:u=>(['Stoper','DOS'].includes(u.pos))&&(u.defans||0)>=85},
+];
+
+function getUserBadges(user){
+  return BADGE_DEFS.map(b=>({...b,earned:b.check(user)}));
+}
+
+function getEarnedBadgeCount(user){
+  return BADGE_DEFS.filter(b=>b.check(user)).length;
+}
+
 function goHome(){
   stopLineupTimer();
   const fresh=Object.values(_users).find(u=>u.id===currentUser.id);
@@ -1173,16 +1842,17 @@ function goHome(){
   document.getElementById('home-admin-badge').style.display=isAdmin(currentUser)?'inline-block':'none';
   document.getElementById('tab-admin-btn').style.display=isAdmin(currentUser)?'flex':'none';
   showPage('page-home');
+  renderDashboard();
   renderPastMatches();renderLeaderboard();
   // Patch notes - ilk girişte göster
-  if(!LS.get('patch_v3_seen')){
+  if(!LS.get('patch_v4_seen')){
     setTimeout(()=>openPatchNotes(),700);
   }
 }
 
 /* ===== PATCH NOTES SLIDER JS ===== */
 let _patchCurrent=0;
-const PATCH_TOTAL=8;
+const PATCH_TOTAL=5;
 
 function openPatchNotes(){
   _patchCurrent=0;
@@ -1200,7 +1870,7 @@ function closePatchNotes(){
     el.style.animation='';
     el.classList.remove('open');
   },350);
-  LS.set('patch_v3_seen','1');
+  LS.set('patch_v4_seen','1');
   // Profile doldurmamışsa profil sekmesine götür
   if(currentUser&&!currentUser.profileComplete){
     const tabs=document.querySelectorAll('.nav-tab');
@@ -1250,6 +1920,7 @@ function patchPrev(){
 
 function switchTab(tabId,btn){
   stopLineupTimer();
+  if(_dbTimer&&tabId!=='tab-dashboard'){clearInterval(_dbTimer);_dbTimer=null;}
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
   document.getElementById(tabId).classList.add('active');btn.classList.add('active');
@@ -1259,6 +1930,7 @@ function switchTab(tabId,btn){
   if(tabId==='tab-lineup')renderLineup();
   if(tabId==='tab-news')renderNewsTab();
   if(tabId==='tab-admin')renderAdmin();
+  if(tabId==='tab-dashboard')renderDashboard();
   if(tabId==='tab-profile')renderProfile();
   if(tabId==='tab-forum')renderForum();
   if(tabId==='tab-borsa')renderBorsa();
@@ -1300,118 +1972,108 @@ function renderLineup(){
   const matches=getMatches();
   const upcoming=matches.filter(m=>!m.finished).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
 
-  // Aktif maç yoksa — demo saha göster
+  // Aktif maç yoksa — boş saha göster
   if(!upcoming.length){
-    const fakeMatch={
-      lineup:{},attending:[],reserves:[],
-      teamAName:'Takım A',teamBName:'Takım B',
-      captainA:null,captainB:null,
-      teamAvgA:0,teamAvgB:0,
-      datetime:new Date().toISOString(),venue:'—'
-    };
-    renderFieldLineup(el, fakeMatch);
+    const fake={lineup:{},attending:[],reserves:[],teamAName:'Takım A',teamBName:'Takım B',captainA:null,captainB:null,teamAvgA:0,teamAvgB:0,datetime:new Date().toISOString(),venue:'—'};
+    renderFieldLineup(el,fake);
     return;
   }
 
   const match=upcoming[0];
   const now=new Date();
-  const revealTime=match.lineupRevealTime
-    ? new Date(match.lineupRevealTime)
-    : null;
+  const revealTime=match.lineupRevealTime ? new Date(match.lineupRevealTime) : null;
 
-  // Kadro açılma saati geldi veya belirlenmemişse direkt göster
-  if(!revealTime || now>=revealTime){
-    const hasLineup = match.lineup && Object.keys(match.lineup).length>0;
-    if(!hasLineup && (match.attending||[]).length>=2){
-      // Lineup yok ama oyuncu var — otomatik oluştur
+  // Reveal zamanı geldi veya set edilmemiş
+  if(!revealTime||now>=revealTime){
+    const hasLineup=match.lineup&&Object.keys(match.lineup).length>0;
+    if(!hasLineup&&(match.attending||[]).length>=2){
+      el.innerHTML='<div class="lineup-waiting"><span class="lw-icon">⚙️</span><p class="lineup-sub">Takımlar oluşturuluyor...</p></div>';
       autoRevealAndBuildTeams(match.id).then(()=>{
-        setTimeout(async ()=>{
-          const snap = await db.ref('matches/'+match.id).once('value');
-          const fm = snap.val()||match;
-          const idx = _matches.findIndex(x=>x.id===match.id);
-          if(idx>=0) _matches[idx]=fm; else _matches.push(fm);
-          const el2=document.getElementById('lineup-content');
-          if(el2) renderFieldLineup(el2, fm);
-        }, 1200);
+        setTimeout(async()=>{
+          const snap=await db.ref('matches/'+match.id).once('value');
+          const fm=snap.val()||match;
+          const i=_matches.findIndex(x=>x.id===match.id);
+          if(i>=0)_matches[i]=fm;else _matches.push(fm);
+          const e2=document.getElementById('lineup-content');
+          if(e2)renderFieldLineup(e2,fm);
+        },1200);
       });
     } else {
-      renderFieldLineup(el, match);
+      renderFieldLineup(el,match);
     }
     return;
   }
 
-  // Geri sayım göster
+  // ── Geri sayım ──────────────────────────────────────────
   const pad=v=>String(v).padStart(2,'0');
 
-  function tick(){
-    const el2=document.getElementById('lineup-content');
-    if(!el2){stopLineupTimer();return;}
-    const n=new Date();
-    if(n>=revealTime){
-      stopLineupTimer();
-      // Önce ekrana "Takımlar oluşturuluyor..." göster
-      el2.innerHTML=`<div class="lineup-waiting">
-        <span class="lw-icon">⚙️</span>
+  // Sayaç ve saha için 2 ayrı div — sadece sayaç güncellenir
+  el.innerHTML=`
+    <div id="lc-countdown">
+      <div class="lineup-waiting" style="padding:18px 0 12px">
         <div class="lineup-quote">"Adalet mülkün temelidir."</div>
-        <p class="lineup-sub">Takımlar oluşturuluyor...</p>
-      </div>`;
-      // Takımları otomatik oluştur, sonra göster
-      autoRevealAndBuildTeams(match.id).then(()=>{
-        // Firebase listener zaten güncelleyecek ama garantili olsun diye
-        // 1 saniye bekle (Firebase yazma tamamlansin)
-        setTimeout(async ()=>{
-          const snap = await db.ref('matches/'+match.id).once('value');
-          const fm = snap.val();
-          if(fm){
-            // _matches cache güncelle
-            const idx = _matches.findIndex(x=>x.id===match.id);
-            if(idx>=0) _matches[idx]=fm; else _matches.push(fm);
-            const el3=document.getElementById('lineup-content');
-            if(el3) renderFieldLineup(el3, fm);
-          }
-        }, 1200);
-      });
-      return;
-    }
+        <p class="lineup-sub" style="margin-bottom:12px">${match.name} — Kadro açılmayı bekliyor</p>
+        <div id="lc-digits" style="display:flex;gap:8px;justify-content:center;margin:0 0 8px"></div>
+        <p class="lineup-sub" style="font-size:.7rem;margin:0">Kadro açıklanmasına bu kadar süre kaldı.</p>
+      </div>
+    </div>
+    <div id="lc-field"></div>`;
+
+  // Boş saha önizlemesi (bir kez render et)
+  const fieldEl=document.getElementById('lc-field');
+  if(fieldEl){
+    const fake={lineup:{},attending:[],reserves:[],
+      teamAName:match.teamAName||'Takım A',teamBName:match.teamBName||'Takım B',
+      captainA:null,captainB:null,teamAvgA:0,teamAvgB:0,datetime:match.datetime,venue:match.venue};
+    renderFieldLineup(fieldEl,fake);
+  }
+
+  function updateDigits(){
+    const digEl=document.getElementById('lc-digits');
+    if(!digEl)return false;
+    const n=new Date();
     const diff=Math.floor((revealTime-n)/1000);
+    if(diff<=0)return false;
     const h=Math.floor(diff/3600);
     const m2=Math.floor((diff%3600)/60);
     const s=diff%60;
-    // Geri sayım üstte, saha önizlemesi altta
-    el2.innerHTML=`
-      <div class="lineup-waiting" style="padding:20px 0 14px">
-        <div class="lineup-quote">"Adalet mülkün temelidir."</div>
-        <p class="lineup-sub" style="margin-bottom:14px">${match.name} — Kadro açılmayı bekliyor</p>
-        <div style="display:flex;gap:8px;justify-content:center;margin:0 0 10px">
-          <div style="text-align:center;background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);padding:10px 12px;min-width:52px">
-            <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:var(--lime);line-height:1">${pad(h)}</div>
-            <div style="font-size:.58rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px">SAAT</div>
-          </div>
-          <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:rgba(255,255,255,.3);padding-top:10px">:</div>
-          <div style="text-align:center;background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);padding:10px 12px;min-width:52px">
-            <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:var(--lime);line-height:1">${pad(m2)}</div>
-            <div style="font-size:.58rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px">DAKİKA</div>
-          </div>
-          <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:rgba(255,255,255,.3);padding-top:10px">:</div>
-          <div style="text-align:center;background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);padding:10px 12px;min-width:52px">
-            <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:var(--lime);line-height:1">${pad(s)}</div>
-            <div style="font-size:.58rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px">SANİYE</div>
-          </div>
-        </div>
-        <p class="lineup-sub" style="font-size:.72rem;margin-bottom:0">Kadro açıklanmasına bu kadar süre kaldı.</p>
-      </div>`;
-    // Geri sayımın altına demo saha ekle — append mode
-    // Boş saha göster (lineup yok = ikonlar yok)
-    el2.dataset.appendMode='1';
-    const fakePreview={lineup:{},attending:[],reserves:[],
-      teamAName:match.teamAName||'Takım A',teamBName:match.teamBName||'Takım B',
-      captainA:null,captainB:null,teamAvgA:0,teamAvgB:0,
-      datetime:match.datetime,venue:match.venue};
-    renderFieldLineup(el2, fakePreview);
-    el2.dataset.appendMode='0';
+    const box=(val,lbl)=>`<div style="text-align:center;background:var(--surface);border:1px solid var(--surface-3);border-radius:var(--radius-sm);padding:10px 12px;min-width:52px">
+      <div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:var(--lime);line-height:1">${pad(val)}</div>
+      <div style="font-size:.58rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px">${lbl}</div>
+    </div>`;
+    const sep=`<div style="font-family:'Bebas Neue',cursive;font-size:2rem;color:rgba(255,255,255,.3);padding-top:10px">:</div>`;
+    digEl.innerHTML=box(h,'SAAT')+sep+box(m2,'DAKİKA')+sep+box(s,'SANİYE');
+    return true;
   }
 
-  tick();
+  function tick(){
+    const cdEl=document.getElementById('lc-countdown');
+    if(!cdEl){stopLineupTimer();return;}
+    const n=new Date();
+    if(n>=revealTime){
+      stopLineupTimer();
+      const outer=document.getElementById('lineup-content');
+      if(outer){
+        outer.innerHTML='<div class="lineup-waiting"><span class="lw-icon">⚙️</span><div class="lineup-quote">"Adalet mülkün temelidir."</div><p class="lineup-sub">Takımlar oluşturuluyor...</p></div>';
+      }
+      autoRevealAndBuildTeams(match.id).then(()=>{
+        setTimeout(async()=>{
+          const snap=await db.ref('matches/'+match.id).once('value');
+          const fm=snap.val();
+          if(fm){
+            const i=_matches.findIndex(x=>x.id===match.id);
+            if(i>=0)_matches[i]=fm;else _matches.push(fm);
+            const e3=document.getElementById('lineup-content');
+            if(e3)renderFieldLineup(e3,fm);
+          }
+        },1200);
+      });
+      return;
+    }
+    updateDigits();
+  }
+
+  updateDigits(); // ilk render
   _lineupTimer=setInterval(tick,1000);
 }
 
@@ -1677,11 +2339,7 @@ function renderFieldLineup(el, match, previewMode=false){
       ${reservesHtml}
     </div>
     ${predictionHtml}`;
-  if(el.dataset.appendMode==="1"){
-    el.innerHTML+=_fieldHtml;
-  } else {
-    el.innerHTML=_fieldHtml;
-  }
+  el.innerHTML=_fieldHtml;
 }
 
 /* ====== VOTING ====== */
@@ -2307,10 +2965,16 @@ async function autoRevealAndBuildTeams(matchId){
     teamB.forEach((p,i)=>{ if(slotsB[i]) lineup[p.id]=slotsB[i]; });
 
     // Firebase'e yaz — tek atomik update
+    // Kaptan isimli takım adları
+    const tNameA = captainA ? captainA.name.split(' ')[0]+"'ın Takımı" : 'Takım A';
+    const tNameB = captainB ? captainB.name.split(' ')[0]+"'ın Takımı" : 'Takım B';
+
     const updates = {
       lineup:    lineup,
       captainA:  captainA ? captainA.id : null,
       captainB:  captainB ? captainB.id : null,
+      teamAName: tNameA,
+      teamBName: tNameB,
       teamAvgA:  avgA,
       teamAvgB:  avgB,
       autoBuilt: true
@@ -2348,6 +3012,9 @@ async function buildAndSaveTeams(matchId){
   match.teamAvgB=avgB;
   await saveMatches(matches);
 
+  // Kaptan isimli takım adları
+  match.teamAName = captainA ? captainA.name.split(' ')[0]+"'ın Takımı" : 'Takım A';
+  match.teamBName = captainB ? captainB.name.split(' ')[0]+"'ın Takımı" : 'Takım B';
   const capMsg=(captainA&&captainB)?` | ⚽ Kaptanlar: ${captainA.name} & ${captainB.name}`:'';
   showNotif('Takımlar kuruldu! A: ort.'+avgA+' | B: ort.'+avgB+capMsg+' ⚖️');
   renderAdmin();
@@ -2686,6 +3353,51 @@ async function applyUserStats(match){
     u.bonservisChange=newBonservis-prevBonservis;
     u.bonservisOverride=newBonservis;
 
+    // ── FORM PUANI (MOMENTUM) SİSTEMİ ──────────────────────
+    const fp = (u.formPuani||0);
+    let newFp = fp;
+    if(result==='w') newFp = fp + 1;
+    else if(result==='l') newFp = fp - 1;
+    // draw → form puanı değişmez
+
+    // +3 → reyting +1 kalıcı artar, sıfırla
+    if(newFp >= 3){
+      const oldRating = calcRating(u, u.pos);
+      // Tüm parametreleri orantılı artır (ortalama +1 etki)
+      u.hiz        = Math.min(99,(u.hiz||50)+1);
+      u.sut        = Math.min(99,(u.sut||50)+1);
+      u.pas        = Math.min(99,(u.pas||50)+1);
+      u.fizik      = Math.min(99,(u.fizik||50)+1);
+      u.defans     = Math.min(99,(u.defans||50)+1);
+      u.kalecilik  = Math.min(99,(u.kalecilik||50)+1);
+      u.topKontrol = Math.min(99,(u.topKontrol||50)+1);
+      u.dribling   = Math.min(99,(u.dribling||50)+1);
+      u.formPuani  = 0;
+      u.reyting_yukseldi = true;
+    }
+    // -3 → reyting -1 kalıcı düşer, sıfırla
+    else if(newFp <= -3){
+      u.hiz        = Math.max(1,(u.hiz||50)-1);
+      u.sut        = Math.max(1,(u.sut||50)-1);
+      u.pas        = Math.max(1,(u.pas||50)-1);
+      u.fizik      = Math.max(1,(u.fizik||50)-1);
+      u.defans     = Math.max(1,(u.defans||50)-1);
+      u.kalecilik  = Math.max(1,(u.kalecilik||50)-1);
+      u.topKontrol = Math.max(1,(u.topKontrol||50)-1);
+      u.dribling   = Math.max(1,(u.dribling||50)-1);
+      u.formPuani  = 0;
+      u.reyting_dustu = true;
+    }
+    else {
+      u.formPuani = newFp;
+    }
+
+    // Bonservisi yeni reyting ile yeniden hesapla
+    const newRating = calcRating(u, u.pos);
+    if(newRating !== calcRating({...u, hiz:(u.hiz||50)-1, sut:(u.sut||50)-1, pas:(u.pas||50)-1, fizik:(u.fizik||50)-1, defans:(u.defans||50)-1, kalecilik:(u.kalecilik||50)-1, topKontrol:(u.topKontrol||50)-1, dribling:(u.dribling||50)-1}, u.pos)){
+      u.bonservisOverride = calcBonservisRaw(newRating, u.pos);
+    }
+
     users[k]=u;
   });
 
@@ -2833,33 +3545,87 @@ function aiSuggestPos(user){
   return Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
 }
 
-function cardTier(r){
-  if(r>=85)return'tier-gold';
-  if(r>=75)return'tier-silver';
-  if(r>=65)return'tier-bronze';
-  if(r>=55)return'tier-rare';
+function cardTier(r,user){
+  // Özel kazanım tierleri
+  if(user){
+    if((user.motm||0)>=5) return 'tier-epic';
+    if((user.bonservisOverride||calcBonservisRaw(r,user.pos))>=50000000) return 'tier-legend';
+    if(r>=90) return 'tier-elite';
+    if((user.winStreak||0)>=10) return 'tier-champion';
+  }
+  // Standart tierlar
+  if(r>=75)return'tier-gold';
+  if(r>=65)return'tier-silver';
+  if(r>=55)return'tier-bronze';
   return'tier-common';
 }
 
 function buildFC2Card(user,mevki){
   const pos=mevki||user.pos||'?';
   const rating=calcRating(user,pos);
-  const tier=cardTier(rating);
+  const tier=cardTier(rating,user);
   const ayak=user.ayak||'Sağ';
-  const ayakIcon=ayak==='İki Ayak'?'⚡':ayak==='Sol'?'🦶L':'🦶R';
+  const ayakIcon=ayak==='İki Ayak'?'⚡':ayak==='Sol'?'◀':'▶';
+  const bv=user.bonservisOverride||calcBonservisRaw(rating,user.pos);
+  const bvFmt=formatBonservis(bv);
+  const bvChg=user.bonservisChange&&user.bonservisChange!==0
+    ?`<span style="font-size:.52rem;font-weight:700;color:${user.bonservisChange>0?'#22cc66':'#ff4040'}">${user.bonservisChange>0?'▲':'▼'}</span>`:'';
+
+  // Form puanı göstergesi — 3 nokta
+  const fp = user.formPuani||0;
+  const fpDots = [-1,-2,-3].reverse().map((_,i)=>{
+    // i=0 → slot1, i=1 → slot2, i=2 → slot3
+    const idx = i+1; // 1,2,3
+    let cls='fp-dot';
+    if(fp>0 && idx<=fp) cls+=' fp-pos'+(fp===2&&idx===2?' fp-danger-pos':'');
+    else if(fp<0 && idx<=Math.abs(fp)) cls+=' fp-neg'+(Math.abs(fp)===2&&idx===2?' fp-danger-neg':'');
+    else cls+=' fp-empty';
+    return `<span class="${cls}"></span>`;
+  }).join('');
+  const fpLabel = fp>0?`+${fp}`:fp<0?`${fp}`:'0';
+
+  // Tier badge
+  const tierBadges={
+    'tier-epic':    ['★ EPIC','#e080ff'],
+    'tier-legend':  ['◈ LEGEND','#ffaa44'],
+    'tier-elite':   ['✦ ELİTE','#ffd700'],
+    'tier-champion':['🏆 CHAMP','#00ee66'],
+    'tier-gold':    ['GOLD','#ffd060'],
+    'tier-silver':  ['SILVER','#a0c8e8'],
+    'tier-bronze':  ['BRONZE','#c07840'],
+    'tier-common':  ['COMMON','#608060'],
+  };
+  const [tierLabel,tierColor]=tierBadges[tier]||['COMMON','#608060'];
+
+  // Kaptan rozeti
+  const matches=getMatches();
+  const isCapt=matches.some(m=>m.captainA===user.id||m.captainB===user.id);
+
   return `
-    <div class="fc2-card ${tier}">
+    <div class="fc2-card ${tier}" style="position:relative">
+      ${tier==='tier-epic'?'<div class="fc2-ring fc2-ring-outer"></div><div class="fc2-ring fc2-ring-inner"></div><div class="fc2-scan"></div><div class="fc2-particles"><span></span><span></span><span></span><span></span><span></span></div>':''}
+      ${tier==='tier-legend'?'<div class="fc2-ring fc2-fire-ring1"></div><div class="fc2-ring fc2-fire-ring2"></div><div class="fc2-fire-pts"><span></span><span></span><span></span><span></span></div>':''}
+      ${tier==='tier-elite'?'<div class="fc2-ring fc2-star-ring"></div><div class="fc2-bolts"><span></span><span></span></div>':''}
+      ${tier==='tier-champion'?'<div class="fc2-ring fc2-champ-ring1"></div><div class="fc2-ring fc2-champ-ring2"></div><div class="fc2-confetti"><span></span><span></span><span></span><span></span></div>':''}
+      ${isCapt?'<div class="fc2-capt-badge">C</div>':''}
       <div class="fc2-bg"></div>
-      <div class="fc2-shine"></div>
-      <div style="width:100%;display:flex;justify-content:space-between;align-items:flex-start">
+      <div class="fc2-top-stripe"></div>
+      <div class="fc2-header">
         <div>
           <div class="fc2-rating">${rating}</div>
           <div class="fc2-pos">${pos.toUpperCase().substring(0,8)}</div>
         </div>
-        <div style="text-align:right;font-size:.6rem;opacity:.7;padding-top:4px">${ayakIcon}</div>
+        <div style="text-align:right">
+          <div class="fc2-tier-badge" style="color:${tierColor};border-color:${tierColor}40;background:${tierColor}18">${tierLabel}</div>
+          <div class="fc2-ayak">${ayakIcon}</div>
+        </div>
       </div>
       <div class="fc2-avatar">${initials(user.name)}</div>
-      <div class="fc2-name">${user.name.split(' ')[0].toUpperCase()} ${getFormArrow(user)}</div>
+      <div class="fc2-name">${user.name.split(' ')[0].toUpperCase()}</div>
+      <div class="fc2-form-row">
+        <div class="fc2-fp-dots">${fpDots}</div>
+        <div class="fc2-fp-label" style="color:${fp>0?'#22cc66':fp<0?'#ff4040':'#446044'}">FORM ${fpLabel}</div>
+      </div>
       <div class="fc2-divider"></div>
       <div class="fc2-stats">
         <div class="fc2-stat"><span class="fc2-stat-val">${user.hiz||50}</span><span class="fc2-stat-lbl">HIZ</span></div>
@@ -2871,10 +3637,7 @@ function buildFC2Card(user,mevki){
         <div class="fc2-stat"><span class="fc2-stat-val">${user.topKontrol||50}</span><span class="fc2-stat-lbl">TOP</span></div>
         <div class="fc2-stat"><span class="fc2-stat-val">${user.dribling||50}</span><span class="fc2-stat-lbl">DRİB</span></div>
       </div>
-      <div style="width:100%;margin-top:6px;padding:4px 6px;background:rgba(0,0,0,.25);border-radius:4px;text-align:center">
-        <span style="font-size:.48rem;opacity:.8;letter-spacing:.8px;text-transform:uppercase">Bonservis</span><br>
-        <span style="font-family:'Bebas Neue',cursive;font-size:.9rem;letter-spacing:1px">${(()=>{const bv=user.bonservisOverride||calcBonservisRaw(rating,user.pos);return formatBonservis(bv);})()} ${user.bonservisChange&&user.bonservisChange!==0?'<span style="font-size:.55rem;font-weight:700;color:'+(user.bonservisChange>0?'#22cc66':'#ff4040')+'">'+(user.bonservisChange>0?'▲':'▼')+'</span>':''}</span>
-      </div>
+      <div class="fc2-bons">${bvFmt} ${bvChg}</div>
     </div>`;
 }
 
@@ -3250,7 +4013,7 @@ function renderPastMatches(){
 /* ===================== TRANSFER PIYASASI ===================== */
 function renderBorsa(){
   const el=document.getElementById('borsa-content');if(!el)return;
-  const users=Object.values(getUsers());
+  const users=Object.values(getUsers()); // hidden olanlar zaten filtrelenmiş
 
   // Bonservis değerlerine göre sırala
   const sorted=[...users].filter(u=>u.name).sort((a,b)=>{
@@ -3363,103 +4126,67 @@ tryAutoLogin();
 
         <!-- SLAYT 1 -->
         <div class="patch-slide">
-          <div class="patch-emoji">📰</div>
-          <div class="patch-slide-title">Gazetemizi <span>Tamamen Yeniledik!</span></div>
-          <p class="patch-slide-desc">Eski gazete tasarımımız yeterince güzel değildi. Artık maç sonlarında skorları ve olayları okurken size tam bir gerçek spor gazetesi hissiyatı verecek devasa görsel iyileştirmeler yaptık. Manşetlere çıkmaya hazır ol!</p>
+          <div class="patch-emoji">🏆</div>
+          <div class="patch-slide-title">7 Farklı <span>Tier Kart</span> Sistemi!</div>
+          <p class="patch-slide-desc">Artık oyuncu kartları performansına göre değişiyor. Her tier'ın kendine özgü rengi ve efekti var!</p>
+          <ul class="patch-features">
+            <li>Common, Bronze, Silver, Gold — standart tierlar</li>
+            <li>Epic, Legend, Elite, Champion — özel kazanım kartları</li>
+            <li>Her özel kartın animasyonu ve efekti farklı</li>
+          </ul>
         </div>
 
         <!-- SLAYT 2 -->
         <div class="patch-slide">
-          <div class="patch-emoji">🃏</div>
-          <div class="patch-slide-title">Oyuncu <span>Profilleri</span> ve Kartlar</div>
-          <p class="patch-slide-desc">Artık herkesin kendine ait janjanlı bir oyuncu profili ve EA FC tarzı oyuncu kartı var!</p>
+          <div class="patch-emoji">💜</div>
+          <div class="patch-slide-title"><span>Epic</span> Kart Nasıl Kazanılır?</div>
+          <p class="patch-slide-desc">5 kez Maçın Adamı seçilirsen kartın mor holografik Epic'e dönüşür. Dönen halkalar, ışık taraması ve partiküller seni bekliyor!</p>
           <ul class="patch-features">
-            <li>Ana mevkini ve alternatif mevkilerini seç</li>
-            <li>Kullandığın ayağı belirle (Sağ, Sol, İki Ayak)</li>
-            <li>Kartın tier sistemiyle (Gold/Silver/Bronze) otomatik belirlenir</li>
+            <li>5x MOTM → 💜 Epic (mor / holografik / dönen çift halka)</li>
+            <li>50M ₺+ bonservis → 🔥 Legend (turuncu / ateş halkası)</li>
+            <li>Reyting 90+ → ⭐ Elite (altın / elektrik çakması)</li>
+            <li>10 maç galibiyet serisi → 🏆 Champion (yeşil / konfeti)</li>
           </ul>
         </div>
 
         <!-- SLAYT 3 -->
         <div class="patch-slide">
-          <div class="patch-emoji">⭐</div>
-          <div class="patch-slide-title">Daha <span>Adaletli</span> Reyting Sistemi</div>
-          <p class="patch-slide-desc">Farklı parametreleri ekibimizce inceleyip en hassas, en adaletli şekilde sizi puanlıyacağız.</p>
+          <div class="patch-emoji">📊</div>
+          <div class="patch-slide-title">Dinamik <span>Momentum</span> Sistemi</div>
+          <p class="patch-slide-desc">Artık her maç reytingini doğrudan etkiliyor. Üst üste kazan, zirvene ulaş!</p>
           <ul class="patch-features">
-            <li>Hız, Şut, Pas, Fizik, Defans, Kalecilik, Top Kontrolü ve Dribling değerlendiriliyor</li>
-            <li>Sistem mevkine göre ağırlıklandırarak genel reytingini hesaplar</li>
-            <li>Yapay zeka en ideal mevkini gerçekçi analizle öneriyor</li>
+            <li>3 üst üste galibiyet → Reyting kalıcı +1 artar 📈</li>
+            <li>3 üst üste mağlubiyet → Reyting -1 düşer 📉</li>
+            <li>Kartında 3 noktalı form göstergesi</li>
+            <li>2. notta gösterge titreşip yanıp söner — tehlike!</li>
           </ul>
         </div>
 
         <!-- SLAYT 4 -->
         <div class="patch-slide">
-          <div class="patch-emoji">⚖️</div>
-          <div class="patch-slide-title"><span>Otomatik</span> Takım Oluşturucu</div>
-          <p class="patch-slide-desc">"Adalet mülkün temelidir" dedik ve takım kurma derdini bitirdik.</p>
+          <div class="patch-emoji">👑</div>
+          <div class="patch-slide-title">Kaptan İsimli <span>Takımlar</span></div>
+          <p class="patch-slide-desc">Artık "Takım A" ve "Takım B" tarih oldu. Kaptanların ismi her yerde!</p>
           <ul class="patch-features">
-            <li>14 kişi tamamlanınca yapay zeka devreye giriyor</li>
-            <li>Rating + mevki dengesine göre kusursuz 7v7</li>
-            <li>Her takıma rastgele kaptan seçiliyor 👑</li>
+            <li>Kaptan Furkan → "Furkan'ın Takımı"</li>
+            <li>Kaptan Mehmet → "Mehmet'in Takımı"</li>
+            <li>Sahada, skor ekranında, geçmiş maçlarda her yerde</li>
           </ul>
         </div>
 
         <!-- SLAYT 5 -->
         <div class="patch-slide">
-          <div class="patch-emoji">🏟️</div>
-          <div class="patch-slide-title">Görsel <span>Taktik Tahtası</span></div>
-          <p class="patch-slide-desc">Kadrolar belli olduktan sonra isimleri alt alta kuru kuru okumayacaksınız.</p>
-          <ul class="patch-features">
-            <li>Oyuncu kartları yemyeşil saha üzerinde diziliyor</li>
-            <li>Yan yana iki saha — Takım A vs Takım B</li>
-            <li>Kaptan, form oku ve reyting kartlarda görünüyor</li>
-          </ul>
-        </div>
-
-        <!-- SLAYT 6 -->
-        <div class="patch-slide">
-          <div class="patch-emoji">📈</div>
-          <div class="patch-slide-title">Bonservis ve <span>Transfer Piyasası</span></div>
-          <p class="patch-slide-desc">Artık her oyuncunun reytingine göre belirlenen bir Piyasa Değeri var!</p>
-          <ul class="patch-features">
-            <li>Maç kazandıkça bonservisin artar ⬆</li>
-            <li>Kaybedince değerin düşer ⬇</li>
-            <li>Transfer Piyasası sekmesinden borsa gibi takip et</li>
-          </ul>
-        </div>
-
-        <!-- SLAYT 7 -->
-        <div class="patch-slide">
-          <div class="patch-emoji">💬</div>
-          <div class="patch-slide-title">Topluluk <span>Forumu</span></div>
-          <p class="patch-slide-desc">Sitemizi sizinle birlikte büyütüyoruz! Yeni Forum sekmesinde öneri ve şikayetlerini yaz, oylarını kullan.</p>
-          <ul class="patch-features">
-            <li>Öneri, Şikayet, Genel ve Bug kategorileri</li>
-            <li>Reddit tarzı upvote/downvote sistemi</li>
-            <li>En çok oy alan gönderiler üstte listeleniyor</li>
-          </ul>
-        </div>
-
-        <!-- SLAYT 8 — SON -->
-        <div class="patch-slide">
           <div class="patch-emoji">🔑</div>
           <div class="patch-slide-title">Artık <span>Şifreni Unutma</span> Derdi Yok!</div>
-          <p class="patch-slide-desc">Çıkış yapmadığın sürece sistem seni otomatik olarak hatırlıyor. Yeni hesap açma derdi bitti!</p>
+          <p class="patch-slide-desc">Çıkış yapmadığın sürece sistem seni otomatik hatırlıyor. Yeni hesap açma devri kapandı!</p>
           <ul class="patch-features">
-            <li>Tarayıcını kapayıp açsan bile otomatik giriş yapılıyor</li>
-            <li>Sadece "Çıkış" butonuna basarsan oturum kapanıyor</li>
-            <li>Her cihazda tek hesap — veriler bulutta senkronize</li>
+            <li>Tarayıcını kapayıp açsan bile otomatik giriş</li>
+            <li>Sadece "Çıkış" butonuna basınca oturum kapanır</li>
+            <li>"Beni Hatırla" seçeneği giriş ekranında</li>
           </ul>
-          <div style="margin-top:14px;padding:12px 14px;background:rgba(255,64,64,.1);border:1px solid rgba(255,64,64,.3);border-radius:10px;text-align:left">
-            <div style="font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--red);margin-bottom:5px">⚠️ UNUTMA!</div>
-            <div style="font-size:.78rem;color:rgba(255,255,255,.8);line-height:1.6">
-              Profil sekmesine gir, <strong style="color:var(--lime)">mevkini ve özelliklerini belirle.</strong><br>
-              Aksi takdirde kadroya giremezsin!
-            </div>
-          </div>
         </div>
 
-      </div>
+              </div>
     </div>
 
     <!-- Navigation -->
