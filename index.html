@@ -2992,34 +2992,36 @@ async function openVoting(matchId){
   showNotif('Oylama açıldı! 🗳️');renderAdmin();
 }
 
-function deleteUser(nameKey){
+async function deleteUser(nameKey){
   if(!isAdmin(currentUser))return;
-  _pendingDeleteKey=nameKey;
   const u=Object.values(_users).find(x=>x.name.toLowerCase()===nameKey);
-  document.getElementById('delete-user-name').textContent=u?u.name:nameKey;
-  openModal('modal-delete-user');
-}
-
-async function confirmDeleteUser(){
-  if(!_pendingDeleteKey)return;
-  const key=_pendingDeleteKey;
-  _pendingDeleteKey=null;
-  closeModal('modal-delete-user');
+  const userName=u?u.name:nameKey;
+  if(!confirm(userName+' adlı oyuncuyu gizlemek istiyor musun?\nSilmez, sadece gizler. Admin panelinden geri alabilirsin.'))return;
   showLoading('Gizleniyor...');
   try{
-    // _users cache'den al, hidden flag ekle, saveUsers ile kaydet
-    const allUsers=Object.assign({},_users);
-    if(!allUsers[key]){hideLoading();showNotif('Kullanıcı bulunamadı!','error');return;}
-    allUsers[key]=Object.assign({},allUsers[key],{hidden:true});
-    await saveUsers(allUsers);
+    const snap=await db.ref('users').once('value');
+    const allUsers=snap.val()||{};
+    if(!allUsers[nameKey]){
+      hideLoading();
+      showNotif('Kullanıcı bulunamadı! Key: '+nameKey,'error');
+      return;
+    }
+    allUsers[nameKey].hidden=true;
+    await db.ref('users').set(allUsers);
+    _users=allUsers;
     hideLoading();
-    showNotif('Kullanıcı gizlendi! 👻');
+    showNotif(userName+' gizlendi 👻');
   }catch(e){
     hideLoading();
     showNotif('Hata: '+e.message,'error');
-    console.error('confirmDeleteUser error:',e);
+    console.error('deleteUser error:',e);
   }
   renderAdmin();
+}
+
+async function confirmDeleteUser(){
+  // Artık kullanılmıyor — deleteUser direkt çalışıyor
+  closeModal('modal-delete-user');
 }
 
 
@@ -3027,14 +3029,18 @@ async function unhideUser(nameKey){
   if(!isAdmin(currentUser))return;
   showLoading('Geri alınıyor...');
   try{
-    const allUsers=Object.assign({},_users);
-    if(!allUsers[nameKey]){hideLoading();showNotif('Kullanıcı bulunamadı!','error');return;}
-    const u=Object.assign({},allUsers[nameKey]);
-    delete u.hidden;
-    allUsers[nameKey]=u;
-    await saveUsers(allUsers);
+    const snap=await db.ref('users').once('value');
+    const allUsers=snap.val()||{};
+    if(!allUsers[nameKey]){
+      hideLoading();
+      showNotif('Kullanıcı bulunamadı!','error');
+      return;
+    }
+    delete allUsers[nameKey].hidden;
+    await db.ref('users').set(allUsers);
+    _users=allUsers;
     hideLoading();
-    showNotif('Kullanıcı tekrar görünür! 👁');
+    showNotif((allUsers[nameKey].name||nameKey)+' tekrar görünür! 👁');
   }catch(e){
     hideLoading();
     showNotif('Hata: '+e.message,'error');
