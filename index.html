@@ -28,8 +28,21 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 @keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 
 /* TOPBAR */
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 0 20px;gap:8px;flex-wrap:wrap}
-.brand{font-family:'Bebas Neue',cursive;font-size:1.7rem;letter-spacing:2px;color:var(--lime);line-height:1;text-shadow:0 0 30px rgba(184,247,23,.3);flex-shrink:0}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;gap:8px;
+  background:rgba(0,0,0,.4);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(184,247,23,.1);
+  position:sticky;top:0;z-index:50;
+  margin:0 -16px;padding-left:16px;padding-right:16px;
+}
+.brand{
+  font-family:'Bebas Neue',cursive;font-size:1.5rem;letter-spacing:3px;
+  color:var(--lime);line-height:1;
+  text-shadow:0 0 20px rgba(184,247,23,.4);flex-shrink:0;
+}
+.brand span{color:rgba(184,247,23,.5)}
 .brand span{color:var(--text)}
 
 /* BUTTONS */
@@ -82,15 +95,47 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .notif.warn{border-color:var(--amber);color:var(--amber)}
 
 /* USER CHIP */
-.user-chip{display:flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--surface-3);border-radius:30px;padding:5px 12px 5px 7px;font-size:.78rem;flex-shrink:0}
-.user-chip .avatar{width:26px;height:26px;border-radius:50%;background:var(--grass);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:var(--lime);font-family:'Bebas Neue',cursive}
-.rating-badge{background:var(--lime);color:var(--dark);font-weight:700;font-size:.65rem;padding:1px 6px;border-radius:20px}
+.user-chip{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(184,247,23,.06);
+  border:1px solid rgba(184,247,23,.15);
+  border-radius:30px;padding:4px 10px 4px 5px;
+  font-size:.75rem;flex-shrink:0;
+}
+.user-chip .avatar{
+  width:24px;height:24px;border-radius:50%;
+  background:rgba(184,247,23,.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.68rem;font-weight:900;color:var(--lime);
+  font-family:'Bebas Neue',cursive;border:1px solid rgba(184,247,23,.3);
+}
+.rating-badge{
+  background:rgba(184,247,23,.12);color:var(--lime);
+  font-weight:800;font-size:.62rem;padding:1px 7px;border-radius:20px;
+  border:1px solid rgba(184,247,23,.2);
+}
 .admin-badge{background:var(--amber);color:var(--dark);font-size:.62rem;font-weight:700;padding:2px 6px;border-radius:20px}
 
 /* NAV TABS */
-.nav-tabs{display:flex;gap:3px;background:var(--dark-3);border-radius:var(--radius-sm);padding:3px;margin-bottom:16px;flex-wrap:wrap}
-.nav-tab{flex:1;min-width:56px;padding:7px 3px;border:none;border-radius:6px;background:transparent;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:.68rem;font-weight:600;cursor:pointer;transition:all .15s;text-align:center;white-space:nowrap}
-.nav-tab.active{background:var(--surface-2);color:var(--lime)}
+.nav-tabs{
+  display:flex;gap:0;
+  background:rgba(0,0,0,.35);
+  border-bottom:1px solid rgba(184,247,23,.08);
+  overflow-x:auto;scrollbar-width:none;
+  margin:0 -16px;padding:0 16px;
+  position:sticky;top:53px;z-index:49;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{
+  flex-shrink:0;padding:10px 12px 8px;border:none;
+  background:transparent;color:#446044;
+  font-family:'DM Sans',sans-serif;font-size:.7rem;font-weight:700;
+  cursor:pointer;transition:all .2s;text-align:center;white-space:nowrap;
+  border-bottom:2px solid transparent;margin-bottom:-1px;letter-spacing:.3px;
+}
+.nav-tab:hover{color:#608060}
+.nav-tab.active{color:var(--lime);border-bottom-color:var(--lime);background:rgba(184,247,23,.04)}
 
 .panel{display:none}
 .panel.active{display:block;animation:fadeIn .22s ease}
@@ -162,7 +207,13 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .no-match-box p{font-size:.85rem;line-height:1.7}
 
 /* LOGOUT */
-.logout-btn{background:none;border:none;color:var(--text-muted);font-size:.72rem;cursor:pointer;text-decoration:underline;font-family:'DM Sans',sans-serif;padding:0}
+.logout-btn{
+  background:rgba(255,60,60,.08);border:1px solid rgba(255,60,60,.2);
+  color:#ff6060;font-size:.68rem;cursor:pointer;
+  font-family:'DM Sans',sans-serif;padding:5px 10px;
+  border-radius:20px;font-weight:700;transition:all .2s;
+}
+.logout-btn:hover{background:rgba(255,60,60,.15);border-color:rgba(255,60,60,.4)}
 .logout-btn:hover{color:var(--red)}
 
 /* ===================== FC CARD ===================== */
@@ -1311,24 +1362,24 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 <div id="page-home" class="page">
   <div class="topbar">
     <div class="brand">SALI<span>MAÇI</span></div>
-    <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;justify-content:flex-end">
+    <div style="display:flex;align-items:center;gap:8px">
       <div class="user-chip">
         <div class="avatar" id="home-avatar"></div>
-        <strong id="home-username" style="font-size:.8rem"></strong>
+        <span id="home-username" style="font-size:.72rem;font-weight:700;color:rgba(184,247,23,.8);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
         <span class="rating-badge" id="home-rating"></span>
-        <span class="admin-badge" id="home-admin-badge" style="display:none">ADMİN</span>
+        <span class="admin-badge" id="home-admin-badge" style="display:none">ADM</span>
       </div>
-      <button class="logout-btn" onclick="handleLogout()">Çıkış</button>
+      <button class="logout-btn" onclick="handleLogout()">⏻</button>
     </div>
   </div>
 
   <div class="nav-tabs">
-    <button class="nav-tab active" onclick="switchTab('tab-dashboard',this)">🏠 Ana</button>
-    <button class="nav-tab"        onclick="switchTab('tab-matches',this)">📋 Maçlar</button>
+    <button class="nav-tab active" onclick="switchTab('tab-dashboard',this)">🏠</button>
+    <button class="nav-tab"        onclick="switchTab('tab-matches',this)">⚽ Maçlar</button>
     <button class="nav-tab"        onclick="switchTab('tab-lineup',this)">👕 Kadro</button>
     <button class="nav-tab"        onclick="switchTab('tab-profile',this)">👤 Profil</button>
-    <button class="nav-tab"        onclick="switchTab('tab-vote',this)">🏅 Oylama</button>
-    <button class="nav-tab"        onclick="switchTab('tab-lb',this)">🏆 Sıralama</button>
+    <button class="nav-tab"        onclick="switchTab('tab-vote',this)">🏅 Oy</button>
+    <button class="nav-tab"        onclick="switchTab('tab-lb',this)">🏆 Liste</button>
     <button class="nav-tab"        onclick="switchTab('tab-news',this)">📰 Gazete</button>
     <button class="nav-tab"        onclick="switchTab('tab-forum',this)">💬 Forum</button>
     <button class="nav-tab"        onclick="switchTab('tab-borsa',this)">📈 Piyasa</button>
@@ -2146,9 +2197,10 @@ function renderLineup(){
     </div>
     <div id="lc-field"></div>`;
 
-  // Boş saha önizlemesi (bir kez render et)
+  // Boş saha önizlemesi (bir kez render et — minimal mod)
   const fieldEl=document.getElementById('lc-field');
   if(fieldEl){
+    fieldEl.dataset.minimal='1';
     const fake={lineup:{},attending:[],reserves:[],
       teamAName:match.teamAName||'Takım A',teamBName:match.teamBName||'Takım B',
       captainA:null,captainB:null,teamAvgA:0,teamAvgB:0,datetime:match.datetime,venue:match.venue};
@@ -2466,7 +2518,15 @@ function renderFieldLineup(el, match, previewMode=false){
       ${reservesHtml}
     </div>
     ${predictionHtml}`;
-  el.innerHTML=_fieldHtml;
+  if(el.dataset.minimal==='1'){
+    // Sadece saha SVG — başlık yok, AI tahmin yok, yedekler yok
+    const parser=new DOMParser();
+    const doc=parser.parseFromString(_fieldHtml,'text/html');
+    const svgWrap=doc.querySelector('.field-wrap');
+    el.innerHTML=svgWrap?svgWrap.outerHTML:_fieldHtml;
+  } else {
+    el.innerHTML=_fieldHtml;
+  }
 }
 
 /* ====== VOTING ====== */
