@@ -1328,6 +1328,111 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .pf-badge-lbl.earned{color:var(--lime)}
 .pf-badge-lbl.locked{color:#2a3a2a}
 
+
+/* ── Patch Notes içi kart gösterimi ── */
+.ps-card-wrap{
+  display:flex;justify-content:center;align-items:flex-start;
+  gap:12px;width:100%;padding:4px 0 8px;
+}
+.ps-mini-card{
+  width:110px;flex-shrink:0;border-radius:14px;
+  overflow:visible;position:relative;
+}
+.ps-card-inner{
+  border-radius:14px;overflow:hidden;
+  padding:10px 9px 9px;
+  display:flex;flex-direction:column;align-items:center;
+  position:relative;z-index:2;
+}
+.ps-ring{position:absolute;border-radius:50%;border:2px solid transparent;z-index:1;pointer-events:none}
+@keyframes ps-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes ps-spinr{from{transform:rotate(360deg)}to{transform:rotate(0deg)}}
+
+/* Epic */
+.ps-epic .ps-card-inner{background:linear-gradient(155deg,#0d0020,#1e0055,#2a0075,#150040)}
+.ps-epic .ps-r1{inset:-10px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 0deg,#ff00ff,#8000ff,#00ffff,#8000ff,#ff00ff) border-box;animation:ps-spin 3s linear infinite}
+.ps-epic .ps-r2{inset:-5px;border-width:1.5px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 180deg,#00ffff,#ff00ff,#8000ff,#ff00ff,#00ffff) border-box;animation:ps-spinr 2s linear infinite}
+.ps-epic .ps-stripe{background:linear-gradient(90deg,#ff00ff,#8000ff,#00ffff,#8000ff,#ff00ff);background-size:200%;animation:fc2shimmer 2s linear infinite}
+.ps-epic .ps-rating{color:#e080ff;text-shadow:0 0 15px rgba(180,0,255,.8)}
+.ps-epic .ps-pos{color:#bb55ee}
+.ps-epic .ps-av{background:conic-gradient(from 0deg,#ff00ff,#8000ff,#00ffff,#8000ff,#ff00ff);animation:ps-spin 4s linear infinite}
+.ps-epic .ps-av-i{background:#180038;color:#e080ff}
+.ps-epic .ps-name{color:#dd77ff}
+.ps-epic .ps-bons{color:#e080ff;background:rgba(160,0,255,.15)}
+
+/* Legend */
+.ps-legend .ps-card-inner{background:linear-gradient(155deg,#180400,#380d00,#581800,#380800,#140300)}
+.ps-legend .ps-r1{inset:-10px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 0deg,#ff3300,#ffaa00,#ff6600,#ffdd00,#ff3300) border-box;animation:ps-spin 2.5s linear infinite}
+.ps-legend .ps-r2{inset:-5px;border-width:1.5px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 90deg,#ffdd00,#ff3300,#ffaa00,#ff3300,#ffdd00) border-box;animation:ps-spinr 1.8s linear infinite}
+.ps-legend .ps-stripe{background:linear-gradient(90deg,#ff3300,#ffcc00,#ff6600,#ffaa00,#ff3300);background-size:200%;animation:fc2shimmer 1.5s linear infinite}
+.ps-legend .ps-rating{color:#ffaa44;text-shadow:0 0 15px rgba(255,100,0,.8)}
+.ps-legend .ps-pos{color:#dd7722}
+.ps-legend .ps-av{background:conic-gradient(from 0deg,#ff3300,#ffcc00,#ff6600,#ff3300);animation:ps-spin 3s linear infinite}
+.ps-legend .ps-av-i{background:#280500;color:#ffaa44}
+.ps-legend .ps-name{color:#ffaa44}
+.ps-legend .ps-bons{color:#ffaa44;background:rgba(255,90,0,.15)}
+
+/* Elite */
+.ps-elite .ps-card-inner{background:linear-gradient(155deg,#0a0900,#1c1700,#2e2500,#1a1500,#080700)}
+.ps-elite .ps-r1{inset:-10px;border-width:2.5px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 0deg,#ffd700,#fff5a0,#ffd700,#ffe450,#ffd700) border-box;animation:ps-spin 4s linear infinite}
+.ps-elite .ps-stripe{background:linear-gradient(90deg,#aa8800,#ffd700,#ffe880,#ffd700,#aa8800);background-size:200%;animation:fc2shimmer 2.5s linear infinite}
+.ps-elite .ps-rating{color:#ffd700;text-shadow:0 0 12px rgba(255,200,0,.8)}
+.ps-elite .ps-pos{color:#ccaa00}
+.ps-elite .ps-av{background:conic-gradient(from 0deg,#ffd700,#fff8a0,#ffd700,#aa8800,#ffd700);animation:ps-spin 5s linear infinite}
+.ps-elite .ps-av-i{background:#1a1200;color:#ffd700}
+.ps-elite .ps-name{color:#ffd700}
+.ps-elite .ps-bons{color:#ffd700;background:rgba(255,200,0,.12)}
+
+/* Champion */
+.ps-champ .ps-card-inner{background:linear-gradient(155deg,#001a03,#003308,#005512,#003008,#001203)}
+.ps-champ .ps-r1{inset:-10px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 0deg,#ffd700,#00cc44,#ffd700,#00ff66,#ffd700) border-box;animation:ps-spin 3.5s linear infinite}
+.ps-champ .ps-r2{inset:-5px;border-width:1.5px;background:linear-gradient(#060a06,#060a06) padding-box,conic-gradient(from 270deg,#00ff66,#ffd700,#00cc44,#ffd700,#00ff66) border-box;animation:ps-spinr 2s linear infinite}
+.ps-champ .ps-stripe{background:linear-gradient(90deg,#ffd700,#00cc44,#00ff88,#00cc44,#ffd700);background-size:200%;animation:fc2shimmer 2s linear infinite}
+.ps-champ .ps-rating{color:#00ee66;text-shadow:0 0 15px rgba(0,210,60,.8)}
+.ps-champ .ps-pos{color:#00bb44}
+.ps-champ .ps-av{background:conic-gradient(from 0deg,#ffd700,#00ff66,#ffd700,#00cc44,#ffd700);animation:ps-spin 4s linear infinite}
+.ps-champ .ps-av-i{background:#001a05;color:#00ff66}
+.ps-champ .ps-name{color:#00ee66}
+.ps-champ .ps-bons{color:#00ee66;background:rgba(0,200,60,.12)}
+
+/* Paylaşılan kart elemanları */
+.ps-stripe{height:3px;width:calc(100%+18px);margin:-10px -9px 8px;border-radius:14px 14px 0 0}
+.ps-tier-lbl{font-size:.55rem;font-weight:800;letter-spacing:1.5px;padding:1px 7px;border-radius:20px;border:1px solid;margin-bottom:4px;text-align:center}
+.ps-epic .ps-tier-lbl{color:#e080ff;border-color:#e080ff50;background:#e080ff18}
+.ps-legend .ps-tier-lbl{color:#ffaa44;border-color:#ffaa4450;background:#ffaa4418}
+.ps-elite .ps-tier-lbl{color:#ffd700;border-color:#ffd70050;background:#ffd70018}
+.ps-champ .ps-tier-lbl{color:#00ee66;border-color:#00ee6650;background:#00ee6618}
+.ps-rating{font-family:'Bebas Neue',Impact,cursive;font-size:1.8rem;line-height:1;letter-spacing:-1px}
+.ps-pos{font-size:.5rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;opacity:.8;margin-bottom:7px;font-family:'Bebas Neue',Impact,cursive}
+.ps-av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',Impact,cursive;font-size:1rem;font-weight:900;margin:0 0 6px;position:relative}
+.ps-av-i{position:absolute;inset:3px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',Impact,cursive;font-size:.95rem;font-weight:900}
+.ps-name{font-family:'Bebas Neue',Impact,cursive;font-size:.65rem;letter-spacing:1px;margin-bottom:5px;text-align:center;text-transform:uppercase}
+.ps-divider{width:100%;border-top:1px solid rgba(255,255,255,.12);margin-bottom:5px}
+.ps-bons{font-size:.58rem;font-weight:700;padding:2px 0;width:100%;text-align:center;border-radius:20px;font-family:Impact,cursive;letter-spacing:.4px}
+
+/* Slayt içi kart info */
+.ps-card-info{flex:1;min-width:0;padding-left:4px}
+.ps-info-title{font-family:'Bebas Neue',cursive;font-size:1.1rem;letter-spacing:1.5px;margin-bottom:6px;line-height:1.1}
+.ps-info-cond{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.05);border-radius:10px;
+  padding:8px 10px;margin-bottom:8px;
+}
+.ps-info-cond-icon{font-size:1.3rem;flex-shrink:0}
+.ps-info-cond-text{font-size:.7rem;color:rgba(255,255,255,.6);line-height:1.4}
+.ps-info-cond-text strong{display:block;color:#fff;font-size:.78rem;margin-bottom:1px}
+.ps-info-efx{list-style:none;padding:0;margin:0}
+.ps-info-efx li{
+  font-size:.65rem;color:rgba(255,255,255,.55);
+  padding:3px 0;border-bottom:1px solid rgba(255,255,255,.05);
+  display:flex;align-items:center;gap:5px;line-height:1.3;
+}
+.ps-info-efx li:last-child{border-bottom:none}
+.ps-info-efx li::before{content:'▸';flex-shrink:0}
+
+/* patch-slide padding azalt kart slaytları için */
+.patch-slide.card-slide{padding:12px 16px 8px;align-items:flex-start}
+
 </style>
 </head>
 <body>
@@ -2023,14 +2128,14 @@ function goHome(){
   renderDashboard();
   renderPastMatches();renderLeaderboard();
   // Patch notes - ilk girişte göster
-  if(!LS.get('patch_v4_seen')){
+  if(!LS.get('patch_v5_seen')){
     setTimeout(()=>openPatchNotes(),700);
   }
 }
 
 /* ===== PATCH NOTES SLIDER JS ===== */
 let _patchCurrent=0;
-const PATCH_TOTAL=5;
+const PATCH_TOTAL=8;
 
 function openPatchNotes(){
   _patchCurrent=0;
@@ -2048,7 +2153,7 @@ function closePatchNotes(){
     el.style.animation='';
     el.classList.remove('open');
   },350);
-  LS.set('patch_v4_seen','1');
+  LS.set('patch_v5_seen','1');
   // Profile doldurmamışsa profil sekmesine götür
   if(currentUser&&!currentUser.profileComplete){
     const tabs=document.querySelectorAll('.nav-tab');
@@ -4339,20 +4444,163 @@ tryAutoLogin();
           </ul>
         </div>
 
-        <!-- SLAYT 2 -->
-        <div class="patch-slide">
-          <div class="patch-emoji">💜</div>
-          <div class="patch-slide-title"><span>Epic</span> Kart Nasıl Kazanılır?</div>
-          <p class="patch-slide-desc">5 kez Maçın Adamı seçilirsen kartın mor holografik Epic'e dönüşür. Dönen halkalar, ışık taraması ve partiküller seni bekliyor!</p>
-          <ul class="patch-features">
-            <li>5x MOTM → 💜 Epic (mor / holografik / dönen çift halka)</li>
-            <li>50M ₺+ bonservis → 🔥 Legend (turuncu / ateş halkası)</li>
-            <li>Reyting 90+ → ⭐ Elite (altın / elektrik çakması)</li>
-            <li>10 maç galibiyet serisi → 🏆 Champion (yeşil / konfeti)</li>
-          </ul>
+        <!-- SLAYT 2 — EPIC KART -->
+        <div class="patch-slide card-slide">
+          <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center;width:100%">YENİ ÖZEL TİER KARTLARI</div>
+          <div class="ps-card-wrap">
+            <!-- Mini Epic Kart -->
+            <div class="ps-mini-card ps-epic">
+              <div class="ps-ring ps-r1"></div>
+              <div class="ps-ring ps-r2"></div>
+              <div class="ps-card-inner">
+                <div class="ps-stripe"></div>
+                <div class="ps-tier-lbl">★ EPIC ★</div>
+                <div class="ps-rating">94</div>
+                <div class="ps-pos">SANTRAFOR</div>
+                <div class="ps-av"><div class="ps-av-i">FS</div></div>
+                <div class="ps-name">Furkan S.</div>
+                <div class="ps-divider"></div>
+                <div class="ps-bons">68,4 M ₺</div>
+              </div>
+            </div>
+            <!-- Bilgi -->
+            <div class="ps-card-info">
+              <div class="ps-info-title" style="color:#e080ff">💜 Epic Kart</div>
+              <div class="ps-info-cond">
+                <div class="ps-info-cond-icon">🏆</div>
+                <div class="ps-info-cond-text">
+                  <strong>5× Maçın Adamı</strong>
+                  MOTM ödülünü 5 kez kazanınca otomatik aktif olur
+                </div>
+              </div>
+              <ul class="ps-info-efx">
+                <li>Dönen çift holografik halka</li>
+                <li>Mor/cyan renk değiştiren şerit</li>
+                <li>Conic gradient avatar çemberi</li>
+                <li>Ekran boyunca ışın taraması</li>
+                <li>Yüzen mor partiküller</li>
+              </ul>
+            </div>
+          </div>
         </div>
 
-        <!-- SLAYT 3 -->
+        <!-- SLAYT 3 — LEGEND KART -->
+        <div class="patch-slide card-slide">
+          <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center;width:100%">YENİ ÖZEL TİER KARTLARI</div>
+          <div class="ps-card-wrap">
+            <!-- Mini Legend Kart -->
+            <div class="ps-mini-card ps-legend">
+              <div class="ps-ring ps-r1"></div>
+              <div class="ps-ring ps-r2"></div>
+              <div class="ps-card-inner">
+                <div class="ps-stripe"></div>
+                <div class="ps-tier-lbl">◈ LEGEND</div>
+                <div class="ps-rating">91</div>
+                <div class="ps-pos">STOPER</div>
+                <div class="ps-av"><div class="ps-av-i">AK</div></div>
+                <div class="ps-name">Ahmet K.</div>
+                <div class="ps-divider"></div>
+                <div class="ps-bons">52,1 M ₺</div>
+              </div>
+            </div>
+            <!-- Bilgi -->
+            <div class="ps-card-info">
+              <div class="ps-info-title" style="color:#ffaa44">🔥 Legend Kart</div>
+              <div class="ps-info-cond">
+                <div class="ps-info-cond-icon">💰</div>
+                <div class="ps-info-cond-text">
+                  <strong>Bonservis 50M ₺+</strong>
+                  Piyasa değerin 50 milyon ₺'yi geçince aktif olur
+                </div>
+              </div>
+              <ul class="ps-info-efx">
+                <li>Turuncu/sarı çift ateş halkası</li>
+                <li>Alev şeklinde yükselen partiküller</li>
+                <li>Kırmızı→altın renk değişen şerit</li>
+                <li>Sürekli ateş parıltısı efekti</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLAYT 4 — ELİTE KART -->
+        <div class="patch-slide card-slide">
+          <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center;width:100%">YENİ ÖZEL TİER KARTLARI</div>
+          <div class="ps-card-wrap">
+            <!-- Mini Elite Kart -->
+            <div class="ps-mini-card ps-elite">
+              <div class="ps-ring ps-r1"></div>
+              <div class="ps-card-inner">
+                <div class="ps-stripe"></div>
+                <div class="ps-tier-lbl">✦ ELİTE</div>
+                <div class="ps-rating">93</div>
+                <div class="ps-pos">KALECİ</div>
+                <div class="ps-av"><div class="ps-av-i">MY</div></div>
+                <div class="ps-name">Mehmet Y.</div>
+                <div class="ps-divider"></div>
+                <div class="ps-bons">48,6 M ₺</div>
+              </div>
+            </div>
+            <!-- Bilgi -->
+            <div class="ps-card-info">
+              <div class="ps-info-title" style="color:#ffd700">⭐ Elite Kart</div>
+              <div class="ps-info-cond">
+                <div class="ps-info-cond-icon">📈</div>
+                <div class="ps-info-cond-text">
+                  <strong>Genel Reyting 90+</strong>
+                  OVR değerin 90'ı geçince otomatik aktif olur
+                </div>
+              </div>
+              <ul class="ps-info-efx">
+                <li>Altın dönen yıldız halkası</li>
+                <li>Elektrik çakması animasyonu</li>
+                <li>Yıldız şekilli yüzen partiküller</li>
+                <li>Sürekli altın parıltısı</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLAYT 5 — CHAMPION KART -->
+        <div class="patch-slide card-slide">
+          <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center;width:100%">YENİ ÖZEL TİER KARTLARI</div>
+          <div class="ps-card-wrap">
+            <!-- Mini Champion Kart -->
+            <div class="ps-mini-card ps-champ">
+              <div class="ps-ring ps-r1"></div>
+              <div class="ps-ring ps-r2"></div>
+              <div class="ps-card-inner">
+                <div class="ps-stripe"></div>
+                <div class="ps-tier-lbl">🏆 CHAMPION</div>
+                <div class="ps-rating">87</div>
+                <div class="ps-pos">SAĞ KANAT</div>
+                <div class="ps-av"><div class="ps-av-i">ET</div></div>
+                <div class="ps-name">Emre T.</div>
+                <div class="ps-divider"></div>
+                <div class="ps-bons">38,2 M ₺</div>
+              </div>
+            </div>
+            <!-- Bilgi -->
+            <div class="ps-card-info">
+              <div class="ps-info-title" style="color:#00ee66">🏆 Champion Kart</div>
+              <div class="ps-info-cond">
+                <div class="ps-info-cond-icon">🔥</div>
+                <div class="ps-info-cond-text">
+                  <strong>10 Maç Galibiyet Serisi</strong>
+                  Üst üste 10 maç kazanınca aktif olur
+                </div>
+              </div>
+              <ul class="ps-info-efx">
+                <li>Altın+yeşil çift dönen halka</li>
+                <li>Konfeti yağmuru animasyonu</li>
+                <li>Yeşil enerji dalgası efekti</li>
+                <li>Sürekli zafer parıltısı</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLAYT 6 -->
         <div class="patch-slide">
           <div class="patch-emoji">📊</div>
           <div class="patch-slide-title">Dinamik <span>Momentum</span> Sistemi</div>
@@ -4365,7 +4613,7 @@ tryAutoLogin();
           </ul>
         </div>
 
-        <!-- SLAYT 4 -->
+        <!-- SLAYT 7 -->
         <div class="patch-slide">
           <div class="patch-emoji">👑</div>
           <div class="patch-slide-title">Kaptan İsimli <span>Takımlar</span></div>
@@ -4377,7 +4625,7 @@ tryAutoLogin();
           </ul>
         </div>
 
-        <!-- SLAYT 5 -->
+        <!-- SLAYT 8 -->
         <div class="patch-slide">
           <div class="patch-emoji">🔑</div>
           <div class="patch-slide-title">Artık <span>Şifreni Unutma</span> Derdi Yok!</div>
