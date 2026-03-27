@@ -6,6 +6,187 @@
 <title>Salı Maçı Organizasyonu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=UnifrakturMaguntia&family=Playfair+Display:ital,wght@0,700;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+
+<div id="page-login" class="page active">
+  <div class="topbar">
+    <div class="brand">SALI<span>MAÇI</span></div>
+  </div>
+  <div style="max-width:400px;margin:0 auto;padding:32px 16px">
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="font-family:'Bebas Neue',cursive;font-size:2.5rem;color:var(--lime);letter-spacing:3px;text-shadow:0 0 30px rgba(184,247,23,.3)">PITCH APP</div>
+      <div style="font-size:.78rem;color:#446044;margin-top:4px;letter-spacing:1px">SALI MAÇI PLATFORMU</div>
+    </div>
+    <div class="profile-form-card">
+      <h3>🔐 Giriş Yap</h3>
+      <div class="form-group"><label>Ad Soyad</label><input type="text" id="login-name" placeholder="Adın Soyadın" autocomplete="name"></div>
+      <div class="form-group"><label>Şifre</label><input type="password" id="login-pass" placeholder="Şifren" autocomplete="current-password"></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+        <input type="checkbox" id="login-remember" style="width:16px;height:16px;accent-color:var(--lime)">
+        <label for="login-remember" style="font-size:.78rem;color:var(--text-muted);cursor:pointer">Beni Hatırla</label>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="handleLogin()">Giriş Yap →</button>
+      <p style="margin-top:12px;text-align:center;font-size:.8rem;color:var(--text-muted)">Hesabın yok mu? <a style="color:var(--lime);cursor:pointer;font-weight:600" onclick="openModal('modal-register')">Kayıt Ol</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ====== HOME ====== -->
+<div id="page-home" class="page" style="padding:0;max-width:100%">
+<div class="app-shell">
+
+  <!-- SIDE NAV -->
+  <nav class="sidenav" id="sidenav">
+    <div class="sn-logo">
+      <span class="sn-logo-text">SALI</span>
+      <span class="sn-logo-text">MAÇI</span>
+      <span class="sn-logo-sub">FC</span>
+    </div>
+    <button class="sn-item active" onclick="switchTab('tab-dashboard',this)" data-title="Ana Sayfa"><span class="sn-icon">🏠</span><span class="sn-lbl">Ana</span></button>
+    <button class="sn-item" onclick="switchTab('tab-matches',this)" data-title="Maçlar"><span class="sn-icon">⚽</span><span class="sn-lbl">Maçlar</span></button>
+    <button class="sn-item" onclick="switchTab('tab-lineup',this)" data-title="Kadro"><span class="sn-icon">👕</span><span class="sn-lbl">Kadro</span></button>
+    <button class="sn-item" onclick="switchTab('tab-profile',this)" data-title="Profil"><span class="sn-icon">👤</span><span class="sn-lbl">Profil</span></button>
+    <button class="sn-item" onclick="switchTab('tab-vote',this)" data-title="Oylama"><span class="sn-icon">🏅</span><span class="sn-lbl">Oylama</span></button>
+    <button class="sn-item" onclick="switchTab('tab-lb',this)" data-title="Sıralama"><span class="sn-icon">🏆</span><span class="sn-lbl">Sıralama</span></button>
+    <button class="sn-item" onclick="switchTab('tab-forum',this)" data-title="Forum"><span class="sn-icon">💬</span><span class="sn-lbl">Forum</span></button>
+    <button class="sn-item" onclick="switchTab('tab-borsa',this)" data-title="Transfer Piyasası"><span class="sn-icon">📈</span><span class="sn-lbl">Piyasa</span></button>
+    <button class="sn-item" onclick="switchTab('tab-news',this)" data-title="Gazete"><span class="sn-icon">📰</span><span class="sn-lbl">Gazete</span></button>
+    <button class="sn-item" onclick="switchTab('tab-updates',this)" data-title="Yama Notları"><span class="sn-icon">🆕</span><span class="sn-lbl">Yamalar</span></button>
+    <button class="sn-item" onclick="switchTab('tab-past',this)" data-title="Geçmiş Maçlar"><span class="sn-icon">📚</span><span class="sn-lbl">Geçmiş</span></button>
+    <button class="sn-guide-btn" onclick="openOnboard()" title="Nasıl Oynanır?"><span class="sn-icon">❓</span><span class="sn-lbl" style="color:var(--lime);font-size:.41rem">Rehber</span></button>
+    <button class="sn-item" id="tab-admin-btn" style="display:none" onclick="switchTab('tab-admin',this)" data-title="Admin Paneli"><span class="sn-icon">⚙️</span><span class="sn-lbl">Admin</span></button>
+    <div class="sn-bottom">
+      <div class="sn-av" id="home-avatar" onclick="switchTab('tab-profile',document.querySelector('.sn-item[data-title=Profil]'))"></div>
+      <div class="sn-rating" id="home-rating">—</div>
+      <button class="sn-out" onclick="handleLogout()">Çıkış</button>
+    </div>
+  </nav>
+
+  <!-- ANA İÇERİK -->
+  <div class="main-content">
+    <div class="page-topbar">
+      <div>
+        <div class="page-title" id="page-title-text">Ana Sayfa</div>
+        <div class="page-sub" id="home-username"></div>
+      </div>
+      <span class="admin-badge" id="home-admin-badge" style="display:none">ADMİN</span>
+    </div>
+
+    <div id="tab-dashboard" class="panel active"><div id="dashboard-content"></div></div>
+    <div id="tab-matches" class="panel">
+      <div style="display:flex;flex-direction:column;align-items:center;padding:36px 0 22px;text-align:center;gap:12px">
+        <p style="font-size:.86rem;color:var(--text-muted);max-width:260px;line-height:1.6">Yaklaşan maçlara katıl, kadroyu doldur.</p>
+        <button class="btn btn-primary btn-big" onclick="findMatch()">⚽ Maç Bul</button>
+      </div>
+      <div id="match-display"></div>
+    </div>
+    <div id="tab-lineup"  class="panel"><div id="lineup-content"></div></div>
+    <div id="tab-profile" class="panel"><div id="profile-content"></div></div>
+    <div id="tab-vote"    class="panel"><div id="vote-content"></div></div>
+    <div id="tab-lb"      class="panel"><div id="lb-content"></div></div>
+    <div id="tab-forum"   class="panel" style="padding:0"><div id="forum-content"></div></div>
+    <div id="tab-borsa"   class="panel"><div id="borsa-content"></div></div>
+    <div id="tab-news"    class="panel"><div id="news-content"></div></div>
+    <div id="tab-updates" class="panel"><div id="updates-content"></div></div>
+    <div id="tab-past"    class="panel"><div id="past-matches-list"></div></div>
+    <div id="tab-admin"   class="panel"><div id="admin-content"></div></div>
+  </div>
+</div>
+</div>
+
+<!-- MODAL: REGISTER -->
+<div id="modal-register" class="modal-overlay">
+  <div class="modal-box">
+    <h2>⚽ Kayıt Ol</h2>
+    <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:14px">Kaydolduktan sonra Profil sekmesinden özelliklerini doldur!</p>
+    <div class="form-group"><label>Ad Soyad</label><input type="text" id="reg-name" placeholder="Adın Soyadın"></div>
+    <div class="form-group"><label>Şifre</label><input type="password" id="reg-pass" placeholder="Şifreni belirle"></div>
+    <div class="form-group"><label>Şifre Tekrar</label><input type="password" id="reg-pass2" placeholder="Tekrar gir"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-register')">İptal</button>
+      <button class="btn btn-primary" onclick="handleRegister()">Kayıt Ol →</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: EXCUSE -->
+<div id="modal-excuse" class="modal-overlay">
+  <div class="modal-box">
+    <h2>😢 Gelemiyorum</h2>
+    <div class="form-group"><label>Neden gelemiyorsun?</label><textarea id="excuse-text" rows="3" placeholder="Kısa bir açıklama yaz..."></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-excuse')">Vazgeç</button>
+      <button class="btn btn-danger" onclick="submitExcuse()">Gönder</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: SCORE -->
+<div id="modal-score" class="modal-overlay">
+  <div class="modal-box">
+    <h2>⚽ Skor Gir</h2>
+    <div class="form-row">
+      <div class="form-group" style="margin-bottom:0"><label id="team-a-name-lbl">Takım A</label><input type="number" id="score-a" min="0" max="99" placeholder="0"></div>
+      <div style="padding-top:28px;font-family:'Bebas Neue',cursive;font-size:1.4rem;color:var(--text-muted)">—</div>
+      <div class="form-group" style="margin-bottom:0"><label id="team-b-name-lbl">Takım B</label><input type="number" id="score-b" min="0" max="99" placeholder="0"></div>
+    </div>
+    <div style="margin:14px 0 10px"><label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:8px">Kazanan</label>
+      <div style="display:flex;gap:8px">
+        <button class="winner-btn btn btn-ghost" id="wbtn-a" onclick="selectWinner('A',this)" style="flex:1">Takım A</button>
+        <button class="winner-btn btn btn-ghost" id="wbtn-draw" onclick="selectWinner('draw',this)" style="flex:1">Berabere</button>
+        <button class="winner-btn btn btn-ghost" id="wbtn-b" onclick="selectWinner('B',this)" style="flex:1">Takım B</button>
+      </div>
+    </div>
+    <div class="form-group"><label>Takım A Adı</label><input type="text" id="team-a-name" placeholder="Takım A"></div>
+    <div class="form-group"><label>Takım B Adı</label><input type="text" id="team-b-name" placeholder="Takım B"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-score')">İptal</button>
+      <button class="btn btn-primary" onclick="submitScore()">Kaydet ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: DELETE MATCH -->
+<div id="modal-delete" class="modal-overlay">
+  <div class="modal-box" style="max-width:340px">
+    <h2>🗑️ Maçı Sil</h2>
+    <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:16px">Bu maçı silmek istediğine emin misin? Bu işlem geri alınamaz.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-delete')">Vazgeç</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Evet, Sil</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: NEWS -->
+<div id="modal-news" class="modal-overlay">
+  <div class="modal-box" style="max-width:480px">
+    <h2>📰 Gazete Yayımla</h2>
+    <div class="form-group"><label>Maç Seç</label><select id="news-match-select"></select></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-news')">İptal</button>
+      <button class="btn btn-primary" onclick="generateNewspaper()">Yayımla 📰</button>
+    </div>
+  </div>
+</div>
+
+<div id="notif" class="notif"></div>
+
+<!-- MODAL: DELETE USER -->
+<div id="modal-delete-user" class="modal-overlay">
+  <div class="modal-box" style="max-width:360px">
+    <h2>🗑️ Kullanıcı Gizle</h2>
+    <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:6px">Şu kullanıcıyı gizlemek istediğine emin misin?</p>
+    <p style="font-size:1rem;font-weight:700;color:var(--red);margin-bottom:16px" id="delete-user-name"></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-delete-user')">Vazgeç</button>
+      <button class="btn btn-danger" onclick="confirmDeleteUser()">Evet, Gizle</button>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <style>
 :root{
   --grass:#1a6b2f;--lime:#b8f717;--lime-dim:#9fd614;
@@ -2081,758 +2262,12 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 }
 .sn-guide-btn:hover{background:rgba(184,247,23,.12);border-color:rgba(184,247,23,.3)}
 
-</style>
-</head>
-<body>
-<div id="app">
-
-<!-- ====== LOGIN ====== -->
-<div id="page-login" class="page active">
-  <div class="topbar">
-    <div class="brand">SALI<span>MAÇI</span></div>
-    <button class="btn btn-outline" onclick="openModal('modal-register')">Kayıt Ol</button>
-  </div>
-  <div class="hero">
-    <span class="hero-icon">⚽</span>
-    <h1>Salı Maçı<em>Organizasyonu</em></h1>
-    <p>Arkadaşlar şu parayı İBANA atmayı unutmayın uyaralım mı illa 💸</p>
-  </div>
-  <div class="iban-banner">💳 IBAN: <strong>TR86 0004 6002 9288 8000 2134 94</strong></div>
-  <div class="card" style="margin-top:20px">
-    <h2 style="font-family:'Bebas Neue',cursive;font-size:1.3rem;letter-spacing:1.5px;color:var(--lime);margin-bottom:16px">Giriş Yap</h2>
-    <div class="form-group"><label>Ad Soyad</label><input type="text" id="login-name" placeholder="Adını yaz..."></div>
-    <div class="form-group"><label>Şifre</label><input type="password" id="login-pass" placeholder="••••••" onkeydown="if(event.key==='Enter')handleLogin()"></div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:4px">
-      <input type="checkbox" id="rememberMe" checked style="accent-color:var(--lime);width:15px;height:15px;cursor:pointer">
-      <label for="rememberMe" style="font-size:.78rem;color:var(--text-muted);cursor:pointer">Beni hatırla <span style="font-size:.7rem;color:rgba(184,247,23,.5)">(Çıkış yapana kadar oturumun açık kalır)</span></label>
-    </div>
-    <button class="btn btn-primary" style="width:100%;margin-top:2px" onclick="handleLogin()">Sahaya Çık →</button>
-    <p style="margin-top:12px;text-align:center;font-size:.8rem;color:var(--text-muted)">Hesabın yok mu? <a style="color:var(--lime);cursor:pointer;font-weight:600" onclick="openModal('modal-register')">Kayıt Ol</a></p>
-  </div>
-</div>
-
-<!-- ====== HOME ====== -->
-<div id="page-home" class="page" style="padding:0;max-width:100%">
-<div class="app-shell">
-
-  <!-- ── SIDE NAV ── -->
-  <nav class="sidenav" id="sidenav">
-    <div class="sn-logo">
-      <span class="sn-logo-text">SALI</span>
-      <span class="sn-logo-text">MAÇI</span>
-      <span class="sn-logo-sub">FC</span>
-    </div>
-
-    <button class="sn-item active" onclick="switchTab('tab-dashboard',this)" data-title="Ana Sayfa">
-      <span class="sn-icon">🏠</span><span class="sn-lbl">Ana</span>
-    </button>
-    <button class="sn-item" onclick="switchTab('tab-matches',this)" data-title="Maçlar">
-      <span class="sn-icon">⚽</span><span class="sn-lbl">Maçlar</span>
-    </button>
-    <button class="sn-item" onclick="switchTab('tab-lineup',this)" data-title="Kadro">
-      <span class="sn-icon">👕</span><span class="sn-lbl">Kadro</span>
-    </button>
-    <button class="sn-item" onclick="switchTab('tab-profile',this)" data-title="Profil">
-      <span class="sn-icon">👤</span><span class="sn-lbl">Profil</span>
-    </button>
-    <button class="sn-item" onclick="switchTab('tab-vote',this)" data-title="Oylama">
-      <span class="sn-icon">🏅</span><span class="sn-lbl">Oylama</span>
-    </button>
-    <button class="sn-item" onclick="switchTab('tab-lb',this)" data-title="Sıralama">
-      <span class="sn-icon">🏆</span><span class="sn-lbl">Sıralama</span>
-    </button>
-    <button class="sn-item" onclick="switchTab('tab-forum',this)" data-title="Forum">
-      <span class="sn-icon">💬</span><span class="sn-lbl">Forum</span>
-    </button>
-    <button class="sn-item" onclick="switchTab('tab-borsa',this)" data-title="Transfer Piyasası">
-      <span class="sn-icon">📈</span><span class="sn-lbl">Piyasa</span>
-    </button>
-    <button class="sn-item" onclick="switchTab('tab-news',this)" data-title="Gazete">
-      <span class="sn-icon">📰</span><span class="sn-lbl">Gazete</span>
-    </button>
-    <button class="sn-item" onclick="switchTab('tab-updates',this)" data-title="Yama Notları">
-      <span class="sn-icon">🆕</span><span class="sn-lbl">Yamalar</span>
-    </button>
-    <button class="sn-item" onclick="switchTab('tab-past',this)" data-title="Geçmiş Maçlar">
-      <span class="sn-icon">📚</span><span class="sn-lbl">Geçmiş</span>
-    </button>
-    <!-- Rehber butonu -->
-    <button class="sn-guide-btn" onclick="openOnboard()" title="Nasıl Oynanır?">
-      <span class="sn-icon">❓</span>
-      <span class="sn-lbl" style="color:var(--lime);font-size:.41rem">Rehber</span>
-    </button>
-
-    <button class="sn-item" id="tab-admin-btn" style="display:none" onclick="switchTab('tab-admin',this)" data-title="Admin Paneli">
-      <span class="sn-icon">⚙️</span><span class="sn-lbl">Admin</span>
-    </button>
-
-    <div class="sn-bottom">
-      <div class="sn-av" id="home-avatar" onclick="switchTab('tab-profile',document.querySelector('.sn-item[data-title=Profil]'))"></div>
-      <div class="sn-rating" id="home-rating">—</div>
-      <button class="sn-out" onclick="handleLogout()">Çıkış</button>
-    </div>
-  </nav>
-
-  <!-- ── ANA İÇERİK ── -->
-  <div class="main-content">
-
-    <!-- Sayfa başlık barı -->
-    <div class="page-topbar">
-      <div>
-        <div class="page-title" id="page-title-text">Ana Sayfa</div>
-        <div class="page-sub" id="home-username"></div>
-      </div>
-      <span class="admin-badge" id="home-admin-badge" style="display:none">ADMİN</span>
-    </div>
-
-    <!-- Paneller -->
-    <div id="tab-dashboard" class="panel active"><div id="dashboard-content"></div></div>
-
-    <div id="tab-matches" class="panel">
-      <div style="display:flex;flex-direction:column;align-items:center;padding:36px 0 22px;text-align:center;gap:12px">
-        <p style="font-size:.86rem;color:var(--text-muted);max-width:260px;line-height:1.6">Yaklaşan maçlara katıl, kadroyu doldur.</p>
-        <button class="btn btn-primary btn-big" onclick="findMatch()">⚽ Maç Bul</button>
-      </div>
-      <div id="match-display"></div>
-    </div>
-
-    <div id="tab-lineup"  class="panel"><div id="lineup-content"></div></div>
-    <div id="tab-profile" class="panel"><div id="profile-content"></div></div>
-    <div id="tab-vote"    class="panel"><div id="vote-content"></div></div>
-    <div id="tab-lb"      class="panel"><div id="lb-content"></div></div>
-    <div id="tab-forum"   class="panel" style="padding:0"><div id="forum-content"></div></div>
-    <div id="tab-borsa"   class="panel"><div id="borsa-content"></div></div>
-    <div id="tab-news"    class="panel"><div id="news-content"></div></div>
-    <div id="tab-updates" class="panel"><div id="updates-content"></div></div>
-    <div id="tab-past"    class="panel"><div id="past-matches-list"></div></div>
-    <div id="tab-admin"   class="panel"><div id="admin-content"></div></div>
-
-  </div>
-</div>
-</div>
-
-<div style="display:none"><!-- eski kapat --></div>
-
-<!-- MODAL: REGISTER -->
-<div id="modal-register" class="modal-overlay">
-  <div class="modal-box">
-    <h2>⚽ Kayıt Ol</h2>
-    <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:14px">Kaydolduktan sonra Profil sekmesinden özelliklerini doldur!</p>
-    <div class="form-group"><label>Ad Soyad</label><input type="text" id="reg-name" placeholder="Adın Soyadın"></div>
-    <div class="form-group"><label>Şifre</label><input type="password" id="reg-pass" placeholder="Şifreni belirle"></div>
-    <div class="form-group"><label>Şifre Tekrar</label><input type="password" id="reg-pass2" placeholder="Tekrar gir"></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('modal-register')">İptal</button>
-      <button class="btn btn-primary" onclick="handleRegister()">Kayıt Ol →</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: EXCUSE -->
-<div id="modal-excuse" class="modal-overlay">
-  <div class="modal-box">
-    <h2>🌈 Bahane Belirt</h2>
-    <div class="form-group"><label>Sebebin</label><textarea id="excuse-text" rows="3" placeholder="Ör: Dizim tuttu abi..."></textarea></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('modal-excuse')">Vazgeç</button>
-      <button class="btn btn-danger" onclick="submitExcuse()">Gelemiyorum 😢</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: SCORE -->
-<div id="modal-score" class="modal-overlay">
-  <div class="modal-box">
-    <h2>⚽ Skor</h2>
-    <div class="field-label">Takım İsimleri</div>
-    <div class="score-teams">
-      <input type="text" id="team-a-name" placeholder="Takım A">
-      <span>vs</span>
-      <input type="text" id="team-b-name" placeholder="Takım B">
-    </div>
-    <div class="field-label">Skor</div>
-    <div class="score-input-row">
-      <input type="number" id="score-a" min="0" placeholder="0">
-      <span class="score-sep">—</span>
-      <input type="number" id="score-b" min="0" placeholder="0">
-    </div>
-    <div class="field-label" style="margin-bottom:8px">Kazanan</div>
-    <div class="winner-select">
-      <button class="winner-btn" id="wbtn-a"    onclick="selectWinner('A',this)">Takım A</button>
-      <button class="winner-btn" id="wbtn-draw" onclick="selectWinner('draw',this)">Berabere</button>
-      <button class="winner-btn" id="wbtn-b"    onclick="selectWinner('B',this)">Takım B</button>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('modal-score')">İptal</button>
-      <button class="btn btn-primary" onclick="submitScore()">Kaydet ✅</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: DELETE CONFIRM -->
-<div id="modal-delete" class="modal-overlay">
-  <div class="modal-box">
-    <h2>🗑️ Maçı Sil</h2>
-    <p style="font-size:.84rem;color:var(--text-muted);margin-bottom:16px">Bu maçı silmek istediğine emin misin?</p>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('modal-delete')">Vazgeç</button>
-      <button class="btn btn-danger" onclick="confirmDelete()">Evet, Sil</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: NEWS -->
-<div id="modal-news" class="modal-overlay">
-  <div class="modal-box">
-    <h2>📰 Manşet Yaz</h2>
-    <div class="form-group"><label>Ana Manşet</label><input type="text" id="news-headline" placeholder="SALININ ŞAMPIYONU..."></div>
-    <div class="form-group"><label>Alt Başlık</label><input type="text" id="news-sub" placeholder="Dün gece oynanan maçta..."></div>
-    <div class="form-group"><label>Haber Metni</label><textarea id="news-body" rows="6" placeholder="Maç haberi buraya..."></textarea></div>
-    <div class="form-group"><label>Tarih</label><input type="text" id="news-date" placeholder="29 Ocak 2026"></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('modal-news')">İptal</button>
-      <button class="btn btn-primary" onclick="saveNews()">Yayınla 📰</button>
-    </div>
-  </div>
-</div>
-
-
-
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script>
-
-/* ====== FIREBASE INIT ====== */
-const firebaseConfig={
-  apiKey:"AIzaSyBc_JhGF0Axeey-pPyUQsV6RZ3UIXd2WIc",
-  authDomain:"sali-maci.firebaseapp.com",
-  databaseURL:"https://sali-maci-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId:"sali-maci",
-  storageBucket:"sali-maci.firebasestorage.app",
-  messagingSenderId:"656383692297",
-  appId:"1:656383692297:web:ecd81c5645e86e073b72d8"
-};
-firebase.initializeApp(firebaseConfig);
-const db=firebase.database();
-
-/* ====== CONSTANTS ====== */
-const ADMIN_KEY='furkan soydan';
-
-/* ====== LOCAL SESSION ONLY ====== */
-const LS={get:k=>{try{return JSON.parse(localStorage.getItem(k))}catch{return null}},set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
-const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
-const initials=n=>n.split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
-const isAdmin=u=>u&&u.name.toLowerCase()===ADMIN_KEY;
-
-/* ====== IN-MEMORY CACHE ====== */
-let _users={};
-let _matches=[];
-let _news=[];
-const getUsers=(includeHidden=false)=>{
-  if(includeHidden)return _users;
-  const filtered={};
-  Object.entries(_users).forEach(([k,v])=>{if(!v.hidden)filtered[k]=v;});
-  return filtered;
-};
-const getMatches=()=>_matches;
-const getNewsList=()=>_news;
-
-/* ====== FIREBASE WRITE HELPERS ====== */
-async function saveUsers(u){
-  _users=u;
-  await db.ref('users').set(u);
-}
-async function saveMatches(m){
-  _matches=m;
-  const obj={};
-  m.forEach(v=>{obj[v.id]=v;});
-  await db.ref('matches').set(obj);
-}
-async function saveNewsList(n){
-  _news=n;
-  await db.ref('news').set(n.length?n:null);
-}
-
-/* ====== REAL-TIME LISTENERS ====== */
-function startListeners(){
-  db.ref('users').on('value',snap=>{
-    _users=snap.val()||{};
-    if(currentUser){
-      const fresh=Object.values(_users).find(u=>u.id===currentUser.id);
-      if(fresh){
-        currentUser=fresh;
-        const un=document.getElementById('home-username');
-        const ur=document.getElementById('home-rating');
-        if(un)un.textContent=fresh.name;
-        if(ur)ur.textContent=calcRating(fresh,fresh.pos)||'?';
-      }
-    }
-    if(document.getElementById('tab-cards')?.classList.contains('active'))renderCards();
-    if(document.getElementById('tab-lb')?.classList.contains('active'))renderLeaderboard();
-    if(document.getElementById('tab-admin')?.classList.contains('active'))renderAdmin();
-  });
-
-  db.ref('matches').on('value',snap=>{
-    const val=snap.val()||{};
-    _matches=Object.values(val).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
-    if(document.getElementById('tab-past')?.classList.contains('active'))renderPastMatches();
-    if(document.getElementById('tab-vote')?.classList.contains('active'))renderVoting();
-    if(document.getElementById('tab-lb')?.classList.contains('active'))renderLeaderboard();
-    if(activeMatchId){
-      const m=_matches.find(x=>x.id===activeMatchId);
-      if(m&&document.getElementById('match-display')?.innerHTML!=='')renderMatchCard(m);
-    }
-  });
-
-  db.ref('news').on('value',snap=>{
-    const val=snap.val()||[];
-    _news=Array.isArray(val)?val:Object.values(val);
-    if(document.getElementById('tab-news')?.classList.contains('active'))renderNewsTab();
-  });
-}
-
-/* ====== LOADING ====== */
-function showLoading(msg='Yükleniyor...'){
-  let el=document.getElementById('fb-loading');
-  if(!el){
-    el=document.createElement('div');
-    el.id='fb-loading';
-    el.style.cssText='position:fixed;inset:0;background:rgba(13,26,18,.92);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#e8f5eb;font-family:DM Sans,sans-serif;font-size:.9rem';
-    document.body.appendChild(el);
-  }
-  el.innerHTML='<div style="font-size:3rem;animation:spin 1s linear infinite">⚽</div><div style="color:#7fa889">'+msg+'</div>';
-  el.style.display='flex';
-}
-function hideLoading(){
-  const el=document.getElementById('fb-loading');
-  if(el)el.style.display='none';
-}
-
-/* ====== STATE ====== */
-let currentUser=null,activeMatchId=null,scoreTargetId=null,deleteTargetId=null,selectedWinner=null,_pendingDeleteKey=null;
-
-/* ====== NOTIF ====== */
-let _nt;
-function showNotif(msg,type=''){
-  const el=document.getElementById('notif');
-  el.textContent=msg;el.className='notif'+(type?' '+type:'');
-  clearTimeout(_nt);requestAnimationFrame(()=>el.classList.add('show'));
-  _nt=setTimeout(()=>el.classList.remove('show'),3500);
-}
-
-/* ====== MODALS ====== */
-const openModal=id=>document.getElementById(id).classList.add('open');
-const closeModal=id=>document.getElementById(id).classList.remove('open');
-document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open')}));
-
-/* ====== AUTH ====== */
-async function handleRegister(){
-  const name=document.getElementById('reg-name').value.trim();
-  const pass=document.getElementById('reg-pass').value;
-  const pass2=document.getElementById('reg-pass2').value;
-  if(!name)return showNotif('İsim gir!','error');
-  if(!pass)return showNotif('Şifre gir!','error');
-  if(pass!==pass2)return showNotif('Şifreler eşleşmiyor!','error');
-  const users=getUsers();
-  if(users[name.toLowerCase()])return showNotif('Bu isim zaten kayıtlı!','warn');
-  // Yeni kullanıcı - profil doldurulmamış halde başlar
-  users[name.toLowerCase()]={
-    name,pass,id:uid(),
-    // Stats - profil sayfasından doldurulacak
-    hiz:50,sut:50,pas:50,fizik:50,defans:50,kalecilik:50,
-    pos:'',altPos1:'',altPos2:'',ayak:'Sağ',
-    rating:0, // dinamik hesaplanacak
-    wins:0,matches:0,motm:0,worst:0,
-    profileComplete:false
-  };
-  showLoading('Kayıt yapılıyor...');
-  await saveUsers(users);
-  hideLoading();
-  closeModal('modal-register');
-  showNotif('Kayıt başarılı! Profil sekmesinden bilgilerini doldur! ⚽');
-  ['reg-name','reg-pass','reg-pass2'].forEach(id=>document.getElementById(id).value='');
-}
-
-async function handleLogin(){
-  const name=document.getElementById('login-name').value.trim();
-  const pass=document.getElementById('login-pass').value;
-  if(!name)return showNotif('Adını gir!','error');
-  if(!pass)return showNotif('Şifreni gir!','error');
-  showLoading('Giriş yapılıyor...');
-  try{
-    const snap=await db.ref('users').once('value');
-    _users=snap.val()||{};
-  }catch(e){
-    hideLoading();
-    return showNotif('Bağlantı hatası! İnterneti kontrol et.','error');
-  }
-  hideLoading();
-  const user=_users[name.toLowerCase()];
-  if(!user)return showNotif('Kullanıcı bulunamadı!','error');
-  if(user.pass!==pass)return showNotif('Şifre yanlış!','error');
-  currentUser=user;
-  const remember=document.getElementById('rememberMe');
-  if(!remember||remember.checked){
-    // Kalıcı oturum
-    LS.set('hs_session',user.id);
-  } else {
-    // Yalnızca bu sekme kapanana kadar
-    sessionStorage.setItem('hs_session_temp',user.id);
-  }
-  goHome();
-}
-
-function handleLogout(){stopLineupTimer();currentUser=null;localStorage.removeItem('hs_session');sessionStorage.removeItem('hs_session_temp');showPage('page-login');}
-
-async function tryAutoLogin(){
-  showLoading('Firebase\'e bağlanıyor...');
-  try{
-    const [usersSnap,matchesSnap,newsSnap]=await Promise.all([
-      db.ref('users').once('value'),
-      db.ref('matches').once('value'),
-      db.ref('news').once('value')
-    ]);
-    _users=usersSnap.val()||{};
-    const mVal=matchesSnap.val()||{};
-    _matches=Object.values(mVal).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
-    const nVal=newsSnap.val()||[];
-    _news=Array.isArray(nVal)?nVal:Object.values(nVal);
-    hideLoading();
-    startListeners();
-    const sid=LS.get('hs_session')||sessionStorage.getItem('hs_session_temp');
-    if(!sid)return;
-    const user=Object.values(_users).find(u=>u.id===sid);
-    if(user){currentUser=user;goHome();}
-    else{localStorage.removeItem('hs_session');sessionStorage.removeItem('hs_session_temp');}
-  }catch(err){
-    hideLoading();
-    console.error('Firebase bağlantı hatası:',err);
-    // Hata durumunda kullanıcıya göster
-    document.getElementById('notif').textContent='Bağlantı hatası! İnternet bağlantınızı kontrol edin.';
-    document.getElementById('notif').className='notif error show';
-  }
-}
-
-/* ====== PAGES ====== */
-function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');}
-
-
-/* ===== DASHBOARD ===== */
-let _dbTimer=null;
-
-function renderDashboard(){
-  const el=document.getElementById('dashboard-content');
-  if(!el)return;
-  if(_dbTimer){clearInterval(_dbTimer);_dbTimer=null;}
-
-  const users=Object.values(getUsers());
-  const matches=getMatches();
-  const u=currentUser;
-  const rating=calcRating(u,u.pos)||50;
-  const tier=cardTier(rating,u);
-  const tierLabels={'tier-epic':'EPIC','tier-legend':'LEGEND','tier-elite':'ELITE','tier-champion':'CHAMP','tier-gold':'GOLD','tier-silver':'SILVER','tier-bronze':'BRONZE','tier-common':'COMMON'};
-  const tierColors={'tier-epic':'#e080ff','tier-legend':'#ffaa44','tier-elite':'#ffd700','tier-champion':'#00ee66','tier-gold':'#ffd060','tier-silver':'#a0c8e8','tier-bronze':'#c07840','tier-common':'#608060'};
-  const tc=tierColors[tier]||'#608060';
-  const tl=tierLabels[tier]||'COMMON';
-
-  // Form puanı gösterge
-  const fp=u.formPuani||0;
-  const fpDots=[1,2,3].map(i=>{
-    if(fp>=i) return `<div class="db-form-dot db-fd-pos${fp===2&&i===2?'2':''}"></div>`;
-    if(fp<=-i) return `<div class="db-form-dot db-fd-neg${Math.abs(fp)===2&&i===2?'2':''}"></div>`;
-    return `<div class="db-form-dot db-fd-empty"></div>`;
-  }).join('');
-
-  // Bonservis
-  const bv=u.bonservisOverride||calcBonservisRaw(rating,u.pos);
-  const bvFmt=formatBonservis(bv);
-  const bvChg=u.bonservisChange||0;
-  const bvChgStr=bvChg>0?`<span style="color:#22cc66;font-size:.6rem">▲ ${formatBonservis(Math.abs(bvChg))}</span>`:
-                 bvChg<0?`<span style="color:#ff5050;font-size:.6rem">▼ ${formatBonservis(Math.abs(bvChg))}</span>`:'';
-
-  // Sonraki maç
-  const upcoming=matches.filter(m=>!m.finished).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
-  const nextMatch=upcoming[0];
-
-  // Geçmiş maçlardan son maç
-  const finished=matches.filter(m=>m.finished&&m.score).sort((a,b)=>new Date(b.datetime)-new Date(a.datetime));
-  const lastMatch=finished[0];
-
-  // Lig tablosu — kazanma + beraberlik puanı
-  const lgUsers=[...users].map(u2=>{
-    const won=matches.filter(m=>m.finished&&(
-      (m.winner==='A'&&(m.lineup?Object.entries(m.lineup).some(([pid,sl])=>sl.startsWith('A')&&pid===u2.id):false))||
-      (m.winner==='B'&&(m.lineup?Object.entries(m.lineup).some(([pid,sl])=>sl.startsWith('B')&&pid===u2.id):false))
-    )).length;
-    const played=u2.matches||0;
-    return{...u2,lgPts:(u2.wins||0)*3,lgPlayed:played,lgWins:u2.wins||0};
-  }).sort((a,b)=>b.lgPts-a.lgPts||b.lgWins-a.lgWins).slice(0,5);
-
-  // Top 4 piyasa
-  const topMarket=[...users].filter(u2=>u2.name).map(u2=>{
-    const r2=calcRating(u2,u2.pos)||50;
-    const bv2=u2.bonservisOverride||calcBonservisRaw(r2,u2.pos);
-    return{...u2,bv:bv2};
-  }).sort((a,b)=>b.bv-a.bv).slice(0,4);
-
-  // Forum son 3
-  const forumSnap=window._forumCache||[];
-
-  // Rozetler
-  const allBadges=getUserBadges(u);
-  const earnedCount=allBadges.filter(b=>b.earned).length;
-
-  // Maç istatistikleri
-  const wins=u.wins||0;
-  const totalMatches=u.matches||0;
-  const winRate=totalMatches>0?Math.round(wins/totalMatches*100):0;
-  const motmCount=u.motm||0;
-
-  const pad=v=>String(v).padStart(2,'0');
-  function cdHtml(ms){
-    if(ms<=0)return`<div class="db-cd-num" style="font-size:1.1rem">BAŞLIYOR!</div>`;
-    const tot=Math.floor(ms/1000);
-    const h=Math.floor(tot/3600),m2=Math.floor((tot%3600)/60),s=tot%60;
-    return`
-      <div class="db-cd-box"><div class="db-cd-num">${pad(h)}</div><div class="db-cd-lbl">SAAT</div></div>
-      <div class="db-cd-sep">:</div>
-      <div class="db-cd-box"><div class="db-cd-num">${pad(m2)}</div><div class="db-cd-lbl">DAKİKA</div></div>
-      <div class="db-cd-sep">:</div>
-      <div class="db-cd-box"><div class="db-cd-num">${pad(s)}</div><div class="db-cd-lbl">SANİYE</div></div>`;
-  }
-
-  const matchWidget=nextMatch?`
-    <div class="db-widget">
-      <div class="db-whead">
-        <span class="db-wtitle lime">Sonraki Maç</span>
-        <button class="db-waction" onclick="switchTab('tab-matches',document.querySelector('[onclick*=tab-matches]'))">Katıl →</button>
-      </div>
-      <div class="db-wbody">
-        <div class="db-match-name">${nextMatch.name}</div>
-        <div class="db-match-meta"><span>📍 ${nextMatch.venue}</span><span>🕐 ${new Date(nextMatch.datetime).toLocaleString('tr-TR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}</span></div>
-        <div class="db-countdown" id="db-countdown">${cdHtml(new Date(nextMatch.datetime)-new Date())}</div>
-        <div class="db-kadro-bar">
-          <div class="db-kadro-lbl"><span>Kadro Doluluk</span><span>${(nextMatch.attending||[]).length} / 14</span></div>
-          <div class="db-kadro-track"><div class="db-kadro-fill" style="width:${Math.min(100,Math.round((nextMatch.attending||[]).length/14*100))}%"></div></div>
-        </div>
-      </div>
-    </div>`:`
-    <div class="db-widget">
-      <div class="db-whead"><span class="db-wtitle lime">Sonraki Maç</span></div>
-      <div class="db-wbody" style="text-align:center;padding:20px 14px;color:#446044;font-size:.8rem">Henüz planlanmış maç yok ⚽</div>
-    </div>`;
-
-  const lastMatchWidget=lastMatch?`
-    <div class="db-widget">
-      <div class="db-whead">
-        <span class="db-wtitle amber">Son Maç</span>
-        <button class="db-waction" onclick="switchTab('tab-past',document.querySelector('[onclick*=tab-past]'))">Tümü →</button>
-      </div>
-      <div class="db-wbody">
-        <div class="db-last-match">
-          <div class="db-lm-teams">
-            <div class="db-lm-team"><div class="db-lm-tname">${lastMatch.teamAName||'Takım A'}</div></div>
-            <div style="text-align:center">
-              <div class="db-lm-score">${lastMatch.score||'—'}</div>
-              <div style="font-size:.55rem;color:#446044">${lastMatch.winner==='draw'?'🤝 Berabere':lastMatch.winner==='A'?`🏆 ${lastMatch.teamAName||'A'} Kazandı`:`🏆 ${lastMatch.teamBName||'B'} Kazandı`}</div>
-            </div>
-            <div class="db-lm-team"><div class="db-lm-tname" style="text-align:right">${lastMatch.teamBName||'Takım B'}</div></div>
-          </div>
-        </div>
-        <div class="db-awards">
-          ${lastMatch.motmId?`<div class="db-award">
-            <span class="db-award-icon">🏆</span>
-            <div><div class="db-award-name">${users.find(u2=>u2.id===lastMatch.motmId)?.name?.split(' ')[0]||'?'}</div><div class="db-award-lbl">Maçın Adamı</div></div>
-          </div>`:''}
-          ${lastMatch.worstId?`<div class="db-award">
-            <span class="db-award-icon">😬</span>
-            <div><div class="db-award-name">${users.find(u2=>u2.id===lastMatch.worstId)?.name?.split(' ')[0]||'?'}</div><div class="db-award-lbl">En Kötü</div></div>
-          </div>`:''}
-        </div>
-      </div>
-    </div>`:'';
-
-  const marketWidget=`
-    <div class="db-widget">
-      <div class="db-whead">
-        <span class="db-wtitle blue">Transfer Piyasası</span>
-        <button class="db-waction" onclick="switchTab('tab-borsa',document.querySelector('[onclick*=tab-borsa]'))">Tümü →</button>
-      </div>
-      <div class="db-wbody">
-        ${topMarket.map((p,i)=>{
-          const r2=calcRating(p,p.pos)||50;
-          const pTc=tierColors[cardTier(r2,p)]||'#608060';
-          const chg=p.bonservisChange||0;
-          return`<div class="db-market-row">
-            <div class="db-market-rank">${i+1}</div>
-            <div class="db-market-av" style="background:${pTc}18;color:${pTc}">${initials(p.name)}</div>
-            <div style="flex:1"><div class="db-market-name">${p.name.split(' ')[0]}</div><div class="db-market-pos">${p.pos||'?'}</div></div>
-            <div class="db-market-val">
-              <div class="db-market-bv" style="color:${pTc}">${formatBonservis(p.bv)}</div>
-              <div class="db-market-chg ${chg>0?'up':chg<0?'down':'flat'}">${chg>0?'▲':chg<0?'▼':'—'} ${chg!==0?formatBonservis(Math.abs(chg)):''}</div>
-            </div>
-          </div>`;
-        }).join('')}
-      </div>
-    </div>`;
-
-  const leagueWidget=`
-    <div class="db-widget">
-      <div class="db-whead">
-        <span class="db-wtitle lime">Lig Tablosu</span>
-        <button class="db-waction" onclick="switchTab('tab-lb',document.querySelector('[onclick*=tab-lb]'))">Tümü →</button>
-      </div>
-      <div class="db-wbody">
-        ${lgUsers.map((p,i)=>{
-          const posClass=i===0?'gold':i===1?'silver':i===2?'bronze':'';
-          const r2=calcRating(p,p.pos)||50;
-          const pTc=tierColors[cardTier(r2,p)]||'#608060';
-          const isMe=p.id===u.id;
-          return`<div class="db-lg-row" style="${isMe?'background:rgba(184,247,23,.04);border-radius:8px;padding:7px 6px;margin:0 -6px':''}">
-            <div class="db-lg-pos ${posClass}">${i+1}</div>
-            <div class="db-lg-av" style="background:${pTc}18;color:${pTc}">${initials(p.name)}</div>
-            <div class="db-lg-name">${p.name.split(' ')[0]}${isMe?' <span style="color:var(--lime);font-size:.55rem">(sen)</span>':''}</div>
-            <div class="db-lg-wdl">${p.lgWins}G ${p.lgPlayed-p.lgWins}M</div>
-            <div class="db-lg-pts">${p.lgPts}</div>
-          </div>`;
-        }).join('')}
-      </div>
-    </div>`;
-
-  // Rozet showcase — ilk 8
-  const badgeWidget=`
-    <div class="db-widget">
-      <div class="db-whead">
-        <span class="db-wtitle purple">Rozetler</span>
-        <span style="font-size:.65rem;color:#cc66ff">${earnedCount}/${BADGE_DEFS.length}</span>
-      </div>
-      <div class="db-badges-grid">
-        ${allBadges.slice(0,8).map(b=>`
-          <div class="db-badge-item" title="${b.desc}">
-            <div class="db-badge-icon ${b.earned?'earned':'locked'}" style="${b.earned?`box-shadow:0 0 12px ${tc}30`:''}">
-              ${b.icon}
-              ${b.earned?`<div style="position:absolute;top:-3px;right:-3px;width:10px;height:10px;border-radius:50%;background:var(--lime);border:1.5px solid #0a120a"></div>`:''}
-            </div>
-            <div class="db-badge-lbl ${b.earned?'earned':''}">${b.label}</div>
-          </div>`).join('')}
-      </div>
-    </div>`;
-
-  // Ticker için piyasa verisi
-  const tickerItems=topMarket.map(p=>{
-    const chg=p.bonservisChange||0;
-    return`<div class="db-ticker-item">
-      <span class="name">${p.name.split(' ')[0]}</span>
-      <span style="color:#446044">${p.pos||'?'}</span>
-      <span class="val" style="color:${tierColors[cardTier(calcRating(p,p.pos),p)]||'#608060'}">${formatBonservis(p.bv)}</span>
-      <span class="${chg>0?'up':chg<0?'down':'flat'}">${chg>0?'▲':chg<0?'▼':'—'}</span>
-    </div>`;
-  }).join('');
-
-  el.innerHTML=`
-  <div class="db">
-
-    <!-- Karşılama hero -->
-    <div class="db-hero">
-      <div class="db-hero-top">
-        <div class="db-avatar">
-          ${initials(u.name)}
-          <div class="db-avatar-tier" style="color:${tc};border-color:${tc}50;background:${tc}15">${tl}</div>
-        </div>
-        <div>
-          <div class="db-hero-name">${u.name.toUpperCase()}</div>
-          <div class="db-hero-sub">${u.pos||'Mevki belirlenmedi'} · ${earnedCount} rozet · ${totalMatches} maç</div>
-        </div>
-        <div style="margin-left:auto;text-align:right">
-          <div class="db-hero-rating" style="color:${tc}">${rating}</div>
-          <div class="db-hero-rating-lbl">OVR</div>
-        </div>
-      </div>
-      <div class="db-form-row">
-        <div class="db-form-dots">${fpDots}</div>
-        <div class="db-form-lbl" style="color:${fp>0?'#22cc66':fp<0?'#ff5050':'#446044'}">FORM ${fp>0?'+'+fp:fp}</div>
-        <div class="db-bonservis">Bonservis: <span class="db-bons-val">${bvFmt}</span> ${bvChgStr}</div>
-      </div>
-    </div>
-
-    <!-- Stat grid -->
-    <div class="db-stats">
-      <div class="db-stat lime"><div class="db-stat-num">${totalMatches}</div><div class="db-stat-lbl">Maç</div></div>
-      <div class="db-stat teal"><div class="db-stat-num">${wins}</div><div class="db-stat-lbl">Galibiyet</div></div>
-      <div class="db-stat amber"><div class="db-stat-num">%${winRate}</div><div class="db-stat-lbl">Oran</div></div>
-      <div class="db-stat purple"><div class="db-stat-num">${motmCount}</div><div class="db-stat-lbl">MOTM</div></div>
-      <div class="db-stat blue"><div class="db-stat-num">${earnedCount}</div><div class="db-stat-lbl">Rozet</div></div>
-      <div class="db-stat red"><div class="db-stat-num">${u.winStreak||0}</div><div class="db-stat-lbl">Seri</div></div>
-    </div>
-
-    ${matchWidget}
-    ${lastMatchWidget}
-    ${marketWidget}
-    ${leagueWidget}
-    ${badgeWidget}
-
-  </div>
-
-  <!-- Canlı piyasa ticker -->
-  ${topMarket.length?`<div class="db-ticker">
-    <div class="db-ticker-inner">${tickerItems}${tickerItems}</div>
-  </div>`:''}`;
-
-  // Geri sayım timer — sadece maç varsa
-  if(nextMatch){
-    _dbTimer=setInterval(()=>{
-      const cdEl=document.getElementById('db-countdown');
-      if(!cdEl){clearInterval(_dbTimer);_dbTimer=null;return;}
-      const ms=new Date(nextMatch.datetime)-new Date();
-      cdEl.innerHTML=cdHtml(ms);
-    },1000);
-  }
-}
-
-/* ===== ROZET / BAŞARIM SİSTEMİ ===== */
-const BADGE_DEFS=[
-  // ── Performans ──
-  {id:'first_match',   icon:'⚽', label:'İlk Maç',        desc:'İlk maçına katıldın!',                        check:u=>(u.matches||0)>=1},
-  {id:'hat_trick_motm',icon:'🎩', label:'Hat-trick MOTM', desc:'3 kez Maçın Adamı seçildin',                  check:u=>(u.motm||0)>=3},
-  {id:'epic_motm',     icon:'💜', label:'Epic MOTM',       desc:'5 kez Maçın Adamı seçildin',                  check:u=>(u.motm||0)>=5},
-  {id:'captain',       icon:'👑', label:'Kaptan',          desc:'3 kez kaptan seçildin',                       check:u=>(u.captainCount||0)>=3},
-  {id:'consistent',    icon:'🎯', label:'Tutarlı',         desc:'10 maçta hiç en kötü seçilmedin',             check:u=>(u.matches||0)>=10&&(u.worst||0)===0},
-  {id:'fast_rise',     icon:'⚡', label:'Hızlı Yükseliş', desc:'5 maçta reyting +3 artış',                    check:u=>calcRating(u,u.pos)>=53},
-  // ── Seri ──
-  {id:'win_streak_5',  icon:'🔥', label:'5 Seri Galibiyet',desc:'5 maç üst üste kazandın',                    check:u=>(u.winStreak||0)>=5},
-  {id:'win_streak_10', icon:'🏆', label:'Şampiyon Serisi', desc:'10 maç üst üste kazandın',                   check:u=>(u.winStreak||0)>=10},
-  {id:'team_player',   icon:'🤝', label:'Takım Oyuncusu', desc:'Kazanan takımda 5 kez oldu',                  check:u=>(u.wins||0)>=5},
-  {id:'bad_boy',       icon:'😈', label:'Kötü Adam',       desc:'3 kez en kötü seçildin',                     check:u=>(u.worst||0)>=3},
-  // ── Deneyim ──
-  {id:'veteran',       icon:'🎖️', label:'Veteran',         desc:'10 maç oynadın',                              check:u=>(u.matches||0)>=10},
-  {id:'loyal',         icon:'🏅', label:'Sadık Üye',       desc:'20 maç oynadın',                              check:u=>(u.matches||0)>=20},
-  {id:'legend_player', icon:'🌟', label:'Emektar',         desc:'30+ maç oynadın',                             check:u=>(u.matches||0)>=30},
-  // ── Piyasa ──
-  {id:'investor',      icon:'📈', label:'Yatırımcı',       desc:'Bonservis 30M+ ₺',                            check:u=>(u.bonservisOverride||calcBonservisRaw(calcRating(u,u.pos),u.pos))>=30000000},
-  {id:'legend_bons',   icon:'💰', label:'Para Babası',      desc:'Bonservis 50M+ ₺',                            check:u=>(u.bonservisOverride||calcBonservisRaw(calcRating(u,u.pos),u.pos))>=50000000},
-  {id:'rocket',        icon:'🚀', label:'Roket',            desc:'Bonservis tek seferde 2M+ arttı',             check:u=>(u.bonservisChange||0)>=2000000},
-  {id:'crash',         icon:'📉', label:'Çöküş',           desc:'Bonservis 3 maç üst üste düştü',              check:u=>(u.loseStreak||0)>=3},
-  // ── Rating ──
-  {id:'golden_boot',   icon:'👟', label:'Altın Bot',        desc:'Reyting 85+',                                 check:u=>calcRating(u,u.pos)>=85},
-  {id:'top_rating',    icon:'⭐', label:'Yıldız Oyuncu',   desc:'Reyting 90+',                                 check:u=>calcRating(u,u.pos)>=90},
-  {id:'iron_wall',     icon:'🧱', label:'Demir Duvar',      desc:'Defans 85+ (Stoper/DOS)',                     check:u=>(['Stoper','DOS'].includes(u.pos))&&(u.defans||0)>=85},
-  // ── Eğlenceli ──
-  {id:'comeback',      icon:'🦅', label:'Geri Dönüş',      desc:'Kötü formdan galibiyetle çıktın',             check:u=>(u.lastResult==='W'&&(u.formPuani||0)>0)},
-  {id:'all_star',      icon:'🌈', label:'All-Star',         desc:'Hem MOTM hem En Kötü kazandın',               check:u=>(u.motm||0)>=1&&(u.worst||0)>=1},
-  {id:'last_minute',   icon:'🕐', label:'Son Dakika',       desc:'Son dakikacı — geç katılım ustası',           check:u=>(u.lateJoin||0)>=3},
-  {id:'bench_king',    icon:'🪑', label:'Yedek Kral',       desc:'5 kez maça katılmayıp bahane yazdın',         check:u=>(u.absent||0)>=5},
-];
-
-function getUserBadges(user){
-  return BADGE_DEFS.map(b=>({...b,earned:b.check(user)}));
-}
-
-function getEarnedBadgeCount(user){
-  return BADGE_DEFS.filter(b=>b.check(user)).length;
-}
 
 
 /* ═══ OYUNCU PROFİL OLUŞTURUCU ═══ */
+
+</style>
+<script>
 
 function buildAdminParamsHTML(u){
   const sColor = v => v>=85?'#b8f717':v>=70?'#f5a623':v>=55?'#60a8ff':'#ff6060';
@@ -2975,6 +2410,7 @@ function buildPlayerProfileHTML(u, isOwn){
     <!-- FC2 KART -->
     <div style="display:flex;justify-content:center;padding:14px 16px 0;background:linear-gradient(to bottom,#0a150a,#060e06)">
       ${buildFC2Card(u,u.pos)}
+
     </div>
 
     <!-- FORM ŞERİDİ -->
@@ -3033,6 +2469,9 @@ function openPlayerProfile(userId){
   if(el) el.innerHTML = buildPlayerProfileHTML(u, isOwn);
   openModal('modal-player-profile');
 }
+
+
+
 
 function goHome(){
   stopLineupTimer();
@@ -6509,6 +5948,8 @@ tryAutoLogin();
 
 </div><!-- /ob-card -->
 </div><!-- /onboardOverlay -->
+
+
 
 </body>
 </html>
