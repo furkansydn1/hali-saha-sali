@@ -38,32 +38,20 @@ html, body { width: 100%; min-height: 100%; font-family: 'DM Sans', sans-serif; 
 .scan-line {
   position: fixed; left: 0; right: 0; height: 1px;
   background: linear-gradient(90deg, transparent, rgba(184,247,23,.2), transparent);
-  animation: scan 8s linear infinite;
-  z-index: 1; pointer-events: none;
+  animation: scan 8s linear infinite; z-index: 1; pointer-events: none;
 }
 @keyframes scan { 0% { top: -1px; opacity: 0; } 3% { opacity: 1; } 96% { opacity: 1; } 100% { top: 100vh; opacity: 0; } }
 
 .page {
   position: relative; z-index: 2; min-height: 100vh;
   display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 24px 16px;
+  align-items: center; justify-content: center; padding: 24px 16px;
 }
 
 .brand { display: flex; flex-direction: column; align-items: center; margin-bottom: 28px; }
-.brand-icon {
-  font-size: 2.2rem; margin-bottom: 8px;
-  filter: drop-shadow(0 0 12px rgba(184,247,23,.5));
-  animation: icon-pulse 3s ease-in-out infinite;
-}
-@keyframes icon-pulse {
-  0%, 100% { filter: drop-shadow(0 0 10px rgba(184,247,23,.4)); }
-  50%       { filter: drop-shadow(0 0 22px rgba(184,247,23,.8)); }
-}
-.brand-title {
-  font-family: 'Bebas Neue', cursive; font-size: 2.6rem; letter-spacing: 6px;
-  color: #b8f717; text-shadow: 0 0 20px rgba(184,247,23,.5), 0 0 60px rgba(184,247,23,.2); line-height: 1;
-}
+.brand-icon { font-size: 2.2rem; margin-bottom: 8px; filter: drop-shadow(0 0 12px rgba(184,247,23,.5)); animation: icon-pulse 3s ease-in-out infinite; }
+@keyframes icon-pulse { 0%, 100% { filter: drop-shadow(0 0 10px rgba(184,247,23,.4)); } 50% { filter: drop-shadow(0 0 22px rgba(184,247,23,.8)); } }
+.brand-title { font-family: 'Bebas Neue', cursive; font-size: 2.6rem; letter-spacing: 6px; color: #b8f717; text-shadow: 0 0 20px rgba(184,247,23,.5), 0 0 60px rgba(184,247,23,.2); line-height: 1; }
 .brand-sub { font-size: .63rem; letter-spacing: 4px; text-transform: uppercase; color: rgba(184,247,23,.4); margin-top: 4px; font-weight: 500; }
 
 .card {
@@ -92,113 +80,48 @@ html, body { width: 100%; min-height: 100%; font-family: 'DM Sans', sans-serif; 
 .form-input {
   width: 100%; padding: 12px 13px 12px 40px;
   background: rgba(255,255,255,.04); border: 1.5px solid rgba(184,247,23,.1);
-  border-radius: 10px; color: #e8f5eb;
-  font-family: 'DM Sans', sans-serif; font-size: .88rem; outline: none;
+  border-radius: 10px; color: #e8f5eb; font-family: 'DM Sans', sans-serif; font-size: .88rem; outline: none;
   transition: border-color .2s, box-shadow .2s, background .2s;
 }
 .form-input::placeholder { color: rgba(255,255,255,.2); }
 .form-input:focus { border-color: rgba(184,247,23,.45); background: rgba(184,247,23,.04); box-shadow: 0 0 0 3px rgba(184,247,23,.08); }
 
-.pass-toggle {
-  position: absolute; right: 12px; background: none; border: none; cursor: pointer;
-  font-size: .9rem; opacity: .35; transition: opacity .2s; padding: 4px; color: inherit;
-}
+.pass-toggle { position: absolute; right: 12px; background: none; border: none; cursor: pointer; font-size: .9rem; opacity: .35; transition: opacity .2s; padding: 4px; color: inherit; }
 .pass-toggle:hover { opacity: .8; }
 
 /* ── MOD SEÇİMİ ── */
-.mode-label {
-  display: block; font-size: .65rem; font-weight: 600;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  color: rgba(184,247,23,.5); margin-bottom: 10px;
-}
-
+.mode-label { display: block; font-size: .65rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(184,247,23,.5); margin-bottom: 10px; }
 .mode-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-
 .mode-card { position: relative; cursor: pointer; }
 .mode-card input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
-
 .mode-card-body {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
-  padding: 14px 10px; border-radius: 12px;
-  border: 1.5px solid rgba(255,255,255,.08);
+  padding: 14px 10px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,.08);
   background: rgba(255,255,255,.03); cursor: pointer;
-  transition: border-color .25s, background .25s, box-shadow .25s;
-  text-align: center;
+  transition: border-color .25s, background .25s, box-shadow .25s; text-align: center;
 }
-
-/* Klasik hover */
-.mode-card.classic:hover .mode-card-body {
-  border-color: rgba(184,247,23,.3);
-  background: rgba(184,247,23,.05);
-}
-/* Klasik seçili */
-.mode-card.classic input:checked + .mode-card-body {
-  border-color: rgba(184,247,23,.65);
-  background: rgba(184,247,23,.09);
-  box-shadow: 0 0 0 3px rgba(184,247,23,.1), 0 0 20px rgba(184,247,23,.08);
-}
-
-/* Turnuva başlangıç */
-.mode-card.tournament .mode-card-body {
-  border-color: rgba(80,140,255,.15);
-  background: rgba(80,140,255,.03);
-}
-/* Turnuva hover */
-.mode-card.tournament:hover .mode-card-body {
-  border-color: rgba(80,140,255,.4);
-  background: rgba(80,140,255,.07);
-}
-/* Turnuva seçili */
-.mode-card.tournament input:checked + .mode-card-body {
-  border-color: rgba(80,140,255,.7);
-  background: rgba(80,140,255,.1);
-  box-shadow: 0 0 0 3px rgba(80,140,255,.12), 0 0 20px rgba(80,140,255,.08);
-}
-
+.mode-card.classic:hover .mode-card-body { border-color: rgba(184,247,23,.3); background: rgba(184,247,23,.05); }
+.mode-card.classic input:checked + .mode-card-body { border-color: rgba(184,247,23,.65); background: rgba(184,247,23,.09); box-shadow: 0 0 0 3px rgba(184,247,23,.1), 0 0 20px rgba(184,247,23,.08); }
+.mode-card.tournament .mode-card-body { border-color: rgba(80,140,255,.15); background: rgba(80,140,255,.03); }
+.mode-card.tournament:hover .mode-card-body { border-color: rgba(80,140,255,.4); background: rgba(80,140,255,.07); }
+.mode-card.tournament input:checked + .mode-card-body { border-color: rgba(80,140,255,.7); background: rgba(80,140,255,.1); box-shadow: 0 0 0 3px rgba(80,140,255,.12), 0 0 20px rgba(80,140,255,.08); }
 .mode-card-icon { font-size: 1.6rem; line-height: 1; }
-
 .mode-card-name { font-family: 'Bebas Neue', cursive; font-size: .9rem; letter-spacing: 1.5px; line-height: 1.2; }
 .mode-card.classic   .mode-card-name { color: rgba(184,247,23,.8); }
 .mode-card.tournament .mode-card-name { color: rgba(180,210,255,.8); }
-
 .mode-card input:checked + .mode-card-body .mode-card-name { text-shadow: 0 0 10px currentColor; }
-
 .mode-card-desc { font-size: .6rem; color: rgba(255,255,255,.3); line-height: 1.4; letter-spacing: .3px; }
-
-/* Köşe checkmark */
-.mode-check {
-  position: absolute; top: 8px; right: 8px;
-  width: 16px; height: 16px; border-radius: 50%;
-  border: 1px solid rgba(255,255,255,.15);
-  background: rgba(255,255,255,.05);
-  display: flex; align-items: center; justify-content: center;
-  font-size: .6rem; opacity: 0;
-  transition: opacity .2s, background .2s, border-color .2s;
-  pointer-events: none;
-}
+.mode-check { position: absolute; top: 8px; right: 8px; width: 16px; height: 16px; border-radius: 50%; border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.05); display: flex; align-items: center; justify-content: center; font-size: .6rem; opacity: 0; transition: opacity .2s, background .2s, border-color .2s; pointer-events: none; }
 .mode-card.classic    input:checked ~ .mode-check { opacity: 1; background: rgba(184,247,23,.2); border-color: rgba(184,247,23,.5); color: #b8f717; }
 .mode-card.tournament input:checked ~ .mode-check { opacity: 1; background: rgba(80,140,255,.2); border-color: rgba(80,140,255,.5); color: #88aaff; }
 
 /* ── HATA ── */
-.error-msg {
-  display: none; align-items: center; gap: 8px;
-  background: rgba(255,50,50,.1); border: 1px solid rgba(255,80,80,.25);
-  border-radius: 8px; padding: 10px 14px; margin-bottom: 16px;
-  font-size: .77rem; color: #ff8080;
-}
+.error-msg { display: none; align-items: center; gap: 8px; background: rgba(255,50,50,.1); border: 1px solid rgba(255,80,80,.25); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: .77rem; color: #ff8080; }
 .error-msg.show { display: flex; animation: err-in .3s cubic-bezier(.34,1.56,.64,1); }
 @keyframes err-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 
 /* ── BUTTON ── */
-.submit-btn {
-  width: 100%; padding: 14px; margin-top: 4px;
-  background: linear-gradient(135deg, #7ab80d, #b8f717); color: #020806;
-  font-family: 'Bebas Neue', cursive; font-size: 1.1rem; letter-spacing: 4px;
-  border: none; border-radius: 10px; cursor: pointer;
-  position: relative; overflow: hidden;
-  transition: transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s, filter .2s;
-  box-shadow: 0 4px 24px rgba(184,247,23,.3);
-}
+.submit-btn { width: 100%; padding: 14px; margin-top: 4px; background: linear-gradient(135deg, #7ab80d, #b8f717); color: #020806; font-family: 'Bebas Neue', cursive; font-size: 1.1rem; letter-spacing: 4px; border: none; border-radius: 10px; cursor: pointer; position: relative; overflow: hidden; transition: transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s, filter .2s; box-shadow: 0 4px 24px rgba(184,247,23,.3); }
 .submit-btn:hover { transform: translateY(-2px) scale(1.01); box-shadow: 0 8px 32px rgba(184,247,23,.45); filter: brightness(1.08); }
 .submit-btn:active { transform: scale(.97); }
 .submit-btn.loading { pointer-events: none; filter: brightness(.7); }
@@ -209,23 +132,14 @@ html, body { width: 100%; min-height: 100%; font-family: 'DM Sans', sans-serif; 
 .spinner-ring { width: 20px; height: 20px; border: 2px solid rgba(2,8,6,.3); border-top-color: #020806; border-radius: 50%; animation: spin .7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── FOOTER ── */
 .card-footer { text-align: center; margin-top: 22px; padding-top: 18px; border-top: 1px solid rgba(184,247,23,.07); }
 .card-footer p { font-size: .77rem; color: rgba(255,255,255,.3); }
 .card-footer a { color: rgba(184,247,23,.7); text-decoration: none; font-weight: 600; transition: color .2s; }
 .card-footer a:hover { color: #b8f717; text-shadow: 0 0 10px rgba(184,247,23,.4); }
 
-.sys-info {
-  position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
-  font-size: .58rem; letter-spacing: 3px; text-transform: uppercase;
-  color: rgba(255,255,255,.12); z-index: 2; white-space: nowrap;
-}
+.sys-info { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); font-size: .58rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,.12); z-index: 2; white-space: nowrap; }
 
-/* ── SUCCESS OVERLAY ── */
-.success-overlay {
-  position: fixed; inset: 0; background: rgba(184,247,23,.06);
-  z-index: 100; display: none; align-items: center; justify-content: center;
-}
+.success-overlay { position: fixed; inset: 0; background: rgba(184,247,23,.06); z-index: 100; display: none; align-items: center; justify-content: center; }
 .success-overlay.show { display: flex; }
 .success-content { text-align: center; }
 .s-icon { font-size: 3rem; display: block; margin-bottom: 12px; animation: bounce-in .4s cubic-bezier(.34,1.56,.64,1); }
@@ -265,7 +179,7 @@ html, body { width: 100%; min-height: 100%; font-family: 'DM Sans', sans-serif; 
       <span id="errorText">Hata oluştu.</span>
     </div>
 
-    <!-- Tek "Ad Soyad" inputu -->
+    <!-- Tek input: Ad Soyad -->
     <div class="form-group">
       <label>Ad Soyad</label>
       <div class="input-wrap">
@@ -274,7 +188,7 @@ html, body { width: 100%; min-height: 100%; font-family: 'DM Sans', sans-serif; 
           type="text"
           id="nameInput"
           class="form-input"
-          placeholder="Adın ve soyadın"
+          placeholder="Örn: Ahmet Yılmaz"
           autocomplete="name"
         >
       </div>
@@ -315,7 +229,6 @@ html, body { width: 100%; min-height: 100%; font-family: 'DM Sans', sans-serif; 
     <!-- Mod Seçimi -->
     <label class="mode-label">Hangi platform için kayıt oluyorsun?</label>
     <div class="mode-cards">
-
       <label class="mode-card classic">
         <input type="radio" name="mode" value="classic" checked>
         <div class="mode-card-body">
@@ -325,7 +238,6 @@ html, body { width: 100%; min-height: 100%; font-family: 'DM Sans', sans-serif; 
         </div>
         <div class="mode-check">✓</div>
       </label>
-
       <label class="mode-card tournament">
         <input type="radio" name="mode" value="tournament">
         <div class="mode-card-body">
@@ -335,7 +247,6 @@ html, body { width: 100%; min-height: 100%; font-family: 'DM Sans', sans-serif; 
         </div>
         <div class="mode-check">✓</div>
       </label>
-
     </div>
 
     <button class="submit-btn" id="registerBtn" type="button">
@@ -379,7 +290,6 @@ const errorText      = document.getElementById('errorText');
 const successOverlay = document.getElementById('successOverlay');
 const successSub     = document.getElementById('successSub');
 
-// Şifre toggle'ları
 function togglePass(input, btn) {
   const show = input.type === 'password';
   input.type = show ? 'text' : 'password';
@@ -388,28 +298,23 @@ function togglePass(input, btn) {
 passToggle.addEventListener('click',  () => togglePass(passInput,  passToggle));
 pass2Toggle.addEventListener('click', () => togglePass(pass2Input, pass2Toggle));
 
-// Yardımcılar
 function showError(msg) { errorText.textContent = msg; errorMsg.classList.add('show'); }
-function hideError() { errorMsg.classList.remove('show'); }
+function hideError()    { errorMsg.classList.remove('show'); }
 
-// Input değişince hatayı gizle + Enter ile kayıt
 [nameInput, passInput, pass2Input].forEach(el => {
   el.addEventListener('input', hideError);
   el.addEventListener('keydown', e => { if (e.key === 'Enter') registerBtn.click(); });
 });
 
-// Seçili mod
 function getSelectedMode() {
   const checked = document.querySelector('input[name="mode"]:checked');
   return checked ? checked.value : 'classic';
 }
 
-// Basit UID üretici
 function uid() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2, 8);
 }
 
-// Kayıt işlemi
 registerBtn.addEventListener('click', async () => {
   hideError();
 
@@ -418,22 +323,25 @@ registerBtn.addEventListener('click', async () => {
   const pass2    = pass2Input.value;
   const mode     = getSelectedMode();
 
-  if (!fullName)        { showError('Lütfen ad soyadını gir.'); nameInput.focus(); return; }
-  if (fullName.split(' ').filter(Boolean).length < 2)
-                        { showError('Lütfen hem adını hem soyadını gir.'); nameInput.focus(); return; }
-  if (pass.length < 6)  { showError('Şifre en az 6 karakter olmalı.'); passInput.focus(); return; }
-  if (pass !== pass2)   { showError('Şifreler eşleşmiyor.'); pass2Input.focus(); return; }
+  if (!fullName)       { showError('Lütfen ad soyadını gir.'); nameInput.focus(); return; }
+  if (pass.length < 6) { showError('Şifre en az 6 karakter olmalı.'); passInput.focus(); return; }
+  if (pass !== pass2)  { showError('Şifreler eşleşmiyor.'); pass2Input.focus(); return; }
 
   registerBtn.classList.add('loading');
 
-  // dbKey: "Ahmet Yılmaz" → "ahmet_yılmaz"  (eski kayıtlarla birebir uyumlu format)
-  const dbKey = fullName.toLowerCase().replace(/ /g, '_');
+  /*
+   * dbKey: eski index.html sistemiyle aynı format — "ahmet yılmaz" (boşluklu, küçük harf)
+   * Bu sayede yeni kayıtlar da login.html'in her iki format aramasıyla bulunabilir.
+   */
+  const dbKey = fullName.toLowerCase();
 
   try {
-    // Aynı isimde kullanıcı var mı?
-    const snapshot = await get(child(ref(db), `users/${dbKey}`));
+    // Aynı isimde kullanıcı var mı? (her iki formatta kontrol et)
+    const dbRef = ref(db);
+    const snapSpace      = await get(child(dbRef, `users/${dbKey}`));
+    const snapUnderscore = await get(child(dbRef, `users/${dbKey.replace(/ /g, '_')}`));
 
-    if (snapshot.exists()) {
+    if (snapSpace.exists() || snapUnderscore.exists()) {
       registerBtn.classList.remove('loading');
       showError('Bu isimle zaten kayıtlı bir kullanıcı var.');
       return;
@@ -469,16 +377,17 @@ registerBtn.addEventListener('click', async () => {
       registeredAt:    Date.now()
     };
 
+    // Boşluklu format ile kaydet — eski sistem ile aynı
     await set(ref(db, `users/${dbKey}`), newUser);
 
     registerBtn.classList.remove('loading');
 
+    // Session'ı hemen kaydet
+    localStorage.setItem('hs_session', JSON.stringify({ id: newUser.id, name: newUser.name }));
+
     const modeLabel = mode === 'tournament' ? 'Hastane Turnuvası' : 'Pitch App Klasik';
     successSub.textContent = modeLabel + ' · Lobiye yönlendiriliyorsun...';
     successOverlay.classList.add('show');
-
-    // Giriş session'ını da hemen kaydet — kullanıcı direkt lobiye gitsin
-    localStorage.setItem('hs_session', JSON.stringify({ id: newUser.id, name: newUser.name }));
 
     setTimeout(() => {
       window.location.href = mode === 'tournament' ? 'tournament.html' : 'lobby.html';
