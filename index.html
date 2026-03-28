@@ -2204,6 +2204,7 @@ function startListeners(){
     if(document.getElementById('tab-lb')?.classList.contains('active')) renderLeaderboard();
     if(document.getElementById('tab-admin')?.classList.contains('active')) renderAdmin();
     if(document.getElementById('tab-borsa')?.classList.contains('active')) renderBorsa();
+    if(document.getElementById('tab-profile')?.classList.contains('active')) renderProfile();
   });
   db.ref('matches').on('value', snap=>{
     const val=snap.val()||{};
@@ -2492,7 +2493,7 @@ function buildPlayerProfileHTML(u, isOwn){
       <button class="pv2-tab" onclick="pv2SwitchTab(this,'pv2-badges-sec')">🎖️ Rozetler (${earned})</button>
     </div>
 
-    <!-- Statüs -->
+    <!-- Parametreler -->
     <div id="pv2-params-sec" class="pv2-params">${paramsHtml}</div>
 
     <!-- Rozetler -->
@@ -4577,8 +4578,17 @@ function buildFC2Card(user,mevki){
 /* ===================== PROFILE PAGE ===================== */
 function renderProfile(){
   const el=document.getElementById('profile-content');if(!el)return;
-  const u=currentUser;
-  if(!u)return;
+  // currentUser yoksa Firebase'den taze çek
+  let u=currentUser;
+  if(!u){
+    el.innerHTML='<div style="padding:40px 16px;text-align:center;color:#446044;font-family:\'Bebas Neue\',cursive;letter-spacing:1px">Giriş yapman gerekiyor</div>';
+    return;
+  }
+  // _users'dan taze veri al (varsa)
+  if(_users){
+    const fresh=Object.values(_users).find(x=>x.id===u.id);
+    if(fresh){u=fresh;currentUser=fresh;}
+  }
   // Modern profil göster
   el.innerHTML=buildPlayerProfileHTML(u, true);
   // Admin ise parametre editörü göster
@@ -4586,143 +4596,6 @@ function renderProfile(){
     const paramSec=el.querySelector('#pv2-params-sec');
     if(paramSec) paramSec.innerHTML=buildAdminParamsHTML(u);
   }
-  return;
-  // (eski kod aşağıda — artık kullanılmıyor)
-  const _u=currentUser;
-  const suggestedPos=aiSuggestPos(u);
-  const currentRating=calcRating(u,u.pos||suggestedPos);
-  const tier=cardTier(currentRating,u);
-  const tierColors={'tier-epic':'#e080ff','tier-legend':'#ffaa44','tier-elite':'#ffd700','tier-champion':'#00ee66','tier-gold':'#ffd060','tier-silver':'#a0c8e8','tier-bronze':'#c07840','tier-common':'#608060'};
-  const tc=tierColors[tier]||'#608060';
-
-  const posOptions=MEVKILER.map(m=>`<option value="${m}"${u.pos===m?' selected':''}>${m}</option>`).join('');
-  const altPosOptions=m=>`<option value="">—</option>`+MEVKILER.map(p=>`<option value="${p}"${u[m]===p?' selected':''}>${p}</option>`).join('');
-
-  // Stat bar rengi
-  const statColor=v=>{
-    if(v>=85)return'#b8f717';
-    if(v>=70)return'#f5a623';
-    if(v>=55)return'#60a8ff';
-    return'#ff6060';
-  };
-
-  const stats=[
-    ['Hız',u.hiz||50],['Şut',u.sut||50],['Pas',u.pas||50],
-    ['Fizik',u.fizik||50],['Defans',u.defans||50],
-    ['Kalecilik',u.kalecilik||50],['Top Kontrolü',u.topKontrol||50],
-    ['Dribling',u.dribling||50],
-  ];
-
-  const adminStats=[
-    ['pf-hiz','Hız',u.hiz||50],['pf-sut','Şut',u.sut||50],
-    ['pf-pas','Pas',u.pas||50],['pf-fizik','Fizik',u.fizik||50],
-    ['pf-defans','Defans',u.defans||50],['pf-kalecilik','Kalecilik',u.kalecilik||50],
-    ['pf-topkontrol','Top Kontrolü',u.topKontrol||50],['pf-dribling','Dribling',u.dribling||50],
-  ];
-
-  // Rozetler
-  const allBadges=getUserBadges(u);
-  const earned=allBadges.filter(b=>b.earned).length;
-
-  el.innerHTML=`
-  <div class="pf-wrap">
-
-    <!-- Hero: Kart + AI -->
-    <div class="pf-hero">
-      <div class="pf-card-wrap">${buildFC2Card(u,u.pos)}</div>
-      <div class="pf-ai" style="width:100%">
-        <div class="pf-ai-title">🤖 Yapay Zeka Analizi</div>
-        <div class="pf-ai-main">
-          <div>
-            <div style="font-size:.58rem;color:#9060e0;margin-bottom:3px">İdeal Mevki</div>
-            <div class="pf-ai-pos">${suggestedPos}</div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:.58rem;color:#9060e0;margin-bottom:3px">Rating</div>
-            <div class="pf-ai-rating" style="color:${tc}">${currentRating}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Temel Bilgiler -->
-    <div class="pf-section">
-      <div class="pf-section-head">
-        <div class="pf-section-icon lime">⚙️</div>
-        <span class="pf-section-title lime">Temel Bilgiler</span>
-      </div>
-      <div class="pf-section-body">
-        <div class="pf-field">
-          <label>Kullandığın Ayak</label>
-          <select id="pf-ayak" onchange="updateProfilePreview()">
-            <option${u.ayak==='Sağ'?' selected':''}>Sağ</option>
-            <option${u.ayak==='Sol'?' selected':''}>Sol</option>
-            <option${u.ayak==='İki Ayak'?' selected':''}>İki Ayak</option>
-          </select>
-        </div>
-        <div class="pf-field">
-          <label>Ana Mevki</label>
-          <select id="pf-pos" onchange="updateProfilePreview()">${posOptions}</select>
-        </div>
-        <div class="pf-field-row">
-          <div class="pf-field">
-            <label>Alt Mevki 1</label>
-            <select id="pf-alt1" onchange="updateProfilePreview()">${altPosOptions('altPos1')}</select>
-          </div>
-          <div class="pf-field">
-            <label>Alt Mevki 2</label>
-            <select id="pf-alt2" onchange="updateProfilePreview()">${altPosOptions('altPos2')}</select>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- İstatistikler -->
-    <div class="pf-section">
-      <div class="pf-section-head">
-        <div class="pf-section-icon ${isAdmin(currentUser)?'amber':'lime'}">📊</div>
-        <span class="pf-section-title ${isAdmin(currentUser)?'amber':'lime'}">
-          Özellikler ${isAdmin(currentUser)?'<span style="font-size:.6rem;font-weight:400;color:#888">— Admin modu</span>':''}
-        </span>
-      </div>
-      <div class="pf-section-body" style="padding:8px 14px">
-        ${isAdmin(currentUser)?
-          adminStats.map(([id,lbl,val])=>`
-            <div class="pf-slider-row">
-              <span class="pf-slider-lbl">${lbl}</span>
-              <input type="range" id="${id}" min="1" max="100" value="${val}"
-                style="flex:1;accent-color:${statColor(val)}"
-                oninput="document.getElementById('${id}-v').textContent=this.value;updateProfilePreview()">
-              <span class="pf-slider-val" id="${id}-v" style="color:${statColor(val)}">${val}</span>
-            </div>`).join(''):
-          stats.map(([lbl,val])=>`
-            <div class="pf-stat-row">
-              <span class="pf-stat-lbl">${lbl}</span>
-              <div class="pf-stat-bar"><div class="pf-stat-fill" style="width:${val}%;background:${statColor(val)}"></div></div>
-              <span class="pf-stat-val" style="color:${statColor(val)}">${val}</span>
-            </div>`).join('')
-        }
-      </div>
-    </div>
-
-    <!-- Rozetler -->
-    <div class="pf-section">
-      <div class="pf-section-head">
-        <div class="pf-section-icon purple">🎖️</div>
-        <span class="pf-section-title purple">Rozetler</span>
-        <span style="margin-left:auto;font-size:.65rem;color:#9060e0">${earned}/${BADGE_DEFS.length} kazanıldı</span>
-      </div>
-      <div class="pf-badge-grid">
-        ${allBadges.map(b=>`
-          <div class="pf-badge" title="${b.desc}">
-            <div class="pf-badge-icon ${b.earned?'earned':'locked'}">${b.icon}</div>
-            <div class="pf-badge-lbl ${b.earned?'earned':'locked'}">${b.label}</div>
-          </div>`).join('')}
-      </div>
-    </div>
-
-    <button class="pf-save-btn" onclick="saveProfile()">💾 Kaydet</button>
-  </div>`;
 }
 function updateProfilePreview(){
   const el=document.getElementById('profile-content');if(!el)return;
