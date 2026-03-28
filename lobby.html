@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lobi — Mod Seç</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  font-family: 'DM Sans', sans-serif;
+  background: #050508;
+}
+
+/* ═══════════════════════════════════════
+   CONTAINER
+═══════════════════════════════════════ */
+.lobby {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+/* ═══════════════════════════════════════
+   DIVIDER LINE
+═══════════════════════════════════════ */
+.divider {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-50%);
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(255,255,255,.08) 15%,
+    rgba(255,255,255,.35) 40%,
+    rgba(255,255,255,.55) 50%,
+    rgba(255,255,255,.35) 60%,
+    rgba(255,255,255,.08) 85%,
+    transparent 100%
+  );
+  z-index: 10;
+  pointer-events: none;
+  transition: left .6s cubic-bezier(.4,0,.2,1);
+}
+
+/* ═══════════════════════════════════════
+   PANELS
+═══════════════════════════════════════ */
+.panel {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    flex .6s cubic-bezier(.4,0,.2,1),
+    filter .6s ease;
+  flex: 1;
+}
+
+/* ── Hover state ── */
+.lobby:has(.panel-left:hover) .panel-left  { flex: 1.2; }
+.lobby:has(.panel-left:hover) .panel-right { flex: 0.8; filter: brightness(.55); }
+
+.lobby:has(.panel-right:hover) .panel-right { flex: 1.2; }
+.lobby:has(.panel-right:hover) .panel-left  { flex: 0.8; filter: brightness(.55); }
+
+/* ═══════════════════════════════════════
+   PANEL LEFT — Hastane Turnuvası
+   Tema: Şampiyonlar Ligi lacivert / gümüş
+═══════════════════════════════════════ */
+.panel-left {
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 45%, rgba(20,60,160,.55) 0%, transparent 70%),
+    radial-gradient(ellipse 120% 80% at 50% 100%, rgba(10,30,100,.7) 0%, transparent 60%),
+    linear-gradient(160deg, #03070f 0%, #060f28 35%, #08152f 60%, #030811 100%);
+}
+
+/* Stadyum ışıkları — çift sütun nokta */
+.panel-left::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle 3px at 20% 12%, rgba(200,220,255,.6) 0%, transparent 100%),
+    radial-gradient(circle 3px at 80% 12%, rgba(200,220,255,.6) 0%, transparent 100%),
+    radial-gradient(circle 80px at 20% 12%, rgba(80,140,255,.08) 0%, transparent 100%),
+    radial-gradient(circle 80px at 80% 12%, rgba(80,140,255,.08) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Zemin simetrik glow */
+.panel-left::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0; height: 35%;
+  background: linear-gradient(to top,
+    rgba(30,80,200,.12) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Grid çizgileri — Şampiyonlar Ligi esintisi */
+.panel-left .grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(80,120,220,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(80,120,220,.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* UCL yıldız halkası — dekoratif arka plan */
+.panel-left .star-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 520px; height: 520px;
+  border-radius: 50%;
+  border: 1px solid rgba(100,140,255,.07);
+  z-index: 1;
+  pointer-events: none;
+  animation: ring-pulse 4s ease-in-out infinite;
+}
+.panel-left .star-ring::before {
+  content: '';
+  position: absolute;
+  inset: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(100,140,255,.05);
+}
+@keyframes ring-pulse {
+  0%, 100% { opacity: .4; transform: translate(-50%,-50%) scale(1); }
+  50%       { opacity: .9; transform: translate(-50%,-50%) scale(1.015); }
+}
+
+/* ═══════════════════════════════════════
+   PANEL RIGHT — Pitch App / Salı Maçı
+   Tema: Neon yeşil + derin siyah
+═══════════════════════════════════════ */
+.panel-right {
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 50%, rgba(20,100,20,.4) 0%, transparent 65%),
+    radial-gradient(ellipse 100% 70% at 50% 100%, rgba(10,60,10,.5) 0%, transparent 60%),
+    linear-gradient(160deg, #020602 0%, #040d04 35%, #050f05 60%, #020502 100%);
+}
+
+/* Grid çizgileri yeşil tonu */
+.panel-right .grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(50,200,50,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(50,200,50,.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Tarama çizgisi — sci-fi efekt */
+.panel-right::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(80,255,80,.5), transparent);
+  box-shadow: 0 0 20px rgba(80,255,80,.3);
+  animation: scan-line 5s linear infinite;
+  z-index: 2;
+  pointer-events: none;
+}
+@keyframes scan-line {
+  0%   { top: -2px; opacity: 0; }
+  5%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* Corner glow noktalar */
+.panel-right::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle 120px at 5% 5%,   rgba(80,255,80,.06) 0%, transparent 100%),
+    radial-gradient(circle 120px at 95% 95%,  rgba(80,255,80,.06) 0%, transparent 100%),
+    radial-gradient(circle 80px  at 95% 5%,   rgba(80,255,80,.04) 0%, transparent 100%),
+    radial-gradient(circle 80px  at 5% 95%,   rgba(80,255,80,.04) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ═══════════════════════════════════════
+   PANEL CONTENT
+═══════════════════════════════════════ */
+.panel-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  padding: 40px 48px;
+  text-align: center;
+}
+
+/* ── Mode tag ── */
+.mode-tag {
+  font-size: .65rem;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 28px;
+  backdrop-filter: blur(8px);
+}
+
+.panel-left  .mode-tag {
+  color: rgba(180,210,255,.8);
+  background: rgba(80,120,220,.12);
+  border: 1px solid rgba(100,140,255,.25);
+}
+
+.panel-right .mode-tag {
+  color: rgba(100,255,100,.85);
+  background: rgba(50,200,50,.1);
+  border: 1px solid rgba(80,255,80,.25);
+}
+
+/* ── Badge icon ── */
+.mode-icon {
+  font-size: 3.5rem;
+  margin-bottom: 18px;
+  line-height: 1;
+  transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+  display: block;
+}
+
+.panel:hover .mode-icon {
+  transform: scale(1.15) translateY(-4px);
+}
+
+/* ── Title ── */
+.mode-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(2.2rem, 3.5vw, 3.4rem);
+  letter-spacing: 2px;
+  line-height: 1;
+  margin-bottom: 14px;
+  transition: letter-spacing .4s;
+}
+
+.panel:hover .mode-title { letter-spacing: 4px; }
+
+.panel-left  .mode-title { color: #e8f0ff; text-shadow: 0 0 40px rgba(80,140,255,.3); }
+.panel-right .mode-title { color: #e8ffe8; text-shadow: 0 0 40px rgba(80,255,80,.3); }
+
+/* ── Description ── */
+.mode-desc {
+  font-size: .88rem;
+  line-height: 1.7;
+  max-width: 320px;
+  margin-bottom: 36px;
+  font-weight: 300;
+}
+
+.panel-left  .mode-desc { color: rgba(180,210,255,.6); }
+.panel-right .mode-desc { color: rgba(120,255,120,.55); }
+
+/* ── CTA Button ── */
+.mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 36px;
+  border-radius: 50px;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.1rem;
+  letter-spacing: 3px;
+  cursor: pointer;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform .25s cubic-bezier(.34,1.56,.64,1),
+    box-shadow .25s;
+  text-decoration: none;
+}
+
+.mode-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity .3s;
+  background: rgba(255,255,255,.12);
+}
+
+.mode-btn:hover::before { opacity: 1; }
+.mode-btn:hover { transform: scale(1.06) translateY(-2px); }
+.mode-btn:active { transform: scale(.97); }
+
+/* Left button — Lacivert / Gümüş */
+.panel-left .mode-btn {
+  background: linear-gradient(135deg, #1a3080, #2a50c0);
+  color: #e0eaff;
+  box-shadow:
+    0 0 0 1px rgba(100,160,255,.3),
+    0 8px 32px rgba(30,60,180,.4),
+    0 0 60px rgba(60,120,255,.15);
+}
+.panel-left .mode-btn:hover {
+  box-shadow:
+    0 0 0 1px rgba(140,180,255,.5),
+    0 12px 40px rgba(30,60,180,.6),
+    0 0 80px rgba(60,120,255,.3);
+}
+
+/* Right button — Neon yeşil */
+.panel-right .mode-btn {
+  background: linear-gradient(135deg, #0a3010, #158030);
+  color: #b8f717;
+  box-shadow:
+    0 0 0 1px rgba(100,255,80,.3),
+    0 8px 32px rgba(10,120,20,.5),
+    0 0 60px rgba(80,255,80,.12);
+}
+.panel-right .mode-btn:hover {
+  box-shadow:
+    0 0 0 1px rgba(140,255,100,.55),
+    0 12px 40px rgba(10,120,20,.7),
+    0 0 80px rgba(80,255,80,.25);
+}
+
+/* Arrow icon on button */
+.btn-arrow {
+  transition: transform .3s;
+  font-style: normal;
+}
+.mode-btn:hover .btn-arrow { transform: translateX(4px); }
+
+/* ── Decorative line under desc ── */
+.deco-line {
+  width: 48px;
+  height: 2px;
+  margin: 0 auto 32px;
+  border-radius: 2px;
+}
+.panel-left  .deco-line { background: linear-gradient(90deg, transparent, rgba(100,160,255,.6), transparent); }
+.panel-right .deco-line { background: linear-gradient(90deg, transparent, rgba(80,255,80,.6), transparent); }
+
+/* ── Stats strip ── */
+.mode-stats {
+  display: flex;
+  gap: 28px;
+  margin-top: 32px;
+}
+
+.mode-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.mode-stat strong {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+}
+
+.mode-stat span {
+  font-size: .6rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: .55;
+}
+
+.panel-left  .mode-stat strong { color: rgba(180,210,255,.9); }
+.panel-left  .mode-stat span   { color: rgba(180,210,255,.5); }
+.panel-right .mode-stat strong { color: rgba(120,255,120,.9); }
+.panel-right .mode-stat span   { color: rgba(120,255,120,.5); }
+
+/* ── VS badge center ── */
+.vs-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #05080f;
+  border: 2px solid rgba(255,255,255,.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,.4);
+  z-index: 20;
+  pointer-events: none;
+  transition: opacity .4s, transform .4s;
+  box-shadow: 0 0 0 6px #05080f;
+}
+
+.lobby:has(.panel:hover) .vs-badge {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(.7);
+}
+
+/* ── Ambient bottom text ── */
+.lobby-footer {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: .62rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.15);
+  z-index: 30;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ── Vignette ── */
+.vignette {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 60%, rgba(0,0,0,.5) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Responsive */
+@media (max-width: 680px) {
+  .lobby { flex-direction: column; }
+  .panel { flex: 1 !important; filter: none !important; }
+  .divider { top: 50%; left: 0; right: 0; width: 100%; height: 2px; transform: translateY(-50%); }
+  .vs-badge { top: 50%; left: 50%; }
+  .mode-title { font-size: 2rem; }
+  .mode-stats { gap: 18px; }
+  .lobby-footer { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="vignette"></div>
+
+<div class="lobby" id="lobby">
+
+  <!-- VS badge -->
+  <div class="vs-badge">VS</div>
+
+  <!-- Divider -->
+  <div class="divider"></div>
+
+  <!-- ═══ PANEL SOL — Hastane Turnuvası ═══ -->
+  <div class="panel panel-left" onclick="window.location.href='tournament.html'">
+    <div class="grid"></div>
+    <div class="star-ring"></div>
+
+    <div class="panel-content">
+      <div class="mode-tag">Resmi Turnuva · 2026</div>
+
+      <span class="mode-icon">🏟️</span>
+
+      <div class="mode-title">Hastane Turnuvası 2026</div>
+      <div class="deco-line"></div>
+      <div class="mode-desc">
+        Kurum içi dev lig, fikstür ve istatistikler.<br>
+        Şampiyonluk için sahaya çık.
+      </div>
+
+      <button class="mode-btn" onclick="event.stopPropagation(); window.location.href='tournament.html'">
+        Turnuvaya Git <i class="btn-arrow">→</i>
+      </button>
+
+      <div class="mode-stats">
+        <div class="mode-stat">
+          <strong>16</strong>
+          <span>Takım</span>
+        </div>
+        <div class="mode-stat">
+          <strong>6</strong>
+          <span>Hafta</span>
+        </div>
+        <div class="mode-stat">
+          <strong>48</strong>
+          <span>Maç</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PANEL SAĞ — Pitch App ═══ -->
+  <div class="panel panel-right" onclick="window.location.href='index.html'">
+    <div class="grid"></div>
+
+    <div class="panel-content">
+      <div class="mode-tag">Pitch App · Klasik Mod</div>
+
+      <span class="mode-icon">⚽</span>
+
+      <div class="mode-title">Pitch App — Klasik Maç</div>
+      <div class="deco-line"></div>
+      <div class="mode-desc">
+        Borsaya gir, takımını kur, Epic kartını yükselt.<br>
+        Her salı saha seninle hesaplaşır.
+      </div>
+
+      <button class="mode-btn" onclick="event.stopPropagation(); window.location.href='index.html'">
+        Sahaya Çık <i class="btn-arrow">→</i>
+      </button>
+
+      <div class="mode-stats">
+        <div class="mode-stat">
+          <strong>∞</strong>
+          <span>Sezon</span>
+        </div>
+        <div class="mode-stat">
+          <strong>5</strong>
+          <span>Tier</span>
+        </div>
+        <div class="mode-stat">
+          <strong>25</strong>
+          <span>Rozet</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="lobby-footer">Bir mod seç · Sahaya gir</div>
+
+<script>
+// CSS :has() desteği yoksa JS fallback
+const lobby = document.getElementById('lobby');
+const left  = lobby.querySelector('.panel-left');
+const right = lobby.querySelector('.panel-right');
+
+const supportsHas = CSS.supports('selector(:has(*))');
+
+if (!supportsHas) {
+  [left, right].forEach(panel => {
+    panel.addEventListener('mouseenter', () => {
+      const other = panel === left ? right : left;
+      panel.style.flex = '1.2';
+      other.style.flex = '0.8';
+      other.style.filter = 'brightness(.55)';
+    });
+    panel.addEventListener('mouseleave', () => {
+      left.style.flex = '';
+      right.style.flex = '';
+      left.style.filter = '';
+      right.style.filter = '';
+    });
+  });
+}
+</script>
+
+</body>
+</html>
