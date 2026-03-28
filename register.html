@@ -8,16 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100%; font-family: 'DM Sans', sans-serif; background: #020806; color: #e8f5eb; overflow-x: hidden; }
 
-html, body {
-  width: 100%; min-height: 100%;
-  font-family: 'DM Sans', sans-serif;
-  background: #020806;
-  color: #e8f5eb;
-  overflow-x: hidden;
-}
-
-/* ═══ BACKGROUND ═══ */
 .bg {
   position: fixed; inset: 0; z-index: 0;
   background:
@@ -26,58 +18,39 @@ html, body {
     #020806;
 }
 .bg::before {
-  content: '';
-  position: absolute; inset: 0;
+  content: ''; position: absolute; inset: 0;
   background-image:
     linear-gradient(rgba(184,247,23,.025) 1px, transparent 1px),
     linear-gradient(90deg, rgba(184,247,23,.025) 1px, transparent 1px);
   background-size: 52px 52px;
   animation: grid-drift 25s linear infinite;
 }
-@keyframes grid-drift {
-  0%   { background-position: 0 0; }
-  100% { background-position: 52px 52px; }
-}
+@keyframes grid-drift { 0% { background-position: 0 0; } 100% { background-position: 52px 52px; } }
 .bg::after {
-  content: '';
-  position: absolute; inset: 0;
+  content: ''; position: absolute; inset: 0;
   background:
     radial-gradient(circle 180px at 15% 20%, rgba(80,255,80,.04) 0%, transparent 100%),
-    radial-gradient(circle 140px at 85% 15%, rgba(0,200,255,.03) 0%, transparent 100%),
     radial-gradient(circle 200px at 75% 80%, rgba(80,255,80,.03) 0%, transparent 100%);
   animation: orb-shift 18s ease-in-out infinite alternate;
 }
-@keyframes orb-shift {
-  0%   { opacity: .6; transform: scale(1); }
-  100% { opacity: 1;  transform: scale(1.08); }
-}
+@keyframes orb-shift { 0% { opacity: .6; } 100% { opacity: 1; } }
+
 .scan-line {
   position: fixed; left: 0; right: 0; height: 1px;
   background: linear-gradient(90deg, transparent, rgba(184,247,23,.2), transparent);
   animation: scan 8s linear infinite;
   z-index: 1; pointer-events: none;
 }
-@keyframes scan {
-  0%   { top: -1px; opacity: 0; }
-  3%   { opacity: 1; }
-  96%  { opacity: 1; }
-  100% { top: 100vh; opacity: 0; }
-}
+@keyframes scan { 0% { top: -1px; opacity: 0; } 3% { opacity: 1; } 96% { opacity: 1; } 100% { top: 100vh; opacity: 0; } }
 
-/* ═══ LAYOUT ═══ */
 .page {
-  position: relative; z-index: 2;
-  min-height: 100vh;
+  position: relative; z-index: 2; min-height: 100vh;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   padding: 24px 16px;
 }
 
-/* ═══ BRAND ═══ */
-.brand {
-  display: flex; flex-direction: column;
-  align-items: center; margin-bottom: 28px;
-}
+.brand { display: flex; flex-direction: column; align-items: center; margin-bottom: 28px; }
 .brand-icon {
   font-size: 2.2rem; margin-bottom: 8px;
   filter: drop-shadow(0 0 12px rgba(184,247,23,.5));
@@ -88,165 +61,94 @@ html, body {
   50%       { filter: drop-shadow(0 0 22px rgba(184,247,23,.8)); }
 }
 .brand-title {
-  font-family: 'Bebas Neue', cursive;
-  font-size: 2.6rem; letter-spacing: 6px;
-  color: #b8f717;
-  text-shadow: 0 0 20px rgba(184,247,23,.5), 0 0 60px rgba(184,247,23,.2);
-  line-height: 1;
+  font-family: 'Bebas Neue', cursive; font-size: 2.6rem; letter-spacing: 6px;
+  color: #b8f717; text-shadow: 0 0 20px rgba(184,247,23,.5), 0 0 60px rgba(184,247,23,.2); line-height: 1;
 }
-.brand-sub {
-  font-size: .63rem; letter-spacing: 4px;
-  text-transform: uppercase;
-  color: rgba(184,247,23,.4);
-  margin-top: 4px; font-weight: 500;
-}
+.brand-sub { font-size: .63rem; letter-spacing: 4px; text-transform: uppercase; color: rgba(184,247,23,.4); margin-top: 4px; font-weight: 500; }
 
-/* ═══ GLASS CARD ═══ */
 .card {
   width: 100%; max-width: 460px;
   background: rgba(10,24,12,.65);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(184,247,23,.12);
-  border-radius: 20px;
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(184,247,23,.12); border-radius: 20px;
   padding: 38px 36px 34px;
-  box-shadow:
-    0 0 0 1px rgba(184,247,23,.05),
-    0 8px 40px rgba(0,0,0,.6),
-    0 0 80px rgba(184,247,23,.04) inset;
+  box-shadow: 0 0 0 1px rgba(184,247,23,.05), 0 8px 40px rgba(0,0,0,.6), 0 0 80px rgba(184,247,23,.04) inset;
   position: relative; overflow: hidden;
 }
 .card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 10%; right: 10%; height: 2px;
-  background: linear-gradient(90deg, transparent, #b8f717, transparent);
-  border-radius: 0 0 2px 2px; opacity: .7;
-}
-.card-heading {
-  text-align: center; margin-bottom: 28px;
-}
-.card-heading h1 {
-  font-family: 'Bebas Neue', cursive;
-  font-size: 1.6rem; letter-spacing: 4px;
-  color: #e8f5eb; margin-bottom: 5px;
-}
-.card-heading p {
-  font-size: .76rem;
-  color: rgba(184,247,23,.4); letter-spacing: .5px;
+  content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 2px;
+  background: linear-gradient(90deg, transparent, #b8f717, transparent); opacity: .7;
 }
 
-/* ═══ FORM ═══ */
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 0;
-}
+.card-heading { text-align: center; margin-bottom: 28px; }
+.card-heading h1 { font-family: 'Bebas Neue', cursive; font-size: 1.6rem; letter-spacing: 4px; color: #e8f5eb; margin-bottom: 5px; }
+.card-heading p { font-size: .76rem; color: rgba(184,247,23,.4); letter-spacing: .5px; }
 
 .form-group { margin-bottom: 16px; position: relative; }
-
-.form-group label {
-  display: block;
-  font-size: .65rem; font-weight: 600;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  color: rgba(184,247,23,.5); margin-bottom: 7px;
-}
-
+.form-group label { display: block; font-size: .65rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(184,247,23,.5); margin-bottom: 7px; }
 .input-wrap { position: relative; display: flex; align-items: center; }
-
-.input-icon {
-  position: absolute; left: 13px;
-  font-size: .95rem; opacity: .4; pointer-events: none;
-  transition: opacity .2s;
-}
+.input-icon { position: absolute; left: 13px; font-size: .95rem; opacity: .4; pointer-events: none; transition: opacity .2s; }
 .form-group:focus-within .input-icon { opacity: .85; }
-
 .form-input {
-  width: 100%;
-  padding: 12px 13px 12px 40px;
-  background: rgba(255,255,255,.04);
-  border: 1.5px solid rgba(184,247,23,.1);
-  border-radius: 10px;
-  color: #e8f5eb;
-  font-family: 'DM Sans', sans-serif;
-  font-size: .88rem;
-  outline: none;
+  width: 100%; padding: 12px 13px 12px 40px;
+  background: rgba(255,255,255,.04); border: 1.5px solid rgba(184,247,23,.1);
+  border-radius: 10px; color: #e8f5eb;
+  font-family: 'DM Sans', sans-serif; font-size: .88rem; outline: none;
   transition: border-color .2s, box-shadow .2s, background .2s;
 }
 .form-input::placeholder { color: rgba(255,255,255,.2); }
-.form-input:focus {
-  border-color: rgba(184,247,23,.45);
-  background: rgba(184,247,23,.04);
-  box-shadow: 0 0 0 3px rgba(184,247,23,.08);
-}
+.form-input:focus { border-color: rgba(184,247,23,.45); background: rgba(184,247,23,.04); box-shadow: 0 0 0 3px rgba(184,247,23,.08); }
 
-/* Şifre toggle */
 .pass-toggle {
-  position: absolute; right: 12px;
-  background: none; border: none; cursor: pointer;
-  font-size: .9rem; opacity: .35;
-  transition: opacity .2s; padding: 4px; color: inherit;
+  position: absolute; right: 12px; background: none; border: none; cursor: pointer;
+  font-size: .9rem; opacity: .35; transition: opacity .2s; padding: 4px; color: inherit;
 }
 .pass-toggle:hover { opacity: .8; }
 
-/* ═══ MOD SEÇİMİ ═══ */
+/* ── MOD SEÇİMİ ── */
 .mode-label {
-  font-size: .65rem; font-weight: 600;
+  display: block; font-size: .65rem; font-weight: 600;
   letter-spacing: 1.5px; text-transform: uppercase;
-  color: rgba(184,247,23,.5);
-  display: block; margin-bottom: 10px;
+  color: rgba(184,247,23,.5); margin-bottom: 10px;
 }
 
-.mode-cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 16px;
-}
+.mode-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
 
-.mode-card {
-  position: relative;
-  cursor: pointer;
-}
-
-.mode-card input[type="radio"] {
-  position: absolute; opacity: 0; width: 0; height: 0;
-}
+.mode-card { position: relative; cursor: pointer; }
+.mode-card input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
 
 .mode-card-body {
-  display: flex; flex-direction: column;
-  align-items: center; gap: 6px;
-  padding: 14px 10px;
-  border-radius: 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 14px 10px; border-radius: 12px;
   border: 1.5px solid rgba(255,255,255,.08);
-  background: rgba(255,255,255,.03);
-  cursor: pointer;
-  transition: all .25s;
+  background: rgba(255,255,255,.03); cursor: pointer;
+  transition: border-color .25s, background .25s, box-shadow .25s;
   text-align: center;
 }
 
-.mode-card:hover .mode-card-body {
-  border-color: rgba(184,247,23,.25);
-  background: rgba(184,247,23,.04);
+/* Klasik hover */
+.mode-card.classic:hover .mode-card-body {
+  border-color: rgba(184,247,23,.3);
+  background: rgba(184,247,23,.05);
 }
-
-/* Seçili mod */
-.mode-card input:checked + .mode-card-body {
-  border-color: rgba(184,247,23,.6);
-  background: rgba(184,247,23,.08);
+/* Klasik seçili */
+.mode-card.classic input:checked + .mode-card-body {
+  border-color: rgba(184,247,23,.65);
+  background: rgba(184,247,23,.09);
   box-shadow: 0 0 0 3px rgba(184,247,23,.1), 0 0 20px rgba(184,247,23,.08);
 }
 
-/* Turnuva modu — mavi tema */
+/* Turnuva başlangıç */
 .mode-card.tournament .mode-card-body {
   border-color: rgba(80,140,255,.15);
   background: rgba(80,140,255,.03);
 }
+/* Turnuva hover */
 .mode-card.tournament:hover .mode-card-body {
   border-color: rgba(80,140,255,.4);
   background: rgba(80,140,255,.07);
 }
+/* Turnuva seçili */
 .mode-card.tournament input:checked + .mode-card-body {
   border-color: rgba(80,140,255,.7);
   background: rgba(80,140,255,.1);
@@ -255,175 +157,81 @@ html, body {
 
 .mode-card-icon { font-size: 1.6rem; line-height: 1; }
 
-.mode-card-name {
-  font-family: 'Bebas Neue', cursive;
-  font-size: .9rem; letter-spacing: 1.5px;
-  line-height: 1.2;
-}
-
-.mode-card.classic .mode-card-name  { color: rgba(184,247,23,.8); }
+.mode-card-name { font-family: 'Bebas Neue', cursive; font-size: .9rem; letter-spacing: 1.5px; line-height: 1.2; }
+.mode-card.classic   .mode-card-name { color: rgba(184,247,23,.8); }
 .mode-card.tournament .mode-card-name { color: rgba(180,210,255,.8); }
 
-.mode-card input:checked + .mode-card-body .mode-card-name {
-  text-shadow: 0 0 10px currentColor;
-}
+.mode-card input:checked + .mode-card-body .mode-card-name { text-shadow: 0 0 10px currentColor; }
 
-.mode-card-desc {
-  font-size: .6rem; color: rgba(255,255,255,.3);
-  line-height: 1.4; letter-spacing: .3px;
-}
+.mode-card-desc { font-size: .6rem; color: rgba(255,255,255,.3); line-height: 1.4; letter-spacing: .3px; }
 
-/* Seçim checkmark */
+/* Köşe checkmark */
 .mode-check {
   position: absolute; top: 8px; right: 8px;
-  width: 16px; height: 16px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.12);
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.05);
   display: flex; align-items: center; justify-content: center;
-  font-size: .55rem;
-  opacity: 0;
-  transition: opacity .2s, background .2s;
+  font-size: .6rem; opacity: 0;
+  transition: opacity .2s, background .2s, border-color .2s;
+  pointer-events: none;
 }
+.mode-card.classic    input:checked ~ .mode-check { opacity: 1; background: rgba(184,247,23,.2); border-color: rgba(184,247,23,.5); color: #b8f717; }
+.mode-card.tournament input:checked ~ .mode-check { opacity: 1; background: rgba(80,140,255,.2); border-color: rgba(80,140,255,.5); color: #88aaff; }
 
-.mode-card.classic input:checked ~ .mode-check {
-  opacity: 1;
-  background: rgba(184,247,23,.2);
-  border-color: rgba(184,247,23,.5);
-  color: #b8f717;
-  content: '✓';
-}
-.mode-card.tournament input:checked ~ .mode-check {
-  opacity: 1;
-  background: rgba(80,140,255,.2);
-  border-color: rgba(80,140,255,.5);
-  color: #88aaff;
-}
-
-/* ═══ HATA MESAJI ═══ */
+/* ── HATA ── */
 .error-msg {
   display: none; align-items: center; gap: 8px;
-  background: rgba(255,50,50,.1);
-  border: 1px solid rgba(255,80,80,.25);
-  border-radius: 8px; padding: 10px 14px;
-  margin-bottom: 16px;
+  background: rgba(255,50,50,.1); border: 1px solid rgba(255,80,80,.25);
+  border-radius: 8px; padding: 10px 14px; margin-bottom: 16px;
   font-size: .77rem; color: #ff8080;
-  animation: err-in .3s cubic-bezier(.34,1.56,.64,1);
 }
-.error-msg.show { display: flex; }
-@keyframes err-in {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+.error-msg.show { display: flex; animation: err-in .3s cubic-bezier(.34,1.56,.64,1); }
+@keyframes err-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Başarı mesajı */
-.success-msg {
-  display: none; align-items: center; gap: 8px;
-  background: rgba(50,255,80,.08);
-  border: 1px solid rgba(80,255,100,.25);
-  border-radius: 8px; padding: 10px 14px;
-  margin-bottom: 16px;
-  font-size: .77rem; color: #80ff90;
-  animation: err-in .3s cubic-bezier(.34,1.56,.64,1);
-}
-.success-msg.show { display: flex; }
-
-/* ═══ SUBMIT BUTTON ═══ */
+/* ── BUTTON ── */
 .submit-btn {
   width: 100%; padding: 14px; margin-top: 4px;
-  background: linear-gradient(135deg, #7ab80d, #b8f717);
-  color: #020806;
-  font-family: 'Bebas Neue', cursive;
-  font-size: 1.1rem; letter-spacing: 4px;
+  background: linear-gradient(135deg, #7ab80d, #b8f717); color: #020806;
+  font-family: 'Bebas Neue', cursive; font-size: 1.1rem; letter-spacing: 4px;
   border: none; border-radius: 10px; cursor: pointer;
   position: relative; overflow: hidden;
   transition: transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s, filter .2s;
-  box-shadow: 0 4px 24px rgba(184,247,23,.3), 0 0 60px rgba(184,247,23,.1);
+  box-shadow: 0 4px 24px rgba(184,247,23,.3);
 }
-.submit-btn::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,.18), transparent);
-  opacity: 0; transition: opacity .25s;
-}
-.submit-btn:hover {
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 8px 32px rgba(184,247,23,.45), 0 0 80px rgba(184,247,23,.15);
-  filter: brightness(1.08);
-}
-.submit-btn:hover::before { opacity: 1; }
+.submit-btn:hover { transform: translateY(-2px) scale(1.01); box-shadow: 0 8px 32px rgba(184,247,23,.45); filter: brightness(1.08); }
 .submit-btn:active { transform: scale(.97); }
 .submit-btn.loading { pointer-events: none; filter: brightness(.7); }
 .submit-btn .btn-text { transition: opacity .2s; }
 .submit-btn.loading .btn-text { opacity: 0; }
-.btn-spinner {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: opacity .2s;
-}
+.btn-spinner { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .2s; }
 .submit-btn.loading .btn-spinner { opacity: 1; }
-.spinner-ring {
-  width: 20px; height: 20px;
-  border: 2px solid rgba(2,8,6,.3);
-  border-top-color: #020806;
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
-}
+.spinner-ring { width: 20px; height: 20px; border: 2px solid rgba(2,8,6,.3); border-top-color: #020806; border-radius: 50%; animation: spin .7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ═══ FOOTER ═══ */
-.card-footer {
-  text-align: center; margin-top: 22px;
-  padding-top: 18px;
-  border-top: 1px solid rgba(184,247,23,.07);
-}
+/* ── FOOTER ── */
+.card-footer { text-align: center; margin-top: 22px; padding-top: 18px; border-top: 1px solid rgba(184,247,23,.07); }
 .card-footer p { font-size: .77rem; color: rgba(255,255,255,.3); }
-.card-footer a {
-  color: rgba(184,247,23,.7); text-decoration: none;
-  font-weight: 600; transition: color .2s;
-}
-.card-footer a:hover {
-  color: #b8f717;
-  text-shadow: 0 0 10px rgba(184,247,23,.4);
-}
+.card-footer a { color: rgba(184,247,23,.7); text-decoration: none; font-weight: 600; transition: color .2s; }
+.card-footer a:hover { color: #b8f717; text-shadow: 0 0 10px rgba(184,247,23,.4); }
 
 .sys-info {
-  position: fixed; bottom: 16px; left: 50%;
-  transform: translateX(-50%);
-  font-size: .58rem; letter-spacing: 3px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.12);
-  z-index: 2; white-space: nowrap;
+  position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+  font-size: .58rem; letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(255,255,255,.12); z-index: 2; white-space: nowrap;
 }
 
-/* ═══ SUCCESS OVERLAY ═══ */
+/* ── SUCCESS OVERLAY ── */
 .success-overlay {
-  position: fixed; inset: 0;
-  background: rgba(184,247,23,.06);
-  z-index: 100;
-  display: none;
-  align-items: center; justify-content: center;
+  position: fixed; inset: 0; background: rgba(184,247,23,.06);
+  z-index: 100; display: none; align-items: center; justify-content: center;
 }
 .success-overlay.show { display: flex; }
 .success-content { text-align: center; }
-.success-content .s-icon {
-  font-size: 3rem; display: block; margin-bottom: 12px;
-  animation: bounce-in .4s cubic-bezier(.34,1.56,.64,1);
-}
-@keyframes bounce-in {
-  from { transform: scale(.4); opacity: 0; }
-  to   { transform: scale(1);  opacity: 1; }
-}
-.success-content .s-text {
-  font-family: 'Bebas Neue', cursive;
-  font-size: 1.3rem; letter-spacing: 4px;
-  color: #b8f717;
-  text-shadow: 0 0 20px rgba(184,247,23,.6);
-}
-.success-content .s-sub {
-  font-size: .75rem; color: rgba(184,247,23,.5);
-  margin-top: 6px; letter-spacing: 1px;
-}
+.s-icon { font-size: 3rem; display: block; margin-bottom: 12px; animation: bounce-in .4s cubic-bezier(.34,1.56,.64,1); }
+@keyframes bounce-in { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.s-text { font-family: 'Bebas Neue', cursive; font-size: 1.3rem; letter-spacing: 4px; color: #b8f717; text-shadow: 0 0 20px rgba(184,247,23,.6); }
+.s-sub { font-size: .75rem; color: rgba(184,247,23,.5); margin-top: 6px; letter-spacing: 1px; }
 </style>
 </head>
 <body>
@@ -431,7 +239,6 @@ html, body {
 <div class="bg"></div>
 <div class="scan-line"></div>
 
-<!-- Success overlay -->
 <div class="success-overlay" id="successOverlay">
   <div class="success-content">
     <span class="s-icon">🎉</span>
@@ -441,58 +248,51 @@ html, body {
 </div>
 
 <div class="page">
-
-  <!-- Brand -->
   <div class="brand">
     <div class="brand-icon">⚽</div>
     <div class="brand-title">Pitch App</div>
     <div class="brand-sub">Yeni Hesap Oluştur</div>
   </div>
 
-  <!-- Card -->
   <div class="card">
-
     <div class="card-heading">
       <h1>Kayıt Ol</h1>
       <p>Bilgilerini doldur ve sahaya çık</p>
     </div>
 
-    <!-- Error / Success -->
     <div class="error-msg" id="errorMsg">
       <span>⚠️</span>
       <span id="errorText">Hata oluştu.</span>
     </div>
-    <div class="success-msg" id="successInline">
-      <span>✅</span>
-      <span id="successText">Kayıt tamamlandı!</span>
-    </div>
 
-    <!-- Ad & Soyad -->
-    <div class="form-row">
-      <div class="form-group" style="margin-bottom:0">
-        <label>Ad</label>
-        <div class="input-wrap">
-          <span class="input-icon">👤</span>
-          <input type="text" id="firstInput" class="form-input" placeholder="Adın" autocomplete="given-name">
-        </div>
-      </div>
-      <div class="form-group" style="margin-bottom:0">
-        <label>Soyad</label>
-        <div class="input-wrap">
-          <span class="input-icon">👤</span>
-          <input type="text" id="lastInput" class="form-input" placeholder="Soyadın" autocomplete="family-name">
-        </div>
+    <!-- Tek "Ad Soyad" inputu -->
+    <div class="form-group">
+      <label>Ad Soyad</label>
+      <div class="input-wrap">
+        <span class="input-icon">👤</span>
+        <input
+          type="text"
+          id="nameInput"
+          class="form-input"
+          placeholder="Adın ve soyadın"
+          autocomplete="name"
+        >
       </div>
     </div>
-    <div style="margin-bottom:16px"></div>
 
     <!-- Şifre -->
     <div class="form-group">
       <label>Şifre</label>
       <div class="input-wrap">
         <span class="input-icon">🔒</span>
-        <input type="password" id="passInput" class="form-input" placeholder="En az 6 karakter" autocomplete="new-password">
-        <button class="pass-toggle" id="passToggle" type="button" title="Göster/Gizle">👁️</button>
+        <input
+          type="password"
+          id="passInput"
+          class="form-input"
+          placeholder="En az 6 karakter"
+          autocomplete="new-password"
+        >
+        <button class="pass-toggle" id="passToggle" type="button">👁️</button>
       </div>
     </div>
 
@@ -501,8 +301,14 @@ html, body {
       <label>Şifre Tekrar</label>
       <div class="input-wrap">
         <span class="input-icon">🔒</span>
-        <input type="password" id="pass2Input" class="form-input" placeholder="Şifreni tekrar gir" autocomplete="new-password">
-        <button class="pass-toggle" id="pass2Toggle" type="button" title="Göster/Gizle">👁️</button>
+        <input
+          type="password"
+          id="pass2Input"
+          class="form-input"
+          placeholder="Şifreni tekrar gir"
+          autocomplete="new-password"
+        >
+        <button class="pass-toggle" id="pass2Toggle" type="button">👁️</button>
       </div>
     </div>
 
@@ -510,7 +316,6 @@ html, body {
     <label class="mode-label">Hangi platform için kayıt oluyorsun?</label>
     <div class="mode-cards">
 
-      <!-- Klasik Salı Maçı -->
       <label class="mode-card classic">
         <input type="radio" name="mode" value="classic" checked>
         <div class="mode-card-body">
@@ -521,7 +326,6 @@ html, body {
         <div class="mode-check">✓</div>
       </label>
 
-      <!-- Hastane Turnuvası -->
       <label class="mode-card tournament">
         <input type="radio" name="mode" value="tournament">
         <div class="mode-card-body">
@@ -542,20 +346,15 @@ html, body {
     <div class="card-footer">
       <p>Zaten hesabın var mı? <a href="login.html">Giriş Yap</a></p>
     </div>
-
   </div>
 </div>
 
 <div class="sys-info">Pitch App · Güvenli Kayıt</div>
 
-<!-- ═══ FIREBASE v9 MODULAR ═══ -->
 <script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getDatabase, ref, set, get, child } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
-import { initializeApp }    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getDatabase, ref, set, get, child }
-  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
-
-// ── Firebase Config ──
 const firebaseConfig = {
   apiKey:            "AIzaSyBc_JhGF0Axeey-pPyUQsV6RZ3UIXd2WIc",
   authDomain:        "sali-maci.firebaseapp.com",
@@ -569,20 +368,18 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db  = getDatabase(app);
 
-// ── DOM ──
-const firstInput   = document.getElementById('firstInput');
-const lastInput    = document.getElementById('lastInput');
-const passInput    = document.getElementById('passInput');
-const pass2Input   = document.getElementById('pass2Input');
-const passToggle   = document.getElementById('passToggle');
-const pass2Toggle  = document.getElementById('pass2Toggle');
-const registerBtn  = document.getElementById('registerBtn');
-const errorMsg     = document.getElementById('errorMsg');
-const errorText    = document.getElementById('errorText');
+const nameInput      = document.getElementById('nameInput');
+const passInput      = document.getElementById('passInput');
+const pass2Input     = document.getElementById('pass2Input');
+const passToggle     = document.getElementById('passToggle');
+const pass2Toggle    = document.getElementById('pass2Toggle');
+const registerBtn    = document.getElementById('registerBtn');
+const errorMsg       = document.getElementById('errorMsg');
+const errorText      = document.getElementById('errorText');
 const successOverlay = document.getElementById('successOverlay');
-const successSub   = document.getElementById('successSub');
+const successSub     = document.getElementById('successSub');
 
-// ── Şifre toggle ──
+// Şifre toggle'ları
 function togglePass(input, btn) {
   const show = input.type === 'password';
   input.type = show ? 'text' : 'password';
@@ -591,76 +388,50 @@ function togglePass(input, btn) {
 passToggle.addEventListener('click',  () => togglePass(passInput,  passToggle));
 pass2Toggle.addEventListener('click', () => togglePass(pass2Input, pass2Toggle));
 
-// ── Hata göster / gizle ──
-function showError(msg) {
-  errorText.textContent = msg;
-  errorMsg.classList.add('show');
-}
-function hideError() {
-  errorMsg.classList.remove('show');
-}
+// Yardımcılar
+function showError(msg) { errorText.textContent = msg; errorMsg.classList.add('show'); }
+function hideError() { errorMsg.classList.remove('show'); }
 
-// ── Input change → hata sil ──
-[firstInput, lastInput, passInput, pass2Input].forEach(el => {
+// Input değişince hatayı gizle + Enter ile kayıt
+[nameInput, passInput, pass2Input].forEach(el => {
   el.addEventListener('input', hideError);
+  el.addEventListener('keydown', e => { if (e.key === 'Enter') registerBtn.click(); });
 });
 
-// ── Enter ile kayıt ──
-[firstInput, lastInput, passInput, pass2Input].forEach(el => {
-  el.addEventListener('keydown', e => {
-    if (e.key === 'Enter') registerBtn.click();
-  });
-});
-
-// ── Basit UUID ──
-function uid() {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2, 8);
-}
-
-// ── Seçili mod ──
+// Seçili mod
 function getSelectedMode() {
   const checked = document.querySelector('input[name="mode"]:checked');
   return checked ? checked.value : 'classic';
 }
 
-// ── Kayıt işlemi ──
+// Basit UID üretici
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2, 8);
+}
+
+// Kayıt işlemi
 registerBtn.addEventListener('click', async () => {
   hideError();
 
-  const firstName = firstInput.value.trim();
-  const lastName  = lastInput.value.trim();
-  const pass      = passInput.value;
-  const pass2     = pass2Input.value;
-  const mode      = getSelectedMode();
+  const fullName = nameInput.value.trim();
+  const pass     = passInput.value;
+  const pass2    = pass2Input.value;
+  const mode     = getSelectedMode();
 
-  // Validasyon
-  if (!firstName) {
-    showError('Lütfen adını gir.');
-    firstInput.focus(); return;
-  }
-  if (!lastName) {
-    showError('Lütfen soyadını gir.');
-    lastInput.focus(); return;
-  }
-  if (pass.length < 6) {
-    showError('Şifre en az 6 karakter olmalı.');
-    passInput.focus(); return;
-  }
-  if (pass !== pass2) {
-    showError('Şifreler eşleşmiyor.');
-    pass2Input.focus(); return;
-  }
+  if (!fullName)        { showError('Lütfen ad soyadını gir.'); nameInput.focus(); return; }
+  if (fullName.split(' ').filter(Boolean).length < 2)
+                        { showError('Lütfen hem adını hem soyadını gir.'); nameInput.focus(); return; }
+  if (pass.length < 6)  { showError('Şifre en az 6 karakter olmalı.'); passInput.focus(); return; }
+  if (pass !== pass2)   { showError('Şifreler eşleşmiyor.'); pass2Input.focus(); return; }
 
-  // Tam isim — mevcut sistemle uyumlu (ad soyad birleşik key)
-  const fullName = firstName + ' ' + lastName;
-  const nameKey  = fullName.toLowerCase().replace(/\s+/g, ' ').trim();
-
-  // Loading
   registerBtn.classList.add('loading');
 
+  // dbKey: "Ahmet Yılmaz" → "ahmet_yılmaz"  (eski kayıtlarla birebir uyumlu format)
+  const dbKey = fullName.toLowerCase().replace(/ /g, '_');
+
   try {
-    // Kullanıcı zaten var mı kontrol et
-    const snapshot = await get(child(ref(db), `users/${nameKey.replace(/ /g,'_')}`));
+    // Aynı isimde kullanıcı var mı?
+    const snapshot = await get(child(ref(db), `users/${dbKey}`));
 
     if (snapshot.exists()) {
       registerBtn.classList.remove('loading');
@@ -668,12 +439,12 @@ registerBtn.addEventListener('click', async () => {
       return;
     }
 
-    // Yeni kullanıcı objesi — index.html'deki mevcut yapıyla tam uyumlu
+    // Yeni kullanıcı — index.html'deki mevcut yapıyla tam uyumlu
     const newUser = {
       id:              uid(),
       name:            fullName,
       pass:            pass,
-      mode:            mode,                    // 'classic' veya 'tournament'
+      mode:            mode,
       pos:             '',
       ayak:            'Sağ',
       altPos1:         '',
@@ -695,28 +466,22 @@ registerBtn.addEventListener('click', async () => {
       formPuani:       0,
       formHistory:     [],
       profileComplete: false,
-      registeredAt:    Date.now(),
+      registeredAt:    Date.now()
     };
 
-    // Firebase Realtime Database'e kaydet
-    // Mevcut index.html ile aynı path: users/{nameKey}
-    const dbKey = nameKey.replace(/ /g, '_');
     await set(ref(db, `users/${dbKey}`), newUser);
 
-    // Başarı
     registerBtn.classList.remove('loading');
 
     const modeLabel = mode === 'tournament' ? 'Hastane Turnuvası' : 'Pitch App Klasik';
-    successSub.textContent = `${modeLabel} · Lobiye yönlendiriliyorsun...`;
+    successSub.textContent = modeLabel + ' · Lobiye yönlendiriliyorsun...';
     successOverlay.classList.add('show');
 
-    // Seçilen moda göre yönlendir
+    // Giriş session'ını da hemen kaydet — kullanıcı direkt lobiye gitsin
+    localStorage.setItem('hs_session', JSON.stringify({ id: newUser.id, name: newUser.name }));
+
     setTimeout(() => {
-      if (mode === 'tournament') {
-        window.location.href = 'tournament.html';
-      } else {
-        window.location.href = 'lobby.html';
-      }
+      window.location.href = mode === 'tournament' ? 'tournament.html' : 'lobby.html';
     }, 1400);
 
   } catch (err) {
@@ -725,7 +490,6 @@ registerBtn.addEventListener('click', async () => {
     showError('Bağlantı hatası: ' + (err.message || 'Bilinmeyen hata'));
   }
 });
-
 </script>
 </body>
 </html>
