@@ -38,32 +38,20 @@ html, body { width: 100%; min-height: 100%; font-family: 'DM Sans', sans-serif; 
 .scan-line {
   position: fixed; left: 0; right: 0; height: 1px;
   background: linear-gradient(90deg, transparent, rgba(184,247,23,.2), transparent);
-  animation: scan 8s linear infinite;
-  z-index: 1; pointer-events: none;
+  animation: scan 8s linear infinite; z-index: 1; pointer-events: none;
 }
 @keyframes scan { 0% { top: -1px; opacity: 0; } 3% { opacity: 1; } 96% { opacity: 1; } 100% { top: 100vh; opacity: 0; } }
 
 .page {
   position: relative; z-index: 2; min-height: 100vh;
   display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 24px 16px;
+  align-items: center; justify-content: center; padding: 24px 16px;
 }
 
 .brand { display: flex; flex-direction: column; align-items: center; margin-bottom: 32px; }
-.brand-icon {
-  font-size: 2.4rem; margin-bottom: 10px;
-  filter: drop-shadow(0 0 12px rgba(184,247,23,.5));
-  animation: icon-pulse 3s ease-in-out infinite;
-}
-@keyframes icon-pulse {
-  0%, 100% { filter: drop-shadow(0 0 10px rgba(184,247,23,.4)); }
-  50%       { filter: drop-shadow(0 0 22px rgba(184,247,23,.8)); }
-}
-.brand-title {
-  font-family: 'Bebas Neue', cursive; font-size: 2.8rem; letter-spacing: 6px;
-  color: #b8f717; text-shadow: 0 0 20px rgba(184,247,23,.5), 0 0 60px rgba(184,247,23,.2); line-height: 1;
-}
+.brand-icon { font-size: 2.4rem; margin-bottom: 10px; filter: drop-shadow(0 0 12px rgba(184,247,23,.5)); animation: icon-pulse 3s ease-in-out infinite; }
+@keyframes icon-pulse { 0%, 100% { filter: drop-shadow(0 0 10px rgba(184,247,23,.4)); } 50% { filter: drop-shadow(0 0 22px rgba(184,247,23,.8)); } }
+.brand-title { font-family: 'Bebas Neue', cursive; font-size: 2.8rem; letter-spacing: 6px; color: #b8f717; text-shadow: 0 0 20px rgba(184,247,23,.5), 0 0 60px rgba(184,247,23,.2); line-height: 1; }
 .brand-sub { font-size: .65rem; letter-spacing: 4px; text-transform: uppercase; color: rgba(184,247,23,.4); margin-top: 4px; font-weight: 500; }
 
 .card {
@@ -92,24 +80,19 @@ html, body { width: 100%; min-height: 100%; font-family: 'DM Sans', sans-serif; 
 .form-input {
   width: 100%; padding: 13px 13px 13px 40px;
   background: rgba(255,255,255,.04); border: 1.5px solid rgba(184,247,23,.1);
-  border-radius: 10px; color: #e8f5eb;
-  font-family: 'DM Sans', sans-serif; font-size: .9rem; outline: none;
+  border-radius: 10px; color: #e8f5eb; font-family: 'DM Sans', sans-serif; font-size: .9rem; outline: none;
   transition: border-color .2s, box-shadow .2s, background .2s;
 }
 .form-input::placeholder { color: rgba(255,255,255,.2); }
 .form-input:focus { border-color: rgba(184,247,23,.45); background: rgba(184,247,23,.04); box-shadow: 0 0 0 3px rgba(184,247,23,.08); }
 
-.pass-toggle {
-  position: absolute; right: 12px; background: none; border: none; cursor: pointer;
-  font-size: .9rem; opacity: .35; transition: opacity .2s; padding: 4px; color: inherit;
-}
+.pass-toggle { position: absolute; right: 12px; background: none; border: none; cursor: pointer; font-size: .9rem; opacity: .35; transition: opacity .2s; padding: 4px; color: inherit; }
 .pass-toggle:hover { opacity: .8; }
 
 .error-msg {
   display: none; align-items: center; gap: 8px;
   background: rgba(255,50,50,.1); border: 1px solid rgba(255,80,80,.25);
-  border-radius: 8px; padding: 10px 14px; margin-bottom: 16px;
-  font-size: .78rem; color: #ff8080;
+  border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: .78rem; color: #ff8080;
 }
 .error-msg.show { display: flex; animation: err-in .3s cubic-bezier(.34,1.56,.64,1); }
 @keyframes err-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
@@ -118,8 +101,7 @@ html, body { width: 100%; min-height: 100%; font-family: 'DM Sans', sans-serif; 
   width: 100%; padding: 14px; margin-top: 6px;
   background: linear-gradient(135deg, #7ab80d, #b8f717); color: #020806;
   font-family: 'Bebas Neue', cursive; font-size: 1.15rem; letter-spacing: 4px;
-  border: none; border-radius: 10px; cursor: pointer;
-  position: relative; overflow: hidden;
+  border: none; border-radius: 10px; cursor: pointer; position: relative; overflow: hidden;
   transition: transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s, filter .2s;
   box-shadow: 0 4px 24px rgba(184,247,23,.3);
 }
@@ -138,16 +120,9 @@ html, body { width: 100%; min-height: 100%; font-family: 'DM Sans', sans-serif; 
 .card-footer a { color: rgba(184,247,23,.7); text-decoration: none; font-weight: 600; transition: color .2s; }
 .card-footer a:hover { color: #b8f717; text-shadow: 0 0 10px rgba(184,247,23,.4); }
 
-.sys-info {
-  position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
-  font-size: .58rem; letter-spacing: 3px; text-transform: uppercase;
-  color: rgba(255,255,255,.12); z-index: 2; white-space: nowrap;
-}
+.sys-info { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); font-size: .58rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,.12); z-index: 2; white-space: nowrap; }
 
-.success-overlay {
-  position: fixed; inset: 0; background: rgba(184,247,23,.06);
-  z-index: 100; display: none; align-items: center; justify-content: center;
-}
+.success-overlay { position: fixed; inset: 0; background: rgba(184,247,23,.06); z-index: 100; display: none; align-items: center; justify-content: center; }
 .success-overlay.show { display: flex; }
 .success-content { text-align: center; }
 .s-icon { font-size: 3rem; display: block; margin-bottom: 12px; animation: bounce-in .4s cubic-bezier(.34,1.56,.64,1); }
@@ -179,7 +154,7 @@ html, body { width: 100%; min-height: 100%; font-family: 'DM Sans', sans-serif; 
   <div class="card">
     <div class="card-heading">
       <h1>Giriş Yap</h1>
-      <p>Ad soyadın ve şifrenle giriş yap</p>
+      <p>Kayıtlı ad soyadın ve şifrenle giriş yap</p>
     </div>
 
     <div class="error-msg" id="errorMsg">
@@ -187,16 +162,16 @@ html, body { width: 100%; min-height: 100%; font-family: 'DM Sans', sans-serif; 
       <span id="errorText">Hata oluştu.</span>
     </div>
 
-    <!-- Tek "Ad Soyad" inputu -->
+    <!-- Tek input: Kayıtlı Ad Soyad -->
     <div class="form-group">
-      <label>Ad Soyad</label>
+      <label>Kayıtlı Ad Soyad</label>
       <div class="input-wrap">
         <span class="input-icon">👤</span>
         <input
           type="text"
           id="nameInput"
           class="form-input"
-          placeholder="Adın ve soyadın"
+          placeholder="Örn: Ahmet Yılmaz"
           autocomplete="name"
         >
       </div>
@@ -257,45 +232,55 @@ const errorText      = document.getElementById('errorText');
 const successOverlay = document.getElementById('successOverlay');
 const successSub     = document.getElementById('successSub');
 
-// Şifre göster / gizle
 passToggle.addEventListener('click', () => {
   const show = passInput.type === 'password';
   passInput.type = show ? 'text' : 'password';
   passToggle.textContent = show ? '🙈' : '👁️';
 });
 
-// Yardımcılar
 function showError(msg) { errorText.textContent = msg; errorMsg.classList.add('show'); }
-function hideError() { errorMsg.classList.remove('show'); }
+function hideError()    { errorMsg.classList.remove('show'); }
 
-// Input değişince hatayı gizle + Enter ile giriş
 [nameInput, passInput].forEach(el => {
   el.addEventListener('input', hideError);
   el.addEventListener('keydown', e => { if (e.key === 'Enter') loginBtn.click(); });
 });
 
-// Giriş işlemi
 loginBtn.addEventListener('click', async () => {
   hideError();
 
   const fullName = nameInput.value.trim();
   const pass     = passInput.value;
 
-  if (!fullName) { showError('Lütfen ad soyadını gir.'); nameInput.focus(); return; }
+  if (!fullName) { showError('Lütfen kayıtlı ad soyadını gir.'); nameInput.focus(); return; }
   if (!pass)     { showError('Lütfen şifreni gir.'); passInput.focus(); return; }
 
   loginBtn.classList.add('loading');
 
-  // dbKey: "Ahmet Yılmaz" → "ahmet_yılmaz"
-  // Eski kayıtlardaki format ile birebir uyumlu
-  const dbKey = fullName.toLowerCase().replace(/ /g, '_');
+  const nameLower = fullName.toLowerCase();
+
+  /*
+   * Eski index.html sistemi anahtarı "ahmet yılmaz" (boşluklu) şeklinde kaydediyor.
+   * Yeni register.html sistemi "ahmet_yılmaz" (alt çizgili) şeklinde kaydediyor.
+   * Her iki formatta da arıyoruz — hangisi bulunursa o hesapla giriş yapılır.
+   */
+  const keyWithSpace     = nameLower;                          // eski format: "ahmet yılmaz"
+  const keyWithUnderscore = nameLower.replace(/ /g, '_');     // yeni format: "ahmet_yılmaz"
 
   try {
-    const snapshot = await get(child(ref(db), `users/${dbKey}`));
+    const dbRef = ref(db);
+
+    // Önce boşluklu format dene (eski hesaplar)
+    let snapshot = await get(child(dbRef, `users/${keyWithSpace}`));
+
+    // Bulunamazsa alt çizgili format dene (yeni hesaplar)
+    if (!snapshot.exists()) {
+      snapshot = await get(child(dbRef, `users/${keyWithUnderscore}`));
+    }
 
     if (!snapshot.exists()) {
       loginBtn.classList.remove('loading');
-      showError('Bu isimle kayıtlı kullanıcı bulunamadı.');
+      showError('Bu isimle kayıtlı kullanıcı bulunamadı. Adını kontrol et.');
       return;
     }
 
@@ -308,7 +293,7 @@ loginBtn.addEventListener('click', async () => {
       return;
     }
 
-    // Giriş başarılı — session'ı mevcut index.html formatıyla uyumlu şekilde kaydet
+    // Başarılı giriş — session mevcut index.html formatıyla uyumlu
     localStorage.setItem('hs_session', JSON.stringify({ id: user.id, name: user.name }));
 
     const mode      = user.mode || 'classic';
