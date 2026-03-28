@@ -1479,137 +1479,118 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 
 /* patch-slide padding azalt kart slaytları için */
 .patch-slide.card-slide{padding:12px 16px 8px;align-items:flex-start}
-/* ══════════════════════════════════════════════════════
-   UTC — ULTRA TİER KARTLARI (Epic/Legendary/Champion/Elite)
-══════════════════════════════════════════════════════ */
-.utc{position:relative;width:110px;height:158px;border-radius:14px;display:flex;flex-direction:column;align-items:center;padding:8px 7px 7px;overflow:hidden;flex-shrink:0;transform-style:preserve-3d;}
+
+/* ══ UTC — ULTRA TİER KARTLARI ══ */
+.utc{position:relative;width:110px;height:158px;border-radius:14px;display:flex;flex-direction:column;align-items:center;padding:8px 7px 7px;overflow:hidden;flex-shrink:0;}
 .utc>*{position:relative;z-index:5;}
-
-/* ── EPIC ── */
-.utc-epic{background:linear-gradient(160deg,#0d0020,#1a0040,#2d0060,#1a0045,#080015);border:1px solid rgba(180,0,255,.4);animation:utc-epic-pulse 2.2s ease-in-out infinite;}
-@keyframes utc-epic-pulse{0%{box-shadow:0 0 0 1px rgba(180,0,255,.3),0 0 18px rgba(180,0,255,.2),0 0 40px rgba(140,0,200,.1);}50%{box-shadow:0 0 0 2px rgba(220,0,255,.7),0 0 36px rgba(200,0,255,.5),0 0 70px rgba(180,0,220,.25);}100%{box-shadow:0 0 0 1px rgba(180,0,255,.3),0 0 18px rgba(180,0,255,.2),0 0 40px rgba(140,0,200,.1);}}
-.utc-epic::before{content:'';position:absolute;inset:-3px;border-radius:17px;background:conic-gradient(from 0deg,rgba(255,0,255,0) 0deg,rgba(180,0,255,.9) 60deg,rgba(0,255,255,.7) 120deg,rgba(255,0,255,0) 180deg,rgba(180,0,255,.6) 240deg,rgba(0,200,255,.5) 300deg,rgba(255,0,255,0) 360deg);animation:utc-holo 3s linear infinite;z-index:0;}
-@keyframes utc-holo{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+/* EPIC */
+.utc-epic{background:linear-gradient(160deg,#0d0020,#1a0040,#2d0060,#1a0045,#080015);border:1px solid rgba(180,0,255,.4);animation:utc-ep 2.2s ease-in-out infinite;}
+@keyframes utc-ep{0%{box-shadow:0 0 0 1px rgba(180,0,255,.3),0 0 18px rgba(180,0,255,.2);}50%{box-shadow:0 0 0 2px rgba(220,0,255,.7),0 0 36px rgba(200,0,255,.5),0 0 70px rgba(180,0,220,.25);}100%{box-shadow:0 0 0 1px rgba(180,0,255,.3),0 0 18px rgba(180,0,255,.2);}}
+.utc-epic::before{content:'';position:absolute;inset:-3px;border-radius:17px;background:conic-gradient(from 0deg,rgba(255,0,255,0),rgba(180,0,255,.9) 60deg,rgba(0,255,255,.7) 120deg,rgba(255,0,255,0) 180deg,rgba(180,0,255,.6) 240deg,rgba(0,200,255,.5) 300deg,rgba(255,0,255,0));animation:utc-holo 3s linear infinite;z-index:0;}
+@keyframes utc-holo{to{transform:rotate(360deg);}}
 .utc-epic::after{content:'';position:absolute;inset:2px;border-radius:13px;background:linear-gradient(160deg,#0d0020,#1a0040,#2d0060,#1a0045,#080015);z-index:1;}
-
-/* ── LEGENDARY ── */
-.utc-legendary{background:linear-gradient(160deg,#1a0400,#3a0a00,#5a1200,#4a0e00,#100200);border:2px solid transparent;animation:utc-fire-glow 1.8s ease-in-out infinite;}
-@keyframes utc-fire-glow{0%{box-shadow:0 0 0 1px rgba(255,80,0,.4),0 0 22px rgba(255,60,0,.3);}33%{box-shadow:0 0 0 2px rgba(255,160,0,.7),0 0 44px rgba(255,120,0,.5);}66%{box-shadow:0 0 0 2px rgba(255,200,0,.6),0 0 36px rgba(255,160,0,.4);}100%{box-shadow:0 0 0 1px rgba(255,80,0,.4),0 0 22px rgba(255,60,0,.3);}}
-.utc-legendary::before{content:'';position:absolute;inset:-2px;border-radius:16px;background:conic-gradient(from 0deg,#ff2200 0deg,#ff6600 30deg,#ffaa00 60deg,#ffd700 90deg,#ffaa00 120deg,#ff6600 150deg,#ff2200 180deg,#ff6600 210deg,#ffcc00 240deg,#ff8800 270deg,#ff3300 300deg,#ff8800 330deg,#ff2200 360deg);animation:utc-fire-spin 2.5s linear infinite;z-index:0;}
-@keyframes utc-fire-spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+/* LEGENDARY */
+.utc-legendary{background:linear-gradient(160deg,#1a0400,#3a0a00,#5a1200,#4a0e00,#100200);border:2px solid transparent;animation:utc-fg 1.8s ease-in-out infinite;}
+@keyframes utc-fg{0%{box-shadow:0 0 0 1px rgba(255,80,0,.4),0 0 22px rgba(255,60,0,.3);}33%{box-shadow:0 0 0 2px rgba(255,160,0,.7),0 0 44px rgba(255,120,0,.5);}66%{box-shadow:0 0 0 2px rgba(255,200,0,.6),0 0 36px rgba(255,160,0,.4);}100%{box-shadow:0 0 0 1px rgba(255,80,0,.4),0 0 22px rgba(255,60,0,.3);}}
+.utc-legendary::before{content:'';position:absolute;inset:-2px;border-radius:16px;background:conic-gradient(from 0deg,#ff2200,#ff6600 30deg,#ffaa00 60deg,#ffd700 90deg,#ffaa00 120deg,#ff6600 150deg,#ff2200 180deg,#ff6600 210deg,#ffcc00 240deg,#ff8800 270deg,#ff3300 300deg,#ff8800 330deg,#ff2200);animation:utc-fs 2.5s linear infinite;z-index:0;}
+@keyframes utc-fs{to{transform:rotate(360deg);}}
 .utc-legendary::after{content:'';position:absolute;inset:2px;border-radius:13px;background:linear-gradient(160deg,#1a0400,#3a0a00,#5a1200,#4a0e00,#100200);z-index:1;}
-
-/* ── CHAMPION — UCL Şampiyonlar Ligi ── */
-.utc-champion{background:linear-gradient(160deg,#000e1a,#001a35,#002855,#001f40,#000e22,#00050f);border:1px solid rgba(0,160,255,.45);animation:utc-champ-glow 2s ease-in-out infinite;}
-@keyframes utc-champ-glow{0%{box-shadow:0 0 0 1px rgba(0,150,255,.3),0 0 20px rgba(0,130,255,.2);}25%{box-shadow:0 0 0 2px rgba(255,215,0,.5),0 0 35px rgba(255,180,0,.3);}50%{box-shadow:0 0 0 2px rgba(0,220,255,.7),0 0 45px rgba(0,200,255,.45),0 0 80px rgba(0,150,255,.2);}75%{box-shadow:0 0 0 2px rgba(255,215,0,.5),0 0 35px rgba(255,180,0,.3);}100%{box-shadow:0 0 0 1px rgba(0,150,255,.3),0 0 20px rgba(0,130,255,.2);}}
-.utc-champion::before{content:'';position:absolute;inset:-3px;border-radius:17px;background:conic-gradient(from 0deg,rgba(0,150,255,0) 0deg,rgba(0,200,255,.9) 45deg,rgba(255,215,0,.8) 90deg,rgba(0,200,255,.5) 135deg,rgba(0,150,255,0) 180deg,rgba(0,200,255,.6) 225deg,rgba(255,215,0,.7) 270deg,rgba(0,200,255,.4) 315deg,rgba(0,150,255,0) 360deg);animation:utc-champ-ring 3s linear infinite;z-index:0;}
-@keyframes utc-champ-ring{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+/* CHAMPION */
+.utc-champion{background:linear-gradient(160deg,#000e1a,#001a35,#002855,#001f40,#000e22,#00050f);border:1px solid rgba(0,160,255,.45);animation:utc-cg 2s ease-in-out infinite;}
+@keyframes utc-cg{0%{box-shadow:0 0 0 1px rgba(0,150,255,.3),0 0 20px rgba(0,130,255,.2);}25%{box-shadow:0 0 0 2px rgba(255,215,0,.5),0 0 35px rgba(255,180,0,.3);}50%{box-shadow:0 0 0 2px rgba(0,220,255,.7),0 0 45px rgba(0,200,255,.45),0 0 80px rgba(0,150,255,.2);}75%{box-shadow:0 0 0 2px rgba(255,215,0,.5),0 0 35px rgba(255,180,0,.3);}100%{box-shadow:0 0 0 1px rgba(0,150,255,.3),0 0 20px rgba(0,130,255,.2);}}
+.utc-champion::before{content:'';position:absolute;inset:-3px;border-radius:17px;background:conic-gradient(from 0deg,rgba(0,150,255,0),rgba(0,200,255,.9) 45deg,rgba(255,215,0,.8) 90deg,rgba(0,200,255,.5) 135deg,rgba(0,150,255,0) 180deg,rgba(0,200,255,.6) 225deg,rgba(255,215,0,.7) 270deg,rgba(0,200,255,.4) 315deg,rgba(0,150,255,0));animation:utc-cr 3s linear infinite;z-index:0;}
+@keyframes utc-cr{to{transform:rotate(360deg);}}
 .utc-champion::after{content:'';position:absolute;inset:2px;border-radius:13px;background:linear-gradient(160deg,#000e1a,#001a35,#002855,#001f40,#000e22,#00050f);z-index:1;}
 .utc-cl-stars{position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:14px;overflow:hidden;}
-.utc-cl-stars::before{content:'✦ ✦ ✦ ✦ ✦ ✦ ✦';position:absolute;bottom:5px;left:0;right:0;font-size:.35rem;letter-spacing:1.5px;text-align:center;color:rgba(255,215,0,.55);text-shadow:0 0 4px rgba(255,215,0,.5);animation:utc-stars-pulse 1.8s ease-in-out infinite;}
-@keyframes utc-stars-pulse{0%,100%{color:rgba(255,215,0,.4);text-shadow:0 0 3px rgba(255,215,0,.3);}50%{color:rgba(255,215,0,.95);text-shadow:0 0 8px rgba(255,215,0,.9),0 0 18px rgba(255,215,0,.5);}}
-.utc-arc-left{position:absolute;left:3px;top:20%;height:60%;width:2px;z-index:3;animation:utc-arc-l 1.3s steps(1) infinite;}
-@keyframes utc-arc-l{0%,55%,100%{opacity:0;}56%{opacity:1;background:linear-gradient(to bottom,transparent,rgba(0,255,255,1),rgba(180,240,255,.8),transparent);}70%{opacity:.3;}75%{opacity:0;}85%{opacity:.8;background:linear-gradient(to bottom,transparent,rgba(100,200,255,.8),transparent);}96%{opacity:0;}}
-.utc-arc-right{position:absolute;right:3px;top:25%;height:50%;width:2px;z-index:3;animation:utc-arc-r 1.7s steps(1) infinite;animation-delay:.4s;}
-@keyframes utc-arc-r{0%,60%,100%{opacity:0;}61%{opacity:1;background:linear-gradient(to bottom,transparent,rgba(150,230,255,.9),rgba(0,200,255,.6),transparent);}73%{opacity:.3;}76%{opacity:0;}88%{opacity:.7;background:linear-gradient(to bottom,transparent,rgba(0,180,255,.8),transparent);}97%{opacity:0;}}
-
-/* ── ELITE ── */
-.utc-elite{background:linear-gradient(160deg,#000814,#001428,#002040,#001830,#000c20,#000408);border:1px solid rgba(0,200,255,.4);animation:utc-elec 2.8s ease-in-out infinite;}
-@keyframes utc-elec{0%{box-shadow:0 0 0 1px rgba(0,200,255,.25),0 0 16px rgba(0,180,255,.15);}30%{box-shadow:0 0 0 2px rgba(0,240,255,.7),0 0 36px rgba(0,220,255,.45);}31%{box-shadow:0 0 0 1px rgba(0,200,255,.35),0 0 18px rgba(0,180,255,.2);}60%{box-shadow:0 0 0 2px rgba(180,220,255,.6),0 0 30px rgba(150,200,255,.35);}61%,100%{box-shadow:0 0 0 1px rgba(0,200,255,.25),0 0 16px rgba(0,180,255,.15);}}
-.utc-elite::before{content:'';position:absolute;inset:-1px;border-radius:15px;background:linear-gradient(0deg,rgba(0,200,255,0) 0%,rgba(0,200,255,.6) 5%,rgba(0,200,255,0) 10%,rgba(0,200,255,0) 25%,rgba(180,220,255,.5) 30%,rgba(0,200,255,0) 35%,rgba(0,200,255,0) 55%,rgba(100,220,255,.4) 60%,rgba(0,200,255,0) 65%,rgba(0,200,255,0) 80%,rgba(0,200,255,.5) 85%,rgba(0,200,255,0) 90%,rgba(0,200,255,0) 100%);animation:utc-static .8s steps(1) infinite;z-index:0;}
-@keyframes utc-static{0%{opacity:.8;}14%{opacity:.3;}28%{opacity:.9;}42%{opacity:.4;}57%{opacity:.7;}71%{opacity:.2;}85%{opacity:.8;}100%{opacity:.5;}}
+.utc-cl-stars::before{content:'✦ ✦ ✦ ✦ ✦ ✦ ✦';position:absolute;bottom:5px;left:0;right:0;font-size:.35rem;letter-spacing:1.5px;text-align:center;color:rgba(255,215,0,.55);animation:utc-sp 1.8s ease-in-out infinite;}
+@keyframes utc-sp{0%,100%{color:rgba(255,215,0,.4);text-shadow:0 0 3px rgba(255,215,0,.3);}50%{color:rgba(255,215,0,.95);text-shadow:0 0 10px rgba(255,215,0,.9),0 0 20px rgba(255,215,0,.5);}}
+.utc-arc-left{position:absolute;left:3px;top:20%;height:60%;width:2px;z-index:3;animation:utc-al 1.3s steps(1) infinite;}
+@keyframes utc-al{0%,55%,100%{opacity:0;}56%{opacity:1;background:linear-gradient(to bottom,transparent,rgba(0,255,255,1),rgba(180,240,255,.8),transparent);}70%{opacity:.3;}75%{opacity:0;}85%{opacity:.8;background:linear-gradient(to bottom,transparent,rgba(100,200,255,.8),transparent);}96%{opacity:0;}}
+.utc-arc-right{position:absolute;right:3px;top:25%;height:50%;width:2px;z-index:3;animation:utc-ar 1.7s steps(1) infinite;animation-delay:.4s;}
+@keyframes utc-ar{0%,60%,100%{opacity:0;}61%{opacity:1;background:linear-gradient(to bottom,transparent,rgba(150,230,255,.9),rgba(0,200,255,.6),transparent);}73%{opacity:.3;}76%{opacity:0;}88%{opacity:.7;background:linear-gradient(to bottom,transparent,rgba(0,180,255,.8),transparent);}97%{opacity:0;}}
+/* ELITE */
+.utc-elite{background:linear-gradient(160deg,#000814,#001428,#002040,#001830,#000c20,#000408);border:1px solid rgba(0,200,255,.4);animation:utc-el 2.8s ease-in-out infinite;}
+@keyframes utc-el{0%{box-shadow:0 0 0 1px rgba(0,200,255,.25),0 0 16px rgba(0,180,255,.15);}30%{box-shadow:0 0 0 2px rgba(0,240,255,.7),0 0 36px rgba(0,220,255,.45);}31%{box-shadow:0 0 0 1px rgba(0,200,255,.35);}60%{box-shadow:0 0 0 2px rgba(180,220,255,.6),0 0 30px rgba(150,200,255,.35);}61%,100%{box-shadow:0 0 0 1px rgba(0,200,255,.25),0 0 16px rgba(0,180,255,.15);}}
+.utc-elite::before{content:'';position:absolute;inset:-1px;border-radius:15px;background:linear-gradient(0deg,rgba(0,200,255,0),rgba(0,200,255,.6) 5%,rgba(0,200,255,0) 10%,rgba(0,200,255,0) 25%,rgba(180,220,255,.5) 30%,rgba(0,200,255,0) 35%,rgba(0,200,255,0) 55%,rgba(100,220,255,.4) 60%,rgba(0,200,255,0) 65%,rgba(0,200,255,0) 80%,rgba(0,200,255,.5) 85%,rgba(0,200,255,0));animation:utc-st .8s steps(1) infinite;z-index:0;}
+@keyframes utc-st{0%{opacity:.8;}14%{opacity:.3;}28%{opacity:.9;}42%{opacity:.4;}57%{opacity:.7;}71%{opacity:.2;}85%{opacity:.8;}100%{opacity:.5;}}
 .utc-elite::after{content:'';position:absolute;inset:1px;border-radius:13px;background:linear-gradient(160deg,#000814,#001428,#002040,#001830,#000c20,#000408);z-index:1;}
-
-/* ── Ortak elementler ── */
-.utc-stripe{width:calc(100% + 14px);height:3px;margin:-8px -7px 7px;border-radius:14px 14px 0 0;background-size:200%;animation:utc-str 2s linear infinite;position:relative;z-index:5;}
-@keyframes utc-str{0%{background-position:0%;}100%{background-position:200%;}}
+/* Ortak */
+.utc-stripe{width:calc(100% + 14px);height:3px;margin:-8px -7px 7px;border-radius:14px 14px 0 0;background-size:200%;animation:utc-ss 2s linear infinite;position:relative;z-index:5;}
+@keyframes utc-ss{to{background-position:200%;}}
 .utc-epic .utc-stripe{background:linear-gradient(90deg,#ff00ff,#8800ff,#00ffff,#8800ff,#ff00ff);}
 .utc-legendary .utc-stripe{background:linear-gradient(90deg,#ff2200,#ff8800,#ffd700,#ffaa00,#ff4400,#ffd700,#ff2200);}
 .utc-champion .utc-stripe{background:linear-gradient(90deg,#0055cc,#00aaff,#ffd700,#00ccff,#ffd700,#0088ff,#0055cc);}
 .utc-elite .utc-stripe{background:linear-gradient(90deg,#004488,#00aaff,#00ffff,#aaddff,#00ccff,#00aaff,#004488);}
-
-.utc-lbl{font-size:.42rem;font-weight:900;letter-spacing:1.5px;padding:1px 7px;border-radius:20px;border:1px solid;text-align:center;text-transform:uppercase;position:relative;z-index:5;margin-bottom:2px;font-family:'DM Sans',sans-serif;}
+.utc-lbl{font-size:.42rem;font-weight:900;letter-spacing:1.5px;padding:1px 7px;border-radius:20px;border:1px solid;text-align:center;text-transform:uppercase;position:relative;z-index:5;margin-bottom:2px;}
 .utc-epic .utc-lbl{color:#e080ff;border-color:#e080ff55;background:rgba(180,0,255,.18);}
 .utc-legendary .utc-lbl{color:#ffaa44;border-color:#ffaa4455;background:rgba(255,100,0,.18);}
 .utc-champion .utc-lbl{color:#00ccff;border-color:#00ccff55;background:rgba(0,150,255,.18);}
 .utc-elite .utc-lbl{color:#00dfff;border-color:#00dfff55;background:rgba(0,180,255,.15);}
-
 .utc-rat{font-family:'Bebas Neue',Impact,cursive;font-size:2rem;line-height:1;letter-spacing:-1px;position:relative;z-index:5;}
-.utc-epic .utc-rat{color:#e080ff;text-shadow:0 0 16px rgba(200,0,255,.9),0 0 32px rgba(180,0,220,.5);}
-.utc-legendary .utc-rat{color:#ffcc44;text-shadow:0 0 16px rgba(255,180,0,.9),0 0 32px rgba(255,120,0,.5);}
-.utc-champion .utc-rat{color:#00e0ff;text-shadow:0 0 16px rgba(0,200,255,.9),0 0 32px rgba(0,150,255,.5),0 0 48px rgba(255,215,0,.2);}
-.utc-elite .utc-rat{color:#00dfff;text-shadow:0 0 16px rgba(0,220,255,.9),0 0 32px rgba(0,180,220,.5);}
-
-.utc-pos{font-size:.46rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;opacity:.75;margin-top:1px;position:relative;z-index:5;font-family:'DM Sans',sans-serif;}
+.utc-epic .utc-rat{color:#e080ff;text-shadow:0 0 16px rgba(200,0,255,.9);}
+.utc-legendary .utc-rat{color:#ffcc44;text-shadow:0 0 16px rgba(255,180,0,.9);}
+.utc-champion .utc-rat{color:#00e0ff;text-shadow:0 0 16px rgba(0,200,255,.9),0 0 48px rgba(255,215,0,.2);}
+.utc-elite .utc-rat{color:#00dfff;text-shadow:0 0 16px rgba(0,220,255,.9);}
+.utc-pos{font-size:.46rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;opacity:.7;margin-top:1px;position:relative;z-index:5;}
 .utc-epic .utc-pos{color:#cc55ee;}.utc-legendary .utc-pos{color:#dd8822;}.utc-champion .utc-pos{color:#0099dd;}.utc-elite .utc-pos{color:#0099cc;}
-
-.utc-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:4px 0 3px;position:relative;z-index:5;animation:utc-av-spin 6s linear infinite;flex-shrink:0;}
-@keyframes utc-av-spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+.utc-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:4px 0 3px;position:relative;z-index:5;animation:utc-av 6s linear infinite;flex-shrink:0;}
+@keyframes utc-av{to{transform:rotate(360deg);}}
 .utc-epic .utc-av{background:conic-gradient(from 0deg,#ff00ff,#8800ff,#00ffff,#8800ff,#ff00ff);}
 .utc-legendary .utc-av{background:conic-gradient(from 0deg,#ff2200,#ff8800,#ffd700,#ff6600,#ff2200);}
 .utc-champion .utc-av{background:conic-gradient(from 0deg,#003399,#0066ff,#00aaff,#ffd700,#00aaff,#0066ff,#003399);}
 .utc-elite .utc-av{background:conic-gradient(from 0deg,#004488,#00aaff,#00ffff,#aaddff,#00aaff,#004488);}
-
 .utc-av-i{position:absolute;inset:3px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',Impact,cursive;font-size:.85rem;font-weight:900;}
 .utc-epic .utc-av-i{background:#0d0020;color:#e080ff;}.utc-legendary .utc-av-i{background:#1a0400;color:#ffcc44;}.utc-champion .utc-av-i{background:#000e1a;color:#00ccff;}.utc-elite .utc-av-i{background:#000814;color:#00dfff;}
-
 .utc-name{font-family:'Bebas Neue',Impact,cursive;font-size:.68rem;letter-spacing:1px;text-transform:uppercase;text-align:center;position:relative;z-index:5;margin-bottom:4px;}
 .utc-epic .utc-name{color:#e0a0ff;}.utc-legendary .utc-name{color:#ffcc88;}.utc-champion .utc-name{color:#80ccff;}.utc-elite .utc-name{color:#80ddff;}
-
 .utc-div{width:100%;height:1px;margin:3px 0;position:relative;z-index:5;}
 .utc-epic .utc-div{background:linear-gradient(90deg,transparent,rgba(200,0,255,.7),transparent);}
 .utc-legendary .utc-div{background:linear-gradient(90deg,transparent,rgba(255,160,0,.7),transparent);}
 .utc-champion .utc-div{background:linear-gradient(90deg,transparent,rgba(0,180,255,.6),rgba(255,215,0,.5),transparent);}
 .utc-elite .utc-div{background:linear-gradient(90deg,transparent,rgba(0,200,255,.7),transparent);}
-
 .utc-bons{width:100%;padding:2px 5px;border-radius:5px;text-align:center;font-family:'Bebas Neue',Impact,cursive;font-size:.72rem;letter-spacing:.5px;position:relative;z-index:5;}
 .utc-epic .utc-bons{color:#e080ff;background:rgba(180,0,255,.2);}.utc-legendary .utc-bons{color:#ffcc44;background:rgba(255,140,0,.2);}.utc-champion .utc-bons{color:#00ccff;background:rgba(0,150,255,.18);}.utc-elite .utc-bons{color:#00dfff;background:rgba(0,180,255,.15);}
-
-/* ── Partiküller ── */
+/* Partiküller */
 .utc-pts{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden;border-radius:14px;}
-.utc-pts span{position:absolute;border-radius:50%;animation:utc-pfloat linear infinite;}
-@keyframes utc-pfloat{0%{bottom:-4px;opacity:0;}10%{opacity:1;}80%{opacity:.7;}100%{bottom:105%;opacity:0;}}
+.utc-pts span{position:absolute;border-radius:50%;animation:utc-pf linear infinite;}
+@keyframes utc-pf{0%{bottom:-4px;opacity:0;}10%{opacity:1;}80%{opacity:.7;}100%{bottom:105%;opacity:0;}}
 .utc-epic .utc-pts span:nth-child(1){left:8%;width:3px;height:3px;background:#ff00ff;animation-duration:2.4s;}
 .utc-epic .utc-pts span:nth-child(2){left:22%;width:2px;height:2px;background:#cc00ff;animation-duration:3s;animation-delay:.5s;}
 .utc-epic .utc-pts span:nth-child(3){left:38%;width:3px;height:3px;background:#00ffff;animation-duration:2.1s;animation-delay:1s;}
 .utc-epic .utc-pts span:nth-child(4){left:55%;width:2px;height:2px;background:#ff00cc;animation-duration:2.8s;animation-delay:.3s;}
 .utc-epic .utc-pts span:nth-child(5){left:70%;width:3px;height:3px;background:#aa00ff;animation-duration:2.5s;animation-delay:.8s;}
 .utc-epic .utc-pts span:nth-child(6){left:85%;width:2px;height:2px;background:#ff44ff;animation-duration:3.2s;animation-delay:1.4s;}
-.fire-pts span{border-radius:50% 50% 35% 35%!important;animation:utc-fire-rise linear infinite!important;}
-@keyframes utc-fire-rise{0%{bottom:-4px;opacity:0;transform:scaleX(1);}15%{opacity:1;}50%{opacity:.8;transform:scaleX(.7);}85%{opacity:.3;}100%{bottom:108%;opacity:0;transform:scaleX(.4);}}
+.fire-pts span{border-radius:50% 50% 35% 35%!important;animation:utc-fr linear infinite!important;}
+@keyframes utc-fr{0%{bottom:-4px;opacity:0;}15%{opacity:1;}50%{opacity:.8;transform:scaleX(.7);}85%{opacity:.3;}100%{bottom:108%;opacity:0;transform:scaleX(.4);}}
 .utc-legendary .utc-pts span:nth-child(1){left:10%;width:4px;height:7px;background:linear-gradient(to top,#ff2200,#ff8800);animation-duration:1.3s;}
 .utc-legendary .utc-pts span:nth-child(2){left:25%;width:3px;height:5px;background:linear-gradient(to top,#ff4400,#ffcc00);animation-duration:1.6s;animation-delay:.25s;}
 .utc-legendary .utc-pts span:nth-child(3){left:42%;width:4px;height:6px;background:linear-gradient(to top,#ff2200,#ff9900);animation-duration:1.2s;animation-delay:.5s;}
 .utc-legendary .utc-pts span:nth-child(4){left:58%;width:3px;height:5px;background:linear-gradient(to top,#ff5500,#ffdd00);animation-duration:1.7s;animation-delay:.1s;}
 .utc-legendary .utc-pts span:nth-child(5){left:74%;width:4px;height:7px;background:linear-gradient(to top,#ff3300,#ffaa00);animation-duration:1.4s;animation-delay:.7s;}
 .utc-legendary .utc-pts span:nth-child(6){left:88%;width:3px;height:5px;background:linear-gradient(to top,#ff1100,#ffcc00);animation-duration:1.9s;animation-delay:.35s;}
-.champ-pts span{animation:utc-champ-spark linear infinite!important;}
-@keyframes utc-champ-spark{0%{bottom:-3px;opacity:0;transform:scale(1) rotate(0deg);}8%{opacity:1;}50%{opacity:.9;transform:scale(.8) rotate(180deg) translateX(3px);}90%{opacity:.2;}100%{bottom:110%;opacity:0;transform:scale(.4) rotate(360deg);}}
-.utc-champion .utc-pts span:nth-child(1){left:5%;width:3px;height:3px;background:#00ccff;border-radius:50%;animation-duration:1.6s;}
+.champ-pts span{animation:utc-cs linear infinite!important;}
+@keyframes utc-cs{0%{bottom:-3px;opacity:0;}8%{opacity:1;}50%{opacity:.9;transform:rotate(180deg) translateX(3px);}90%{opacity:.2;}100%{bottom:110%;opacity:0;transform:rotate(360deg);}}
+.utc-champion .utc-pts span:nth-child(1){left:5%;width:3px;height:3px;background:#00ccff;animation-duration:1.6s;}
 .utc-champion .utc-pts span:nth-child(2){left:18%;width:4px;height:4px;background:#ffd700;border-radius:1px;animation-duration:2.2s;animation-delay:.3s;}
-.utc-champion .utc-pts span:nth-child(3){left:35%;width:3px;height:3px;background:#00eeff;border-radius:50%;animation-duration:1.8s;animation-delay:.7s;}
+.utc-champion .utc-pts span:nth-child(3){left:35%;width:3px;height:3px;background:#00eeff;animation-duration:1.8s;animation-delay:.7s;}
 .utc-champion .utc-pts span:nth-child(4){left:52%;width:4px;height:4px;background:#ffd700;border-radius:1px;animation-duration:2s;animation-delay:.15s;}
-.utc-champion .utc-pts span:nth-child(5){left:68%;width:3px;height:3px;background:#80dfff;border-radius:50%;animation-duration:1.5s;animation-delay:.9s;}
+.utc-champion .utc-pts span:nth-child(5){left:68%;width:3px;height:3px;background:#80dfff;animation-duration:1.5s;animation-delay:.9s;}
 .utc-champion .utc-pts span:nth-child(6){left:82%;width:4px;height:4px;background:#ffd700;border-radius:1px;animation-duration:2.4s;animation-delay:.5s;}
-.utc-champion .utc-pts span:nth-child(7){left:93%;width:3px;height:3px;background:#00ccff;border-radius:50%;animation-duration:1.9s;animation-delay:1.2s;}
-.bolt-pts span{width:1.5px!important;border-radius:0!important;background:linear-gradient(to bottom,transparent,rgba(0,220,255,.9),rgba(180,240,255,.8),transparent)!important;animation:utc-bolt linear infinite!important;}
-@keyframes utc-bolt{0%,75%,100%{opacity:0;top:-5%;}76%{opacity:1;top:8%;}94%{opacity:.8;top:100%;}95%{opacity:0;}}
+.utc-champion .utc-pts span:nth-child(7){left:93%;width:3px;height:3px;background:#00ccff;animation-duration:1.9s;animation-delay:1.2s;}
+.bolt-pts span{width:1.5px!important;border-radius:0!important;background:linear-gradient(to bottom,transparent,rgba(0,220,255,.9),rgba(180,240,255,.8),transparent)!important;animation:utc-bl linear infinite!important;}
+@keyframes utc-bl{0%,75%,100%{opacity:0;top:-5%;}76%{opacity:1;top:8%;}94%{opacity:.8;top:100%;}95%{opacity:0;}}
 .utc-elite .utc-pts span:nth-child(1){left:15%;height:35%;animation-duration:1.9s;animation-delay:.1s;}
 .utc-elite .utc-pts span:nth-child(2){left:35%;height:50%;animation-duration:2.5s;animation-delay:.8s;}
 .utc-elite .utc-pts span:nth-child(3){left:55%;height:40%;animation-duration:1.7s;animation-delay:.4s;}
 .utc-elite .utc-pts span:nth-child(4){left:75%;height:45%;animation-duration:2.2s;animation-delay:1.2s;}
 .utc-elite .utc-pts span:nth-child(5){left:88%;height:30%;animation-duration:1.5s;animation-delay:.6s;}
-
-/* Shimmer */
 .utc-shim{position:absolute;top:0;left:-140%;width:70%;height:100%;pointer-events:none;z-index:3;}
-.utc-epic .utc-shim{background:linear-gradient(105deg,transparent 25%,rgba(255,255,255,.18) 48%,rgba(200,100,255,.25) 52%,transparent 70%);animation:utc-shim-e 3.5s ease-in-out infinite;}
-.utc-legendary .utc-shim{background:linear-gradient(110deg,transparent 25%,rgba(255,220,0,.28) 48%,rgba(255,255,200,.35) 52%,transparent 70%);animation:utc-shim-l 2.8s ease-in-out infinite;}
-@keyframes utc-shim-e{0%{left:-140%;}45%{left:160%;}100%{left:160%;}}
-@keyframes utc-shim-l{0%{left:-140%;}40%{left:160%;}100%{left:160%;}}
-
-/* Scan */
-.utc-scan{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,220,255,.3) 20%,rgba(0,255,255,.9) 50%,rgba(0,220,255,.3) 80%,transparent);box-shadow:0 0 8px rgba(0,220,255,.8),0 0 16px rgba(0,200,255,.4);animation:utc-laser 2.4s ease-in-out infinite;z-index:6;pointer-events:none;}
-@keyframes utc-laser{0%{top:-3px;opacity:0;}5%{opacity:1;}92%{opacity:1;}100%{top:calc(100% + 3px);opacity:0;}}
+.utc-epic .utc-shim{background:linear-gradient(105deg,transparent 25%,rgba(255,255,255,.18) 48%,rgba(200,100,255,.25) 52%,transparent 70%);animation:utc-she 3.5s ease-in-out infinite;}
+.utc-legendary .utc-shim{background:linear-gradient(110deg,transparent 25%,rgba(255,220,0,.28) 48%,rgba(255,255,200,.35) 52%,transparent 70%);animation:utc-shl 2.8s ease-in-out infinite;}
+@keyframes utc-she{0%{left:-140%;}45%{left:160%;}100%{left:160%;}}
+@keyframes utc-shl{0%{left:-140%;}40%{left:160%;}100%{left:160%;}}
+.utc-scan{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,220,255,.3) 20%,rgba(0,255,255,.9) 50%,rgba(0,220,255,.3) 80%,transparent);box-shadow:0 0 8px rgba(0,220,255,.8),0 0 16px rgba(0,200,255,.4);animation:utc-lz 2.4s ease-in-out infinite;z-index:6;pointer-events:none;}
+@keyframes utc-lz{0%{top:-3px;opacity:0;}5%{opacity:1;}92%{opacity:1;}100%{top:calc(100% + 3px);opacity:0;}}
 
 
 
@@ -2489,6 +2470,71 @@ function buildAdminParamsHTML(u){
     </div>`).join('')}
     <button class="pf-save-btn" style="margin-top:12px" onclick="saveProfile()">💾 Kaydet</button>
   </div>`;
+}
+
+
+/* ── ROZET Tanımları ── */
+const BADGE_DEFS=[
+  {id:'motm1',icon:'🌟',label:'İlk MOTM',desc:'İlk kez Maçın Adamı seçildin'},
+  {id:'motm5',icon:'⭐',label:'5x MOTM',desc:'5 kez Maçın Adamı seçildin'},
+  {id:'motm10',icon:'💫',label:'10x MOTM',desc:'10 kez Maçın Adamı seçildin'},
+  {id:'win1',icon:'🏆',label:'İlk Galibiyet',desc:'İlk maçını kazandın'},
+  {id:'win10',icon:'🥇',label:'10 Galibiyet',desc:'10 maç kazandın'},
+  {id:'win25',icon:'👑',label:'25 Galibiyet',desc:'25 maç kazandın'},
+  {id:'streak3',icon:'🔥',label:'3 Seri',desc:'3 üst üste galibiyet'},
+  {id:'streak5',icon:'⚡',label:'5 Seri',desc:'5 üst üste galibiyet'},
+  {id:'streak10',icon:'💥',label:'Şampiyon Serisi',desc:'10 üst üste galibiyet'},
+  {id:'match10',icon:'⚽',label:'10 Maç',desc:'10 maç oynadın'},
+  {id:'match25',icon:'🎮',label:'25 Maç',desc:'25 maç oynadın'},
+  {id:'match50',icon:'🎯',label:'50 Maç',desc:'50 maç oynadın'},
+  {id:'bons10m',icon:'💰',label:'10M Bonservis',desc:'Bonservis değerin 10M geçti'},
+  {id:'bons30m',icon:'💎',label:'30M Bonservis',desc:'Bonservis değerin 30M geçti'},
+  {id:'bons50m',icon:'💸',label:'50M Bonservis',desc:'Bonservis değerin 50M geçti'},
+  {id:'rating70',icon:'📈',label:'Rating 70+',desc:'Genel reytingin 70 oldu'},
+  {id:'rating80',icon:'🚀',label:'Rating 80+',desc:'Genel reytingin 80 oldu'},
+  {id:'rating90',icon:'🦅',label:'Rating 90+',desc:'Genel reytingin 90 oldu'},
+  {id:'wr60',icon:'📊',label:'%60 Oran',desc:'Kazanma oranın %60 geçti'},
+  {id:'wr75',icon:'🎖️',label:'%75 Oran',desc:'Kazanma oranın %75 geçti'},
+  {id:'epic',icon:'💜',label:'Epic Kart',desc:'Epic tier kartına ulaştın'},
+  {id:'legendary',icon:'🔥',label:'Legendary Kart',desc:'Legendary tier kartına ulaştın'},
+  {id:'champion',icon:'🏅',label:'Champion Kart',desc:'Champion tier kartına ulaştın'},
+  {id:'elite',icon:'⚡',label:'Elite Kart',desc:'Elite tier kartına ulaştın'},
+  {id:'allrounder',icon:'🌈',label:'Her Mevki',desc:'Tüm mevkilerde oynadın'},
+];
+
+function getUserBadges(u){
+  const r=calcRating(u,u.pos)||0;
+  const bv=(u.bonservisOverride||calcBonservisRaw(r,u.pos))||0;
+  const t=cardTier(r,u);
+  return BADGE_DEFS.map(def=>{
+    let earned=false;
+    if(def.id==='motm1')   earned=(u.motm||0)>=1;
+    if(def.id==='motm5')   earned=(u.motm||0)>=5;
+    if(def.id==='motm10')  earned=(u.motm||0)>=10;
+    if(def.id==='win1')    earned=(u.wins||0)>=1;
+    if(def.id==='win10')   earned=(u.wins||0)>=10;
+    if(def.id==='win25')   earned=(u.wins||0)>=25;
+    if(def.id==='streak3') earned=(u.winStreak||0)>=3;
+    if(def.id==='streak5') earned=(u.winStreak||0)>=5;
+    if(def.id==='streak10')earned=(u.winStreak||0)>=10;
+    if(def.id==='match10') earned=(u.matches||0)>=10;
+    if(def.id==='match25') earned=(u.matches||0)>=25;
+    if(def.id==='match50') earned=(u.matches||0)>=50;
+    if(def.id==='bons10m') earned=bv>=10000000;
+    if(def.id==='bons30m') earned=bv>=30000000;
+    if(def.id==='bons50m') earned=bv>=50000000;
+    if(def.id==='rating70')earned=r>=70;
+    if(def.id==='rating80')earned=r>=80;
+    if(def.id==='rating90')earned=r>=90;
+    if(def.id==='wr60')    earned=(u.matches||0)>0&&Math.round((u.wins||0)/(u.matches||1)*100)>=60;
+    if(def.id==='wr75')    earned=(u.matches||0)>0&&Math.round((u.wins||0)/(u.matches||1)*100)>=75;
+    if(def.id==='epic')    earned=t==='tier-epic';
+    if(def.id==='legendary')earned=t==='tier-legend';
+    if(def.id==='champion')earned=t==='tier-champion';
+    if(def.id==='elite')   earned=t==='tier-elite';
+    if(def.id==='allrounder')earned=false;
+    return {...def,earned};
+  });
 }
 
 function buildPlayerProfileHTML(u, isOwn){
@@ -4711,10 +4757,10 @@ function buildFC2Card(user,mevki){
 function renderProfile(){
   const el=document.getElementById('profile-content');if(!el)return;
   let u=currentUser;
-  if(!u){el.innerHTML='<div style="padding:40px 16px;text-align:center;color:#446044;font-family:\'Bebas Neue\',cursive;letter-spacing:1px">Giriş yapman gerekiyor</div>';return;}
+  if(!u){el.innerHTML='<div style="padding:40px 16px;text-align:center;color:#446044;font-family:\'Bebas Neue\',cursive">Giriş yapman gerekiyor</div>';return;}
   if(typeof _users!=='undefined'&&_users){const fresh=Object.values(_users).find(x=>x.id===u.id);if(fresh){u=fresh;currentUser=fresh;}}
   el.innerHTML=buildPlayerProfileHTML(u,true);
-  if(isAdmin(u)){const s=el.querySelector('#pv2-params-sec');if(s)s.innerHTML=buildAdminParamsHTML(u);}
+  if(isAdmin(u)){const ps=el.querySelector('#pv2-params-sec');if(ps)ps.innerHTML=buildAdminParamsHTML(u);}
 }
 function updateProfilePreview(){
   const el=document.getElementById('profile-content');if(!el)return;
@@ -5575,26 +5621,20 @@ initApp();
           <p class="patch-slide-desc">Sıradanlık bitti. Yeni Tier Kart sistemiyle sahadaki başarın artık doğrudan oyuncu kartının görünümüne yansıyor. Ne kadar iyi oynarsan, profiline o kadar görkemli bir kart hükmedecek!</p>
         </div>
 
-        <!-- SLAYT 2 — EPIC CARD -->
+        <!-- SLAYT 2 — EPIC -->
         <div class="patch-slide card-slide">
           <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center;width:100%">YENİ ULTRA-PREMİUM TİER KARTLARI</div>
           <div class="ps-card-wrap">
             <div class="utc utc-epic">
               <div class="utc-pts"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-              <div class="utc-shim"></div>
-              <div class="utc-stripe"></div>
-              <div class="utc-lbl">★ EPIC ★</div>
-              <div class="utc-rat">94</div>
-              <div class="utc-pos">SANTRAFOR</div>
+              <div class="utc-shim"></div><div class="utc-stripe"></div>
+              <div class="utc-lbl">★ EPIC ★</div><div class="utc-rat">94</div><div class="utc-pos">SANTRAFOR</div>
               <div class="utc-av"><div class="utc-av-i">FS</div></div>
-              <div class="utc-name">Furkan S.</div>
-              <div class="utc-div"></div>
-              <div class="utc-bons">68,4 M ₺</div>
+              <div class="utc-name">Furkan S.</div><div class="utc-div"></div><div class="utc-bons">68,4 M ₺</div>
             </div>
             <div class="ps-card-info">
               <div class="ps-info-title" style="color:#e080ff">💜 Epic Kart</div>
-              <div class="ps-info-cond">
-                <div class="ps-info-cond-icon">🏆</div>
+              <div class="ps-info-cond"><div class="ps-info-cond-icon">🏆</div>
                 <div class="ps-info-cond-text"><strong>5× Maçın Adamı</strong> Dönen holografik hale, mor ışık tozları ve shimmer efektiyle efsaneye dön!</div>
               </div>
               <ul class="ps-info-efx">
@@ -5607,99 +5647,81 @@ initApp();
           </div>
         </div>
 
-        <!-- SLAYT 3 — LEGENDARY CARD -->
+        <!-- SLAYT 3 — LEGENDARY -->
         <div class="patch-slide card-slide">
           <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center;width:100%">YENİ ULTRA-PREMİUM TİER KARTLARI</div>
           <div class="ps-card-wrap">
             <div class="utc utc-legendary">
               <div class="utc-pts fire-pts"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-              <div class="utc-shim"></div>
-              <div class="utc-stripe"></div>
-              <div class="utc-lbl">🔥 LEGENDARY</div>
-              <div class="utc-rat">91</div>
-              <div class="utc-pos">STOPER</div>
+              <div class="utc-shim"></div><div class="utc-stripe"></div>
+              <div class="utc-lbl">🔥 LEGENDARY</div><div class="utc-rat">91</div><div class="utc-pos">STOPER</div>
               <div class="utc-av"><div class="utc-av-i">AK</div></div>
-              <div class="utc-name">Ahmet K.</div>
-              <div class="utc-div"></div>
-              <div class="utc-bons">52,1 M ₺</div>
+              <div class="utc-name">Ahmet K.</div><div class="utc-div"></div><div class="utc-bons">52,1 M ₺</div>
             </div>
             <div class="ps-card-info">
               <div class="ps-info-title" style="color:#ffaa44">🔥 Legendary Kart</div>
-              <div class="ps-info-cond">
-                <div class="ps-info-cond-icon">💰</div>
-                <div class="ps-info-cond-text"><strong>Bonservis 50.000.000 ₺+</strong> Dönen ateş borderi, alev partikülleri ve altın shine — milyonerlerin kartı!</div>
+              <div class="ps-info-cond"><div class="ps-info-cond-icon">💰</div>
+                <div class="ps-info-cond-text"><strong>Bonservis 50M ₺+</strong> Dönen ateş borderi, alev partikülleri ve altın shine — milyonerlerin kartı!</div>
               </div>
               <ul class="ps-info-efx">
-                <li>Canlı dönen ateş border animasyonu</li>
-                <li>Kırmızı→turuncu→altın alev partikülleri</li>
-                <li>Lüks altın shine sweep efekti</li>
-                <li>Sürekli ateş kor parıltısı</li>
+                <li>Canlı dönen ateş border</li>
+                <li>Kırmızı→turuncu→altın alevler</li>
+                <li>Lüks altın shine sweep</li>
+                <li>Kor ateş parıltısı</li>
               </ul>
             </div>
           </div>
         </div>
 
-        <!-- SLAYT 4 — ELITE CARD -->
+        <!-- SLAYT 4 — ELITE -->
         <div class="patch-slide card-slide">
           <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center;width:100%">YENİ ULTRA-PREMİUM TİER KARTLARI</div>
           <div class="ps-card-wrap">
             <div class="utc utc-elite">
               <div class="utc-pts bolt-pts"><span></span><span></span><span></span><span></span><span></span></div>
-              <div class="utc-scan"></div>
-              <div class="utc-stripe"></div>
-              <div class="utc-lbl">⚡ ELİTE</div>
-              <div class="utc-rat">93</div>
-              <div class="utc-pos">KALECİ</div>
+              <div class="utc-scan"></div><div class="utc-stripe"></div>
+              <div class="utc-lbl">⚡ ELİTE</div><div class="utc-rat">93</div><div class="utc-pos">KALECİ</div>
               <div class="utc-av"><div class="utc-av-i">MY</div></div>
-              <div class="utc-name">Mehmet Y.</div>
-              <div class="utc-div"></div>
-              <div class="utc-bons">48,6 M ₺</div>
+              <div class="utc-name">Mehmet Y.</div><div class="utc-div"></div><div class="utc-bons">48,6 M ₺</div>
             </div>
             <div class="ps-card-info">
               <div class="ps-info-title" style="color:#00dfff">⚡ Elite Kart</div>
-              <div class="ps-info-cond">
-                <div class="ps-info-cond-icon">📈</div>
-                <div class="ps-info-cond-text"><strong>Genel Reyting 90+</strong> Lazer tarama çizgisi ve elektrik bolt efektleriyle sahanın hakimiyetini ilan et!</div>
+              <div class="ps-info-cond"><div class="ps-info-cond-icon">📈</div>
+                <div class="ps-info-cond-text"><strong>Genel Reyting 90+</strong> Lazer tarama ve elektrik bolt efektleriyle sahanın hakimiyetini ilan et!</div>
               </div>
               <ul class="ps-info-efx">
-                <li>Sci-Fi lazer tarama animasyonu</li>
+                <li>Sci-Fi lazer tarama çizgisi</li>
                 <li>Statik elektrik kenar efekti</li>
-                <li>Buz mavisi elektrik bolt partikülleri</li>
+                <li>Buz mavisi bolt partikülleri</li>
                 <li>Platin elektrik glow nabzı</li>
               </ul>
             </div>
           </div>
         </div>
 
-        <!-- SLAYT 5 — CHAMPION CARD -->
+        <!-- SLAYT 5 — CHAMPION -->
         <div class="patch-slide card-slide">
           <div style="font-family:'Bebas Neue',cursive;font-size:.7rem;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:10px;text-align:center;width:100%">YENİ ULTRA-PREMİUM TİER KARTLARI</div>
           <div class="ps-card-wrap">
             <div class="utc utc-champion">
               <div class="utc-pts champ-pts"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
               <div class="utc-cl-stars"></div>
-              <div class="utc-arc-left"></div>
-              <div class="utc-arc-right"></div>
+              <div class="utc-arc-left"></div><div class="utc-arc-right"></div>
               <div class="utc-stripe"></div>
-              <div class="utc-lbl">🏆 CHAMPION</div>
-              <div class="utc-rat">87</div>
-              <div class="utc-pos">SAĞ KANAT</div>
+              <div class="utc-lbl">🏆 CHAMPION</div><div class="utc-rat">87</div><div class="utc-pos">SAĞ KANAT</div>
               <div class="utc-av"><div class="utc-av-i">ET</div></div>
-              <div class="utc-name">Emre T.</div>
-              <div class="utc-div"></div>
-              <div class="utc-bons">38,2 M ₺</div>
+              <div class="utc-name">Emre T.</div><div class="utc-div"></div><div class="utc-bons">38,2 M ₺</div>
             </div>
             <div class="ps-card-info">
               <div class="ps-info-title" style="color:#00ccff">🏆 Champion Kart</div>
-              <div class="ps-info-cond">
-                <div class="ps-info-cond-icon">⚡</div>
+              <div class="ps-info-cond"><div class="ps-info-cond-icon">⚡</div>
                 <div class="ps-info-cond-text"><strong>10 Maç Galibiyet Serisi</strong> UCL yıldız halkası, elektrik ark çakmaları ve mavi-altın enerji dalgasıyla yenilmezliğini ilan et!</div>
               </div>
               <ul class="ps-info-efx">
-                <li>Şampiyonlar Ligi mavi-altın dönen halka</li>
-                <li>Elektrik ark çakmaları (sol+sağ kenar)</li>
-                <li>UCL yıldız satırı — nabız atan altın glow</li>
-                <li>Mavi+altın elektrik & konfeti partikülleri</li>
+                <li>Şampiyonlar Ligi mavi-altın halka</li>
+                <li>Sol+sağ elektrik ark çakmaları</li>
+                <li>UCL altın yıldız satırı — nabız atan glow</li>
+                <li>Mavi+altın elektrik partikülleri</li>
               </ul>
             </div>
           </div>
