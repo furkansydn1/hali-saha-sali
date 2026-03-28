@@ -3,1220 +3,1397 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hastane Turnuvası 2026 — Turnuva Merkezi</title>
+<title>Turnuva Merkezi 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Exo+2:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,700&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════════
    RESET
-═══════════════════════════════════════════════════════════════ */
+════════════════════════════════════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-button{font-family:inherit;cursor:pointer;outline:none}
+button{font-family:inherit;cursor:pointer;outline:none;background:none;border:none}
 
-/* ═══════════════════════════════════════════════════════════════
-   DESIGN TOKENS
-═══════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════
+   TOKENS
+════════════════════════════════════════════════════════════ */
 :root{
-  /* Backgrounds */
-  --bg0:#01030d;
-  --bg1:#030818;
-  --bg2:#050d20;
-  --bg3:#071228;
-  --glass:rgba(6,12,32,.72);
-  --glass2:rgba(4,9,24,.8);
-
-  /* Brand colours */
+  --void:#01030e;
+  --deep:#030818;
+  --dark:#050d1e;
+  --glass:rgba(5,11,30,.75);
+  --glass2:rgba(3,7,22,.82);
   --cyan:#00d8ff;
   --cyan2:#00a8cc;
-  --cyan3:rgba(0,216,255,.14);
+  --cyan3:rgba(0,216,255,.13);
   --gold:#ffd84d;
-  --gold2:rgba(255,216,77,.12);
-  --silver:#c6d6ea;
-  --plat:#dce8f6;
-  --white:rgba(255,255,255,.9);
-
-  /* Borders / glows */
-  --b0:rgba(0,216,255,.06);
-  --b1:rgba(0,216,255,.14);
-  --b2:rgba(0,216,255,.32);
-  --b3:rgba(0,216,255,.55);
-  --g-xs:0 0 6px rgba(0,216,255,.4);
-  --g-sm:0 0 14px rgba(0,216,255,.35),0 0 30px rgba(0,216,255,.1);
-  --g-md:0 0 24px rgba(0,216,255,.45),0 0 60px rgba(0,216,255,.18),0 0 100px rgba(0,216,255,.06);
-  --g-gold:0 0 14px rgba(255,215,0,.5),0 0 40px rgba(255,215,0,.15);
-
-  /* Text */
-  --t0:#dce8f6;
-  --t1:#8aa8c8;
-  --t2:#3a5070;
-  --t3:#1e3050;
-
-  /* Radius */
-  --r1:6px;--r2:10px;--r3:16px;--r4:22px;--r5:32px;
+  --gold2:rgba(255,216,77,.11);
+  --silver:#c4d4e8;
+  --plat:#dce8f8;
+  --b0:rgba(0,216,255,.07);
+  --b1:rgba(0,216,255,.16);
+  --b2:rgba(0,216,255,.34);
+  --b3:rgba(0,216,255,.58);
+  --gxs:0 0 7px rgba(0,216,255,.45);
+  --gsm:0 0 16px rgba(0,216,255,.38),0 0 36px rgba(0,216,255,.12);
+  --gmd:0 0 26px rgba(0,216,255,.5),0 0 70px rgba(0,216,255,.2);
+  --ggold:0 0 16px rgba(255,210,0,.55),0 0 44px rgba(255,210,0,.18);
+  --t0:#dce8f8;--t1:#8aa8cc;--t2:#3a5070;--t3:#1e3050;
+  --r1:6px;--r2:11px;--r3:16px;--r4:22px;--r5:32px;
 }
 
-/* ═══════════════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════════
    BASE
-═══════════════════════════════════════════════════════════════ */
-html,body{width:100%;min-height:100vh;background:var(--bg0);color:var(--t0);font-family:'Exo 2',sans-serif;overflow-x:hidden}
+════════════════════════════════════════════════════════════ */
+html,body{width:100%;min-height:100vh;background:var(--void);color:var(--t0);font-family:'Exo 2',sans-serif;overflow-x:hidden}
 
-/* ═══════════════════════════════════════════════════════════════
-   ██  COSMIC BACKGROUND  ██
-═══════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════
+   COSMIC BACKGROUND
+════════════════════════════════════════════════════════════ */
 .cosmos{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
-
-/* Base sky gradient */
-.cosmos-sky{
-  position:absolute;inset:0;
-  background:
-    linear-gradient(180deg,#010612 0%,#020918 40%,#010610 70%,#010410 100%);
-}
-
-/* Stadyum çift ışık huzmesi — UCL imzası */
-.cosmos-spots{
-  position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 55% 65% at 18% 0%,rgba(0,80,180,.22) 0%,transparent 60%),
-    radial-gradient(ellipse 50% 60% at 82% 0%,rgba(0,80,180,.18) 0%,transparent 58%),
-    radial-gradient(ellipse 90% 45% at 50% 105%,rgba(0,40,120,.28) 0%,transparent 55%),
-    radial-gradient(ellipse 35% 40% at 5%  70%,rgba(0,60,140,.1)  0%,transparent 50%),
-    radial-gradient(ellipse 30% 35% at 95% 65%,rgba(0,60,140,.08) 0%,transparent 50%);
-}
-
-/* Animated halo — merkezde büyüyen nefes */
-.cosmos-halo{
-  position:absolute;
-  width:900px;height:900px;
-  left:50%;top:50%;
-  transform:translate(-50%,-50%);
-  border-radius:50%;
-  background:radial-gradient(circle,rgba(0,140,220,.06) 0%,rgba(0,80,180,.04) 40%,transparent 70%);
-  animation:halo-breath 8s ease-in-out infinite;
-}
-@keyframes halo-breath{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.5}50%{transform:translate(-50%,-50%) scale(1.12);opacity:1}}
-
-/* Grid dokusunu */
-.cosmos-grid{
-  position:absolute;inset:0;
-  background-image:
-    linear-gradient(rgba(0,180,255,.016) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,180,255,.016) 1px,transparent 1px);
-  background-size:60px 60px;
-  animation:grid-crawl 35s linear infinite;
-}
-@keyframes grid-crawl{0%{background-position:0 0}100%{background-position:60px 60px}}
-
-/* Floating star particles */
-.cosmos-stars{position:absolute;inset:0}
+.cosmos-sky{position:absolute;inset:0;background:linear-gradient(170deg,#020814 0%,#030a1c 35%,#020710 65%,#010410 100%)}
+.cosmos-spots{position:absolute;inset:0;background:
+  radial-gradient(ellipse 52% 60% at 16% 0%,rgba(0,75,195,.24) 0%,transparent 62%),
+  radial-gradient(ellipse 48% 55% at 84% 0%,rgba(0,70,185,.19) 0%,transparent 60%),
+  radial-gradient(ellipse 85% 42% at 50% 106%,rgba(0,38,115,.3) 0%,transparent 55%),
+  radial-gradient(ellipse 34% 38% at 4%  72%,rgba(0,55,135,.12) 0%,transparent 52%),
+  radial-gradient(ellipse 28% 32% at 96% 68%,rgba(0,55,135,.09) 0%,transparent 50%)}
+.cosmos-halo{position:absolute;width:860px;height:860px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(0,130,210,.07) 0%,rgba(0,70,170,.04) 40%,transparent 70%);animation:halo 9s ease-in-out infinite}
+@keyframes halo{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.5}50%{transform:translate(-50%,-50%) scale(1.13);opacity:1}}
+.cosmos-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,180,255,.017) 1px,transparent 1px),linear-gradient(90deg,rgba(0,180,255,.017) 1px,transparent 1px);background-size:58px 58px;animation:gcrawl 38s linear infinite}
+@keyframes gcrawl{0%{background-position:0 0}100%{background-position:58px 58px}}
 .star{position:absolute;border-radius:50%;background:rgba(0,216,255,.7);animation:twinkle ease-in-out infinite}
-@keyframes twinkle{0%,100%{opacity:.1;transform:scale(1)}50%{opacity:1;transform:scale(2);box-shadow:0 0 5px rgba(0,216,255,.9)}}
+@keyframes twinkle{0%,100%{opacity:.1;transform:scale(1)}50%{opacity:1;transform:scale(2.2);box-shadow:0 0 5px rgba(0,216,255,.9)}}
+.cosmos-scan{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,216,255,.28) 30%,rgba(255,255,255,.55) 50%,rgba(0,216,255,.28) 70%,transparent);animation:scan 14s linear infinite}
+@keyframes scan{0%{top:-1px;opacity:0}3%{opacity:1}95%{opacity:.6}100%{top:100%;opacity:0}}
 
-/* Tarama çizgisi */
-.cosmos-scan{
-  position:absolute;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(0,216,255,.25) 30%,rgba(255,255,255,.5) 50%,rgba(0,216,255,.25) 70%,transparent);
-  animation:scanline 12s linear infinite;
-}
-@keyframes scanline{0%{top:-1px;opacity:0}3%{opacity:1}95%{opacity:.6}100%{top:100%;opacity:0}}
-
-/* ═══════════════════════════════════════════════════════════════
-   ██  APP SHELL  ██
-═══════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════
+   APP SHELL
+════════════════════════════════════════════════════════════ */
 #app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
 
-/* ═══════════════════════════════════════════════════════════════
-   ██  NAVBAR  ██
-═══════════════════════════════════════════════════════════════ */
-.navbar{
-  position:sticky;top:0;z-index:200;
-  height:64px;
-  display:flex;align-items:center;gap:4px;
-  padding:0 24px;
-  background:rgba(1,4,16,.92);
-  backdrop-filter:blur(24px);
-  -webkit-backdrop-filter:blur(24px);
-  border-bottom:1px solid var(--b0);
-}
+/* ════════════════════════════════════════════════════════════
+   NAVBAR
+════════════════════════════════════════════════════════════ */
+.navbar{position:sticky;top:0;z-index:200;height:64px;display:flex;align-items:center;gap:3px;padding:0 22px;background:rgba(1,3,17,.93);backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);border-bottom:1px solid var(--b0)}
+.navbar::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,rgba(0,216,255,.4) 18%,var(--cyan) 38%,rgba(255,255,255,.9) 50%,var(--cyan) 62%,rgba(0,216,255,.4) 82%,transparent 100%);animation:nshine 5s ease-in-out infinite}
+@keyframes nshine{0%,100%{opacity:.5}50%{opacity:1}}
+.navbar::after{content:'';position:absolute;bottom:-1px;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(0,216,255,.1),transparent)}
 
-/* Üst şerit — neon glow */
-.navbar::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,
-    transparent 0%,
-    rgba(0,216,255,.4) 20%,
-    var(--cyan) 40%,
-    rgba(255,255,255,.9) 50%,
-    var(--cyan) 60%,
-    rgba(0,216,255,.4) 80%,
-    transparent 100%);
-  animation:nav-shimmer 5s ease-in-out infinite;
-}
-@keyframes nav-shimmer{0%,100%{opacity:.55}50%{opacity:1}}
-
-/* Alt hafif glow çizgisi */
-.navbar::after{
-  content:'';position:absolute;bottom:-1px;left:10%;right:10%;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(0,216,255,.12),transparent);
-}
-
-/* Logo */
 .nav-logo{display:flex;align-items:center;gap:10px;margin-right:auto;text-decoration:none;flex-shrink:0}
-
-.nav-logo-icon{
-  width:40px;height:40px;border-radius:11px;flex-shrink:0;
-  background:linear-gradient(145deg,rgba(0,100,200,.45),rgba(0,50,120,.7));
-  border:1px solid rgba(0,216,255,.4);
-  box-shadow:var(--g-sm);
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.15rem;
-  position:relative;overflow:hidden;
-}
-/* dönen conic ring */
-.nav-logo-icon::before{
-  content:'';position:absolute;inset:-2px;
-  background:conic-gradient(from 0deg,transparent,rgba(0,216,255,.5) 60deg,transparent 120deg);
-  animation:logo-spin 4s linear infinite;
-  border-radius:13px;
-}
-.nav-logo-icon::after{
-  content:'🏆';position:absolute;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;
-}
-@keyframes logo-spin{to{transform:rotate(360deg)}}
-
+.nav-logo-icon{position:relative;width:40px;height:40px;border-radius:11px;flex-shrink:0;background:linear-gradient(145deg,rgba(0,95,200,.45),rgba(0,44,115,.7));border:1px solid rgba(0,216,255,.42);box-shadow:var(--gsm);display:flex;align-items:center;justify-content:center;font-size:1.12rem;overflow:hidden}
+.nav-logo-icon::before{content:'';position:absolute;inset:-2px;background:conic-gradient(from 0deg,transparent,rgba(0,216,255,.55) 65deg,transparent 125deg);animation:lspin 4s linear infinite;border-radius:13px}
+.nav-logo-icon::after{content:'🏆';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+@keyframes lspin{to{transform:rotate(360deg)}}
 .nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
-.nav-logo-text b{
-  font-family:'Bebas Neue',cursive;font-size:1.08rem;letter-spacing:3px;
-  color:var(--cyan);text-shadow:var(--g-xs);
-}
+.nav-logo-text b{font-family:'Bebas Neue',cursive;font-size:1.06rem;letter-spacing:3px;color:var(--cyan);text-shadow:var(--gxs)}
 .nav-logo-text small{font-size:.5rem;letter-spacing:3px;text-transform:uppercase;color:var(--t1)}
 
-/* Nav buttons */
-.nav-btn{
-  display:flex;align-items:center;gap:5px;
-  padding:7px 13px;border-radius:var(--r2);
-  font-family:'Rajdhani',sans-serif;
-  font-size:.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--t1);background:transparent;border:1px solid transparent;
-  white-space:nowrap;transition:all .2s;
-}
-.nav-btn:hover{color:var(--cyan);background:var(--cyan3);border-color:var(--b1)}
-.nav-btn.on{
-  color:var(--cyan);
-  background:linear-gradient(135deg,rgba(0,216,255,.13),rgba(0,100,200,.08));
-  border-color:var(--b2);
-  box-shadow:var(--g-xs);
-}
-.nav-btn.on .nbdot{display:block}
-.nbdot{
-  width:5px;height:5px;border-radius:50%;
-  background:var(--cyan);box-shadow:var(--g-xs);
-  display:none;flex-shrink:0;
-}
-.nav-btn-exit{
-  color:rgba(255,90,90,.7);border-color:rgba(255,60,60,.12);
-  background:rgba(255,50,50,.05);margin-left:4px;
-}
-.nav-btn-exit:hover{color:#ff6a6a;background:rgba(255,50,50,.1);border-color:rgba(255,80,80,.3);box-shadow:0 0 12px rgba(255,60,60,.2)}
+.nbtn{display:flex;align-items:center;gap:5px;padding:7px 13px;border-radius:var(--r2);font-family:'Rajdhani',sans-serif;font-size:.71rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t1);border:1px solid transparent;white-space:nowrap;transition:all .2s}
+.nbtn:hover{color:var(--cyan);background:var(--cyan3);border-color:var(--b1)}
+.nbtn.on{color:var(--cyan);background:linear-gradient(135deg,rgba(0,216,255,.14),rgba(0,95,200,.09));border-color:var(--b2);box-shadow:var(--gxs)}
+.nbdot{width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:var(--gxs);flex-shrink:0;display:none}
+.nbtn.on .nbdot{display:block}
+.nbtn-exit{color:rgba(255,88,88,.72);border-color:rgba(255,55,55,.13);background:rgba(255,48,48,.06);margin-left:5px}
+.nbtn-exit:hover{color:#ff6a6a;background:rgba(255,48,48,.12);border-color:rgba(255,78,78,.32);box-shadow:0 0 12px rgba(255,55,55,.22)}
 
-/* ═══════════════════════════════════════════════════════════════
-   ██  HERO BANNER  ██
-═══════════════════════════════════════════════════════════════ */
-.hero{
-  position:relative;overflow:hidden;
-  padding:28px 28px 22px;
-  display:flex;align-items:center;gap:22px;
-  border-bottom:1px solid var(--b0);
-}
-.hero::before{
-  content:'';position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 65% 120% at 75% 50%,rgba(0,90,200,.12) 0%,transparent 60%),
-    radial-gradient(ellipse 40% 80% at 10% 50%,rgba(0,50,120,.08) 0%,transparent 55%);
-  pointer-events:none;
-}
-
-/* UCL yıldız emblem */
-.hero-emblem{
-  position:relative;width:76px;height:76px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  border-radius:20px;
-  background:linear-gradient(145deg,rgba(0,90,200,.35),rgba(0,40,110,.6));
-  border:1px solid rgba(0,216,255,.35);
-  box-shadow:var(--g-md);
-  font-size:2.2rem;z-index:1;
-  animation:emblem-glow 3.5s ease-in-out infinite;
-}
-@keyframes emblem-glow{
-  0%,100%{box-shadow:var(--g-md)}
-  50%{box-shadow:0 0 35px rgba(0,216,255,.6),0 0 80px rgba(0,216,255,.25),0 0 150px rgba(0,216,255,.08)}
-}
-.hero-emblem::before{
-  content:'';position:absolute;inset:-2px;border-radius:22px;
-  background:conic-gradient(from 0deg,
-    rgba(0,216,255,0) 0deg,
-    rgba(0,216,255,.7) 70deg,
-    rgba(255,255,255,.6) 90deg,
-    rgba(0,216,255,.4) 110deg,
-    rgba(0,216,255,0) 180deg,
-    rgba(0,216,255,.5) 250deg,
-    rgba(0,216,255,0) 360deg);
-  animation:emblem-ring 4s linear infinite;
-  z-index:-1;
-}
-@keyframes emblem-ring{to{transform:rotate(360deg)}}
-
-.hero-text{flex:1;min-width:0}
-.hero-eyebrow{
-  font-family:'Rajdhani',sans-serif;font-size:.64rem;font-weight:700;
-  letter-spacing:4px;text-transform:uppercase;
-  color:var(--cyan);text-shadow:var(--g-xs);margin-bottom:7px;
-}
-.hero-title{
-  font-family:'Bebas Neue',cursive;
-  font-size:clamp(1.9rem,3.5vw,3.2rem);
-  letter-spacing:4px;line-height:1;
-  color:var(--plat);text-shadow:0 0 40px rgba(0,216,255,.15);
-  margin-bottom:10px;
-}
-.hero-title em{color:var(--cyan);text-shadow:var(--g-md);font-style:normal}
+/* ════════════════════════════════════════════════════════════
+   HERO
+════════════════════════════════════════════════════════════ */
+.hero{position:relative;overflow:hidden;padding:26px 28px 20px;display:flex;align-items:center;gap:20px;border-bottom:1px solid var(--b0)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 62% 110% at 78% 50%,rgba(0,84,195,.14) 0%,transparent 62%),radial-gradient(ellipse 38% 80% at 8% 50%,rgba(0,46,115,.09) 0%,transparent 56%);pointer-events:none}
+.hero-embl{position:relative;width:74px;height:74px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:20px;background:linear-gradient(145deg,rgba(0,88,200,.36),rgba(0,38,108,.62));border:1px solid rgba(0,216,255,.36);box-shadow:var(--gmd);font-size:2.1rem;z-index:1;animation:emblg 3.5s ease-in-out infinite}
+@keyframes emblg{0%,100%{box-shadow:var(--gmd)}50%{box-shadow:0 0 38px rgba(0,216,255,.62),0 0 85px rgba(0,216,255,.26)}}
+.hero-embl::before{content:'';position:absolute;inset:-2px;border-radius:22px;background:conic-gradient(from 0deg,rgba(0,216,255,0) 0deg,rgba(0,216,255,.72) 72deg,rgba(255,255,255,.6) 90deg,rgba(0,216,255,.42) 110deg,rgba(0,216,255,0) 180deg,rgba(0,216,255,.52) 252deg,rgba(0,216,255,0) 360deg);animation:ering 4s linear infinite;z-index:-1}
+@keyframes ering{to{transform:rotate(360deg)}}
+.hero-txt{flex:1;min-width:0}
+.hero-ey{font-family:'Rajdhani',sans-serif;font-size:.63rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);text-shadow:var(--gxs);margin-bottom:7px}
+.hero-h1{font-family:'Bebas Neue',cursive;font-size:clamp(1.8rem,3.3vw,3rem);letter-spacing:4px;line-height:1;color:var(--plat);text-shadow:0 0 38px rgba(0,216,255,.14);margin-bottom:10px}
+.hero-h1 em{color:var(--cyan);text-shadow:var(--gmd);font-style:normal}
 .hero-chips{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.hchip{
-  display:flex;align-items:center;gap:5px;
-  font-family:'Rajdhani',sans-serif;font-size:.66rem;font-weight:600;letter-spacing:1.5px;
-  padding:4px 12px;border-radius:20px;
-  background:rgba(0,216,255,.08);border:1px solid rgba(0,216,255,.18);color:var(--silver);
-}
-.hchip-live .livepulse{
-  width:6px;height:6px;border-radius:50%;background:#00ff88;
-  box-shadow:0 0 6px #00ff88;animation:livep 1.2s ease-in-out infinite;
-}
-@keyframes livep{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
-
-/* Hero stat strip */
+.hchip{display:flex;align-items:center;gap:5px;font-family:'Rajdhani',sans-serif;font-size:.66rem;font-weight:600;letter-spacing:1.5px;padding:4px 12px;border-radius:20px;background:rgba(0,216,255,.08);border:1px solid rgba(0,216,255,.18);color:var(--silver)}
+.lp{width:6px;height:6px;border-radius:50%;background:#00ff88;box-shadow:0 0 6px #00ff88;animation:lpb 1.2s ease-in-out infinite}
+@keyframes lpb{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
 .hero-stats{display:flex;flex-shrink:0;border-radius:var(--r2);overflow:hidden;border:1px solid var(--b1)}
-.hstat{
-  display:flex;flex-direction:column;align-items:center;
-  padding:10px 18px;
-  background:rgba(0,216,255,.05);
-  border-right:1px solid var(--b0);
-}
-.hstat:last-child{border-right:none}
-.hstat b{font-family:'Bebas Neue',cursive;font-size:1.65rem;line-height:1;color:var(--cyan);text-shadow:var(--g-xs)}
-.hstat span{font-size:.52rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--t1);margin-top:2px}
+.hst{display:flex;flex-direction:column;align-items:center;padding:10px 17px;background:rgba(0,216,255,.05);border-right:1px solid var(--b0)}
+.hst:last-child{border-right:none}
+.hst b{font-family:'Bebas Neue',cursive;font-size:1.62rem;line-height:1;color:var(--cyan);text-shadow:var(--gxs)}
+.hst span{font-size:.51rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--t1);margin-top:2px}
 
-/* ═══════════════════════════════════════════════════════════════
-   ██  VIEW SYSTEM  ██
-═══════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════
+   VIEW SYSTEM
+════════════════════════════════════════════════════════════ */
 .view{display:none;flex:1}
 .view.on{display:flex}
 
-/* ═══════════════════════════════════════════════════════════════
-   ██  VIEW: GRUPLAR & FİKSTÜR  ██
-═══════════════════════════════════════════════════════════════ */
-.groups-view{flex-direction:row;flex:1}
+/* ════════════════════════════════════════════════════════════
+   GRUPLAR VIEW
+════════════════════════════════════════════════════════════ */
+.gview{flex-direction:row}
+@media(max-width:960px){.gview{flex-direction:column}}
 
-@media(max-width:960px){.groups-view{flex-direction:column}}
+/* Sol: Gruplar %60 */
+.gcol{flex:60;border-right:1px solid var(--b0);padding:22px;display:flex;flex-direction:column;gap:17px;overflow-y:auto}
+.col-ttl{display:flex;align-items:center;gap:10px;font-family:'Bebas Neue',cursive;font-size:.98rem;letter-spacing:4px;color:var(--cyan);text-shadow:var(--gxs);margin-bottom:2px}
+.col-ttl::before{content:'';display:inline-block;width:3px;height:16px;border-radius:2px;background:var(--cyan);box-shadow:var(--gxs)}
 
-/* ── Sol: Gruplar ── */
-.groups-col{
-  flex:60;
-  border-right:1px solid var(--b0);
-  padding:24px;
-  display:flex;flex-direction:column;gap:18px;
-  overflow-y:auto;
-}
-
-.col-title{
-  display:flex;align-items:center;gap:10px;
-  font-family:'Bebas Neue',cursive;font-size:1rem;letter-spacing:4px;
-  color:var(--cyan);text-shadow:var(--g-xs);
-}
-.col-title::before{
-  content:'';display:inline-block;width:3px;height:16px;border-radius:2px;
-  background:var(--cyan);box-shadow:var(--g-xs);
-}
-
-/* Grup kartı */
-.group-card{
-  background:var(--glass);
-  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-  border:1px solid var(--b1);border-radius:var(--r3);
-  overflow:hidden;
-  box-shadow:0 8px 32px rgba(0,0,0,.45),0 0 0 1px rgba(0,216,255,.04) inset;
-  transition:border-color .3s,box-shadow .3s;
-}
-.group-card:hover{border-color:var(--b2);box-shadow:0 10px 40px rgba(0,0,0,.5),var(--g-xs)}
-
-/* Grup header */
-.gcard-head{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:13px 18px;
-  background:linear-gradient(90deg,rgba(0,100,210,.22),rgba(0,216,255,.06),transparent);
-  border-bottom:1px solid var(--b1);position:relative;overflow:hidden;
-}
-.gcard-head::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.35;
-}
-.gcard-badge{display:flex;align-items:center;gap:9px}
-.g-letter{
-  width:34px;height:34px;border-radius:9px;
-  background:linear-gradient(135deg,rgba(0,140,230,.4),rgba(0,70,160,.65));
-  border:1px solid var(--b2);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',cursive;font-size:1.15rem;
-  color:var(--cyan);text-shadow:var(--g-xs);
-  box-shadow:var(--g-xs);
-}
-.g-title-wrap b{
-  display:block;font-family:'Bebas Neue',cursive;font-size:.95rem;letter-spacing:3px;color:var(--silver);
-}
-.g-title-wrap span{font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--t1)}
-.g-week{
-  font-family:'Rajdhani',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-  padding:3px 10px;border-radius:20px;
-  background:rgba(0,216,255,.1);border:1px solid rgba(0,216,255,.22);color:var(--cyan);
-}
-
-/* Tablo */
-.gtable-head{
-  display:grid;grid-template-columns:1fr 30px 30px 30px 30px 38px;
-  padding:7px 18px;
-  background:rgba(0,0,0,.28);border-bottom:1px solid rgba(0,216,255,.05);
-}
+/* Grup kart */
+.gcard{background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--b1);border-radius:var(--r3);overflow:hidden;box-shadow:0 8px 34px rgba(0,0,0,.46),0 0 0 1px rgba(0,216,255,.04) inset;transition:border-color .3s,box-shadow .3s}
+.gcard:hover{border-color:var(--b2);box-shadow:0 10px 42px rgba(0,0,0,.52),var(--gxs)}
+.gcard-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 17px;background:linear-gradient(90deg,rgba(0,95,210,.24),rgba(0,216,255,.07),transparent);border-bottom:1px solid var(--b1);position:relative;overflow:hidden}
+.gcard-hd::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.36}
+.gbadge{display:flex;align-items:center;gap:9px}
+.gletter{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,rgba(0,136,228,.42),rgba(0,64,158,.68));border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',cursive;font-size:1.12rem;color:var(--cyan);text-shadow:var(--gxs);box-shadow:var(--gxs)}
+.gttlwrap b{display:block;font-family:'Bebas Neue',cursive;font-size:.94rem;letter-spacing:3px;color:var(--silver)}
+.gttlwrap span{font-size:.57rem;letter-spacing:2px;text-transform:uppercase;color:var(--t1)}
+.gwk{font-family:'Rajdhani',sans-serif;font-size:.61rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:20px;background:rgba(0,216,255,.1);border:1px solid rgba(0,216,255,.22);color:var(--cyan)}
+.gthead{display:grid;grid-template-columns:1fr 28px 28px 28px 28px 36px;padding:7px 17px;background:rgba(0,0,0,.28);border-bottom:1px solid rgba(0,216,255,.05)}
 .th{font-size:.56rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--t2);text-align:center}
 .th:first-child{text-align:left}
-
-.grow{
-  display:grid;grid-template-columns:1fr 30px 30px 30px 30px 38px;
-  padding:10px 18px;
-  border-bottom:1px solid rgba(0,216,255,.04);
-  align-items:center;position:relative;
-  transition:background .2s;
-}
+.grow{display:grid;grid-template-columns:1fr 28px 28px 28px 28px 36px;padding:10px 17px;border-bottom:1px solid rgba(0,216,255,.04);align-items:center;position:relative;transition:background .2s}
 .grow:last-child{border-bottom:none}
 .grow:hover{background:rgba(0,216,255,.035)}
+.grow.r1{background:linear-gradient(90deg,rgba(0,216,255,.09),rgba(0,95,200,.05),transparent)}
+.grow.r1::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--cyan);box-shadow:0 0 10px var(--cyan),0 0 22px rgba(0,216,255,.44)}
+.grow.r2{background:linear-gradient(90deg,rgba(255,214,0,.056),rgba(195,152,0,.032),transparent)}
+.grow.r2::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:rgba(255,210,0,.78);box-shadow:0 0 9px rgba(255,210,0,.46)}
+.tcell{display:flex;align-items:center;gap:8px;min-width:0}
+.tpos{font-family:'Bebas Neue',cursive;font-size:.74rem;width:14px;text-align:center;flex-shrink:0;color:var(--t2)}
+.grow.r1 .tpos{color:var(--cyan)}
+.grow.r2 .tpos{color:rgba(255,212,0,.92)}
+.tav{width:27px;height:27px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:900;border:1px solid rgba(255,255,255,.1)}
+.tname{font-size:.76rem;font-weight:600;color:var(--t0);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.grow.r1 .tname{color:var(--cyan)}
+.td{text-align:center;font-family:'Bebas Neue',cursive;font-size:.9rem;color:var(--silver)}
+.td.pts{color:var(--cyan);font-size:.98rem;text-shadow:var(--gxs)}
+.grow.r1 .td.pts{font-size:1.02rem}
 
-/* Lider satırı */
-.grow.rank1{
-  background:linear-gradient(90deg,rgba(0,216,255,.08),rgba(0,100,200,.04),transparent);
-}
-.grow.rank1::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
-  background:var(--cyan);
-  box-shadow:0 0 10px var(--cyan),0 0 22px rgba(0,216,255,.45);
-}
-
-/* İkinci sıra */
-.grow.rank2{
-  background:linear-gradient(90deg,rgba(255,215,0,.055),rgba(200,155,0,.03),transparent);
-}
-.grow.rank2::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
-  background:rgba(255,210,0,.75);
-  box-shadow:0 0 8px rgba(255,210,0,.45);
-}
-
-.team-cell{display:flex;align-items:center;gap:8px;min-width:0}
-.t-pos{
-  font-family:'Bebas Neue',cursive;font-size:.75rem;
-  width:14px;text-align:center;flex-shrink:0;color:var(--t2);
-}
-.grow.rank1 .t-pos{color:var(--cyan)}
-.grow.rank2 .t-pos{color:rgba(255,210,0,.9)}
-
-.t-av{
-  width:27px;height:27px;border-radius:7px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:.6rem;font-weight:900;
-  border:1px solid rgba(255,255,255,.1);
-}
-.t-name{
-  font-size:.78rem;font-weight:600;color:var(--t0);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.grow.rank1 .t-name{color:var(--cyan)}
-
-.td{text-align:center;font-family:'Bebas Neue',cursive;font-size:.92rem;color:var(--silver)}
-.td.pts{color:var(--cyan);font-size:1rem;text-shadow:var(--g-xs)}
-.grow.rank1 .td.pts{font-size:1.05rem}
-
-/* ── Sağ: Fikstür ── */
-.fixture-col{
-  flex:40;
-  padding:22px 20px;
-  overflow-y:auto;
-  max-height:calc(100vh - 180px);
-  scrollbar-width:thin;
-  scrollbar-color:rgba(0,216,255,.25) transparent;
-}
-.fixture-col::-webkit-scrollbar{width:3px}
-.fixture-col::-webkit-scrollbar-thumb{background:rgba(0,216,255,.2);border-radius:4px}
+/* Sağ: Fikstür %40 */
+.fcol{flex:40;padding:20px 18px;overflow-y:auto;max-height:calc(100vh - 176px);scrollbar-width:thin;scrollbar-color:rgba(0,216,255,.24) transparent}
+.fcol::-webkit-scrollbar{width:3px}
+.fcol::-webkit-scrollbar-thumb{background:rgba(0,216,255,.2);border-radius:4px}
 
 /* Hafta başlığı */
-.week-head{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:18px;
-  padding-bottom:14px;
-  border-bottom:1px solid var(--b1);
-}
-.week-left{display:flex;align-items:flex-end;gap:10px}
-.week-num{
-  font-family:'Bebas Neue',cursive;font-size:3.2rem;line-height:1;
-  color:var(--cyan);text-shadow:var(--g-md);letter-spacing:-1px;
-}
-.week-meta{padding-bottom:4px}
-.week-meta b{display:block;font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--plat)}
-.week-meta span{font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--t1)}
-.week-badge{
-  display:flex;align-items:center;gap:5px;
-  font-family:'Rajdhani',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-  padding:5px 13px;border-radius:20px;
-  background:rgba(0,255,110,.08);border:1px solid rgba(0,220,80,.25);color:#00ee66;
-}
-.week-badge .wd{width:6px;height:6px;border-radius:50%;background:#00ee66;box-shadow:0 0 7px #00ee66;animation:livep 1.2s ease-in-out infinite}
+.whd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:11px;border-bottom:1px solid var(--b1)}
+.wleft{display:flex;align-items:flex-end;gap:9px}
+.wnum{font-family:'Bebas Neue',cursive;font-size:3rem;line-height:1;color:var(--cyan);text-shadow:var(--gmd);letter-spacing:-1px}
+.wmeta b{display:block;font-family:'Rajdhani',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--plat)}
+.wmeta span{font-size:.57rem;letter-spacing:2px;text-transform:uppercase;color:var(--t1)}
+.wbadge{font-family:'Rajdhani',sans-serif;font-size:.59rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:20px}
+.wbadge-done{background:rgba(80,80,105,.14);border:1px solid rgba(108,108,130,.2);color:var(--t1)}
+.wbadge-up{background:var(--cyan3);border:1px solid var(--b1);color:var(--cyan)}
+.wbadge-ko{background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.28);color:var(--gold)}
 
-/* Grup ayraç */
-.fix-sep{
-  font-family:'Rajdhani',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:3px;
-  text-transform:uppercase;color:var(--t2);margin:16px 0 10px;
-  display:flex;align-items:center;gap:8px;
-}
-.fix-sep::before{content:'';flex:1;height:1px;background:var(--b0)}
-
-/* ── Maç kartı ── */
-.mcard{
-  background:var(--glass);
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  border:1px solid var(--b1);border-radius:var(--r2);
-  padding:13px 15px;margin-bottom:9px;
-  position:relative;overflow:hidden;
-  transition:border-color .25s,transform .2s,box-shadow .25s;
-}
-.mcard:hover{border-color:var(--b2);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.45),var(--g-xs)}
-.mcard.played{background:rgba(4,8,22,.68);border-color:rgba(0,216,255,.07)}
+/* Maç kartı */
+.mcard{position:relative;overflow:hidden;background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--b1);border-radius:var(--r2);padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:border-color .22s,transform .18s,box-shadow .22s}
+.mcard:hover{border-color:var(--b2);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.48),var(--gxs)}
+.mcard.played{background:rgba(3,7,21,.7);border-color:rgba(0,216,255,.08)}
 .mcard.played:hover{border-color:var(--b1)}
-
-/* Sol kenar şerit */
-.mcard::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
-  background:linear-gradient(to bottom,transparent,var(--cyan),transparent);
-  opacity:.25;transition:opacity .25s;
-}
+.mcard.ko{background:rgba(4,8,24,.72);border-color:rgba(255,215,0,.14)}
+.mcard.ko:hover{border-color:rgba(255,215,0,.4);box-shadow:0 8px 30px rgba(0,0,0,.48),var(--ggold)}
+.mcard.final{background:linear-gradient(135deg,rgba(4,8,24,.8),rgba(8,14,36,.85));border-color:rgba(255,215,0,.25)}
+.mcard.final:hover{border-color:rgba(255,215,0,.55);box-shadow:0 10px 36px rgba(0,0,0,.55),var(--ggold)}
+.mcard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,transparent,var(--cyan),transparent);opacity:.24;transition:opacity .22s}
 .mcard:hover::before{opacity:.9}
+.mcard.ko::before{background:linear-gradient(to bottom,transparent,var(--gold),transparent)}
+.mcard.final::before{background:linear-gradient(to bottom,transparent,var(--gold),rgba(255,255,255,.8),var(--gold),transparent)}
 
-/* Meta */
-.mc-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
-.mc-time{font-family:'Rajdhani',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--t1)}
-.mc-tag{
-  font-family:'Rajdhani',sans-serif;font-size:.56rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  padding:2px 8px;border-radius:10px;
-}
-.mc-tag-done{background:rgba(80,80,100,.15);border:1px solid rgba(100,100,120,.2);color:var(--t1)}
-.mc-tag-next{background:var(--cyan3);border:1px solid var(--b1);color:var(--cyan)}
+.mc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.mc-dt{font-family:'Rajdhani',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--t1)}
+.mc-tag{font-family:'Rajdhani',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;border-radius:9px}
+.mc-tag-done{background:rgba(72,72,96,.14);border:1px solid rgba(100,100,128,.2);color:var(--t1)}
+.mc-tag-up{background:var(--cyan3);border:1px solid var(--b1);color:var(--cyan)}
+.mc-tag-ko{background:var(--gold2);border:1px solid rgba(255,215,0,.28);color:var(--gold)}
+.mc-tag-fin{background:linear-gradient(90deg,var(--gold2),rgba(255,255,200,.1));border:1px solid rgba(255,215,0,.38);color:var(--gold);text-shadow:0 0 8px rgba(255,215,0,.5)}
 
-/* Teams */
-.mc-teams{display:flex;align-items:center;gap:0}
-.mc-team{flex:1;display:flex;align-items:center}
-.mc-team.home{justify-content:flex-end;text-align:right}
-.mc-team.away{justify-content:flex-start;text-align:left}
-.mc-tname{
-  font-family:'Rajdhani',sans-serif;font-size:.84rem;font-weight:700;
-  color:var(--t0);line-height:1.2;
-}
-.mc-team.home .mc-tname{margin-right:9px}
-.mc-team.away .mc-tname{margin-left:9px}
-.mc-team.win .mc-tname{color:var(--cyan)}
-
-/* VS / Score center */
+.mc-teams{display:flex;align-items:center}
+.mc-tm{flex:1;display:flex;align-items:center}
+.mc-tm.h{justify-content:flex-end;text-align:right}
+.mc-tm.a{justify-content:flex-start;text-align:left}
+.mc-tn{font-family:'Rajdhani',sans-serif;font-size:.8rem;font-weight:700;color:var(--t0);line-height:1.2}
+.mc-tm.h .mc-tn{margin-right:8px}
+.mc-tm.a .mc-tn{margin-left:8px}
+.mc-tm.win .mc-tn{color:var(--cyan)}
 .mc-mid{display:flex;flex-direction:column;align-items:center;flex-shrink:0;padding:0 8px}
 
 /* VS badge */
-.vs-badge{
-  width:42px;height:42px;border-radius:50%;
-  background:linear-gradient(135deg,rgba(0,70,160,.55),rgba(0,35,90,.8));
-  border:1.5px solid rgba(0,216,255,.38);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',cursive;font-size:.88rem;letter-spacing:2px;
-  color:var(--cyan);text-shadow:var(--g-xs);
-  box-shadow:0 0 14px rgba(0,216,255,.22),0 0 30px rgba(0,216,255,.08);
-  position:relative;
-}
-.vs-badge::before{
-  content:'';position:absolute;inset:-3px;border-radius:50%;
-  background:conic-gradient(from 0deg,transparent,rgba(0,216,255,.45) 70deg,transparent 130deg);
-  animation:vs-ring 3.5s linear infinite;z-index:-1;
-}
-@keyframes vs-ring{to{transform:rotate(360deg)}}
+.vs{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,rgba(0,65,158,.55),rgba(0,34,90,.82));border:1.5px solid rgba(0,216,255,.4);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',cursive;font-size:.86rem;letter-spacing:2px;color:var(--cyan);text-shadow:var(--gxs);box-shadow:0 0 14px rgba(0,216,255,.24),0 0 30px rgba(0,216,255,.09);position:relative}
+.vs::before{content:'';position:absolute;inset:-3px;border-radius:50%;background:conic-gradient(from 0deg,transparent,rgba(0,216,255,.48) 72deg,transparent 134deg);animation:vsring 3.5s linear infinite;z-index:-1}
+@keyframes vsring{to{transform:rotate(360deg)}}
+.vs.ko{border-color:rgba(255,215,0,.42);color:var(--gold);box-shadow:0 0 14px rgba(255,215,0,.24),0 0 30px rgba(255,215,0,.1)}
+.vs.ko::before{background:conic-gradient(from 0deg,transparent,rgba(255,215,0,.5) 72deg,transparent 134deg)}
+.vs.fin{border-color:rgba(255,215,0,.55);color:var(--gold);font-size:.72rem;box-shadow:0 0 18px rgba(255,215,0,.36),0 0 40px rgba(255,215,0,.14)}
+.vs.fin::before{background:conic-gradient(from 0deg,transparent,rgba(255,215,0,.7) 60deg,rgba(255,255,200,.5) 90deg,transparent 130deg)}
 
-/* Score */
-.mc-score{display:flex;align-items:center;gap:4px}
-.snum{
-  width:34px;height:34px;border-radius:8px;
-  background:rgba(0,216,255,.1);border:1px solid rgba(0,216,255,.26);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',cursive;font-size:1.15rem;
-  color:var(--cyan);text-shadow:var(--g-xs);
-  box-shadow:0 0 8px rgba(0,216,255,.15);
-}
-.ssep{font-family:'Bebas Neue',cursive;font-size:.9rem;color:var(--t2)}
-.mcard.upcoming .snum{
-  background:rgba(255,255,255,.03);
-  border-color:rgba(255,255,255,.07);
-  color:var(--t2);box-shadow:none;
-}
+/* Skor */
+.sbox{display:flex;align-items:center;gap:3px}
+.sn{width:33px;height:33px;border-radius:8px;background:rgba(0,216,255,.1);border:1px solid rgba(0,216,255,.27);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',cursive;font-size:1.12rem;color:var(--cyan);text-shadow:var(--gxs);box-shadow:0 0 8px rgba(0,216,255,.16)}
+.sep{font-family:'Bebas Neue',cursive;font-size:.88rem;color:var(--t2)}
+.mcard.upcoming .sn,.mcard.ko .sn,.mcard.final .sn{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.07);color:var(--t2);box-shadow:none}
 
-/* Mini avatar inline */
-.mt-av{
-  width:28px;height:28px;border-radius:7px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:.58rem;font-weight:900;
-  border:1px solid rgba(255,255,255,.09);
-}
+/* Avatar inline */
+.mav{width:27px;height:27px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.56rem;font-weight:900;border:1px solid rgba(255,255,255,.09)}
 
-/* ═══════════════════════════════════════════════════════════════
-   ██  VIEW: EN DEĞERLİ 20  ██
-═══════════════════════════════════════════════════════════════ */
-.top20-view{flex-direction:column;padding:26px}
-.top20-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(290px,1fr));
-  gap:11px;margin-top:18px;
-}
-.p20card{
-  display:flex;align-items:center;gap:11px;
-  padding:13px 15px;
-  background:var(--glass);backdrop-filter:blur(14px);
-  border:1px solid var(--b1);border-radius:var(--r2);
-  position:relative;overflow:hidden;
-  transition:border-color .25s,transform .2s;
-}
-.p20card:hover{border-color:var(--b2);transform:translateY(-2px)}
-.p20card.r1{border-color:rgba(255,215,0,.4);background:linear-gradient(90deg,rgba(255,215,0,.06),var(--glass))}
-.p20card.r2{border-color:rgba(192,200,220,.3)}
-.p20card.r3{border-color:rgba(200,120,50,.28)}
-.p20num{
-  font-family:'Bebas Neue',cursive;font-size:1.35rem;width:30px;
-  text-align:center;color:var(--t1);flex-shrink:0;line-height:1;
-}
-.p20card.r1 .p20num{color:var(--gold);text-shadow:var(--g-gold)}
-.p20card.r2 .p20num{color:#c0c8d8}
-.p20card.r3 .p20num{color:#cd7f32}
-.p20av{
-  width:38px;height:38px;border-radius:10px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:.75rem;font-weight:900;
-  border:1px solid rgba(255,255,255,.1);
-}
+/* Grup separator */
+.gsep{font-family:'Rajdhani',sans-serif;font-size:.57rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--t2);margin:14px 0 8px;display:flex;align-items:center;gap:8px}
+.gsep::before{content:'';flex:1;height:1px;background:var(--b0)}
+
+/* Hafta separator */
+.wsep{margin:20px 0 14px}
+
+/* Final büyük başlık */
+.final-banner{margin:20px 0 10px;padding:14px 16px;background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(255,200,0,.04));border:1px solid rgba(255,215,0,.26);border-radius:var(--r3);text-align:center;position:relative;overflow:hidden}
+.final-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),rgba(255,255,200,.8),var(--gold),transparent);animation:nshine 4s ease-in-out infinite}
+.fb-label{font-family:'Bebas Neue',cursive;font-size:.65rem;letter-spacing:5px;color:rgba(255,215,0,.55);margin-bottom:4px}
+.fb-title{font-family:'Bebas Neue',cursive;font-size:1.1rem;letter-spacing:4px;color:var(--gold);text-shadow:var(--ggold)}
+.fb-sub{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--t1);margin-top:3px}
+
+/* ════════════════════════════════════════════════════════════
+   TOP 20 VIEW
+════════════════════════════════════════════════════════════ */
+.t20view{flex-direction:column;padding:24px}
+.t20grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(286px,1fr));gap:10px;margin-top:16px}
+.p20{display:flex;align-items:center;gap:11px;padding:12px 14px;background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--b1);border-radius:var(--r2);position:relative;overflow:hidden;transition:border-color .22s,transform .18s}
+.p20:hover{border-color:var(--b2);transform:translateY(-2px)}
+.p20.rk1{border-color:rgba(255,215,0,.42);background:linear-gradient(90deg,rgba(255,215,0,.065),var(--glass))}
+.p20.rk2{border-color:rgba(192,200,220,.32)}
+.p20.rk3{border-color:rgba(200,118,48,.3)}
+.p20num{font-family:'Bebas Neue',cursive;font-size:1.32rem;width:29px;text-align:center;color:var(--t1);flex-shrink:0;line-height:1}
+.p20.rk1 .p20num{color:var(--gold);text-shadow:var(--ggold)}
+.p20.rk2 .p20num{color:#c0c8d8}
+.p20.rk3 .p20num{color:#cd7f32}
+.p20av{width:37px;height:37px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:900;border:1px solid rgba(255,255,255,.1)}
 .p20info{flex:1;min-width:0}
-.p20name{font-family:'Rajdhani',sans-serif;font-size:.84rem;font-weight:700;color:var(--t0);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.p20pos{font-size:.6rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--t1)}
+.p20nm{font-family:'Rajdhani',sans-serif;font-size:.82rem;font-weight:700;color:var(--t0);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p20ps{font-size:.59rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--t1)}
 .p20val{text-align:right;flex-shrink:0}
-.p20valnum{font-family:'Bebas Neue',cursive;font-size:1rem;color:var(--cyan);text-shadow:var(--g-xs);white-space:nowrap}
-.p20valsub{font-size:.54rem;color:var(--t2);letter-spacing:.5px}
+.p20vn{font-family:'Bebas Neue',cursive;font-size:.98rem;color:var(--cyan);text-shadow:var(--gxs);white-space:nowrap}
+.p20vs{font-size:.53rem;color:var(--t2);letter-spacing:.5px}
 
-/* ═══════════════════════════════════════════════════════════════
-   ██  VIEW: GOL KRALLIĞI  ██
-═══════════════════════════════════════════════════════════════ */
-.scorers-view{flex-direction:column;padding:26px}
-.scorers-list{display:flex;flex-direction:column;gap:8px;max-width:680px;margin-top:18px}
-.srow{
-  display:flex;align-items:center;gap:12px;
-  padding:13px 16px;
-  background:var(--glass);backdrop-filter:blur(14px);
-  border:1px solid var(--b1);border-radius:var(--r2);
-  transition:border-color .25s;
-}
+/* ════════════════════════════════════════════════════════════
+   GOL KRALLIĞI VIEW
+════════════════════════════════════════════════════════════ */
+.sview{flex-direction:column;padding:24px}
+.slist{display:flex;flex-direction:column;gap:7px;max-width:680px;margin-top:16px}
+.srow{display:flex;align-items:center;gap:12px;padding:12px 15px;background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--b1);border-radius:var(--r2);transition:border-color .22s}
 .srow:hover{border-color:var(--b2)}
-.srow:first-child{border-color:rgba(255,215,0,.35);background:linear-gradient(90deg,rgba(255,215,0,.055),var(--glass))}
-.srank{font-family:'Bebas Neue',cursive;font-size:1.2rem;width:26px;text-align:center;flex-shrink:0;color:var(--t1)}
-.srow:first-child .srank{color:var(--gold);text-shadow:var(--g-gold)}
-.sav{width:36px;height:36px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:900;border:1px solid rgba(255,255,255,.1)}
+.srow:first-child{border-color:rgba(255,215,0,.36);background:linear-gradient(90deg,rgba(255,215,0,.056),var(--glass))}
+.srank{font-family:'Bebas Neue',cursive;font-size:1.18rem;width:26px;text-align:center;flex-shrink:0;color:var(--t1)}
+.srow:first-child .srank{color:var(--gold);text-shadow:var(--ggold)}
+.sav{width:36px;height:36px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:900;border:1px solid rgba(255,255,255,.1)}
 .sinfo{flex:1}
-.sname{font-family:'Rajdhani',sans-serif;font-size:.83rem;font-weight:700;color:var(--t0)}
-.steam{font-size:.6rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--t1);margin-top:1px}
-.sgoals{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.sgnum{font-family:'Bebas Neue',cursive;font-size:1.7rem;color:var(--cyan);text-shadow:var(--g-sm);line-height:1}
-.sgball{font-size:.9rem}
+.snm{font-family:'Rajdhani',sans-serif;font-size:.81rem;font-weight:700;color:var(--t0)}
+.stm{font-size:.6rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--t1);margin-top:1px}
+.sgl{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.sgn{font-family:'Bebas Neue',cursive;font-size:1.65rem;color:var(--cyan);text-shadow:var(--gsm);line-height:1}
 
-/* ═══════════════════════════════════════════════════════════════
-   ██  VIEW: PROFİL & KAPTANLIK  ██
-═══════════════════════════════════════════════════════════════ */
-.captains-view{flex-direction:column;padding:26px}
-.captains-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px;margin-top:18px}
-.capcard{
-  background:var(--glass);backdrop-filter:blur(16px);
-  border:1px solid var(--b1);border-radius:var(--r3);
-  padding:20px;position:relative;overflow:hidden;
-  transition:border-color .25s,transform .2s;
-}
-.capcard:hover{border-color:var(--b2);transform:translateY(-3px);box-shadow:var(--g-xs)}
-.capcard::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.45;
-}
-.cap-crown{
-  display:inline-block;font-size:.6rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;
-  padding:3px 10px;border-radius:20px;margin-bottom:14px;
-  background:var(--gold2);border:1px solid rgba(255,215,0,.3);color:var(--gold);
-}
-.cap-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.cap-av{
-  width:50px;height:50px;border-radius:14px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;font-weight:900;
-  border:1px solid rgba(255,255,255,.1);
-}
-.cap-name{font-family:'Bebas Neue',cursive;font-size:1.12rem;letter-spacing:2px;color:var(--plat)}
-.cap-team{font-family:'Rajdhani',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cyan)}
-.cap-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.cap-stat{
-  text-align:center;padding:8px 6px;
-  background:rgba(0,216,255,.05);border:1px solid rgba(0,216,255,.1);border-radius:var(--r1);
-}
-.cap-stat b{display:block;font-family:'Bebas Neue',cursive;font-size:1.25rem;color:var(--cyan);text-shadow:var(--g-xs)}
-.cap-stat span{font-size:.54rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--t2)}
+/* ════════════════════════════════════════════════════════════
+   KAPTANLIK VIEW
+════════════════════════════════════════════════════════════ */
+.capview{flex-direction:column;padding:24px}
+.capgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(308px,1fr));gap:15px;margin-top:16px}
+.capcard{background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--b1);border-radius:var(--r3);padding:19px;position:relative;overflow:hidden;transition:border-color .22s,transform .18s}
+.capcard:hover{border-color:var(--b2);transform:translateY(-3px);box-shadow:var(--gxs)}
+.capcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.44}
+.cap-crown{display:inline-block;font-size:.59rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:13px;background:var(--gold2);border:1px solid rgba(255,215,0,.3);color:var(--gold)}
+.cap-hd{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.cap-av{width:48px;height:48px;border-radius:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.06rem;font-weight:900;border:1px solid rgba(255,255,255,.11)}
+.cap-nm{font-family:'Bebas Neue',cursive;font-size:1.08rem;letter-spacing:2px;color:var(--plat)}
+.cap-tm{font-family:'Rajdhani',sans-serif;font-size:.64rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cyan)}
+.cap-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.cap-st{text-align:center;padding:8px 5px;background:rgba(0,216,255,.05);border:1px solid rgba(0,216,255,.1);border-radius:var(--r1)}
+.cap-st b{display:block;font-family:'Bebas Neue',cursive;font-size:1.2rem;color:var(--cyan);text-shadow:var(--gxs)}
+.cap-st span{font-size:.53rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--t2)}
 
-/* ═══════════════════════════════════════════════════════════════
-   ██  FOOTER  ██
-═══════════════════════════════════════════════════════════════ */
-.footer{
-  padding:13px 28px;display:flex;align-items:center;justify-content:space-between;
-  border-top:1px solid var(--b0);
-  background:rgba(1,3,14,.7);backdrop-filter:blur(12px);
-}
-.footer-l{font-family:'Bebas Neue',cursive;font-size:.8rem;letter-spacing:3px;color:var(--t2)}
-.footer-l em{color:var(--cyan);font-style:normal}
-.footer-r{font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--t2)}
+/* ════════════════════════════════════════════════════════════
+   MODAL
+════════════════════════════════════════════════════════════ */
+.modal-overlay{position:fixed;inset:0;z-index:900;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,2,10,.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);animation:mfadein .22s ease}
+.modal-overlay.open{display:flex}
+@keyframes mfadein{from{opacity:0}to{opacity:1}}
 
-/* ═══════════════════════════════════════════════════════════════
-   ██  COLOUR HELPERS  ██
-═══════════════════════════════════════════════════════════════ */
-.c-r{background:rgba(220,50,50,.22);color:#ff8888}
-.c-b{background:rgba(50,100,230,.22);color:#88aaff}
-.c-g{background:rgba(40,180,70,.22);color:#80ff99}
-.c-o{background:rgba(220,140,30,.22);color:#ffcc77}
-.c-p{background:rgba(140,50,220,.22);color:#cc88ff}
-.c-t{background:rgba(20,180,180,.22);color:#80ffee}
-.c-rs{background:rgba(220,60,120,.22);color:#ff80bb}
-.c-in{background:rgba(80,65,210,.22);color:#aa99ff}
-.c-li{background:rgba(130,200,20,.22);color:#ccff77}
-.c-am{background:rgba(220,165,20,.22);color:#ffe077}
+.modal{position:relative;width:100%;max-width:780px;max-height:90vh;overflow-y:auto;background:linear-gradient(155deg,rgba(4,9,28,.94),rgba(6,13,36,.96));border:1px solid rgba(0,216,255,.28);border-radius:var(--r4);box-shadow:0 0 60px rgba(0,0,0,.7),var(--gmd);scrollbar-width:thin;scrollbar-color:rgba(0,216,255,.22) transparent;animation:mslide .28s cubic-bezier(.16,1,.3,1)}
+.modal::-webkit-scrollbar{width:4px}
+.modal::-webkit-scrollbar-thumb{background:rgba(0,216,255,.18);border-radius:4px}
+@keyframes mslide{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),rgba(255,255,255,.8),var(--cyan),transparent);animation:nshine 4s ease-in-out infinite}
+
+/* Modal header */
+.mhd{padding:28px 28px 20px;position:relative;border-bottom:1px solid var(--b1);background:linear-gradient(135deg,rgba(0,88,195,.1),rgba(0,40,100,.08),transparent)}
+.mclose{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.52);font-size:.9rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}
+.mclose:hover{background:rgba(255,80,80,.15);border-color:rgba(255,80,80,.3);color:#ff7070}
+.m-vs-row{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+.m-tm-name{font-family:'Bebas Neue',cursive;font-size:clamp(1.2rem,3vw,2rem);letter-spacing:3px;color:var(--plat);text-align:center;line-height:1}
+.m-vs-badge{font-family:'Bebas Neue',cursive;font-size:.95rem;letter-spacing:3px;padding:6px 14px;border-radius:var(--r5);background:linear-gradient(135deg,rgba(0,65,158,.5),rgba(0,34,90,.75));border:1.5px solid rgba(0,216,255,.4);color:var(--cyan);text-shadow:var(--gxs);box-shadow:var(--gxs);flex-shrink:0}
+.m-badges{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.mbadge{display:flex;align-items:center;gap:5px;font-family:'Rajdhani',sans-serif;font-size:.64rem;font-weight:600;letter-spacing:1.5px;padding:5px 13px;border-radius:20px;background:rgba(0,216,255,.08);border:1px solid rgba(0,216,255,.18);color:var(--silver)}
+
+/* Modal body */
+.mbody{padding:22px 28px 28px}
+.m-squads{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:600px){.m-squads{grid-template-columns:1fr}}
+.m-squad{}
+.msq-ttl{font-family:'Bebas Neue',cursive;font-size:.88rem;letter-spacing:3px;color:var(--cyan);text-shadow:var(--gxs);margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:8px}
+.msq-ttl::before{content:'';width:3px;height:14px;border-radius:2px;background:var(--cyan);box-shadow:var(--gxs)}
+.msq-section-lbl{font-size:.55rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--t2);margin:10px 0 6px;padding-left:2px}
+.mpl{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--r1);background:rgba(0,216,255,.04);border:1px solid rgba(0,216,255,.07);margin-bottom:4px;transition:background .18s}
+.mpl:hover{background:rgba(0,216,255,.08);border-color:rgba(0,216,255,.16)}
+.mpl-num{font-family:'Bebas Neue',cursive;font-size:.8rem;width:20px;text-align:center;color:var(--t1);flex-shrink:0}
+.mpl-av{width:24px;height:24px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:900;border:1px solid rgba(255,255,255,.09)}
+.mpl-info{flex:1;min-width:0}
+.mpl-nm{font-family:'Rajdhani',sans-serif;font-size:.76rem;font-weight:700;color:var(--t0);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mpl-pos{font-size:.56rem;letter-spacing:1px;text-transform:uppercase;color:var(--t1)}
+.mpl.cap .mpl-nm::after{content:' 🅒';font-size:.65rem}
+.mpl.ydk{background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.04)}
+.mpl.ydk .mpl-nm{color:var(--t1)}
+
+/* ════════════════════════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════════════════════════ */
+.footer{padding:12px 28px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--b0);background:rgba(1,2,14,.72);backdrop-filter:blur(12px)}
+.fl{font-family:'Bebas Neue',cursive;font-size:.78rem;letter-spacing:3px;color:var(--t2)}
+.fl em{color:var(--cyan);font-style:normal}
+.fr{font-size:.57rem;letter-spacing:2px;text-transform:uppercase;color:var(--t2)}
+
+/* ════════════════════════════════════════════════════════════
+   RENK HELPERS
+════════════════════════════════════════════════════════════ */
+.cr {background:rgba(220,50,50,.22);color:#ff8888}
+.cb {background:rgba(50,100,230,.22);color:#88aaff}
+.cg {background:rgba(40,180,70,.22);color:#80ff99}
+.co {background:rgba(220,140,30,.22);color:#ffcc77}
+.cp {background:rgba(140,50,220,.22);color:#cc88ff}
+.ct {background:rgba(20,180,180,.22);color:#80ffee}
+.crs{background:rgba(220,60,120,.22);color:#ff80bb}
+.cin{background:rgba(80,65,210,.22);color:#aa99ff}
+.cli{background:rgba(130,200,20,.22);color:#ccff77}
+.cam{background:rgba(220,165,20,.22);color:#ffe077}
+.cgr{background:rgba(90,110,130,.22);color:#aabccc}
+.crd{background:rgba(200,30,30,.22);color:#ff6666}
 </style>
 </head>
 <body>
 
-<!-- ══════════════ COSMOS BACKGROUND ══════════════ -->
+<!-- COSMOS -->
 <div class="cosmos" aria-hidden="true">
   <div class="cosmos-sky"></div>
   <div class="cosmos-spots"></div>
   <div class="cosmos-halo"></div>
   <div class="cosmos-grid"></div>
-  <div class="cosmos-stars">
-    <div class="star" style="width:2px;height:2px;top:7%;left:14%;animation-duration:3.1s;animation-delay:0s"></div>
-    <div class="star" style="width:1px;height:1px;top:20%;left:76%;animation-duration:2.7s;animation-delay:.5s"></div>
-    <div class="star" style="width:2px;height:2px;top:44%;left:4%;animation-duration:3.9s;animation-delay:1.1s"></div>
-    <div class="star" style="width:1px;height:1px;top:60%;left:91%;animation-duration:3.4s;animation-delay:.25s"></div>
-    <div class="star" style="width:2px;height:2px;top:77%;left:48%;animation-duration:2.5s;animation-delay:.8s"></div>
-    <div class="star" style="width:1px;height:1px;top:13%;left:54%;animation-duration:3.7s;animation-delay:1.6s"></div>
-    <div class="star" style="width:2px;height:2px;top:87%;left:28%;animation-duration:3s;animation-delay:.35s"></div>
-    <div class="star" style="width:1px;height:1px;top:32%;left:66%;animation-duration:2.8s;animation-delay:2s"></div>
+  <div style="position:absolute;inset:0">
+    <div class="star" style="width:2px;height:2px;top:7%;left:13%;animation-duration:3s;animation-delay:0s"></div>
+    <div class="star" style="width:1px;height:1px;top:21%;left:77%;animation-duration:2.7s;animation-delay:.5s"></div>
+    <div class="star" style="width:2px;height:2px;top:43%;left:4%;animation-duration:3.9s;animation-delay:1.1s"></div>
+    <div class="star" style="width:1px;height:1px;top:61%;left:92%;animation-duration:3.4s;animation-delay:.25s"></div>
+    <div class="star" style="width:2px;height:2px;top:78%;left:48%;animation-duration:2.5s;animation-delay:.8s"></div>
+    <div class="star" style="width:1px;height:1px;top:14%;left:55%;animation-duration:3.7s;animation-delay:1.6s"></div>
+    <div class="star" style="width:2px;height:2px;top:88%;left:27%;animation-duration:3s;animation-delay:.35s"></div>
+    <div class="star" style="width:1px;height:1px;top:33%;left:66%;animation-duration:2.8s;animation-delay:2s"></div>
     <div class="star" style="width:2px;height:2px;top:5%;left:87%;animation-duration:4.1s;animation-delay:.6s"></div>
-    <div class="star" style="width:1px;height:1px;top:70%;left:11%;animation-duration:3.5s;animation-delay:1.75s"></div>
+    <div class="star" style="width:1px;height:1px;top:71%;left:11%;animation-duration:3.5s;animation-delay:1.75s"></div>
   </div>
   <div class="cosmos-scan"></div>
 </div>
 
-<!-- ══════════════ APP ══════════════ -->
 <div id="app">
 
-  <!-- ── NAVBAR ── -->
+  <!-- NAVBAR -->
   <nav class="navbar">
     <a class="nav-logo" href="#">
       <div class="nav-logo-icon"></div>
       <div class="nav-logo-text">
-        <b>Turnuva Merkezi</b>
-        <small>Hastane Şampiyonası 2026</small>
+        <b>Turnuva Merkezi 2026</b>
+        <small>Hastane Şampiyonası</small>
       </div>
     </a>
-    <button class="nav-btn on" onclick="switchView('groups',this)"><span class="nbdot"></span>Gruplar &amp; Fikstür</button>
-    <button class="nav-btn" onclick="switchView('top20',this)">En Değerli 20</button>
-    <button class="nav-btn" onclick="switchView('scorers',this)">Gol Krallığı</button>
-    <button class="nav-btn" onclick="switchView('captains',this)">Profil &amp; Kaptanlık</button>
-    <button class="nav-btn nav-btn-exit" onclick="window.location.href='lobby.html'">← Lobiye Dön</button>
+    <button class="nbtn on" onclick="sv('groups',this)"><span class="nbdot"></span>Gruplar &amp; Fikstür</button>
+    <button class="nbtn" onclick="sv('top20',this)">En Değerli 20</button>
+    <button class="nbtn" onclick="sv('scorers',this)">Gol Krallığı</button>
+    <button class="nbtn" onclick="sv('captains',this)">Profil &amp; Kaptanlık</button>
+    <button class="nbtn nbtn-exit" onclick="window.location.href='lobby.html'">← Lobiye Dön</button>
   </nav>
 
-  <!-- ── HERO ── -->
+  <!-- HERO -->
   <div class="hero">
-    <div class="hero-emblem">🏆</div>
-    <div class="hero-text">
-      <div class="hero-eyebrow">Sezon 2025–2026 · Grup Aşaması</div>
-      <div class="hero-title">Hastane <em>Turnuvası</em></div>
+    <div class="hero-embl">🏆</div>
+    <div class="hero-txt">
+      <div class="hero-ey">Sezon 2025–2026 · Grup Aşaması</div>
+      <div class="hero-h1">Hastane <em>Turnuvası</em></div>
       <div class="hero-chips">
-        <div class="hchip hchip-live"><span class="livepulse"></span>Aktif Sezon</div>
+        <div class="hchip"><span class="lp"></span>Aktif Sezon</div>
         <div class="hchip">⚕️ 3 Grup · 12 Takım</div>
-        <div class="hchip">📅 Hafta 1 / 6</div>
+        <div class="hchip">📅 Hafta 1–7 Takvimi</div>
       </div>
     </div>
     <div class="hero-stats">
-      <div class="hstat"><b>12</b><span>Takım</span></div>
-      <div class="hstat"><b>3</b><span>Grup</span></div>
-      <div class="hstat"><b>18</b><span>Maç</span></div>
-      <div class="hstat"><b>1</b><span>Kupa</span></div>
+      <div class="hst"><b>12</b><span>Takım</span></div>
+      <div class="hst"><b>3</b><span>Grup</span></div>
+      <div class="hst"><b>7</b><span>Hafta</span></div>
+      <div class="hst"><b>1</b><span>Kupa</span></div>
     </div>
   </div>
 
-  <!-- ════════════════════════════════════════
-       VIEW — GRUPLAR & FİKSTÜR
-  ════════════════════════════════════════ -->
-  <div class="view groups-view on" id="view-groups">
+  <!-- ══════════════ VIEW: GRUPLAR & FİKSTÜR ══════════════ -->
+  <div class="view gview on" id="view-groups">
 
     <!-- SOL: GRUPLAR -->
-    <div class="groups-col">
-      <div class="col-title">Grup Tabloları</div>
+    <div class="gcol">
+      <div class="col-ttl">Grup Tabloları</div>
 
-      <!-- ── GRUP A ── -->
-      <div class="group-card">
-        <div class="gcard-head">
-          <div class="gcard-badge">
-            <div class="g-letter">A</div>
-            <div class="g-title-wrap"><b>Grup A</b><span>Kuzey Kanadi</span></div>
+      <!-- GRUP A -->
+      <div class="gcard">
+        <div class="gcard-hd">
+          <div class="gbadge">
+            <div class="gletter">A</div>
+            <div class="gttlwrap"><b>Grup A</b><span>Kuzey Kanadi</span></div>
           </div>
-          <div class="g-week">1. Hafta</div>
+          <div class="gwk">4. Hafta</div>
         </div>
-        <div class="gtable-head">
+        <div class="gthead">
           <div class="th">Takım</div>
-          <div class="th">O</div><div class="th">G</div><div class="th">B</div><div class="th">M</div>
-          <div class="th">P</div>
+          <div class="th">O</div><div class="th">G</div><div class="th">B</div><div class="th">M</div><div class="th">P</div>
         </div>
-        <div class="grow rank1">
-          <div class="team-cell">
-            <div class="t-pos">1</div>
-            <div class="t-av c-r">AC</div>
-            <div class="t-name">Acil United</div>
-          </div>
-          <div class="td">3</div><div class="td">3</div><div class="td">0</div><div class="td">0</div>
-          <div class="td pts">9</div>
+        <div class="grow r1">
+          <div class="tcell"><div class="tpos">1</div><div class="tav cr">FU</div><div class="tname">FUTMEYDANI</div></div>
+          <div class="td">4</div><div class="td">3</div><div class="td">1</div><div class="td">0</div><div class="td pts">10</div>
         </div>
-        <div class="grow rank2">
-          <div class="team-cell">
-            <div class="t-pos">2</div>
-            <div class="t-av c-b">OR</div>
-            <div class="t-name">Ortopedi FC</div>
-          </div>
-          <div class="td">3</div><div class="td">2</div><div class="td">0</div><div class="td">1</div>
-          <div class="td pts">6</div>
+        <div class="grow r2">
+          <div class="tcell"><div class="tpos">2</div><div class="tav cb">OK</div><div class="tname">OKMEYDANI DİŞ</div></div>
+          <div class="td">4</div><div class="td">2</div><div class="td">1</div><div class="td">1</div><div class="td pts">7</div>
         </div>
         <div class="grow">
-          <div class="team-cell">
-            <div class="t-pos">3</div>
-            <div class="t-av c-g">KR</div>
-            <div class="t-name">Kardiyoloji Rovers</div>
-          </div>
-          <div class="td">3</div><div class="td">1</div><div class="td">0</div><div class="td">2</div>
-          <div class="td pts">3</div>
+          <div class="tcell"><div class="tpos">3</div><div class="tav cg">AR</div><div class="tname">ARNAVUTKÖY FK</div></div>
+          <div class="td">4</div><div class="td">1</div><div class="td">1</div><div class="td">2</div><div class="td pts">4</div>
         </div>
         <div class="grow">
-          <div class="team-cell">
-            <div class="t-pos">4</div>
-            <div class="t-av c-p">NR</div>
-            <div class="t-name">Nöroloji Racing</div>
-          </div>
-          <div class="td">3</div><div class="td">0</div><div class="td">0</div><div class="td">3</div>
-          <div class="td pts">0</div>
+          <div class="tcell"><div class="tpos">4</div><div class="tav co">İL</div><div class="tname">İLKYARDIM SPOR</div></div>
+          <div class="td">4</div><div class="td">0</div><div class="td">1</div><div class="td">3</div><div class="td pts">1</div>
         </div>
       </div>
 
-      <!-- ── GRUP B ── -->
-      <div class="group-card">
-        <div class="gcard-head">
-          <div class="gcard-badge">
-            <div class="g-letter">B</div>
-            <div class="g-title-wrap"><b>Grup B</b><span>Güney Kanadi</span></div>
+      <!-- GRUP B -->
+      <div class="gcard">
+        <div class="gcard-hd">
+          <div class="gbadge">
+            <div class="gletter">B</div>
+            <div class="gttlwrap"><b>Grup B</b><span>Güney Kanadi</span></div>
           </div>
-          <div class="g-week">1. Hafta</div>
+          <div class="gwk">4. Hafta</div>
         </div>
-        <div class="gtable-head">
+        <div class="gthead">
           <div class="th">Takım</div>
-          <div class="th">O</div><div class="th">G</div><div class="th">B</div><div class="th">M</div>
-          <div class="th">P</div>
+          <div class="th">O</div><div class="th">G</div><div class="th">B</div><div class="th">M</div><div class="th">P</div>
         </div>
-        <div class="grow rank1">
-          <div class="team-cell">
-            <div class="t-pos">1</div>
-            <div class="t-av c-o">CF</div>
-            <div class="t-name">Cerrahi FC</div>
-          </div>
-          <div class="td">3</div><div class="td">2</div><div class="td">1</div><div class="td">0</div>
-          <div class="td pts">7</div>
+        <div class="grow r1">
+          <div class="tcell"><div class="tpos">1</div><div class="tav cp">EY</div><div class="tname">EYÜP CİTY</div></div>
+          <div class="td">4</div><div class="td">3</div><div class="td">0</div><div class="td">1</div><div class="td pts">9</div>
         </div>
-        <div class="grow rank2">
-          <div class="team-cell">
-            <div class="t-pos">2</div>
-            <div class="t-av c-t">PI</div>
-            <div class="t-name">Psikiyatri Inter</div>
-          </div>
-          <div class="td">3</div><div class="td">1</div><div class="td">2</div><div class="td">0</div>
-          <div class="td pts">5</div>
+        <div class="grow r2">
+          <div class="tcell"><div class="tpos">2</div><div class="tav ct">SI</div><div class="tname">SİSTRUNK</div></div>
+          <div class="td">4</div><div class="td">2</div><div class="td">1</div><div class="td">1</div><div class="td pts">7</div>
         </div>
         <div class="grow">
-          <div class="team-cell">
-            <div class="t-pos">3</div>
-            <div class="t-av c-rs">RM</div>
-            <div class="t-name">Radyoloji Madrid</div>
-          </div>
-          <div class="td">3</div><div class="td">1</div><div class="td">1</div><div class="td">1</div>
-          <div class="td pts">4</div>
+          <div class="tcell"><div class="tpos">3</div><div class="tav crs">SA</div><div class="tname">SAGRADA FAMİLA</div></div>
+          <div class="td">4</div><div class="td">1</div><div class="td">1</div><div class="td">2</div><div class="td pts">4</div>
         </div>
         <div class="grow">
-          <div class="team-cell">
-            <div class="t-pos">4</div>
-            <div class="t-av c-in">PD</div>
-            <div class="t-name">Pediatri Dynamo</div>
-          </div>
-          <div class="td">3</div><div class="td">0</div><div class="td">0</div><div class="td">3</div>
-          <div class="td pts">0</div>
+          <div class="tcell"><div class="tpos">4</div><div class="tav cin">TÜ</div><div class="tname">TÜPÇÜLER FK</div></div>
+          <div class="td">4</div><div class="td">0</div><div class="td">2</div><div class="td">2</div><div class="td pts">2</div>
         </div>
       </div>
 
-      <!-- ── GRUP C ── -->
-      <div class="group-card">
-        <div class="gcard-head">
-          <div class="gcard-badge">
-            <div class="g-letter">C</div>
-            <div class="g-title-wrap"><b>Grup C</b><span>Doğu Kanadi</span></div>
+      <!-- GRUP C -->
+      <div class="gcard">
+        <div class="gcard-hd">
+          <div class="gbadge">
+            <div class="gletter">C</div>
+            <div class="gttlwrap"><b>Grup C</b><span>Doğu Kanadi</span></div>
           </div>
-          <div class="g-week">1. Hafta</div>
+          <div class="gwk">4. Hafta</div>
         </div>
-        <div class="gtable-head">
+        <div class="gthead">
           <div class="th">Takım</div>
-          <div class="th">O</div><div class="th">G</div><div class="th">B</div><div class="th">M</div>
-          <div class="th">P</div>
+          <div class="th">O</div><div class="th">G</div><div class="th">B</div><div class="th">M</div><div class="th">P</div>
         </div>
-        <div class="grow rank1">
-          <div class="team-cell">
-            <div class="t-pos">1</div>
-            <div class="t-av c-li">DA</div>
-            <div class="t-name">Dahiliye Athletic</div>
-          </div>
-          <div class="td">3</div><div class="td">2</div><div class="td">1</div><div class="td">0</div>
-          <div class="td pts">7</div>
+        <div class="grow r1">
+          <div class="tcell"><div class="tpos">1</div><div class="tav cli">PU</div><div class="tname">PUSU FK</div></div>
+          <div class="td">4</div><div class="td">3</div><div class="td">1</div><div class="td">0</div><div class="td pts">10</div>
         </div>
-        <div class="grow rank2">
-          <div class="team-cell">
-            <div class="t-pos">2</div>
-            <div class="t-av c-am">KU</div>
-            <div class="t-name">KBB United</div>
-          </div>
-          <div class="td">3</div><div class="td">2</div><div class="td">0</div><div class="td">1</div>
-          <div class="td pts">6</div>
+        <div class="grow r2">
+          <div class="tcell"><div class="tpos">2</div><div class="tav cam">SS</div><div class="tname">SSK MONTANA</div></div>
+          <div class="td">4</div><div class="td">2</div><div class="td">0</div><div class="td">2</div><div class="td pts">6</div>
         </div>
         <div class="grow">
-          <div class="team-cell">
-            <div class="t-pos">3</div>
-            <div class="t-av c-g">GO</div>
-            <div class="t-name">Göz Hastalıkları SC</div>
-          </div>
-          <div class="td">3</div><div class="td">1</div><div class="td">0</div><div class="td">2</div>
-          <div class="td pts">3</div>
+          <div class="tcell"><div class="tpos">3</div><div class="tav cgr">RÖ</div><div class="tname">RÖNTGEN</div></div>
+          <div class="td">4</div><div class="td">1</div><div class="td">1</div><div class="td">2</div><div class="td pts">4</div>
         </div>
         <div class="grow">
-          <div class="team-cell">
-            <div class="t-pos">4</div>
-            <div class="t-av c-r">ÜR</div>
-            <div class="t-name">Üroloji Rangers</div>
-          </div>
-          <div class="td">3</div><div class="td">0</div><div class="td">1</div><div class="td">2</div>
-          <div class="td pts">1</div>
+          <div class="tcell"><div class="tpos">4</div><div class="tav crd">DE</div><div class="tname">DETERJAN GÜCÜ</div></div>
+          <div class="td">4</div><div class="td">1</div><div class="td">0</div><div class="td">3</div><div class="td pts">3</div>
         </div>
       </div>
-    </div><!-- /groups-col -->
+    </div>
 
     <!-- SAĞ: FİKSTÜR -->
-    <div class="fixture-col">
+    <div class="fcol">
 
-      <div class="week-head">
-        <div class="week-left">
-          <div class="week-num">01</div>
-          <div class="week-meta">
-            <b>Bu Haftanın Maçları</b>
-            <span>Grup Aşaması · 1. Hafta</span>
-          </div>
+      <!-- ── 1. HAFTA ── -->
+      <div class="whd">
+        <div class="wleft">
+          <div class="wnum">01</div>
+          <div class="wmeta"><b>1. Hafta</b><span>Grup Aşaması</span></div>
         </div>
-        <div class="week-badge"><span class="wd"></span>Aktif</div>
+        <div class="wbadge wbadge-done">Tamamlandı</div>
       </div>
 
-      <!-- Grup A maçları -->
-      <div class="fix-sep">Grup A</div>
+      <div class="mcard played" onclick="om('OKMEYDANI DİŞ','İLKYARDIM SPOR','06.04.2026 P.tesi','17:00','Saha A','Hakem: Mehmet T.','cb','co')">
+        <div class="mc-top"><div class="mc-dt">06.04.2026 P.tesi · 17:00</div><div class="mc-tag mc-tag-done">Tamamlandı</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h win"><div class="mc-tn">OKMEYDANI DİŞ</div><div class="mav cb">OK</div></div>
+          <div class="mc-mid">
+            <div class="sbox"><div class="sn">2</div><div class="sep">–</div><div class="sn">1</div></div>
+          </div>
+          <div class="mc-tm a"><div class="mav co">İL</div><div class="mc-tn">İLKYARDIM SPOR</div></div>
+        </div>
+      </div>
 
-      <div class="mcard played">
-        <div class="mc-meta">
-          <div class="mc-time">Pts 14:00</div>
-          <div class="mc-tag mc-tag-done">Tamamlandı</div>
+      <div class="mcard played" onclick="om('FUTMEYDANI','ARNAVUTKÖY FK','07.04.2026 Salı','18:00','Saha B','Hakem: Ali K.','cr','cg')">
+        <div class="mc-top"><div class="mc-dt">07.04.2026 Salı · 18:00</div><div class="mc-tag mc-tag-done">Tamamlandı</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h win"><div class="mc-tn">FUTMEYDANI</div><div class="mav cr">FU</div></div>
+          <div class="mc-mid">
+            <div class="sbox"><div class="sn">3</div><div class="sep">–</div><div class="sn">1</div></div>
+          </div>
+          <div class="mc-tm a"><div class="mav cg">AR</div><div class="mc-tn">ARNAVUTKÖY FK</div></div>
+        </div>
+      </div>
+
+      <div class="mcard played" onclick="om('EYÜP CİTY','TÜPÇÜLER FK','08.04.2026 Çarşamba','17:30','Saha C','Hakem: Veli Y.','cp','cin')">
+        <div class="mc-top"><div class="mc-dt">08.04.2026 Çarşamba · 17:30</div><div class="mc-tag mc-tag-done">Tamamlandı</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h win"><div class="mc-tn">EYÜP CİTY</div><div class="mav cp">EY</div></div>
+          <div class="mc-mid">
+            <div class="sbox"><div class="sn">4</div><div class="sep">–</div><div class="sn">0</div></div>
+          </div>
+          <div class="mc-tm a"><div class="mav cin">TÜ</div><div class="mc-tn">TÜPÇÜLER FK</div></div>
+        </div>
+      </div>
+
+      <div class="mcard played" onclick="om('SİSTRUNK','SAGRADA FAMİLA','09.04.2026 Perşembe','17:00','Saha A','Hakem: Hasan B.','ct','crs')">
+        <div class="mc-top"><div class="mc-dt">09.04.2026 Perşembe · 17:00</div><div class="mc-tag mc-tag-done">Tamamlandı</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h win"><div class="mc-tn">SİSTRUNK</div><div class="mav ct">SI</div></div>
+          <div class="mc-mid">
+            <div class="sbox"><div class="sn">2</div><div class="sep">–</div><div class="sn">0</div></div>
+          </div>
+          <div class="mc-tm a"><div class="mav crs">SA</div><div class="mc-tn">SAGRADA FAMİLA</div></div>
+        </div>
+      </div>
+
+      <div class="mcard played" onclick="om('SSK MONTANA','PUSU FK','10.04.2026 Cuma','17:00','Saha B','Hakem: Murat Ş.','cam','cli')">
+        <div class="mc-top"><div class="mc-dt">10.04.2026 Cuma · 17:00</div><div class="mc-tag mc-tag-done">Tamamlandı</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h"><div class="mc-tn">SSK MONTANA</div><div class="mav cam">SS</div></div>
+          <div class="mc-mid">
+            <div class="sbox"><div class="sn">1</div><div class="sep">–</div><div class="sn">1</div></div>
+          </div>
+          <div class="mc-tm a"><div class="mav cli">PU</div><div class="mc-tn">PUSU FK</div></div>
+        </div>
+      </div>
+
+      <!-- ── 2. HAFTA ── -->
+      <div class="wsep">
+        <div class="whd">
+          <div class="wleft">
+            <div class="wnum">02</div>
+            <div class="wmeta"><b>2. Hafta</b><span>Grup Aşaması</span></div>
+          </div>
+          <div class="wbadge wbadge-done">Tamamlandı</div>
+        </div>
+      </div>
+
+      <div class="mcard played" onclick="om('EYÜP CİTY','SİSTRUNK','13.04.2026 P.tesi','17:00','Saha C','Hakem: Ali K.','cp','ct')">
+        <div class="mc-top"><div class="mc-dt">13.04.2026 P.tesi · 17:00</div><div class="mc-tag mc-tag-done">Tamamlandı</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h win"><div class="mc-tn">EYÜP CİTY</div><div class="mav cp">EY</div></div>
+          <div class="mc-mid">
+            <div class="sbox"><div class="sn">2</div><div class="sep">–</div><div class="sn">1</div></div>
+          </div>
+          <div class="mc-tm a"><div class="mav ct">SI</div><div class="mc-tn">SİSTRUNK</div></div>
+        </div>
+      </div>
+
+      <div class="mcard played" onclick="om('ARNAVUTKÖY FK','İLKYARDIM SPOR','14.04.2026 Salı','18:00','Saha A','Hakem: Mehmet T.','cg','co')">
+        <div class="mc-top"><div class="mc-dt">14.04.2026 Salı · 18:00</div><div class="mc-tag mc-tag-done">Tamamlandı</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h win"><div class="mc-tn">ARNAVUTKÖY FK</div><div class="mav cg">AR</div></div>
+          <div class="mc-mid">
+            <div class="sbox"><div class="sn">3</div><div class="sep">–</div><div class="sn">2</div></div>
+          </div>
+          <div class="mc-tm a"><div class="mav co">İL</div><div class="mc-tn">İLKYARDIM SPOR</div></div>
+        </div>
+      </div>
+
+      <div class="mcard played" onclick="om('TÜPÇÜLER FK','SAGRADA FAMİLA','15.04.2026 Çarşamba','17:30','Saha B','Hakem: Veli Y.','cin','crs')">
+        <div class="mc-top"><div class="mc-dt">15.04.2026 Çarşamba · 17:30</div><div class="mc-tag mc-tag-done">Tamamlandı</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h"><div class="mc-tn">TÜPÇÜLER FK</div><div class="mav cin">TÜ</div></div>
+          <div class="mc-mid">
+            <div class="sbox"><div class="sn">1</div><div class="sep">–</div><div class="sn">1</div></div>
+          </div>
+          <div class="mc-tm a"><div class="mav crs">SA</div><div class="mc-tn">SAGRADA FAMİLA</div></div>
+        </div>
+      </div>
+
+      <div class="mcard played" onclick="om('DETERJAN GÜCÜ','PUSU FK','16.04.2026 Perşembe','17:00','Saha C','Hakem: Hasan B.','crd','cli')">
+        <div class="mc-top"><div class="mc-dt">16.04.2026 Perşembe · 17:00</div><div class="mc-tag mc-tag-done">Tamamlandı</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h"><div class="mc-tn">DETERJAN GÜCÜ</div><div class="mav crd">DE</div></div>
+          <div class="mc-mid">
+            <div class="sbox"><div class="sn">1</div><div class="sep">–</div><div class="sn">2</div></div>
+          </div>
+          <div class="mc-tm a win"><div class="mav cli">PU</div><div class="mc-tn">PUSU FK</div></div>
+        </div>
+      </div>
+
+      <div class="mcard played" onclick="om('RÖNTGEN','SSK MONTANA','17.04.2026 Cuma','17:00','Saha A','Hakem: Murat Ş.','cgr','cam')">
+        <div class="mc-top"><div class="mc-dt">17.04.2026 Cuma · 17:00</div><div class="mc-tag mc-tag-done">Tamamlandı</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h win"><div class="mc-tn">RÖNTGEN</div><div class="mav cgr">RÖ</div></div>
+          <div class="mc-mid">
+            <div class="sbox"><div class="sn">3</div><div class="sep">–</div><div class="sn">1</div></div>
+          </div>
+          <div class="mc-tm a"><div class="mav cam">SS</div><div class="mc-tn">SSK MONTANA</div></div>
+        </div>
+      </div>
+
+      <!-- ── 3. HAFTA ── -->
+      <div class="wsep">
+        <div class="whd">
+          <div class="wleft">
+            <div class="wnum">03</div>
+            <div class="wmeta"><b>3. Hafta</b><span>Grup Aşaması</span></div>
+          </div>
+          <div class="wbadge wbadge-done">Tamamlandı</div>
+        </div>
+      </div>
+
+      <div class="mcard played" onclick="om('EYÜP CİTY','SAGRADA FAMİLA','20.04.2026 P.tesi','17:00','Saha B','Hakem: Ali K.','cp','crs')">
+        <div class="mc-top"><div class="mc-dt">20.04.2026 P.tesi · 17:00</div><div class="mc-tag mc-tag-done">Tamamlandı</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h win"><div class="mc-tn">EYÜP CİTY</div><div class="mav cp">EY</div></div>
+          <div class="mc-mid">
+            <div class="sbox"><div class="sn">2</div><div class="sep">–</div><div class="sn">0</div></div>
+          </div>
+          <div class="mc-tm a"><div class="mav crs">SA</div><div class="mc-tn">SAGRADA FAMİLA</div></div>
+        </div>
+      </div>
+
+      <div class="mcard played" onclick="om('FUTMEYDANI','OKMEYDANI DİŞ','21.04.2026 Salı','18:00','Saha A','Hakem: Mehmet T.','cr','cb')">
+        <div class="mc-top"><div class="mc-dt">21.04.2026 Salı · 18:00</div><div class="mc-tag mc-tag-done">Tamamlandı</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h win"><div class="mc-tn">FUTMEYDANI</div><div class="mav cr">FU</div></div>
+          <div class="mc-mid">
+            <div class="sbox"><div class="sn">1</div><div class="sep">–</div><div class="sn">0</div></div>
+          </div>
+          <div class="mc-tm a"><div class="mav cb">OK</div><div class="mc-tn">OKMEYDANI DİŞ</div></div>
+        </div>
+      </div>
+
+      <div class="mcard played" onclick="om('PUSU FK','RÖNTGEN','22.04.2026 Çarşamba','17:30','Saha C','Hakem: Veli Y.','cli','cgr')">
+        <div class="mc-top"><div class="mc-dt">22.04.2026 Çarşamba · 17:30</div><div class="mc-tag mc-tag-done">Tamamlandı</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h win"><div class="mc-tn">PUSU FK</div><div class="mav cli">PU</div></div>
+          <div class="mc-mid">
+            <div class="sbox"><div class="sn">3</div><div class="sep">–</div><div class="sn">0</div></div>
+          </div>
+          <div class="mc-tm a"><div class="mav cgr">RÖ</div><div class="mc-tn">RÖNTGEN</div></div>
+        </div>
+      </div>
+
+      <div class="mcard played" onclick="om('SSK MONTANA','DETERJAN GÜCÜ','24.04.2026 Cuma','17:00','Saha B','Hakem: Hasan B.','cam','crd')">
+        <div class="mc-top"><div class="mc-dt">24.04.2026 Cuma · 17:00</div><div class="mc-tag mc-tag-done">Tamamlandı</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h win"><div class="mc-tn">SSK MONTANA</div><div class="mav cam">SS</div></div>
+          <div class="mc-mid">
+            <div class="sbox"><div class="sn">2</div><div class="sep">–</div><div class="sn">1</div></div>
+          </div>
+          <div class="mc-tm a"><div class="mav crd">DE</div><div class="mc-tn">DETERJAN GÜCÜ</div></div>
+        </div>
+      </div>
+
+      <!-- ── 4. HAFTA ── -->
+      <div class="wsep">
+        <div class="whd">
+          <div class="wleft">
+            <div class="wnum">04</div>
+            <div class="wmeta"><b>4. Hafta</b><span>Grup Aşaması · Son Tur</span></div>
+          </div>
+          <div class="wbadge wbadge-up">Bu Hafta</div>
+        </div>
+      </div>
+
+      <div class="mcard upcoming" onclick="om('İLKYARDIM SPOR','FUTMEYDANI','27.04.2026 P.tesi','17:00','Saha A','Hakem: Murat Ş.','co','cr')">
+        <div class="mc-top"><div class="mc-dt">27.04.2026 P.tesi · 17:00</div><div class="mc-tag mc-tag-up">Yaklaşıyor</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h"><div class="mc-tn">İLKYARDIM SPOR</div><div class="mav co">İL</div></div>
+          <div class="mc-mid"><div class="vs">VS</div></div>
+          <div class="mc-tm a"><div class="mav cr">FU</div><div class="mc-tn">FUTMEYDANI</div></div>
+        </div>
+      </div>
+
+      <div class="mcard upcoming" onclick="om('OKMEYDANI DİŞ','ARNAVUTKÖY FK','28.04.2026 Salı','18:00','Saha B','Hakem: Ali K.','cb','cg')">
+        <div class="mc-top"><div class="mc-dt">28.04.2026 Salı · 18:00</div><div class="mc-tag mc-tag-up">Yaklaşıyor</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h"><div class="mc-tn">OKMEYDANI DİŞ</div><div class="mav cb">OK</div></div>
+          <div class="mc-mid"><div class="vs">VS</div></div>
+          <div class="mc-tm a"><div class="mav cg">AR</div><div class="mc-tn">ARNAVUTKÖY FK</div></div>
+        </div>
+      </div>
+
+      <div class="mcard upcoming" onclick="om('SİSTRUNK','TÜPÇÜLER FK','29.04.2026 Çarşamba','17:30','Saha C','Hakem: Veli Y.','ct','cin')">
+        <div class="mc-top"><div class="mc-dt">29.04.2026 Çarşamba · 17:30</div><div class="mc-tag mc-tag-up">Yaklaşıyor</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h"><div class="mc-tn">SİSTRUNK</div><div class="mav ct">SI</div></div>
+          <div class="mc-mid"><div class="vs">VS</div></div>
+          <div class="mc-tm a"><div class="mav cin">TÜ</div><div class="mc-tn">TÜPÇÜLER FK</div></div>
+        </div>
+      </div>
+
+      <div class="mcard upcoming" onclick="om('RÖNTGEN','DETERJAN GÜCÜ','30.04.2026 Perşembe','17:00','Saha A','Hakem: Mehmet T.','cgr','crd')">
+        <div class="mc-top"><div class="mc-dt">30.04.2026 Perşembe · 17:00</div><div class="mc-tag mc-tag-up">Yaklaşıyor</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h"><div class="mc-tn">RÖNTGEN</div><div class="mav cgr">RÖ</div></div>
+          <div class="mc-mid"><div class="vs">VS</div></div>
+          <div class="mc-tm a"><div class="mav crd">DE</div><div class="mc-tn">DETERJAN GÜCÜ</div></div>
+        </div>
+      </div>
+
+      <!-- ── 5. HAFTA — ÇEYREK FİNAL ── -->
+      <div class="wsep">
+        <div class="whd">
+          <div class="wleft">
+            <div class="wnum">05</div>
+            <div class="wmeta"><b>5. Hafta</b><span>Çeyrek Final</span></div>
+          </div>
+          <div class="wbadge wbadge-ko">Çeyrek Final</div>
+        </div>
+      </div>
+      <div class="final-banner">
+        <div class="fb-label">Eleme Aşaması</div>
+        <div class="fb-title">⚡ ÇEYREK FİNAL ⚡</div>
+        <div class="fb-sub">En iyi 8 takım · Tek maç eleme</div>
+      </div>
+
+      <div class="mcard ko" onclick="om('A Grubu 1.si','B Grubu 2.si','04.05.2026 Pazartesi','17:00','Ana Saha','Hakem: TBD','cr','ct')">
+        <div class="mc-top"><div class="mc-dt">04.05.2026 P.tesi · 17:00</div><div class="mc-tag mc-tag-ko">ÇF 1</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h"><div class="mc-tn">A Grubu 1.si</div><div class="mav cr">A1</div></div>
+          <div class="mc-mid"><div class="vs ko">VS</div></div>
+          <div class="mc-tm a"><div class="mav ct">B2</div><div class="mc-tn">B Grubu 2.si</div></div>
+        </div>
+      </div>
+
+      <div class="mcard ko" onclick="om('C Grubu 1.si','En İyi 2. Takım','05.05.2026 Salı','18:00','Ana Saha','Hakem: TBD','cli','cb')">
+        <div class="mc-top"><div class="mc-dt">05.05.2026 Salı · 18:00</div><div class="mc-tag mc-tag-ko">ÇF 2</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h"><div class="mc-tn">C Grubu 1.si</div><div class="mav cli">C1</div></div>
+          <div class="mc-mid"><div class="vs ko">VS</div></div>
+          <div class="mc-tm a"><div class="mav cb">Eİ2</div><div class="mc-tn">En İyi 2. Takım</div></div>
+        </div>
+      </div>
+
+      <div class="mcard ko" onclick="om('B Grubu 1.si','A Grubu 2.si','06.05.2026 Çarşamba','17:00','Ana Saha','Hakem: TBD','cp','cg')">
+        <div class="mc-top"><div class="mc-dt">06.05.2026 Çarşamba · 17:00</div><div class="mc-tag mc-tag-ko">ÇF 3</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h"><div class="mc-tn">B Grubu 1.si</div><div class="mav cp">B1</div></div>
+          <div class="mc-mid"><div class="vs ko">VS</div></div>
+          <div class="mc-tm a"><div class="mav cg">A2</div><div class="mc-tn">A Grubu 2.si</div></div>
+        </div>
+      </div>
+
+      <div class="mcard ko" onclick="om('C Grubu 2.si','En İyi 2. Takım 2','07.05.2026 Perşembe','17:00','Ana Saha','Hakem: TBD','cam','crs')">
+        <div class="mc-top"><div class="mc-dt">07.05.2026 Perşembe · 17:00</div><div class="mc-tag mc-tag-ko">ÇF 4</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h"><div class="mc-tn">C Grubu 2.si</div><div class="mav cam">C2</div></div>
+          <div class="mc-mid"><div class="vs ko">VS</div></div>
+          <div class="mc-tm a"><div class="mav crs">Eİ3</div><div class="mc-tn">En İyi 2. Takım 2</div></div>
+        </div>
+      </div>
+
+      <!-- ── 6. HAFTA — YARI FİNAL ── -->
+      <div class="wsep">
+        <div class="whd">
+          <div class="wleft">
+            <div class="wnum">06</div>
+            <div class="wmeta"><b>6. Hafta</b><span>Yarı Final</span></div>
+          </div>
+          <div class="wbadge wbadge-ko">Yarı Final</div>
+        </div>
+      </div>
+      <div class="final-banner">
+        <div class="fb-label">Eleme Aşaması</div>
+        <div class="fb-title">🔥 YARI FİNAL 🔥</div>
+        <div class="fb-sub">Son 4 · Şampiyonluk yolunun son adımı</div>
+      </div>
+
+      <div class="mcard ko" onclick="om('Yarı Final 1 — Takım A','Yarı Final 1 — Takım B','12.05.2026 Salı','17:30','Ana Saha','Hakem: TBD','cr','cp')">
+        <div class="mc-top"><div class="mc-dt">12.05.2026 Salı · 17:30</div><div class="mc-tag mc-tag-ko">YF 1</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h"><div class="mc-tn">YF 1 — Takım A</div><div class="mav cr">YF</div></div>
+          <div class="mc-mid"><div class="vs ko">VS</div></div>
+          <div class="mc-tm a"><div class="mav cp">YF</div><div class="mc-tn">YF 1 — Takım B</div></div>
+        </div>
+      </div>
+
+      <div class="mcard ko" onclick="om('Yarı Final 2 — Takım C','Yarı Final 2 — Takım D','13.05.2026 Çarşamba','17:00','Ana Saha','Hakem: TBD','cli','ct')">
+        <div class="mc-top"><div class="mc-dt">13.05.2026 Çarşamba · 17:00</div><div class="mc-tag mc-tag-ko">YF 2</div></div>
+        <div class="mc-teams">
+          <div class="mc-tm h"><div class="mc-tn">YF 2 — Takım C</div><div class="mav cli">YF</div></div>
+          <div class="mc-mid"><div class="vs ko">VS</div></div>
+          <div class="mc-tm a"><div class="mav ct">YF</div><div class="mc-tn">YF 2 — Takım D</div></div>
+        </div>
+      </div>
+
+      <!-- ── 7. HAFTA — BÜYÜK FİNAL ── -->
+      <div class="wsep">
+        <div class="whd">
+          <div class="wleft">
+            <div class="wnum">07</div>
+            <div class="wmeta"><b>7. Hafta</b><span>Büyük Final</span></div>
+          </div>
+          <div class="wbadge wbadge-ko">Şampiyonluk</div>
+        </div>
+      </div>
+      <div class="final-banner">
+        <div class="fb-label">🏆 Büyük Final 🏆</div>
+        <div class="fb-title">ŞAMPİYONLUK MAÇI</div>
+        <div class="fb-sub">20–22 Mayıs 2026 · Saat 17:00 · Ana Saha</div>
+      </div>
+
+      <div class="mcard final" onclick="om('Finalist 1','Finalist 2','20–22.05.2026','17:00','Ana Saha — Büyük Final','TBD','cr','cli')">
+        <div class="mc-top">
+          <div class="mc-dt">20–22.05.2026 · 17:00</div>
+          <div class="mc-tag mc-tag-fin">🏆 BÜYÜK FİNAL</div>
         </div>
         <div class="mc-teams">
-          <div class="mc-team home win">
-            <div class="mc-tname">Acil United</div>
-            <div class="mt-av c-r">AC</div>
-          </div>
-          <div class="mc-mid">
-            <div class="mc-score">
-              <div class="snum">3</div>
-              <div class="ssep">–</div>
-              <div class="snum">1</div>
-            </div>
-          </div>
-          <div class="mc-team away">
-            <div class="mt-av c-g">KR</div>
-            <div class="mc-tname">Kardiyoloji Rovers</div>
-          </div>
+          <div class="mc-tm h"><div class="mc-tn">ŞAMPİYON ADAYI 1</div><div class="mav cr">S1</div></div>
+          <div class="mc-mid"><div class="vs fin">FİNAL</div></div>
+          <div class="mc-tm a"><div class="mav cli">S2</div><div class="mc-tn">ŞAMPİYON ADAYI 2</div></div>
         </div>
       </div>
 
-      <div class="mcard played">
-        <div class="mc-meta">
-          <div class="mc-time">Pts 16:00</div>
-          <div class="mc-tag mc-tag-done">Tamamlandı</div>
-        </div>
-        <div class="mc-teams">
-          <div class="mc-team home win">
-            <div class="mc-tname">Ortopedi FC</div>
-            <div class="mt-av c-b">OR</div>
-          </div>
-          <div class="mc-mid">
-            <div class="mc-score">
-              <div class="snum">2</div>
-              <div class="ssep">–</div>
-              <div class="snum">0</div>
-            </div>
-          </div>
-          <div class="mc-team away">
-            <div class="mt-av c-p">NR</div>
-            <div class="mc-tname">Nöroloji Racing</div>
-          </div>
-        </div>
-      </div>
+    </div><!-- /fcol -->
+  </div><!-- /gview -->
 
-      <!-- Grup B maçları -->
-      <div class="fix-sep">Grup B</div>
-
-      <div class="mcard played">
-        <div class="mc-meta">
-          <div class="mc-time">Sal 14:00</div>
-          <div class="mc-tag mc-tag-done">Tamamlandı</div>
-        </div>
-        <div class="mc-teams">
-          <div class="mc-team home win">
-            <div class="mc-tname">Cerrahi FC</div>
-            <div class="mt-av c-o">CF</div>
-          </div>
-          <div class="mc-mid">
-            <div class="mc-score">
-              <div class="snum">4</div>
-              <div class="ssep">–</div>
-              <div class="snum">2</div>
-            </div>
-          </div>
-          <div class="mc-team away">
-            <div class="mt-av c-in">PD</div>
-            <div class="mc-tname">Pediatri Dynamo</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mcard played">
-        <div class="mc-meta">
-          <div class="mc-time">Sal 16:00</div>
-          <div class="mc-tag mc-tag-done">Tamamlandı</div>
-        </div>
-        <div class="mc-teams">
-          <div class="mc-team home">
-            <div class="mc-tname">Psikiyatri Inter</div>
-            <div class="mt-av c-t">PI</div>
-          </div>
-          <div class="mc-mid">
-            <div class="mc-score">
-              <div class="snum">1</div>
-              <div class="ssep">–</div>
-              <div class="snum">1</div>
-            </div>
-          </div>
-          <div class="mc-team away">
-            <div class="mt-av c-rs">RM</div>
-            <div class="mc-tname">Radyoloji Madrid</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Grup C maçları -->
-      <div class="fix-sep">Grup C</div>
-
-      <div class="mcard upcoming">
-        <div class="mc-meta">
-          <div class="mc-time">Çrş 14:00</div>
-          <div class="mc-tag mc-tag-next">Yaklaşıyor</div>
-        </div>
-        <div class="mc-teams">
-          <div class="mc-team home">
-            <div class="mc-tname">Dahiliye Athletic</div>
-            <div class="mt-av c-li">DA</div>
-          </div>
-          <div class="mc-mid">
-            <div class="vs-badge">VS</div>
-          </div>
-          <div class="mc-team away">
-            <div class="mt-av c-r">ÜR</div>
-            <div class="mc-tname">Üroloji Rangers</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mcard upcoming">
-        <div class="mc-meta">
-          <div class="mc-time">Çrş 16:00</div>
-          <div class="mc-tag mc-tag-next">Yaklaşıyor</div>
-        </div>
-        <div class="mc-teams">
-          <div class="mc-team home">
-            <div class="mc-tname">KBB United</div>
-            <div class="mt-av c-am">KU</div>
-          </div>
-          <div class="mc-mid">
-            <div class="vs-badge">VS</div>
-          </div>
-          <div class="mc-team away">
-            <div class="mt-av c-g">GO</div>
-            <div class="mc-tname">Göz Hastalıkları SC</div>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /fixture-col -->
-
-  </div><!-- /view groups -->
-
-  <!-- ════════════════════════════════════════
-       VIEW — EN DEĞERLİ 20
-  ════════════════════════════════════════ -->
-  <div class="view top20-view" id="view-top20">
-    <div class="col-title">En Değerli 20 Oyuncu</div>
-    <div class="top20-grid">
-      <div class="p20card r1"><div class="p20num">1</div><div class="p20av c-r">ME</div><div class="p20info"><div class="p20name">Mehmet Yılmaz</div><div class="p20pos">CAM · Acil United</div></div><div class="p20val"><div class="p20valnum">42,8 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card r2"><div class="p20num">2</div><div class="p20av c-o">AH</div><div class="p20info"><div class="p20name">Ahmet Kaya</div><div class="p20pos">STR · Cerrahi FC</div></div><div class="p20val"><div class="p20valnum">38,1 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card r3"><div class="p20num">3</div><div class="p20av c-li">MU</div><div class="p20info"><div class="p20name">Mustafa Demir</div><div class="p20pos">OSA · Dahiliye Athletic</div></div><div class="p20val"><div class="p20valnum">34,5 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card"><div class="p20num">4</div><div class="p20av c-p">EM</div><div class="p20info"><div class="p20name">Emre Şahin</div><div class="p20pos">STR · Ortopedi FC</div></div><div class="p20val"><div class="p20valnum">31,2 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card"><div class="p20num">5</div><div class="p20av c-am">BU</div><div class="p20info"><div class="p20name">Burak Arslan</div><div class="p20pos">SKN · KBB United</div></div><div class="p20val"><div class="p20valnum">28,7 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card"><div class="p20num">6</div><div class="p20av c-t">AL</div><div class="p20info"><div class="p20name">Ali Koç</div><div class="p20pos">STP · Psikiyatri Inter</div></div><div class="p20val"><div class="p20valnum">25,3 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card"><div class="p20num">7</div><div class="p20av c-rs">ÖZ</div><div class="p20info"><div class="p20name">Özgür Çelik</div><div class="p20pos">KAL · Kardiyoloji Rovers</div></div><div class="p20val"><div class="p20valnum">22,8 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card"><div class="p20num">8</div><div class="p20av c-in">HA</div><div class="p20info"><div class="p20name">Hasan Polat</div><div class="p20pos">DEF · Cerrahi FC</div></div><div class="p20val"><div class="p20valnum">21,5 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card"><div class="p20num">9</div><div class="p20av c-b">KE</div><div class="p20info"><div class="p20name">Kerem Yıldız</div><div class="p20pos">SAK · Acil United</div></div><div class="p20val"><div class="p20valnum">19,9 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card"><div class="p20num">10</div><div class="p20av c-g">TA</div><div class="p20info"><div class="p20name">Tarık Güneş</div><div class="p20pos">OSA · Nöroloji Racing</div></div><div class="p20val"><div class="p20valnum">18,4 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card"><div class="p20num">11</div><div class="p20av c-o">SE</div><div class="p20info"><div class="p20name">Serhat Erdoğan</div><div class="p20pos">STR · Radyoloji Madrid</div></div><div class="p20val"><div class="p20valnum">17,2 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card"><div class="p20num">12</div><div class="p20av c-li">DO</div><div class="p20info"><div class="p20name">Doğan Aksoy</div><div class="p20pos">DEF · Dahiliye Athletic</div></div><div class="p20val"><div class="p20valnum">16,1 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card"><div class="p20num">13</div><div class="p20av c-r">RA</div><div class="p20info"><div class="p20name">Ramazan Kurt</div><div class="p20pos">CAM · Göz Hastalıkları SC</div></div><div class="p20val"><div class="p20valnum">15,4 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card"><div class="p20num">14</div><div class="p20av c-p">CE</div><div class="p20info"><div class="p20name">Cem Bozkurt</div><div class="p20pos">SKN · Ortopedi FC</div></div><div class="p20val"><div class="p20valnum">14,8 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card"><div class="p20num">15</div><div class="p20av c-t">ÜM</div><div class="p20info"><div class="p20name">Ümit Aydın</div><div class="p20pos">STP · KBB United</div></div><div class="p20val"><div class="p20valnum">13,9 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card"><div class="p20num">16</div><div class="p20av c-in">FA</div><div class="p20info"><div class="p20name">Fatih Şimşek</div><div class="p20pos">OSA · Pediatri Dynamo</div></div><div class="p20val"><div class="p20valnum">13,1 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card"><div class="p20num">17</div><div class="p20av c-rs">İL</div><div class="p20info"><div class="p20name">İlhan Soylu</div><div class="p20pos">KAL · Acil United</div></div><div class="p20val"><div class="p20valnum">12,6 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card"><div class="p20num">18</div><div class="p20av c-g">GÖ</div><div class="p20info"><div class="p20name">Gökhan Uysal</div><div class="p20pos">DEF · Üroloji Rangers</div></div><div class="p20val"><div class="p20valnum">11,8 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card"><div class="p20num">19</div><div class="p20av c-am">BA</div><div class="p20info"><div class="p20name">Baran Yılmaz</div><div class="p20pos">SKN · Cerrahi FC</div></div><div class="p20val"><div class="p20valnum">11,2 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
-      <div class="p20card"><div class="p20num">20</div><div class="p20av c-b">SA</div><div class="p20info"><div class="p20name">Samet Kılıç</div><div class="p20pos">STR · Psikiyatri Inter</div></div><div class="p20val"><div class="p20valnum">10,5 M ₺</div><div class="p20valsub">Bonservis</div></div></div>
+  <!-- ══════════════ VIEW: EN DEĞERLİ 20 ══════════════ -->
+  <div class="view t20view" id="view-top20">
+    <div class="col-ttl">En Değerli 20 Oyuncu</div>
+    <div class="t20grid">
+      <div class="p20 rk1"><div class="p20num">1</div><div class="p20av cr">ME</div><div class="p20info"><div class="p20nm">Mehmet Yıldız</div><div class="p20ps">STR · FUTMEYDANI</div></div><div class="p20val"><div class="p20vn">42,8 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20 rk2"><div class="p20num">2</div><div class="p20av cp">Emir K.</div><div class="p20info"><div class="p20nm">Emir Kaplan</div><div class="p20ps">CAM · EYÜP CİTY</div></div><div class="p20val"><div class="p20vn">38,4 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20 rk3"><div class="p20num">3</div><div class="p20av cli">Bu</div><div class="p20info"><div class="p20nm">Burak Demir</div><div class="p20ps">SAK · PUSU FK</div></div><div class="p20val"><div class="p20vn">35,1 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20"><div class="p20num">4</div><div class="p20av ct">Ce</div><div class="p20info"><div class="p20nm">Cem Arslan</div><div class="p20ps">OSA · SİSTRUNK</div></div><div class="p20val"><div class="p20vn">31,6 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20"><div class="p20num">5</div><div class="p20av cg">Al</div><div class="p20info"><div class="p20nm">Ali Şahin</div><div class="p20ps">STR · ARNAVUTKÖY FK</div></div><div class="p20val"><div class="p20vn">28,9 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20"><div class="p20num">6</div><div class="p20av cb">Ha</div><div class="p20info"><div class="p20nm">Hakan Öz</div><div class="p20ps">DEF · OKMEYDANI DİŞ</div></div><div class="p20val"><div class="p20vn">25,7 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20"><div class="p20num">7</div><div class="p20av cam">Ta</div><div class="p20info"><div class="p20nm">Tarık Coşkun</div><div class="p20ps">KAL · SSK MONTANA</div></div><div class="p20val"><div class="p20vn">22,3 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20"><div class="p20num">8</div><div class="p20av crs">Ög</div><div class="p20info"><div class="p20nm">Öğrenci Bey</div><div class="p20ps">STP · SAGRADA FAMİLA</div></div><div class="p20val"><div class="p20vn">21,0 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20"><div class="p20num">9</div><div class="p20av cin">Ka</div><div class="p20info"><div class="p20nm">Kahraman T.</div><div class="p20ps">SKN · TÜPÇÜLER FK</div></div><div class="p20val"><div class="p20vn">19,4 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20"><div class="p20num">10</div><div class="p20av crd">Ra</div><div class="p20info"><div class="p20nm">Ramiz Aktaş</div><div class="p20ps">OSA · DETERJAN GÜCÜ</div></div><div class="p20val"><div class="p20vn">18,7 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20"><div class="p20num">11</div><div class="p20av cgr">Kı</div><div class="p20info"><div class="p20nm">Kıvanç Bora</div><div class="p20ps">SAK · RÖNTGEN</div></div><div class="p20val"><div class="p20vn">17,5 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20"><div class="p20num">12</div><div class="p20av co">Or</div><div class="p20info"><div class="p20nm">Orhan Demir</div><div class="p20ps">STR · İLKYARDIM SPOR</div></div><div class="p20val"><div class="p20vn">16,2 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20"><div class="p20num">13</div><div class="p20av cr">Se</div><div class="p20info"><div class="p20nm">Serhat Bal</div><div class="p20ps">CAM · FUTMEYDANI</div></div><div class="p20val"><div class="p20vn">15,8 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20"><div class="p20num">14</div><div class="p20av cp">Ya</div><div class="p20info"><div class="p20nm">Yavuz Kaya</div><div class="p20ps">DEF · EYÜP CİTY</div></div><div class="p20val"><div class="p20vn">14,9 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20"><div class="p20num">15</div><div class="p20av cli">Öm</div><div class="p20info"><div class="p20nm">Ömer Gülen</div><div class="p20ps">STP · PUSU FK</div></div><div class="p20val"><div class="p20vn">13,5 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20"><div class="p20num">16</div><div class="p20av ct">Fi</div><div class="p20info"><div class="p20nm">Firaz Aslan</div><div class="p20ps">SKN · SİSTRUNK</div></div><div class="p20val"><div class="p20vn">12,9 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20"><div class="p20num">17</div><div class="p20av cg">Um</div><div class="p20info"><div class="p20nm">Umut Ergün</div><div class="p20ps">OSA · ARNAVUTKÖY FK</div></div><div class="p20val"><div class="p20vn">12,1 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20"><div class="p20num">18</div><div class="p20av cam">Fa</div><div class="p20info"><div class="p20nm">Faruk Sönmez</div><div class="p20ps">DEF · SSK MONTANA</div></div><div class="p20val"><div class="p20vn">11,6 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20"><div class="p20num">19</div><div class="p20av cin">İh</div><div class="p20info"><div class="p20nm">İhsan Turan</div><div class="p20ps">KAL · TÜPÇÜLER FK</div></div><div class="p20val"><div class="p20vn">10,8 M ₺</div><div class="p20vs">Bonservis</div></div></div>
+      <div class="p20"><div class="p20num">20</div><div class="p20av crd">Do</div><div class="p20info"><div class="p20nm">Doğukan Er</div><div class="p20ps">SAK · DETERJAN GÜCÜ</div></div><div class="p20val"><div class="p20vn">10,2 M ₺</div><div class="p20vs">Bonservis</div></div></div>
     </div>
   </div>
 
-  <!-- ════════════════════════════════════════
-       VIEW — GOL KRALLIĞI
-  ════════════════════════════════════════ -->
-  <div class="view scorers-view" id="view-scorers">
-    <div class="col-title">Gol Krallığı</div>
-    <div class="scorers-list">
-      <div class="srow"><div class="srank">1</div><div class="sav c-r">ME</div><div class="sinfo"><div class="sname">Mehmet Yılmaz</div><div class="steam">Acil United · Grup A</div></div><div class="sgoals"><div class="sgnum">7</div><div class="sgball">⚽</div></div></div>
-      <div class="srow"><div class="srank">2</div><div class="sav c-o">CF</div><div class="sinfo"><div class="sname">Cerrahi Kaptan</div><div class="steam">Cerrahi FC · Grup B</div></div><div class="sgoals"><div class="sgnum">6</div><div class="sgball">⚽</div></div></div>
-      <div class="srow"><div class="srank">3</div><div class="sav c-li">DO</div><div class="sinfo"><div class="sname">Doğan Aksoy</div><div class="steam">Dahiliye Athletic · Grup C</div></div><div class="sgoals"><div class="sgnum">5</div><div class="sgball">⚽</div></div></div>
-      <div class="srow"><div class="srank">4</div><div class="sav c-b">AH</div><div class="sinfo"><div class="sname">Ahmet Kaya</div><div class="steam">Cerrahi FC · Grup B</div></div><div class="sgoals"><div class="sgnum">4</div><div class="sgball">⚽</div></div></div>
-      <div class="srow"><div class="srank">4</div><div class="sav c-am">TA</div><div class="sinfo"><div class="sname">Tarık Güneş</div><div class="steam">KBB United · Grup C</div></div><div class="sgoals"><div class="sgnum">4</div><div class="sgball">⚽</div></div></div>
-      <div class="srow"><div class="srank">6</div><div class="sav c-g">KE</div><div class="sinfo"><div class="sname">Kerem Yıldız</div><div class="steam">Acil United · Grup A</div></div><div class="sgoals"><div class="sgnum">3</div><div class="sgball">⚽</div></div></div>
-      <div class="srow"><div class="srank">6</div><div class="sav c-p">EM</div><div class="sinfo"><div class="sname">Emre Şahin</div><div class="steam">Ortopedi FC · Grup A</div></div><div class="sgoals"><div class="sgnum">3</div><div class="sgball">⚽</div></div></div>
-      <div class="srow"><div class="srank">6</div><div class="sav c-t">AL</div><div class="sinfo"><div class="sname">Ali Koç</div><div class="steam">Psikiyatri Inter · Grup B</div></div><div class="sgoals"><div class="sgnum">3</div><div class="sgball">⚽</div></div></div>
-      <div class="srow"><div class="srank">9</div><div class="sav c-rs">ÖZ</div><div class="sinfo"><div class="sname">Özgür Çelik</div><div class="steam">Radyoloji Madrid · Grup B</div></div><div class="sgoals"><div class="sgnum">2</div><div class="sgball">⚽</div></div></div>
-      <div class="srow"><div class="srank">9</div><div class="sav c-in">CE</div><div class="sinfo"><div class="sname">Cem Bozkurt</div><div class="steam">Ortopedi FC · Grup A</div></div><div class="sgoals"><div class="sgnum">2</div><div class="sgball">⚽</div></div></div>
+  <!-- ══════════════ VIEW: GOL KRALLIĞI ══════════════ -->
+  <div class="view sview" id="view-scorers">
+    <div class="col-ttl">Gol Krallığı</div>
+    <div class="slist">
+      <div class="srow"><div class="srank">1</div><div class="sav cr">ME</div><div class="sinfo"><div class="snm">Mehmet Yıldız</div><div class="stm">FUTMEYDANI · Grup A</div></div><div class="sgl"><div class="sgn">8</div><span style="font-size:.9rem">⚽</span></div></div>
+      <div class="srow"><div class="srank">2</div><div class="sav cp">EK</div><div class="sinfo"><div class="snm">Emir Kaplan</div><div class="stm">EYÜP CİTY · Grup B</div></div><div class="sgl"><div class="sgn">6</div><span style="font-size:.9rem">⚽</span></div></div>
+      <div class="srow"><div class="srank">3</div><div class="sav cli">BD</div><div class="sinfo"><div class="snm">Burak Demir</div><div class="stm">PUSU FK · Grup C</div></div><div class="sgl"><div class="sgn">5</div><span style="font-size:.9rem">⚽</span></div></div>
+      <div class="srow"><div class="srank">4</div><div class="sav cg">Al</div><div class="sinfo"><div class="snm">Ali Şahin</div><div class="stm">ARNAVUTKÖY FK · Grup A</div></div><div class="sgl"><div class="sgn">4</div><span style="font-size:.9rem">⚽</span></div></div>
+      <div class="srow"><div class="srank">4</div><div class="sav ct">Ce</div><div class="sinfo"><div class="snm">Cem Arslan</div><div class="stm">SİSTRUNK · Grup B</div></div><div class="sgl"><div class="sgn">4</div><span style="font-size:.9rem">⚽</span></div></div>
+      <div class="srow"><div class="srank">6</div><div class="sav cgr">Kı</div><div class="sinfo"><div class="snm">Kıvanç Bora</div><div class="stm">RÖNTGEN · Grup C</div></div><div class="sgl"><div class="sgn">3</div><span style="font-size:.9rem">⚽</span></div></div>
+      <div class="srow"><div class="srank">6</div><div class="sav cb">Ha</div><div class="sinfo"><div class="snm">Hakan Öz</div><div class="stm">OKMEYDANI DİŞ · Grup A</div></div><div class="sgl"><div class="sgn">3</div><span style="font-size:.9rem">⚽</span></div></div>
+      <div class="srow"><div class="srank">8</div><div class="sav cam">Ta</div><div class="sinfo"><div class="snm">Tarık Coşkun</div><div class="stm">SSK MONTANA · Grup C</div></div><div class="sgl"><div class="sgn">2</div><span style="font-size:.9rem">⚽</span></div></div>
+      <div class="srow"><div class="srank">8</div><div class="sav crs">Ög</div><div class="sinfo"><div class="snm">Öğrenci Bey</div><div class="stm">SAGRADA FAMİLA · Grup B</div></div><div class="sgl"><div class="sgn">2</div><span style="font-size:.9rem">⚽</span></div></div>
+      <div class="srow"><div class="srank">8</div><div class="sav co">Or</div><div class="sinfo"><div class="snm">Orhan Demir</div><div class="stm">İLKYARDIM SPOR · Grup A</div></div><div class="sgl"><div class="sgn">2</div><span style="font-size:.9rem">⚽</span></div></div>
     </div>
   </div>
 
-  <!-- ════════════════════════════════════════
-       VIEW — PROFİL & KAPTANLIK
-  ════════════════════════════════════════ -->
-  <div class="view captains-view" id="view-captains">
-    <div class="col-title">Takım Kaptanları</div>
-    <div class="captains-grid">
+  <!-- ══════════════ VIEW: PROFİL & KAPTANLIK ══════════════ -->
+  <div class="view capview" id="view-captains">
+    <div class="col-ttl">Takım Kaptanları</div>
+    <div class="capgrid">
       <div class="capcard">
-        <div class="cap-crown">👑 Kaptan · Grup A Lideri</div>
-        <div class="cap-head">
-          <div class="cap-av c-r">ME</div>
-          <div><div class="cap-name">Mehmet Yılmaz</div><div class="cap-team">⚡ Acil United</div></div>
-        </div>
+        <div class="cap-crown">👑 Kaptan · Grup A 1.si</div>
+        <div class="cap-hd"><div class="cap-av cr">ME</div><div><div class="cap-nm">Mehmet Yıldız</div><div class="cap-tm">⚽ FUTMEYDANI</div></div></div>
         <div class="cap-stats">
-          <div class="cap-stat"><b>7</b><span>Gol</span></div>
-          <div class="cap-stat"><b>3</b><span>Asist</span></div>
-          <div class="cap-stat"><b>9</b><span>Puan</span></div>
+          <div class="cap-st"><b>8</b><span>Gol</span></div>
+          <div class="cap-st"><b>3</b><span>Asist</span></div>
+          <div class="cap-st"><b>10</b><span>Puan</span></div>
         </div>
       </div>
       <div class="capcard">
-        <div class="cap-crown">👑 Kaptan · Grup B Lideri</div>
-        <div class="cap-head">
-          <div class="cap-av c-o">CF</div>
-          <div><div class="cap-name">Cerrahi Kaptan</div><div class="cap-team">🔪 Cerrahi FC</div></div>
-        </div>
+        <div class="cap-crown">👑 Kaptan · Grup B 1.si</div>
+        <div class="cap-hd"><div class="cap-av cp">EK</div><div><div class="cap-nm">Emir Kaplan</div><div class="cap-tm">🏙️ EYÜP CİTY</div></div></div>
         <div class="cap-stats">
-          <div class="cap-stat"><b>6</b><span>Gol</span></div>
-          <div class="cap-stat"><b>2</b><span>Asist</span></div>
-          <div class="cap-stat"><b>7</b><span>Puan</span></div>
+          <div class="cap-st"><b>6</b><span>Gol</span></div>
+          <div class="cap-st"><b>4</b><span>Asist</span></div>
+          <div class="cap-st"><b>9</b><span>Puan</span></div>
         </div>
       </div>
       <div class="capcard">
-        <div class="cap-crown">👑 Kaptan · Grup C Lideri</div>
-        <div class="cap-head">
-          <div class="cap-av c-li">DA</div>
-          <div><div class="cap-name">Dahiliye Kaptan</div><div class="cap-team">🏥 Dahiliye Athletic</div></div>
-        </div>
+        <div class="cap-crown">👑 Kaptan · Grup C 1.si</div>
+        <div class="cap-hd"><div class="cap-av cli">BD</div><div><div class="cap-nm">Burak Demir</div><div class="cap-tm">🎯 PUSU FK</div></div></div>
         <div class="cap-stats">
-          <div class="cap-stat"><b>2</b><span>Gol</span></div>
-          <div class="cap-stat"><b>4</b><span>Asist</span></div>
-          <div class="cap-stat"><b>7</b><span>Puan</span></div>
+          <div class="cap-st"><b>5</b><span>Gol</span></div>
+          <div class="cap-st"><b>5</b><span>Asist</span></div>
+          <div class="cap-st"><b>10</b><span>Puan</span></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ── FOOTER ── -->
+  <!-- FOOTER -->
   <div class="footer">
-    <div class="footer-l">Hastane <em>Turnuvası</em> 2026</div>
-    <div class="footer-r">Grup Aşaması · Hafta 1 / 6</div>
+    <div class="fl">Hastane <em>Turnuvası</em> 2026</div>
+    <div class="fr">Grup Aşaması · 7 Hafta · Tek Eleme</div>
   </div>
 
 </div><!-- /app -->
 
+<!-- ══════════════ MODAL ══════════════ -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)cm()">
+  <div class="modal" id="modal-inner">
+    <!-- Modal içeriği JS ile doldurulur -->
+  </div>
+</div>
+
 <script>
-function switchView(id, btn) {
+/* ════════════════════════════════════════════════
+   VIEW SWITCH
+════════════════════════════════════════════════ */
+function sv(id, btn) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('on'));
-  document.querySelectorAll('.nav-btn').forEach(b => {
+  document.querySelectorAll('.nbtn').forEach(b => {
     b.classList.remove('on');
-    const dot = b.querySelector('.nbdot');
-    if (dot) dot.style.display = 'none';
+    const d = b.querySelector('.nbdot');
+    if (d) d.style.display = 'none';
   });
   const v = document.getElementById('view-' + id);
   if (v) v.classList.add('on');
   if (btn) {
     btn.classList.add('on');
-    const dot = btn.querySelector('.nbdot');
-    if (dot) dot.style.display = 'block';
+    const d = btn.querySelector('.nbdot');
+    if (d) d.style.display = 'block';
   }
 }
-// init dot visibility
-document.querySelectorAll('.nav-btn:not(.on) .nbdot').forEach(d => d.style.display = 'none');
-</script>
+// init
+document.querySelectorAll('.nbtn:not(.on) .nbdot').forEach(d => d.style.display = 'none');
 
+/* ════════════════════════════════════════════════
+   KADRO VERİSİ — her takım için örnek 11 + 7 yedek
+════════════════════════════════════════════════ */
+const SQUADS = {
+  'FUTMEYDANI': {
+    ilk11: [
+      {n:1, nm:'Kadir Avcı',    pos:'KAL', av:'cr'},
+      {n:2, nm:'Hüseyin Çevik', pos:'SAĞ BEK', av:'cb'},
+      {n:5, nm:'Ahmet Kılıç',   pos:'STOPER', av:'cg'},
+      {n:4, nm:'Burak Taş',     pos:'STOPER', av:'co'},
+      {n:3, nm:'Cenk Doğan',    pos:'SOL BEK', av:'cp'},
+      {n:8, nm:'Tarık Güneş',   pos:'DEF.OSA', av:'ct'},
+      {n:6, nm:'Serhat Bal',    pos:'OSA', av:'crs'},
+      {n:10,nm:'Mert Yıldız',   pos:'ATK.OSA', av:'cin'},
+      {n:11,nm:'Emre Kaya',     pos:'SAĞ KANAT', av:'cli'},
+      {n:7, nm:'Ali Koç',       pos:'SOL KANAT', av:'cam'},
+      {n:9, nm:'Mehmet Yıldız', pos:'STR', av:'cr', cap:true},
+    ],
+    yedek: [
+      {n:12,nm:'Ozan Ak',       pos:'KAL', av:'cgr'},
+      {n:13,nm:'Fatih Yılmaz',  pos:'BEK', av:'cb'},
+      {n:14,nm:'Can Demirci',   pos:'STOPER', av:'cg'},
+      {n:15,nm:'Kerem Aydın',   pos:'OSA', av:'co'},
+      {n:16,nm:'Ferhat Çelik',  pos:'OSA', av:'cp'},
+      {n:17,nm:'Volkan Şen',    pos:'KANAT', av:'ct'},
+      {n:18,nm:'İbrahim Er',    pos:'STR', av:'crs'},
+    ]
+  },
+  'OKMEYDANI DİŞ': {
+    ilk11: [
+      {n:1, nm:'Yusuf Can',     pos:'KAL', av:'cb'},
+      {n:2, nm:'Sinan Bozkurt', pos:'SAĞ BEK', av:'cgr'},
+      {n:5, nm:'Rıfat Kaya',    pos:'STOPER', av:'co'},
+      {n:4, nm:'Tunahan Ak',    pos:'STOPER', av:'cr'},
+      {n:3, nm:'Ertan Çam',     pos:'SOL BEK', av:'ct'},
+      {n:8, nm:'Gökhan Polat',  pos:'DEF.OSA', av:'cp'},
+      {n:6, nm:'Hasan Bora',    pos:'OSA', av:'cam'},
+      {n:10,nm:'Ahmet Ateş',    pos:'ATK.OSA', av:'cli'},
+      {n:11,nm:'Musa Demir',    pos:'SAĞ KANAT', av:'cg'},
+      {n:7, nm:'Ege Yıldız',    pos:'SOL KANAT', av:'cin'},
+      {n:9, nm:'Hakan Öz',      pos:'STR', av:'cb', cap:true},
+    ],
+    yedek: [
+      {n:12,nm:'Caner Kılıç',   pos:'KAL', av:'cgr'},
+      {n:13,nm:'Berk Çelik',    pos:'BEK', av:'co'},
+      {n:14,nm:'Mehmet Taş',    pos:'STOPER', av:'cr'},
+      {n:15,nm:'Onur Güler',    pos:'OSA', av:'ct'},
+      {n:16,nm:'Sercan Ay',     pos:'OSA', av:'cp'},
+      {n:17,nm:'Deniz Ak',      pos:'KANAT', av:'cam'},
+      {n:18,nm:'Ufuk Er',       pos:'STR', av:'cli'},
+    ]
+  },
+  'ARNAVUTKÖY FK': {
+    ilk11: [
+      {n:1, nm:'Bartu Yıldız',  pos:'KAL', av:'cg'},
+      {n:2, nm:'Okan Çelik',    pos:'SAĞ BEK', av:'cb'},
+      {n:5, nm:'Arda Demir',    pos:'STOPER', av:'co'},
+      {n:4, nm:'Sami Kaya',     pos:'STOPER', av:'cr'},
+      {n:3, nm:'Yiğit Taş',     pos:'SOL BEK', av:'ct'},
+      {n:8, nm:'Furkan Boz',    pos:'DEF.OSA', av:'cp'},
+      {n:6, nm:'Alp Güneş',     pos:'OSA', av:'cgr'},
+      {n:10,nm:'Tuncay Ak',     pos:'ATK.OSA', av:'cam'},
+      {n:11,nm:'Orkun Şen',     pos:'SAĞ KANAT', av:'cli'},
+      {n:7, nm:'İbrahim Can',   pos:'SOL KANAT', av:'cin'},
+      {n:9, nm:'Ali Şahin',     pos:'STR', av:'cg', cap:true},
+    ],
+    yedek: [
+      {n:12,nm:'Tolga Er',      pos:'KAL', av:'cgr'},
+      {n:13,nm:'Metin Bozkurt', pos:'BEK', av:'cb'},
+      {n:14,nm:'Emrah Polat',   pos:'STOPER', av:'co'},
+      {n:15,nm:'Kadir Avcı',    pos:'OSA', av:'cr'},
+      {n:16,nm:'Mert Çam',      pos:'OSA', av:'ct'},
+      {n:17,nm:'Selim Kılıç',   pos:'KANAT', av:'cp'},
+      {n:18,nm:'Gürkan Yıldız', pos:'STR', av:'cgr'},
+    ]
+  },
+  'İLKYARDIM SPOR': {
+    ilk11: [
+      {n:1, nm:'Hüseyin Ak',    pos:'KAL', av:'co'},
+      {n:2, nm:'Cevdet Çelik',  pos:'SAĞ BEK', av:'cr'},
+      {n:5, nm:'Nezih Kaya',    pos:'STOPER', av:'cb'},
+      {n:4, nm:'Birol Demir',   pos:'STOPER', av:'cg'},
+      {n:3, nm:'Rüştü Taş',     pos:'SOL BEK', av:'ct'},
+      {n:8, nm:'Nevzat Güneş',  pos:'DEF.OSA', av:'cam'},
+      {n:6, nm:'Ercan Şen',     pos:'OSA', av:'cp'},
+      {n:10,nm:'Muzaffer Çam',  pos:'ATK.OSA', av:'cgr'},
+      {n:11,nm:'Necati Er',     pos:'SAĞ KANAT', av:'cli'},
+      {n:7, nm:'Selahattin Ak', pos:'SOL KANAT', av:'cin'},
+      {n:9, nm:'Orhan Demir',   pos:'STR', av:'co', cap:true},
+    ],
+    yedek: [
+      {n:12,nm:'Celal Yıldız',  pos:'KAL', av:'cgr'},
+      {n:13,nm:'Şevket Polat',  pos:'BEK', av:'cr'},
+      {n:14,nm:'Zübeyir Boz',   pos:'STOPER', av:'cb'},
+      {n:15,nm:'Hayati Kılıç',  pos:'OSA', av:'cg'},
+      {n:16,nm:'Kenan Çelik',   pos:'OSA', av:'ct'},
+      {n:17,nm:'Sıtkı Demir',   pos:'KANAT', av:'cam'},
+      {n:18,nm:'Nazmiye Er',    pos:'STR', av:'cp'},
+    ]
+  },
+  'EYÜP CİTY': {
+    ilk11: [
+      {n:1, nm:'Serkan Ak',     pos:'KAL', av:'cp'},
+      {n:2, nm:'Melik Çelik',   pos:'SAĞ BEK', av:'ct'},
+      {n:5, nm:'Gürsel Kaya',   pos:'STOPER', av:'cgr'},
+      {n:4, nm:'Çağlar Demir',  pos:'STOPER', av:'cam'},
+      {n:3, nm:'Ilgaz Taş',     pos:'SOL BEK', av:'cr'},
+      {n:8, nm:'Kemal Güneş',   pos:'DEF.OSA', av:'cb'},
+      {n:6, nm:'Doruk Şen',     pos:'OSA', av:'cg'},
+      {n:10,nm:'Asil Çam',      pos:'ATK.OSA', av:'co'},
+      {n:11,nm:'Enes Er',       pos:'SAĞ KANAT', av:'cli'},
+      {n:7, nm:'Taha Ak',       pos:'SOL KANAT', av:'cin'},
+      {n:9, nm:'Emir Kaplan',   pos:'STR', av:'cp', cap:true},
+    ],
+    yedek: [
+      {n:12,nm:'Mevlüt Yıldız', pos:'KAL', av:'cgr'},
+      {n:13,nm:'Serhat Polat',  pos:'BEK', av:'ct'},
+      {n:14,nm:'Adem Boz',      pos:'STOPER', av:'cr'},
+      {n:15,nm:'Hamdi Kılıç',   pos:'OSA', av:'cb'},
+      {n:16,nm:'Harun Çelik',   pos:'OSA', av:'cg'},
+      {n:17,nm:'Volkan Demir',  pos:'KANAT', av:'co'},
+      {n:18,nm:'Oktay Er',      pos:'STR', av:'cp'},
+    ]
+  },
+  'SİSTRUNK': {
+    ilk11: [
+      {n:1, nm:'Atakan Ak',     pos:'KAL', av:'ct'},
+      {n:2, nm:'Başar Çelik',   pos:'SAĞ BEK', av:'cr'},
+      {n:5, nm:'Cüneyt Kaya',   pos:'STOPER', av:'cb'},
+      {n:4, nm:'Demir Taş',     pos:'STOPER', av:'cg'},
+      {n:3, nm:'Ekrem Demir',   pos:'SOL BEK', av:'co'},
+      {n:8, nm:'Firat Güneş',   pos:'DEF.OSA', av:'cp'},
+      {n:6, nm:'Gazi Şen',      pos:'OSA', av:'cam'},
+      {n:10,nm:'Hasan Çam',     pos:'ATK.OSA', av:'cgr'},
+      {n:11,nm:'İlker Er',      pos:'SAĞ KANAT', av:'cli'},
+      {n:7, nm:'Jale Ak',       pos:'SOL KANAT', av:'cin'},
+      {n:9, nm:'Cem Arslan',    pos:'STR', av:'ct', cap:true},
+    ],
+    yedek: [
+      {n:12,nm:'Kanat Yıldız',  pos:'KAL', av:'cgr'},
+      {n:13,nm:'Lütfi Polat',   pos:'BEK', av:'cr'},
+      {n:14,nm:'Mete Boz',      pos:'STOPER', av:'cb'},
+      {n:15,nm:'Nihat Kılıç',   pos:'OSA', av:'cg'},
+      {n:16,nm:'Onat Çelik',    pos:'OSA', av:'co'},
+      {n:17,nm:'Pelin Demir',   pos:'KANAT', av:'cp'},
+      {n:18,nm:'Rauf Er',       pos:'STR', av:'ct'},
+    ]
+  },
+  'SAGRADA FAMİLA': {
+    ilk11: [
+      {n:1, nm:'Sarp Ak',       pos:'KAL', av:'crs'},
+      {n:2, nm:'Tolga Çelik',   pos:'SAĞ BEK', av:'ct'},
+      {n:5, nm:'Ufuk Kaya',     pos:'STOPER', av:'cr'},
+      {n:4, nm:'Veli Taş',      pos:'STOPER', av:'cb'},
+      {n:3, nm:'Yener Demir',   pos:'SOL BEK', av:'cg'},
+      {n:8, nm:'Zafer Güneş',   pos:'DEF.OSA', av:'co'},
+      {n:6, nm:'Ahmet Şen',     pos:'OSA', av:'cp'},
+      {n:10,nm:'Berk Çam',      pos:'ATK.OSA', av:'cam'},
+      {n:11,nm:'Cem Er',        pos:'SAĞ KANAT', av:'cgr'},
+      {n:7, nm:'Deniz Ak',      pos:'SOL KANAT', av:'cli'},
+      {n:9, nm:'Öğrenci Bey',   pos:'STR', av:'crs', cap:true},
+    ],
+    yedek: [
+      {n:12,nm:'Emre Yıldız',   pos:'KAL', av:'ct'},
+      {n:13,nm:'Fırat Polat',   pos:'BEK', av:'cr'},
+      {n:14,nm:'Güney Boz',     pos:'STOPER', av:'cb'},
+      {n:15,nm:'Haluk Kılıç',   pos:'OSA', av:'cg'},
+      {n:16,nm:'İhsan Çelik',   pos:'OSA', av:'co'},
+      {n:17,nm:'Jülide Demir',  pos:'KANAT', av:'cp'},
+      {n:18,nm:'Kürşat Er',     pos:'STR', av:'cam'},
+    ]
+  },
+  'TÜPÇÜLER FK': {
+    ilk11: [
+      {n:1, nm:'Levet Ak',      pos:'KAL', av:'cin'},
+      {n:2, nm:'Mesut Çelik',   pos:'SAĞ BEK', av:'ct'},
+      {n:5, nm:'Nadir Kaya',    pos:'STOPER', av:'cr'},
+      {n:4, nm:'Osman Taş',     pos:'STOPER', av:'cb'},
+      {n:3, nm:'Pınar Demir',   pos:'SOL BEK', av:'cg'},
+      {n:8, nm:'Rıza Güneş',    pos:'DEF.OSA', av:'co'},
+      {n:6, nm:'Selim Şen',     pos:'OSA', av:'crs'},
+      {n:10,nm:'Taner Çam',     pos:'ATK.OSA', av:'cam'},
+      {n:11,nm:'Ulaş Er',       pos:'SAĞ KANAT', av:'cgr'},
+      {n:7, nm:'Vural Ak',      pos:'SOL KANAT', av:'cli'},
+      {n:9, nm:'Kahraman T.',   pos:'STR', av:'cin', cap:true},
+    ],
+    yedek: [
+      {n:12,nm:'Yaşar Yıldız',  pos:'KAL', av:'ct'},
+      {n:13,nm:'Zafer Polat',   pos:'BEK', av:'cr'},
+      {n:14,nm:'Abdil Boz',     pos:'STOPER', av:'cb'},
+      {n:15,nm:'Bilal Kılıç',   pos:'OSA', av:'cg'},
+      {n:16,nm:'Cafer Çelik',   pos:'OSA', av:'co'},
+      {n:17,nm:'Dağhan Demir',  pos:'KANAT', av:'crs'},
+      {n:18,nm:'Enis Er',       pos:'STR', av:'cam'},
+    ]
+  },
+  'PUSU FK': {
+    ilk11: [
+      {n:1, nm:'Faruk Ak',      pos:'KAL', av:'cli'},
+      {n:2, nm:'Gürkan Çelik',  pos:'SAĞ BEK', av:'cg'},
+      {n:5, nm:'Halit Kaya',    pos:'STOPER', av:'cr'},
+      {n:4, nm:'İsmail Taş',    pos:'STOPER', av:'cb'},
+      {n:3, nm:'Janset Demir',  pos:'SOL BEK', av:'co'},
+      {n:8, nm:'Kaan Güneş',    pos:'DEF.OSA', av:'ct'},
+      {n:6, nm:'Latif Şen',     pos:'OSA', av:'cp'},
+      {n:10,nm:'Mıknat Çam',    pos:'ATK.OSA', av:'cgr'},
+      {n:11,nm:'Nedim Er',      pos:'SAĞ KANAT', av:'cam'},
+      {n:7, nm:'Orhan Ak',      pos:'SOL KANAT', av:'cin'},
+      {n:9, nm:'Burak Demir',   pos:'STR', av:'cli', cap:true},
+    ],
+    yedek: [
+      {n:12,nm:'Polat Yıldız',  pos:'KAL', av:'cg'},
+      {n:13,nm:'Remzi Polat',   pos:'BEK', av:'cr'},
+      {n:14,nm:'Soner Boz',     pos:'STOPER', av:'cb'},
+      {n:15,nm:'Tevfik Kılıç',  pos:'OSA', av:'co'},
+      {n:16,nm:'Uğur Çelik',    pos:'OSA', av:'ct'},
+      {n:17,nm:'Veyis Demir',   pos:'KANAT', av:'cp'},
+      {n:18,nm:'Yılmaz Er',     pos:'STR', av:'cgr'},
+    ]
+  },
+  'SSK MONTANA': {
+    ilk11: [
+      {n:1, nm:'Zekai Ak',      pos:'KAL', av:'cam'},
+      {n:2, nm:'Abdurrahman Ç.',pos:'SAĞ BEK', av:'cr'},
+      {n:5, nm:'Bayram Kaya',   pos:'STOPER', av:'cb'},
+      {n:4, nm:'Cahit Taş',     pos:'STOPER', av:'cg'},
+      {n:3, nm:'Davut Demir',   pos:'SOL BEK', av:'co'},
+      {n:8, nm:'Ekber Güneş',   pos:'DEF.OSA', av:'ct'},
+      {n:6, nm:'Fatin Şen',     pos:'OSA', av:'cp'},
+      {n:10,nm:'Gündüz Çam',    pos:'ATK.OSA', av:'cgr'},
+      {n:11,nm:'Harun Er',      pos:'SAĞ KANAT', av:'cli'},
+      {n:7, nm:'İsmet Ak',      pos:'SOL KANAT', av:'cin'},
+      {n:9, nm:'Tarık Coşkun',  pos:'KAL', av:'cam', cap:true},
+    ],
+    yedek: [
+      {n:12,nm:'Kudret Yıldız', pos:'KAL', av:'cr'},
+      {n:13,nm:'Lütfü Polat',   pos:'BEK', av:'cb'},
+      {n:14,nm:'Macit Boz',     pos:'STOPER', av:'cg'},
+      {n:15,nm:'Nimet Kılıç',   pos:'OSA', av:'co'},
+      {n:16,nm:'Nuri Çelik',    pos:'OSA', av:'ct'},
+      {n:17,nm:'Okan Demir',    pos:'KANAT', av:'cp'},
+      {n:18,nm:'Pakize Er',     pos:'STR', av:'cgr'},
+    ]
+  },
+  'RÖNTGEN': {
+    ilk11: [
+      {n:1, nm:'Rafet Ak',      pos:'KAL', av:'cgr'},
+      {n:2, nm:'Salim Çelik',   pos:'SAĞ BEK', av:'cr'},
+      {n:5, nm:'Tufan Kaya',    pos:'STOPER', av:'cb'},
+      {n:4, nm:'Uzay Taş',      pos:'STOPER', av:'cg'},
+      {n:3, nm:'Vural Demir',   pos:'SOL BEK', av:'co'},
+      {n:8, nm:'Yalçın Güneş',  pos:'DEF.OSA', av:'ct'},
+      {n:6, nm:'Zeki Şen',      pos:'OSA', av:'cp'},
+      {n:10,nm:'Adil Çam',      pos:'ATK.OSA', av:'cam'},
+      {n:11,nm:'Bekir Er',      pos:'SAĞ KANAT', av:'cli'},
+      {n:7, nm:'Cafer Ak',      pos:'SOL KANAT', av:'cin'},
+      {n:9, nm:'Kıvanç Bora',   pos:'STR', av:'cgr', cap:true},
+    ],
+    yedek: [
+      {n:12,nm:'Diyar Yıldız',  pos:'KAL', av:'cr'},
+      {n:13,nm:'Eşref Polat',   pos:'BEK', av:'cb'},
+      {n:14,nm:'Fettah Boz',    pos:'STOPER', av:'cg'},
+      {n:15,nm:'Garip Kılıç',   pos:'OSA', av:'co'},
+      {n:16,nm:'Hürriyet Ç.',   pos:'OSA', av:'ct'},
+      {n:17,nm:'İdris Demir',   pos:'KANAT', av:'cp'},
+      {n:18,nm:'Jandarma Er',   pos:'STR', av:'cam'},
+    ]
+  },
+  'DETERJAN GÜCÜ': {
+    ilk11: [
+      {n:1, nm:'Kadir Ak',      pos:'KAL', av:'crd'},
+      {n:2, nm:'Lokman Çelik',  pos:'SAĞ BEK', av:'cr'},
+      {n:5, nm:'Mikail Kaya',   pos:'STOPER', av:'cb'},
+      {n:4, nm:'Namık Taş',     pos:'STOPER', av:'cg'},
+      {n:3, nm:'Oruç Demir',    pos:'SOL BEK', av:'co'},
+      {n:8, nm:'Papatya Güneş', pos:'DEF.OSA', av:'ct'},
+      {n:6, nm:'Recep Şen',     pos:'OSA', av:'cp'},
+      {n:10,nm:'Seyhan Çam',    pos:'ATK.OSA', av:'cgr'},
+      {n:11,nm:'Turhan Er',     pos:'SAĞ KANAT', av:'cam'},
+      {n:7, nm:'Ufuk Ak',       pos:'SOL KANAT', av:'cli'},
+      {n:9, nm:'Ramiz Aktaş',   pos:'STR', av:'crd', cap:true},
+    ],
+    yedek: [
+      {n:12,nm:'Vahit Yıldız',  pos:'KAL', av:'cr'},
+      {n:13,nm:'Yakup Polat',   pos:'BEK', av:'cb'},
+      {n:14,nm:'Ziya Boz',      pos:'STOPER', av:'cg'},
+      {n:15,nm:'Ata Kılıç',     pos:'OSA', av:'co'},
+      {n:16,nm:'Berna Çelik',   pos:'OSA', av:'ct'},
+      {n:17,nm:'Cihad Demir',   pos:'KANAT', av:'cp'},
+      {n:18,nm:'Deni Er',       pos:'STR', av:'cgr'},
+    ]
+  }
+};
+
+/* Bilinmeyen takım için varsayılan kadro */
+function defaultSquad(name, avClass) {
+  return {
+    ilk11: [
+      {n:1, nm:'Kaleci',      pos:'KAL', av:avClass},
+      {n:2, nm:'Sağ Bek',     pos:'SAĞ BEK', av:'cb'},
+      {n:5, nm:'Stoper 1',    pos:'STOPER', av:'cg'},
+      {n:4, nm:'Stoper 2',    pos:'STOPER', av:'co'},
+      {n:3, nm:'Sol Bek',     pos:'SOL BEK', av:'ct'},
+      {n:8, nm:'Def. OSA',    pos:'DEF.OSA', av:'cp'},
+      {n:6, nm:'Merkez OSA',  pos:'OSA', av:'cgr'},
+      {n:10,nm:'Atk. OSA',    pos:'ATK.OSA', av:'cam'},
+      {n:11,nm:'Sağ Kanat',   pos:'SAĞ KANAT', av:'cli'},
+      {n:7, nm:'Sol Kanat',   pos:'SOL KANAT', av:'cin'},
+      {n:9, nm:'Forvet',      pos:'STR', av:avClass, cap:true},
+    ],
+    yedek: [
+      {n:12,nm:'Yedek 1',     pos:'KAL', av:'cgr'},
+      {n:13,nm:'Yedek 2',     pos:'BEK', av:'cb'},
+      {n:14,nm:'Yedek 3',     pos:'STOPER', av:'co'},
+      {n:15,nm:'Yedek 4',     pos:'OSA', av:'ct'},
+      {n:16,nm:'Yedek 5',     pos:'OSA', av:'cp'},
+      {n:17,nm:'Yedek 6',     pos:'KANAT', av:'cam'},
+      {n:18,nm:'Yedek 7',     pos:'STR', av:'cli'},
+    ]
+  };
+}
+
+/* ════════════════════════════════════════════════
+   MODAL AÇMA
+════════════════════════════════════════════════ */
+function om(tm1, tm2, tarih, saat, saha, hakem, av1, av2) {
+  const sq1 = SQUADS[tm1] || defaultSquad(tm1, av1||'cr');
+  const sq2 = SQUADS[tm2] || defaultSquad(tm2, av2||'cb');
+
+  function buildSquad(sq) {
+    const rows11 = sq.ilk11.map(p => `
+      <div class="mpl ${p.cap ? 'cap' : ''}">
+        <div class="mpl-num">${p.n}</div>
+        <div class="mpl-av ${p.av}">${p.nm.split(' ').map(w=>w[0]).join('').substr(0,2).toUpperCase()}</div>
+        <div class="mpl-info"><div class="mpl-nm">${p.nm}</div><div class="mpl-pos">${p.pos}</div></div>
+      </div>`).join('');
+    const rows7 = sq.yedek.map(p => `
+      <div class="mpl ydk">
+        <div class="mpl-num">${p.n}</div>
+        <div class="mpl-av ${p.av}">${p.nm.split(' ').map(w=>w[0]).join('').substr(0,2).toUpperCase()}</div>
+        <div class="mpl-info"><div class="mpl-nm">${p.nm}</div><div class="mpl-pos">${p.pos}</div></div>
+      </div>`).join('');
+    return `<div class="msq-section-lbl">İlk 11</div>${rows11}<div class="msq-section-lbl">Yedekler</div>${rows7}`;
+  }
+
+  const av1s = av1 || 'cr';
+  const av2s = av2 || 'cb';
+  const init1 = tm1.split(' ').map(w=>w[0]).join('').substr(0,2).toUpperCase();
+  const init2 = tm2.split(' ').map(w=>w[0]).join('').substr(0,2).toUpperCase();
+
+  document.getElementById('modal-inner').innerHTML = `
+    <div class="mhd">
+      <button class="mclose" onclick="cm()">✕</button>
+      <div class="m-vs-row">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:900;flex-shrink:0;border:1px solid rgba(255,255,255,.12)" class="${av1s}">${init1}</div>
+          <div class="m-tm-name">${tm1}</div>
+        </div>
+        <div class="m-vs-badge">VS</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="m-tm-name">${tm2}</div>
+          <div style="width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:900;flex-shrink:0;border:1px solid rgba(255,255,255,.12)" class="${av2s}">${init2}</div>
+        </div>
+      </div>
+      <div class="m-badges">
+        <div class="mbadge">📅 ${tarih}</div>
+        <div class="mbadge">⏰ ${saat}</div>
+        <div class="mbadge">🏟️ ${saha}</div>
+        <div class="mbadge">👤 ${hakem}</div>
+      </div>
+    </div>
+    <div class="mbody">
+      <div class="m-squads">
+        <div class="m-squad">
+          <div class="msq-ttl">${tm1}</div>
+          ${buildSquad(sq1)}
+        </div>
+        <div class="m-squad">
+          <div class="msq-ttl">${tm2}</div>
+          ${buildSquad(sq2)}
+        </div>
+      </div>
+    </div>`;
+
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function cm() {
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') cm(); });
+</script>
 </body>
 </html>
