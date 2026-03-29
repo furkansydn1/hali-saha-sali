@@ -7189,8 +7189,8 @@ document.addEventListener('DOMContentLoaded', function () {
   /* Fikstür başlangıçta aktif — hemen render et */
   renderFixture();
 
-  /* Kullanıcı rolünü uygula — dropdown'ları ve yetkili alanları açar */
-  setRole(currentUser.role);
+  /* Kullanıcı rolü Firebase'den async yüklenir — tmLoadCurrentUser setRole çağırır */
+  /* setRole(currentUser.role) buradan kaldırıldı */
 
   /* SA arama inputuna debounce bağla (300ms) */
   const saSearch = document.getElementById('memberSearch');
@@ -8542,7 +8542,14 @@ async function tmLoadCurrentUser() {
     const role = SUPERADMINS.includes(nameLC) ? 'superadmin' : (data.role || 'oyuncu');
     currentUser  = { id: data.id, name: data.name, team: data.team || '', role };
     currentRole  = role;
-    if (typeof setRole === 'function') setRole(role);
+    /* setRole DOM hazır olduktan sonra çağır */
+    if (typeof setRole === 'function') {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => setRole(role, true));
+      } else {
+        setRole(role, true);
+      }
+    }
 
     // currentProfile'ı DB'den gelen veriyle güncelle (her açılışta sıfırlanmasın)
     if (typeof currentProfile !== 'undefined') {
@@ -8913,6 +8920,9 @@ document.addEventListener('DOMContentLoaded', async function() {
   if (typeof renderFixture  === 'function') renderFixture();
   if (typeof renderScorers  === 'function') renderScorers();
   if (typeof renderTop20    === 'function') renderTop20();
+
+  // Rol yüklendikten sonra roster'ı yenile (⚙️ butonları rol'e göre göster)
+  if (typeof renderRosterList === 'function') renderRosterList();
 });
 </script>
 </body>
