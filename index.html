@@ -11,14 +11,12 @@
 </head>
 <body>
 <script>
-/* SESSION GUARD — Giriş yapmayanları login'e gönder */
+/* SESSION GUARD */
 (function() {
   var raw = localStorage.getItem('hs_session') || localStorage.getItem('hs_session_temp');
   if (!raw) { window.location.replace('login.html'); return; }
-  try {
-    var s = JSON.parse(raw);
-    if (!s || !s.id) { window.location.replace('login.html'); }
-  } catch(e) { window.location.replace('login.html'); }
+  try { var s = JSON.parse(raw); if (!s || !s.id) window.location.replace('login.html'); }
+  catch(e) { window.location.replace('login.html'); }
 })();
 </script>
 
@@ -3420,7 +3418,10 @@ async function initApp(){
     }catch(e){ console.error('Auto-login error:', e); }
     hideLoading();
   }
-  showPage('page-login');
+  // Session yok veya geçersiz → login.html'e gönder (page-login gösterme)
+  localStorage.removeItem('hs_session');
+  localStorage.removeItem('hs_session_temp');
+  window.location.replace('login.html');
 }
 
 // Modal overlay click to close
