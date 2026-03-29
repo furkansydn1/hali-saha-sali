@@ -8601,16 +8601,6 @@ const _tmSession = (function() {
   try {
     const s = JSON.parse(raw);
     if (!s || !s.id) { window.location.replace('login.html'); return null; }
-    /* Lobby'den mi gelindiğini kontrol et */
-    const fromLobby = document.referrer.indexOf('lobby.html') >= 0 ||
-                      sessionStorage.getItem('from_lobby') === '1';
-    if (!fromLobby) {
-      /* Süper admin direkt açabilir — session varsa geç */
-      sessionStorage.setItem('from_lobby', '1');
-      /* Yine de lobby'ye yönlendir, lobby da from_lobby set edecek */
-      window.location.replace('lobby.html');
-      return null;
-    }
     return s;
   } catch(e) { window.location.replace('login.html'); return null; }
 })();
@@ -8637,17 +8627,23 @@ async function tmLoadCurrentUser() {
     let   data  = snap.val();
 
     const SUPERADMINS = ['furkan soydan'];
-    const nameLC = (data?.name || _tmSession.name || '').toLowerCase();
+    const nameLC = (data?.name || rawName || _tmSession.name || '').toLowerCase().trim();
 
     if (!data) {
-      // turnuva_users'da yok — oluştur
+      /* Her iki formatta da yok — yeni turnuva_users kaydı oluştur */
+      const newRole = SUPERADMINS.includes(nameLC) ? 'superadmin' : 'oyuncu';
       data = {
-        id: _tmSession.id, name: _tmSession.name || '',
-        role: SUPERADMINS.includes(nameLC) ? 'superadmin' : 'oyuncu',
-        team: '', pos: '', foot: '',
+        id:           _tmSession.id,
+        name:         rawName || _tmSession.name || '',
+        role:         newRole,
+        team:         '',
+        pos:          '',
+        foot:         '',
         registeredAt: Date.now()
       };
+      /* Boşluklu formatta kaydet (standart) */
       await _tmDB.ref('turnuva_users/' + dbKey).set(data);
+      console.log('[TM] turnuva_users yeni kayıt oluşturuldu:', dbKey, '| rol:', newRole);
     }
 
     const role = SUPERADMINS.includes(nameLC) ? 'superadmin' : (data.role || 'oyuncu');
