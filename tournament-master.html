@@ -4421,7 +4421,7 @@ html, body {
           <div class="drop-sep"></div>
 
           <button class="drop-item"
-                  onclick="closeDrop(); showToast('Lobiye dön bağlantısı hazırlanıyor…')">
+                  onclick="closeDrop(); window.location.href='lobby.html';">
             <span class="drop-icon">🔙</span>Lobiye Dön
           </button>
         </div>
@@ -8340,8 +8340,10 @@ async function tmLoadCurrentUser() {
     const userData = snap.val();
 
     if (userData) {
-      // Rol bilgisine göre RBAC ayarla
-      const role = userData.role || 'oyuncu';
+      // Rol bilgisine göre RBAC ayarla — superadmin isim bazlı override
+      const SUPERADMINS = ['furkan soydan'];
+      const nameLC = (userData.name || '').toLowerCase();
+      const role = SUPERADMINS.includes(nameLC) ? 'superadmin' : (userData.role || 'oyuncu');
       const name = userData.name || session.name;
 
       // Mevcut currentUser'ı Firebase verisine göre güncelle
@@ -8361,11 +8363,13 @@ async function tmLoadCurrentUser() {
 
       console.log('Turnuva kullanıcısı yüklendi:', name, '|', role);
     } else {
-      // turnuva_users'da yok — misafir olarak devam et (oyuncu rolü)
-      const name = session.name;
-      currentUser = { id: session.id, name: name, team: '', role: 'oyuncu' };
-      currentRole = 'oyuncu';
-      if (typeof setRole === 'function') setRole('oyuncu');
+      // turnuva_users'da yok — isim bazlı rol ver
+      const name = session.name || '';
+      const SUPERADMINS = ['furkan soydan'];
+      const role = SUPERADMINS.includes(name.toLowerCase()) ? 'superadmin' : 'oyuncu';
+      currentUser = { id: session.id, name: name, team: '', role: role };
+      currentRole = role;
+      if (typeof setRole === 'function') setRole(role);
     }
   } catch(err) {
     console.warn('tmLoadCurrentUser hata:', err);
