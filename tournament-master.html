@@ -4331,6 +4331,9 @@ html, body {
   text-align: right;
 }
 </style>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
@@ -8285,6 +8288,184 @@ switchTab = function(target, btn) {
   if (target === 'profil') setTimeout(renderProfileCard, 50);
 };
 
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   TOURNAMENT MASTER — Firebase Init + Session Guard + DB Sync
+   turnuva_ prefix kullanılır, eski koleksiyonlara DOKUNULMAZ
+═══════════════════════════════════════════════════════════════ */
+
+// Firebase Init
+const _tmFirebaseConfig = {
+  apiKey:            "AIzaSyBc_JhGF0Axeey-pPyUQsV6RZ3UIXd2WIc",
+  authDomain:        "sali-maci.firebaseapp.com",
+  databaseURL:       "https://sali-maci-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:         "sali-maci",
+  storageBucket:     "sali-maci.appspot.com",
+  messagingSenderId: "656383692297",
+  appId:             "1:656383692297:web:ecd81c5645e86e073b72d8"
+};
+
+let _tmDB = null;
+try {
+  const _tmApp = firebase.app('tournament');
+  _tmDB = firebase.database(_tmApp);
+} catch(e) {
+  const _tmApp = firebase.initializeApp(_tmFirebaseConfig, 'tournament');
+  _tmDB = firebase.database(_tmApp);
+}
+
+// ── Session Guard ──
+(function() {
+  const raw = localStorage.getItem('hs_session') || localStorage.getItem('hs_session_temp');
+  if (!raw) { window.location.replace('login.html'); return; }
+  let session;
+  try { session = JSON.parse(raw); } catch(e) { window.location.replace('login.html'); return; }
+  if (!session || !session.id) { window.location.replace('login.html'); return; }
+
+  // Session'dan kullanıcıyı yükle ve rolünü DB'den al
+  window._tmSession = session;
+})();
+
+// ── DB'den turnuva kullanıcısını yükle ve rolünü ayarla ──
+async function tmLoadCurrentUser() {
+  if (!window._tmSession) return;
+  const session = window._tmSession;
+
+  try {
+    // Önce dbKey ile dene (kayıt sırasında saklanan)
+    const dbKey = session.dbKey || session.name.toLowerCase();
+    const snap = await _tmDB.ref('turnuva_users/' + dbKey).once('value');
+    const userData = snap.val();
+
+    if (userData) {
+      // Rol bilgisine göre RBAC ayarla
+      const role = userData.role || 'oyuncu';
+      const name = userData.name || session.name;
+
+      // Mevcut currentUser'ı Firebase verisine göre güncelle
+      currentUser = { id: userData.id, name: name, team: userData.team || '', role: role };
+      currentRole = role;
+
+      // RBAC bar'ı güncelle
+      if (typeof setRole === 'function') setRole(role);
+
+      // Üye listesinde de güncelle
+      const existing = memberDB.findIndex(m => m.id === userData.id || m.name === name);
+      if (existing >= 0) {
+        memberDB[existing] = { ...memberDB[existing], ...userData };
+      } else {
+        memberDB.push({ id: userData.id, name: name, team: userData.team || '', pos: userData.pos || '', foot: userData.foot || '', role: role });
+      }
+
+      console.log('Turnuva kullanıcısı yüklendi:', name, '|', role);
+    } else {
+      // turnuva_users'da yok — misafir olarak devam et (oyuncu rolü)
+      const name = session.name;
+      currentUser = { id: session.id, name: name, team: '', role: 'oyuncu' };
+      currentRole = 'oyuncu';
+      if (typeof setRole === 'function') setRole('oyuncu');
+    }
+  } catch(err) {
+    console.warn('tmLoadCurrentUser hata:', err);
+  }
+}
+
+// ── Takım & Kadro Verilerini DB'den Yükle ──
+async function tmLoadTeamData() {
+  try {
+    const snap = await _tmDB.ref('turnuva_teams').once('value');
+    const data = snap.val();
+    if (!data) return;
+
+    Object.entries(data).forEach(([teamName, teamData]) => {
+      if (teamDB[teamName]) {
+        // Puan tablosu
+        teamDB[teamName].g = teamData.g || 0;
+        teamDB[teamName].b = teamData.b || 0;
+        teamDB[teamName].m = teamData.m || 0;
+        teamDB[teamName].o = teamData.o || 0;
+        teamDB[teamName].ag = teamData.ag || 0;
+        teamDB[teamName].yg = teamData.yg || 0;
+        teamDB[teamName].kap = teamData.kap || null;
+        // Kadro
+        if (teamData.kadro) {
+          teamDB[teamName].kadro = Object.values(teamData.kadro);
+        }
+        // Formation
+        if (teamData.formation) {
+          teamDB[teamName].formation = teamData.formation;
+        }
+      }
+    });
+    console.log('Takım verileri DB\'den yüklendi');
+  } catch(err) {
+    console.warn('tmLoadTeamData hata:', err);
+  }
+}
+
+// ── Maç Sonuçlarını DB'den Yükle ──
+async function tmLoadMatchResults() {
+  try {
+    const snap = await _tmDB.ref('turnuva_matches').once('value');
+    const data = snap.val();
+    if (!data) return;
+    Object.entries(data).forEach(([matchId, result]) => {
+      matchResults[matchId] = result;
+    });
+    console.log('Maç sonuçları DB\'den yüklendi');
+  } catch(err) {
+    console.warn('tmLoadMatchResults hata:', err);
+  }
+}
+
+// ── Maç Sonucu DB'ye Kaydet (komite kullanır) ──
+window.tmSaveMatchResult = async function(matchId, resultData) {
+  try {
+    await _tmDB.ref('turnuva_matches/' + matchId).set(resultData);
+    console.log('Maç kaydedildi:', matchId);
+  } catch(err) {
+    console.warn('tmSaveMatchResult hata:', err);
+  }
+};
+
+// ── Takım Kadrosunu DB'ye Kaydet (kaptan kullanır) ──
+window.tmSaveTeamKadro = async function(teamName, kadro, formation) {
+  try {
+    const key = teamName.replace(/\s+/g, '_').replace(/[.#$\[\]]/g, '');
+    await _tmDB.ref('turnuva_teams/' + key).update({
+      kadro: kadro,
+      formation: formation || '1-2-1-2-1',
+      name: teamName,
+    });
+    console.log('Kadro kaydedildi:', teamName);
+  } catch(err) {
+    console.warn('tmSaveTeamKadro hata:', err);
+  }
+};
+
+// ── Kullanıcı Rolünü DB'ye Kaydet (süper admin kullanır) ──
+window.tmSaveUserRole = async function(dbKey, role, team) {
+  try {
+    await _tmDB.ref('turnuva_users/' + dbKey).update({ role, team: team || '' });
+    console.log('Rol güncellendi:', dbKey, role);
+  } catch(err) {
+    console.warn('tmSaveUserRole hata:', err);
+  }
+};
+
+// ── Uygulama başlangıcında yükle ──
+document.addEventListener('DOMContentLoaded', async function() {
+  await tmLoadCurrentUser();
+  await tmLoadTeamData();
+  await tmLoadMatchResults();
+
+  // Render'ları güncelle
+  if (typeof renderGroups === 'function') renderGroups();
+  if (typeof renderFixture === 'function') renderFixture();
+  if (typeof renderScorers === 'function') renderScorers();
+});
 </script>
 </body>
 </html>
