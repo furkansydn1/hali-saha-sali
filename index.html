@@ -11,13 +11,15 @@
 </head>
 <body>
 <script>
-/* SESSION GUARD */
+/* SESSION GUARD — session varsa lobby'ye yönlendir */
 (function() {
   var raw = localStorage.getItem('hs_session') || localStorage.getItem('hs_session_temp');
   if (!raw) { window.location.replace('login.html'); return; }
   try {
     var s = JSON.parse(raw);
-    if (!s || !s.id) window.location.replace('login.html');
+    if (!s || !s.id) { window.location.replace('login.html'); return; }
+    /* Direkt açılınca lobby'ye gönder */
+    window.location.replace('lobby.html');
   } catch(e) { window.location.replace('login.html'); }
 })();
 </script>
