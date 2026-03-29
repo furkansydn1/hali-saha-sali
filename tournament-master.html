@@ -6952,8 +6952,50 @@ function updateRsmStat(statKey, value, valEl) {
 }
 
 function saveRosterStats() {
+  const pl = captainRoster.find(p => p.id == rosterStatPlayerId);
+  if (!pl) { closeRosterStatModal(); return; }
+
+  /* Slider değerlerini oku */
+  Object.keys(pl.stats).forEach(key => {
+    const inp = document.getElementById('rsm-sl-' + key);
+    if (inp) pl.stats[key] = parseInt(inp.value) || pl.stats[key];
+  });
+
+  /* OVR hesapla (ağırlıklı ortalama) */
+  const s = pl.stats;
+  const vals = Object.values(s);
+  const ovr = Math.round(vals.reduce((a,b) => a+b, 0) / vals.length);
+  pl.rating = ovr;
+
+  /* teamDB kadrosunda da güncelle */
+  const teamName = getCaptainTeam() || (() => {
+    for (const [tn, t] of Object.entries(teamDB)) {
+      if (t.kadro && t.kadro.find(k => k.nm === pl.name)) return tn;
+    }
+    return null;
+  })();
+
+  if (teamName && teamDB[teamName]) {
+    const kadropl = teamDB[teamName].kadro.find(k => k.nm === pl.name);
+    if (kadropl) {
+      kadropl.stats  = { ...pl.stats };
+      kadropl.rating = ovr;
+    }
+    /* DB'ye kaydet */
+    if (typeof tmSaveTeam === 'function') {
+      tmSaveTeam(teamName);
+      /* turnuva_users'da da güncelle */
+      if (typeof _tmDB !== 'undefined') {
+        const dbKey = pl.name.toLowerCase();
+        _tmDB.ref('turnuva_users/' + dbKey).update({ stats: pl.stats, rating: ovr })
+          .catch(e => console.warn('saveRosterStats DB:', e));
+      }
+    }
+  }
+
   closeRosterStatModal();
-  showToast('✅ Stat değişiklikleri kaydedildi!');
+  renderRosterList();
+  showToast('✅ ' + pl.name + ' · OVR ' + ovr + ' kaydedildi!');
 }
 
 function closeRosterStatModal() {
@@ -7038,128 +7080,20 @@ document.addEventListener('DOMContentLoaded', function () {
 ─────────────────────────────────────────────────────────── */
 const teamDB = {
   /* GRUP A */
-  'FUTMEYDANI':    { grp:'A', av:'av-snt', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
-    kadro:[
-      {id:'fu01',nm:'Kadir Avcı',    pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'fu02',nm:'Mert Arslan',   pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'fu03',nm:'Serdar Kaya',   pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'fu04',nm:'Tarık Güneş',   pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'fu05',nm:'Ali Koç',       pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'fu06',nm:'Serhat Bal',    pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'fu07',nm:'Mehmet Yıldırım',pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
-    ]},
-  'OKMEYDANI DİŞ': { grp:'A', av:'av-mo',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
-    kadro:[
-      {id:'ok01',nm:'Yusuf Can',     pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ok02',nm:'Rıfat Kaya',    pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ok03',nm:'Tunahan Ak',    pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ok04',nm:'Hasan Bora',    pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ok05',nm:'Musa Demir',    pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ok06',nm:'Ahmet Ateş',    pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ok07',nm:'Hakan Öz',      pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
-    ]},
-  'ARNAVUTKÖY FK': { grp:'A', av:'av-bek', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
-    kadro:[
-      {id:'ar01',nm:'Bartu Yıldız',  pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ar02',nm:'Arda Demir',    pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ar03',nm:'Sami Kaya',     pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ar04',nm:'Alp Güneş',     pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ar05',nm:'Orkun Şen',     pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ar06',nm:'İbrahim Can',   pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ar07',nm:'Ali Şahin',     pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
-    ]},
-  'İLKYARDIM SPOR':{ grp:'A', av:'av-kl',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
-    kadro:[
-      {id:'il01',nm:'Hüseyin Ak',    pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'il02',nm:'Nezih Kaya',    pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'il03',nm:'Birol Demir',   pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'il04',nm:'Ercan Şen',     pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'il05',nm:'Muzaffer Çam',  pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'il06',nm:'Selahattin Ak', pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'il07',nm:'Orhan Demir',   pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
-    ]},
+  'FUTMEYDANI':    { grp:'A', av:'av-snt', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1', kadro:[] },
+  'OKMEYDANI DİŞ': { grp:'A', av:'av-mo',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1', kadro:[] },
+  'ARNAVUTKÖY FK': { grp:'A', av:'av-bek', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1', kadro:[] },
+  'İLKYARDIM SPOR':{ grp:'A', av:'av-kl',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1', kadro:[] },
   /* GRUP B */
-  'EYÜP CİTY':     { grp:'B', av:'av-stp', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
-    kadro:[
-      {id:'ey01',nm:'Serkan Ak',     pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ey02',nm:'Gürsel Kaya',   pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ey03',nm:'Çağlar Demir',  pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ey04',nm:'Doruk Şen',     pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ey05',nm:'Taha Ak',       pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ey06',nm:'Asil Çam',      pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ey07',nm:'Emir Kaplan',   pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
-    ]},
-  'SİSTRUNK':      { grp:'B', av:'av-kan', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
-    kadro:[
-      {id:'si01',nm:'Atakan Ak',     pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'si02',nm:'Cüneyt Kaya',   pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'si03',nm:'Demir Taş',     pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'si04',nm:'Fırat Güneş',   pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'si05',nm:'İlker Er',      pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'si06',nm:'Hasan Çam',     pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'si07',nm:'Cem Arslan',    pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
-    ]},
-  'SAGRADA FAMİLA':{ grp:'B', av:'av-snt', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
-    kadro:[
-      {id:'sa01',nm:'Sarp Ak',       pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'sa02',nm:'Ufuk Kaya',     pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'sa03',nm:'Veli Taş',      pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'sa04',nm:'Ahmet Şen',     pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'sa05',nm:'Cem Er',        pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'sa06',nm:'Berk Çam',      pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'sa07',nm:'Öğrenci Bey',   pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
-    ]},
-  'TÜPÇÜLER FK':   { grp:'B', av:'av-mo',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
-    kadro:[
-      {id:'tu01',nm:'Levet Ak',      pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'tu02',nm:'Nadir Kaya',    pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'tu03',nm:'Osman Taş',     pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'tu04',nm:'Selim Şen',     pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'tu05',nm:'Ulaş Er',       pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'tu06',nm:'Taner Çam',     pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'tu07',nm:'Kahraman T.',   pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
-    ]},
+  'EYÜP CİTY':     { grp:'B', av:'av-stp', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1', kadro:[] },
+  'SİSTRUNK':      { grp:'B', av:'av-kan', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1', kadro:[] },
+  'SAGRADA FAMİLA':{ grp:'B', av:'av-snt', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1', kadro:[] },
+  'TÜPÇÜLER FK':   { grp:'B', av:'av-mo',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1', kadro:[] },
   /* GRUP C */
-  'PUSU FK':       { grp:'C', av:'av-mo',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
-    kadro:[
-      {id:'pu01',nm:'Faruk Ak',      pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'pu02',nm:'İsmail Taş',    pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'pu03',nm:'Halit Kaya',    pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'pu04',nm:'Latif Şen',     pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'pu05',nm:'Mıknat Çam',    pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'pu06',nm:'Orhan Ak',      pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'pu07',nm:'Burak Demir',   pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
-    ]},
-  'SSK MONTANA':   { grp:'C', av:'av-stp', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
-    kadro:[
-      {id:'ss01',nm:'Zekai Ak',      pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ss02',nm:'Cahit Taş',     pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ss03',nm:'Bayram Kaya',   pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ss04',nm:'Kemal Güneş',   pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ss05',nm:'Harun Er',      pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ss06',nm:'Gündüz Çam',    pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ss07',nm:'Tarık Coşkun',  pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
-    ]},
-  'RÖNTGEN':       { grp:'C', av:'av-snt', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
-    kadro:[
-      {id:'ro01',nm:'Rafet Ak',      pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ro02',nm:'Tufan Kaya',    pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ro03',nm:'Uzay Taş',      pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ro04',nm:'Yalçın Güneş',  pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ro05',nm:'Bekir Er',      pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ro06',nm:'Adil Çam',      pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ro07',nm:'Kıvanç Bora',   pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
-    ]},
-  'DETERJAN GÜCÜ': { grp:'C', av:'av-kl',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
-    kadro:[
-      {id:'de01',nm:'Kadir Ak',      pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'de02',nm:'Mikail Kaya',   pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'de03',nm:'Namık Taş',     pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'de04',nm:'Papatya G.',    pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'de05',nm:'Turhan Er',     pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'de06',nm:'Seyhan Çam',    pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'de07',nm:'Ramiz Aktaş',   pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
-    ]},
+  'PUSU FK':       { grp:'C', av:'av-mo',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1', kadro:[] },
+  'SSK MONTANA':   { grp:'C', av:'av-stp', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1', kadro:[] },
+  'RÖNTGEN':       { grp:'C', av:'av-snt', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1', kadro:[] },
+  'DETERJAN GÜCÜ': { grp:'C', av:'av-kl',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1', kadro:[] },
 };
 
 /* Tüm oyuncuları düz liste olarak döndür */
