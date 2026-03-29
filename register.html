@@ -390,6 +390,7 @@ registerBtn.addEventListener('click', async () => {
       foot:         '',
       registeredAt: newUser.registeredAt,
     });
+    console.log('turnuva_users yazıldı:', dbKey);
 
     registerBtn.classList.remove('loading');
 
@@ -403,8 +404,8 @@ registerBtn.addEventListener('click', async () => {
 
   } catch (err) {
     registerBtn.classList.remove('loading');
-    console.error('Firebase Error:', err);
-    showError('Bağlantı hatası: ' + (err.message || 'Bilinmeyen hata'));
+    console.error('Firebase Kayıt Hatası:', err.code, err.message, err);
+    showError('Hata: ' + (err.message || err.code || 'Bilinmeyen hata'));
   }
 });
 </script>
