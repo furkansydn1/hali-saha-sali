@@ -8591,15 +8591,8 @@ const _tmCfg = {
   appId:             "1:656383692297:web:ecd81c5645e86e073b72d8"
 };
 let _tmDB;
-try {
-  let _tmApp;
-  try { _tmApp = firebase.app('tm'); }
-  catch(e) { _tmApp = firebase.initializeApp(_tmCfg, 'tm'); }
-  _tmDB = firebase.database(_tmApp);
-  console.log('[TM] Firebase _tmDB hazır ✅');
-} catch(e) {
-  console.error('[TM] Firebase init HATASI:', e);
-}
+try { _tmDB = firebase.database(firebase.app('tm')); }
+catch(e) { _tmDB = firebase.database(firebase.initializeApp(_tmCfg, 'tm')); }
 
 // ── Session Guard ──
 const _tmSession = (function() {
@@ -8620,18 +8613,15 @@ function _tmKey(name) {
 // ── Kullanıcıyı turnuva_users'dan yükle ──
 async function tmLoadCurrentUser() {
   if (!_tmSession) return;
-  if (!_tmDB) { console.error('[TM] _tmDB hazır değil, tmLoadCurrentUser atlandı!'); return; }
   try {
     /* dbKey: önce session'dan, sonra isim lowercase + boşluk normalize */
-    const rawName  = (_tmSession.name || '').trim();
-    const dbKey    = (_tmSession.dbKey || rawName.toLowerCase()).replace(/\s+/g,'_').replace(/[.#$\[\]\/]/g,'');
-    const dbKeyAlt = rawName.toLowerCase().replace(/\s+/g, '_').replace(/[.#$\[\]\/]/g,'');
-
-    console.log('[TM] tmLoadCurrentUser başladı | rawName:', rawName, '| dbKey:', dbKey);
+    const rawName = (_tmSession.name || '').trim();
+    const dbKey   = _tmSession.dbKey || rawName.toLowerCase();
+    const dbKeyAlt = rawName.toLowerCase().replace(/\s+/g, '_');
 
     /* Her iki formatta da ara */
     let snap = await _tmDB.ref('turnuva_users/' + dbKey).once('value');
-    if (!snap.exists() && dbKeyAlt !== dbKey) {
+    if (!snap.exists()) {
       snap = await _tmDB.ref('turnuva_users/' + dbKeyAlt).once('value');
     }
     let   data  = snap.val();
@@ -8651,17 +8641,9 @@ async function tmLoadCurrentUser() {
         foot:         '',
         registeredAt: Date.now()
       };
-      /* Sanitize edilmiş key ile kaydet */
+      /* Boşluklu formatta kaydet (standart) */
       await _tmDB.ref('turnuva_users/' + dbKey).set(data);
-      console.log('[TM] ✅ turnuva_users yeni kayıt oluşturuldu | path: turnuva_users/' + dbKey + ' | rol:', newRole);
-    } else {
-      console.log('[TM] ✅ turnuva_users kaydı zaten mevcut | path: turnuva_users/' + (snap.ref?.key || dbKey) + ' | rol:', data.role);
-      /* Superadmin ise eski kayıtta da rolü garantile */
-      if (SUPERADMINS.includes(nameLC) && data.role !== 'superadmin') {
-        await _tmDB.ref('turnuva_users/' + dbKey).update({ role: 'superadmin' });
-        data.role = 'superadmin';
-        console.log('[TM] ✅ Superadmin rolü güncellendi.');
-      }
+      console.log('[TM] turnuva_users yeni kayıt oluşturuldu:', dbKey, '| rol:', newRole);
     }
 
     const role = SUPERADMINS.includes(nameLC) ? 'superadmin' : (data.role || 'oyuncu');
@@ -8696,7 +8678,7 @@ async function tmLoadCurrentUser() {
     }
 
     console.log('[TM] Kullanıcı:', data.name, '| Rol:', role, '| Takım:', data.team||'yok');
-  } catch(err) { console.error('[TM] ❌ tmLoadCurrentUser HATA:', err.code, err.message, err); }
+  } catch(err) { console.warn('[TM] tmLoadCurrentUser:', err); }
 }
 
 // ── Tüm turnuva üyelerini yükle (süper admin üye listesi için) ──
