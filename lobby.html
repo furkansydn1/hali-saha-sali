@@ -473,7 +473,7 @@ html, body {
   <div class="divider"></div>
 
   <!-- ═══ PANEL SOL — Hastane Turnuvası ═══ -->
-  <div class="panel panel-left" onclick="window.location.href='tournament-master.html'">
+  <div class="panel panel-left" onclick="sessionStorage.setItem('from_lobby','1'); window.location.href='tournament-master.html'">
     <div class="grid"></div>
     <div class="star-ring"></div>
 
@@ -489,7 +489,7 @@ html, body {
         Şampiyonluk için sahaya çık.
       </div>
 
-      <button class="mode-btn" onclick="event.stopPropagation(); window.location.href='tournament-master.html'">
+      <button class="mode-btn" onclick="event.stopPropagation(); sessionStorage.setItem('from_lobby','1'); window.location.href='tournament-master.html'">
         Turnuvaya Git <i class="btn-arrow">→</i>
       </button>
 
@@ -511,7 +511,7 @@ html, body {
   </div>
 
   <!-- ═══ PANEL SAĞ — Pitch App ═══ -->
-  <div class="panel panel-right" onclick="window.location.href='index.html'">
+  <div class="panel panel-right" onclick="sessionStorage.setItem('from_lobby','1'); window.location.href='index.html'">
     <div class="grid"></div>
 
     <div class="panel-content">
@@ -526,7 +526,7 @@ html, body {
         Her salı saha seninle hesaplaşır.
       </div>
 
-      <button class="mode-btn" onclick="event.stopPropagation(); window.location.href='index.html'">
+      <button class="mode-btn" onclick="event.stopPropagation(); sessionStorage.setItem('from_lobby','1'); window.location.href='index.html'">
         Sahaya Çık <i class="btn-arrow">→</i>
       </button>
 
