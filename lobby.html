@@ -594,5 +594,20 @@ if (!supportsHas) {
   });
 })();
 </script>
+
+<script>
+/* LOBBY GUARD */
+(function() {
+  var raw = localStorage.getItem('hs_session') || localStorage.getItem('hs_session_temp');
+  if (!raw) { window.location.replace('login.html'); return; }
+  var session;
+  try { session = JSON.parse(raw); } catch(e) { window.location.replace('login.html'); return; }
+  if (!session || !session.id) { window.location.replace('login.html'); return; }
+  document.addEventListener('DOMContentLoaded', function() {
+    var footer = document.querySelector('.lobby-footer');
+    if (footer && session.name) footer.textContent = '👋 Hoş geldin, ' + session.name + ' · Bir mod seç';
+  });
+})();
+</script>
 </body>
 </html>
