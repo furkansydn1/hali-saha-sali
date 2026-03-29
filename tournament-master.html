@@ -8580,11 +8580,62 @@ if (_origSaveProfile) {
 // ════════════════════════════════════
 // Başlangıç yüklemesi
 // ════════════════════════════════════
+// ── Firebase'e tüm fikstür + takım verilerini yaz (sadece yoksa) ──
+async function tmInitFirebaseData() {
+  try {
+    // 1. turnuva_teams — yoksa tüm takımları yaz
+    const teamsSnap = await _tmDB.ref('turnuva_teams').once('value');
+    if (!teamsSnap.exists()) {
+      const teamsData = {};
+      Object.entries(teamDB).forEach(([name, t]) => {
+        const key = name.replace(/\s+/g,'_').replace(/[.#$\[\]]/g,'');
+        teamsData[key] = {
+          name: name, grp: t.grp,
+          g:0, b:0, m:0, o:0, ag:0, yg:0,
+          kap: null, formation: '1-2-1-2-1', kadro: []
+        };
+      });
+      await _tmDB.ref('turnuva_teams').set(teamsData);
+      console.log('[TM] turnuva_teams Firebase\'e yazıldı:', Object.keys(teamsData).length, 'takım');
+    }
+
+    // 2. turnuva_fixtures — yoksa tüm maçları yaz
+    const fixtSnap = await _tmDB.ref('turnuva_fixtures').once('value');
+    if (!fixtSnap.exists()) {
+      const fixtData = {};
+      FIXTURE_WEEKS.forEach(wk => {
+        wk.matches.forEach(m => {
+          fixtData[m.id] = {
+            id: m.id, t1: m.t1, t2: m.t2,
+            date: m.date, time: m.time, grp: m.grp,
+            week: wk.label, weekDates: wk.dates,
+            type: wk.type || 'group',
+            ko: m.ko || false, final: m.final || false
+          };
+        });
+      });
+      await _tmDB.ref('turnuva_fixtures').set(fixtData);
+      console.log('[TM] turnuva_fixtures Firebase\'e yazıldı:', Object.keys(fixtData).length, 'maç');
+    }
+
+    // 3. turnuva_matches — yoksa boş placeholder oluştur
+    const matchSnap = await _tmDB.ref('turnuva_matches').once('value');
+    if (!matchSnap.exists()) {
+      await _tmDB.ref('turnuva_matches/_placeholder').set({ created: Date.now() });
+      console.log('[TM] turnuva_matches klasörü oluşturuldu');
+    }
+
+  } catch(e) { console.warn('[TM] tmInitFirebaseData:', e); }
+}
+
 document.addEventListener('DOMContentLoaded', async function() {
   await tmLoadCurrentUser();
   await tmLoadAllMembers();
   await tmLoadTeamData();
   await tmLoadMatchResults();
+
+  // Firebase'de yoksa fikstür + takımları yaz
+  await tmInitFirebaseData();
 
   // Profil kartını DB verisiyle render et
   if (typeof renderProfileCard === 'function') renderProfileCard();
@@ -8593,15 +8644,6 @@ document.addEventListener('DOMContentLoaded', async function() {
   if (typeof renderFixture  === 'function') renderFixture();
   if (typeof renderScorers  === 'function') renderScorers();
   if (typeof renderTop20    === 'function') renderTop20();
-
-  // turnuva_matches yoksa boş kayıt oluştur (klasör görünsün)
-  try {
-    const ms = await _tmDB.ref('turnuva_matches').once('value');
-    if (!ms.exists()) {
-      await _tmDB.ref('turnuva_matches/_init').set({ created: Date.now() });
-      console.log('[TM] turnuva_matches klasörü oluşturuldu');
-    }
-  } catch(e) {}
 });
 </script>
 </body>
