@@ -8923,13 +8923,24 @@ if (_origSaveFixtureScore) {
 // ════════════════════════════════════
 const _origQuickGrant = typeof quickGrant === 'function' ? quickGrant : null;
 if (_origQuickGrant) {
-  window.quickGrant = function(userId, newRole) {
+  window.quickGrant = async function(userId, newRole) {
     _origQuickGrant(userId, newRole);
     const m = memberDB.find(u => u.id === userId);
-    if (m) {
+    if (!m) return;
+    try {
       const dbKey = (m.name||'').toLowerCase();
-      tmSaveUserRole(dbKey, newRole, m.team||'');
-    }
+      // Rol + takım bilgisini Firebase'e yaz
+      await _tmDB.ref('turnuva_users/' + dbKey).update({
+        role: newRole,
+        team: m.team || ''
+      });
+      // Kaptan atandıysa takımın kap alanını da güncelle
+      if (newRole === 'kaptan' && m.team && teamDB[m.team]) {
+        teamDB[m.team].kap = m.name;
+        await tmSaveTeam(m.team);
+      }
+      console.log('[TM] quickGrant Firebase:', m.name, newRole);
+    } catch(e) { console.warn('[TM] quickGrant Firebase:', e); }
   };
 }
 
@@ -8975,12 +8986,43 @@ if (_origAddStat) {
 // ════════════════════════════════════
 const _origAssignCaptan = typeof assignCaptan === 'function' ? assignCaptan : null;
 if (_origAssignCaptan) {
-  window.assignCaptan = function() {
+  window.assignCaptan = async function() {
     _origAssignCaptan();
-    setTimeout(async () => {
-      const tn = document.getElementById('captainTeamSel')?.value;
-      if (tn) await tmSaveTeam(tn);
-    }, 100);
+    try {
+      const tn   = document.getElementById('captainTeamSel')?.value;
+      const memNm = document.getElementById('captainMemberSel')?.value;
+      const plNm  = document.getElementById('captainPlayerSel')?.value;
+      const nm    = memNm || plNm;
+      if (!tn || !nm) return;
+
+      // 1. Takımı kaydet (kap alanı güncellendi)
+      await tmSaveTeam(tn);
+
+      // 2. Kaptanın turnuva_users kaydını güncelle — role: kaptan
+      const dbKey = nm.toLowerCase();
+      const snap  = await _tmDB.ref('turnuva_users/' + dbKey).once('value');
+      if (snap.exists()) {
+        await _tmDB.ref('turnuva_users/' + dbKey).update({
+          role: 'kaptan',
+          team: tn
+        });
+        console.log('[TM] Kaptan atandı Firebase:', nm, '->', tn);
+      } else {
+        // turnuva_users kaydı yoksa oluştur
+        await _tmDB.ref('turnuva_users/' + dbKey).set({
+          id:   dbKey,
+          name: nm,
+          role: 'kaptan',
+          team: tn,
+          pos:  '',
+          foot: '',
+          registeredAt: Date.now()
+        });
+        console.log('[TM] Kaptan yeni kayıt oluşturuldu:', nm);
+      }
+
+      showToast('Kaptan atandi: ' + nm + ' -> ' + tn);
+    } catch(e) { console.warn('[TM] assignCaptan Firebase:', e); }
   };
 }
 
@@ -9074,6 +9116,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 
   // Profil kartını DB verisiyle render et
   if (typeof renderProfileCard === 'function') renderProfileCard();
+
+  // Kaptan/Komite ise ilgili paneli otomatik göster (ama tab switch yapma)
+  if (typeof setRole === 'function' && currentRole && currentRole !== 'oyuncu') {
+    setRole(currentRole, true); // silent=true, toast gösterme
+  }
 
   if (typeof renderGroups   === 'function') renderGroups();
   if (typeof renderFixture  === 'function') renderFixture();
