@@ -7057,18 +7057,25 @@ function openRosterStatModal(playerId) {
   /* Slider'lar — sabit sırada göster */
   const sliders = Object.entries(DEFAULT_STATS).map(([key]) => {
     const val = pl.stats[key] || DEFAULT_STATS[key];
-    return `
-    <div class="rsm-sl-row">
-      <div class="rsm-sl-lbl">${STAT_LABELS_TR[key] || key}</div>
-      <input type="range" class="stt-stat-slider" min="1" max="99" value="${val}"
-             id="rsm-sl-${key}"
-             oninput="updateRsmStat('${key}',this.value,document.getElementById('rsm-val-${key}'))">
-      <div class="rsm-sl-val" id="rsm-val-${key}">${val}</div>
-    </div>`;
+    const lbl = STAT_LABELS_TR[key] || key;
+    return '<div class="rsm-sl-row">'
+      + '<div class="rsm-sl-lbl">' + lbl + '</div>'
+      + '<input type="range" class="stt-stat-slider" min="1" max="99" value="' + val + '"'
+      + ' id="rsm-sl-' + key + '" data-statkey="' + key + '">'
+      + '<div class="rsm-sl-val" id="rsm-val-' + key + '">' + val + '</div>'
+      + '</div>';
   }).join('');
 
   const slidersEl = document.getElementById('rsmSliders');
-  if (slidersEl) slidersEl.innerHTML = sliders;
+  if (slidersEl) {
+    slidersEl.innerHTML = sliders;
+    slidersEl.querySelectorAll('input[data-statkey]').forEach(inp => {
+      inp.addEventListener('input', function() {
+        const valEl = document.getElementById('rsm-val-' + this.dataset.statkey);
+        updateRsmStat(this.dataset.statkey, this.value, valEl);
+      });
+    });
+  }
 
   document.getElementById('rosterStatModal').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -7158,16 +7165,24 @@ function openMyStatModal() {
 
     const sliders = Object.entries(DEFAULT_STATS).map(([key]) => {
       const val = DEFAULT_STATS[key];
-      return `<div class="rsm-sl-row">
-        <div class="rsm-sl-lbl">${STAT_LABELS_TR[key]||key}</div>
-        <input type="range" class="stt-stat-slider" min="1" max="99" value="${val}"
-               id="rsm-sl-${key}"
-               oninput="updateRsmStat('${key}',this.value,document.getElementById('rsm-val-${key}'))">
-        <div class="rsm-sl-val" id="rsm-val-${key}">${val}</div>
-      </div>`;
+      const lbl = STAT_LABELS_TR[key] || key;
+      return '<div class="rsm-sl-row">'
+        + '<div class="rsm-sl-lbl">' + lbl + '</div>'
+        + '<input type="range" class="stt-stat-slider" min="1" max="99" value="' + val + '"'
+        + ' id="rsm-sl-' + key + '" data-statkey="' + key + '">'
+        + '<div class="rsm-sl-val" id="rsm-val-' + key + '">' + val + '</div>'
+        + '</div>';
     }).join('');
     const slidersEl = document.getElementById('rsmSliders');
-    if (slidersEl) slidersEl.innerHTML = sliders;
+    if (slidersEl) {
+      slidersEl.innerHTML = sliders;
+      slidersEl.querySelectorAll('input[data-statkey]').forEach(inp => {
+        inp.addEventListener('input', function() {
+          const valEl = document.getElementById('rsm-val-' + this.dataset.statkey);
+          updateRsmStat(this.dataset.statkey, this.value, valEl);
+        });
+      });
+    }
     document.getElementById('rosterStatModal').classList.add('open');
     document.body.style.overflow = 'hidden';
     return;
@@ -8863,7 +8878,7 @@ if (_origSaveFixtureScore) {
       }
 
       console.log('[TM] Maç kaydedildi Firebase:', mid, res.t1, res.hg, '-', res.ag, res.t2);
-      showToast('💾 Firebase'e kaydedildi!');
+      showToast('💾 Firebase\'e kaydedildi!');
     } catch(e) { console.warn('[TM] saveFixtureScore Firebase:', e); }
   };
 }
