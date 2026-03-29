@@ -8293,11 +8293,11 @@ switchTab = function(target, btn) {
 <script>
 /* ═══════════════════════════════════════════════════════════════
    TOURNAMENT MASTER — Firebase Init + Session Guard + DB Sync
-   turnuva_ prefix kullanılır, eski koleksiyonlara DOKUNULMAZ
+   turnuva_ prefix — eski koleksiyonlara SIFIR DOKUNUŞ
 ═══════════════════════════════════════════════════════════════ */
 
-// Firebase Init
-const _tmFirebaseConfig = {
+// Firebase Init (ayrı named instance — index.html ile çakışmaz)
+const _tmCfg = {
   apiKey:            "AIzaSyBc_JhGF0Axeey-pPyUQsV6RZ3UIXd2WIc",
   authDomain:        "sali-maci.firebaseapp.com",
   databaseURL:       "https://sali-maci-default-rtdb.europe-west1.firebasedatabase.app",
@@ -8306,169 +8306,243 @@ const _tmFirebaseConfig = {
   messagingSenderId: "656383692297",
   appId:             "1:656383692297:web:ecd81c5645e86e073b72d8"
 };
-
-let _tmDB = null;
-try {
-  const _tmApp = firebase.app('tournament');
-  _tmDB = firebase.database(_tmApp);
-} catch(e) {
-  const _tmApp = firebase.initializeApp(_tmFirebaseConfig, 'tournament');
-  _tmDB = firebase.database(_tmApp);
-}
+let _tmDB;
+try { _tmDB = firebase.database(firebase.app('tm')); }
+catch(e) { _tmDB = firebase.database(firebase.initializeApp(_tmCfg, 'tm')); }
 
 // ── Session Guard ──
-(function() {
+const _tmSession = (function() {
   const raw = localStorage.getItem('hs_session') || localStorage.getItem('hs_session_temp');
-  if (!raw) { window.location.replace('login.html'); return; }
-  let session;
-  try { session = JSON.parse(raw); } catch(e) { window.location.replace('login.html'); return; }
-  if (!session || !session.id) { window.location.replace('login.html'); return; }
-
-  // Session'dan kullanıcıyı yükle ve rolünü DB'den al
-  window._tmSession = session;
+  if (!raw) { window.location.replace('login.html'); return null; }
+  try {
+    const s = JSON.parse(raw);
+    if (!s || !s.id) { window.location.replace('login.html'); return null; }
+    return s;
+  } catch(e) { window.location.replace('login.html'); return null; }
 })();
 
-// ── DB'den turnuva kullanıcısını yükle ve rolünü ayarla ──
-async function tmLoadCurrentUser() {
-  if (!window._tmSession) return;
-  const session = window._tmSession;
-
-  try {
-    // Önce dbKey ile dene (kayıt sırasında saklanan)
-    const dbKey = session.dbKey || session.name.toLowerCase();
-    const snap = await _tmDB.ref('turnuva_users/' + dbKey).once('value');
-    const userData = snap.val();
-
-    if (userData) {
-      // Rol bilgisine göre RBAC ayarla — superadmin isim bazlı override
-      const SUPERADMINS = ['furkan soydan'];
-      const nameLC = (userData.name || '').toLowerCase();
-      const role = SUPERADMINS.includes(nameLC) ? 'superadmin' : (userData.role || 'oyuncu');
-      const name = userData.name || session.name;
-
-      // Mevcut currentUser'ı Firebase verisine göre güncelle
-      currentUser = { id: userData.id, name: name, team: userData.team || '', role: role };
-      currentRole = role;
-
-      // RBAC bar'ı güncelle
-      if (typeof setRole === 'function') setRole(role);
-
-      // Üye listesinde de güncelle
-      const existing = memberDB.findIndex(m => m.id === userData.id || m.name === name);
-      if (existing >= 0) {
-        memberDB[existing] = { ...memberDB[existing], ...userData };
-      } else {
-        memberDB.push({ id: userData.id, name: name, team: userData.team || '', pos: userData.pos || '', foot: userData.foot || '', role: role });
-      }
-
-      console.log('Turnuva kullanıcısı yüklendi:', name, '|', role);
-    } else {
-      // turnuva_users'da yok — isim bazlı rol ver
-      const name = session.name || '';
-      const SUPERADMINS = ['furkan soydan'];
-      const role = SUPERADMINS.includes(name.toLowerCase()) ? 'superadmin' : 'oyuncu';
-      currentUser = { id: session.id, name: name, team: '', role: role };
-      currentRole = role;
-      if (typeof setRole === 'function') setRole(role);
-    }
-  } catch(err) {
-    console.warn('tmLoadCurrentUser hata:', err);
-  }
+// ── Yardımcı: takım adını Firebase key'e çevir ──
+function _tmKey(name) {
+  return name.replace(/\s+/g,'_').replace(/[.#$\[\]]/g,'');
 }
 
-// ── Takım & Kadro Verilerini DB'den Yükle ──
+// ── Kullanıcıyı turnuva_users'dan yükle ──
+async function tmLoadCurrentUser() {
+  if (!_tmSession) return;
+  try {
+    const dbKey = _tmSession.dbKey || (_tmSession.name||'').toLowerCase();
+    const snap  = await _tmDB.ref('turnuva_users/' + dbKey).once('value');
+    let   data  = snap.val();
+
+    const SUPERADMINS = ['furkan soydan'];
+    const nameLC = (data?.name || _tmSession.name || '').toLowerCase();
+
+    if (!data) {
+      // turnuva_users'da yok — oluştur
+      data = {
+        id: _tmSession.id, name: _tmSession.name || '',
+        role: SUPERADMINS.includes(nameLC) ? 'superadmin' : 'oyuncu',
+        team: '', pos: '', foot: '',
+        registeredAt: Date.now()
+      };
+      await _tmDB.ref('turnuva_users/' + dbKey).set(data);
+    }
+
+    const role = SUPERADMINS.includes(nameLC) ? 'superadmin' : (data.role || 'oyuncu');
+    currentUser  = { id: data.id, name: data.name, team: data.team || '', role };
+    currentRole  = role;
+    if (typeof setRole === 'function') setRole(role);
+
+    // memberDB'ye ekle/güncelle
+    const idx = memberDB.findIndex(m => m.id === data.id || m.name === data.name);
+    const entry = { id: data.id, name: data.name, team: data.team||'', pos: data.pos||'', foot: data.foot||'', role };
+    if (idx >= 0) memberDB[idx] = { ...memberDB[idx], ...entry };
+    else memberDB.push(entry);
+
+    console.log('[TM] Kullanıcı:', data.name, '|', role);
+  } catch(err) { console.warn('[TM] tmLoadCurrentUser:', err); }
+}
+
+// ── Tüm turnuva üyelerini yükle (süper admin üye listesi için) ──
+async function tmLoadAllMembers() {
+  try {
+    const snap = await _tmDB.ref('turnuva_users').once('value');
+    const data = snap.val() || {};
+    const SUPERADMINS = ['furkan soydan'];
+    Object.values(data).forEach(u => {
+      if (!u || !u.id) return;
+      const nameLC = (u.name||'').toLowerCase();
+      const role = SUPERADMINS.includes(nameLC) ? 'superadmin' : (u.role||'oyuncu');
+      const idx = memberDB.findIndex(m => m.id === u.id || m.name === u.name);
+      const entry = { id: u.id, name: u.name||'', team: u.team||'', pos: u.pos||'', foot: u.foot||'', role };
+      if (idx >= 0) memberDB[idx] = { ...memberDB[idx], ...entry };
+      else memberDB.push(entry);
+    });
+    console.log('[TM] Üyeler yüklendi:', memberDB.length);
+  } catch(err) { console.warn('[TM] tmLoadAllMembers:', err); }
+}
+
+// ── Takım verilerini turnuva_teams'den yükle ──
 async function tmLoadTeamData() {
   try {
     const snap = await _tmDB.ref('turnuva_teams').once('value');
     const data = snap.val();
     if (!data) return;
-
-    Object.entries(data).forEach(([teamName, teamData]) => {
-      if (teamDB[teamName]) {
-        // Puan tablosu
-        teamDB[teamName].g = teamData.g || 0;
-        teamDB[teamName].b = teamData.b || 0;
-        teamDB[teamName].m = teamData.m || 0;
-        teamDB[teamName].o = teamData.o || 0;
-        teamDB[teamName].ag = teamData.ag || 0;
-        teamDB[teamName].yg = teamData.yg || 0;
-        teamDB[teamName].kap = teamData.kap || null;
-        // Kadro
-        if (teamData.kadro) {
-          teamDB[teamName].kadro = Object.values(teamData.kadro);
-        }
-        // Formation
-        if (teamData.formation) {
-          teamDB[teamName].formation = teamData.formation;
-        }
-      }
+    Object.entries(data).forEach(([key, td]) => {
+      const teamName = td.name || key.replace(/_/g,' ');
+      if (!teamDB[teamName]) return;
+      if (td.g   !== undefined) teamDB[teamName].g   = td.g;
+      if (td.b   !== undefined) teamDB[teamName].b   = td.b;
+      if (td.m   !== undefined) teamDB[teamName].m   = td.m;
+      if (td.o   !== undefined) teamDB[teamName].o   = td.o;
+      if (td.ag  !== undefined) teamDB[teamName].ag  = td.ag;
+      if (td.yg  !== undefined) teamDB[teamName].yg  = td.yg;
+      if (td.kap !== undefined) teamDB[teamName].kap = td.kap;
+      if (td.formation)         teamDB[teamName].formation = td.formation;
+      if (td.kadro) teamDB[teamName].kadro = Array.isArray(td.kadro) ? td.kadro : Object.values(td.kadro);
     });
-    console.log('Takım verileri DB\'den yüklendi');
-  } catch(err) {
-    console.warn('tmLoadTeamData hata:', err);
-  }
+    console.log('[TM] Takımlar yüklendi');
+  } catch(err) { console.warn('[TM] tmLoadTeamData:', err); }
 }
 
-// ── Maç Sonuçlarını DB'den Yükle ──
+// ── Maç sonuçlarını turnuva_matches'den yükle ──
 async function tmLoadMatchResults() {
   try {
     const snap = await _tmDB.ref('turnuva_matches').once('value');
     const data = snap.val();
     if (!data) return;
-    Object.entries(data).forEach(([matchId, result]) => {
-      matchResults[matchId] = result;
-    });
-    console.log('Maç sonuçları DB\'den yüklendi');
-  } catch(err) {
-    console.warn('tmLoadMatchResults hata:', err);
-  }
+    Object.assign(matchResults, data);
+    console.log('[TM] Maçlar yüklendi');
+  } catch(err) { console.warn('[TM] tmLoadMatchResults:', err); }
 }
 
-// ── Maç Sonucu DB'ye Kaydet (komite kullanır) ──
-window.tmSaveMatchResult = async function(matchId, resultData) {
+// ── Maç sonucu kaydet ──
+async function tmSaveMatchResult(matchId, resultData) {
   try {
     await _tmDB.ref('turnuva_matches/' + matchId).set(resultData);
-    console.log('Maç kaydedildi:', matchId);
-  } catch(err) {
-    console.warn('tmSaveMatchResult hata:', err);
-  }
-};
+  } catch(err) { console.warn('[TM] tmSaveMatchResult:', err); }
+}
 
-// ── Takım Kadrosunu DB'ye Kaydet (kaptan kullanır) ──
-window.tmSaveTeamKadro = async function(teamName, kadro, formation) {
+// ── Takım durumunu kaydet (puan tablosu + kadro + formasyon) ──
+async function tmSaveTeam(teamName) {
   try {
-    const key = teamName.replace(/\s+/g, '_').replace(/[.#$\[\]]/g, '');
-    await _tmDB.ref('turnuva_teams/' + key).update({
-      kadro: kadro,
-      formation: formation || '1-2-1-2-1',
-      name: teamName,
+    const t = teamDB[teamName];
+    if (!t) return;
+    const key = _tmKey(teamName);
+    await _tmDB.ref('turnuva_teams/' + key).set({
+      name: teamName, grp: t.grp,
+      g: t.g||0, b: t.b||0, m: t.m||0, o: t.o||0,
+      ag: t.ag||0, yg: t.yg||0, kap: t.kap||null,
+      formation: t.formation||'1-2-1-2-1',
+      kadro: t.kadro||[]
     });
-    console.log('Kadro kaydedildi:', teamName);
-  } catch(err) {
-    console.warn('tmSaveTeamKadro hata:', err);
-  }
-};
+  } catch(err) { console.warn('[TM] tmSaveTeam:', err); }
+}
 
-// ── Kullanıcı Rolünü DB'ye Kaydet (süper admin kullanır) ──
-window.tmSaveUserRole = async function(dbKey, role, team) {
+// ── Kullanıcı rolü/takımını kaydet ──
+async function tmSaveUserRole(dbKey, role, team) {
   try {
-    await _tmDB.ref('turnuva_users/' + dbKey).update({ role, team: team || '' });
-    console.log('Rol güncellendi:', dbKey, role);
-  } catch(err) {
-    console.warn('tmSaveUserRole hata:', err);
-  }
-};
+    await _tmDB.ref('turnuva_users/' + dbKey).update({ role, team: team||'' });
+  } catch(err) { console.warn('[TM] tmSaveUserRole:', err); }
+}
 
-// ── Uygulama başlangıcında yükle ──
+// ── Profil kaydet → turnuva_users'a yaz ──
+async function tmSaveProfile(name, team, pos, foot) {
+  if (!_tmSession) return;
+  try {
+    const dbKey = _tmSession.dbKey || (_tmSession.name||'').toLowerCase();
+    await _tmDB.ref('turnuva_users/' + dbKey).update({ team, pos, foot });
+  } catch(err) { console.warn('[TM] tmSaveProfile:', err); }
+}
+
+// ════════════════════════════════════
+// Hook: saveFixtureScore → Firebase'e yaz
+// ════════════════════════════════════
+const _origSaveFixtureScore = typeof saveFixtureScore === 'function' ? saveFixtureScore : null;
+if (_origSaveFixtureScore) {
+  window.saveFixtureScore = function() {
+    _origSaveFixtureScore();
+    // Kaydedilen maçı ve etkilenen takımları DB'ye yaz
+    setTimeout(async () => {
+      const mid = document.getElementById('fixtureMatchSel')?.value;
+      if (mid && matchResults[mid]) {
+        await tmSaveMatchResult(mid, matchResults[mid]);
+      }
+      // Tüm teamDB'yi kaydet (puan tablosu)
+      for (const tn of Object.keys(teamDB)) { await tmSaveTeam(tn); }
+    }, 100);
+  };
+}
+
+// ════════════════════════════════════
+// Hook: quickGrant → Firebase'e yaz
+// ════════════════════════════════════
+const _origQuickGrant = typeof quickGrant === 'function' ? quickGrant : null;
+if (_origQuickGrant) {
+  window.quickGrant = function(userId, newRole) {
+    _origQuickGrant(userId, newRole);
+    const m = memberDB.find(u => u.id === userId);
+    if (m) {
+      const dbKey = (m.name||'').toLowerCase();
+      tmSaveUserRole(dbKey, newRole, m.team||'');
+    }
+  };
+}
+
+// ════════════════════════════════════
+// Hook: assignCaptan → Firebase'e yaz
+// ════════════════════════════════════
+const _origAssignCaptan = typeof assignCaptan === 'function' ? assignCaptan : null;
+if (_origAssignCaptan) {
+  window.assignCaptan = function() {
+    _origAssignCaptan();
+    setTimeout(async () => {
+      const tn = document.getElementById('captainTeamSel')?.value;
+      if (tn) await tmSaveTeam(tn);
+    }, 100);
+  };
+}
+
+// ════════════════════════════════════
+// Hook: publishLineup → Firebase'e yaz
+// ════════════════════════════════════
+const _origPublishLineup = typeof publishLineup === 'function' ? publishLineup : null;
+if (_origPublishLineup) {
+  window.publishLineup = function() {
+    _origPublishLineup();
+    setTimeout(async () => {
+      if (captainTeamName) await tmSaveTeam(captainTeamName);
+    }, 200);
+  };
+}
+
+// ════════════════════════════════════
+// Hook: saveProfile → turnuva_users'a yaz
+// ════════════════════════════════════
+const _origSaveProfile = typeof saveProfile === 'function' ? saveProfile : null;
+if (_origSaveProfile) {
+  window.saveProfile = function() {
+    _origSaveProfile();
+    setTimeout(() => {
+      const p = currentProfile;
+      if (p && p.team) tmSaveProfile(p.name, p.team, p.pos, p.foot);
+    }, 100);
+  };
+}
+
+// ════════════════════════════════════
+// Başlangıç yüklemesi
+// ════════════════════════════════════
 document.addEventListener('DOMContentLoaded', async function() {
   await tmLoadCurrentUser();
+  await tmLoadAllMembers();
   await tmLoadTeamData();
   await tmLoadMatchResults();
 
-  // Render'ları güncelle
-  if (typeof renderGroups === 'function') renderGroups();
-  if (typeof renderFixture === 'function') renderFixture();
-  if (typeof renderScorers === 'function') renderScorers();
+  if (typeof renderGroups   === 'function') renderGroups();
+  if (typeof renderFixture  === 'function') renderFixture();
+  if (typeof renderScorers  === 'function') renderScorers();
+  if (typeof renderTop20    === 'function') renderTop20();
 });
 </script>
 </body>
