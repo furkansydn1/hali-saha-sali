@@ -5048,9 +5048,16 @@ html, body {
             <button class="prf-register-btn" id="statAyarlaBtn" onclick="openMyStatModal()" style="margin-bottom:8px;background:rgba(0,212,255,.08);border-color:var(--b2);color:var(--cyan);display:none">
               ⚙️ Statlarımı Ayarla
             </button>
-            <button class="prf-register-btn" onclick="openRegisterModal()">
+            <button class="prf-register-btn" id="profileUpdateBtn" onclick="openRegisterModal()">
               ✏️ Profil Bilgilerini Güncelle
             </button>
+            <button class="prf-register-btn" id="izleyiciBtn" onclick="setIzleyici()"
+                    style="margin-top:8px;background:rgba(255,180,0,.06);border-color:rgba(255,180,0,.25);color:#ffb84d">
+              👁️ İzleyici Moduna Geç
+            </button>
+            <div id="izleyiciMsg" style="display:none;margin-top:10px;padding:10px 14px;border-radius:10px;background:rgba(255,180,0,.07);border:1px solid rgba(255,180,0,.2);font-family:'Rajdhani',sans-serif;font-size:.72rem;letter-spacing:1px;color:#ffb84d;text-align:center">
+              👁️ İzleyici modundasın — Turnuvayı takip ediyorsun, sahada değilsin.
+            </div>
 
           </div><!-- /profile-right-panel -->
         </div><!-- /profile-layout -->
@@ -5700,8 +5707,39 @@ function showToast(msg) {
 ═════════════════════════════════════════════════════════ */
 
 /* ── Oyuncu Veri Dizisi ── */
-/* ─── Production: oyuncular Firebase'den gelecek ─── */
+/* teamDB.kadro'dan türetilir — tmSyncPlayers() ile güncellenir */
 const players = [];
+
+/* teamDB kadrosundan players[] dizisini güncelle */
+function tmSyncPlayers() {
+  players.length = 0;
+  Object.entries(teamDB).forEach(([teamName, t]) => {
+    (t.kadro || []).forEach(pl => {
+      if (!pl || !pl.nm || pl.pos === 'IZL') return; /* izleyeci hariç */
+      const posGroup = posToGroup ? posToGroup(pl.pos) : 'forvet';
+      const rating   = pl.rating || 75;
+      const stats    = (pl.stats && Object.keys(pl.stats).length > 0)
+        ? { hiz: pl.stats.HIZ||pl.stats.hiz||70, sut: pl.stats.SUT||pl.stats.sut||70,
+            pas: pl.stats.PAS||pl.stats.pas||70, drb: pl.stats.DRB||pl.stats.drb||70,
+            def: pl.stats.DEF||pl.stats.def||70, fiz: pl.stats.FIZ||pl.stats.fiz||70 }
+        : { hiz:70, sut:70, pas:70, drb:70, def:70, fiz:70 };
+      players.push({
+        id:       pl.id,
+        name:     pl.nm,
+        team:     teamName,
+        pos:      pl.pos,
+        posGroup: posGroup,
+        rating:   rating,
+        goals:    pl.gol     || 0,
+        wins:     t.g        || 0,
+        stats:    stats,
+        avClass:  (typeof posToAvClass === 'function') ? posToAvClass(pl.pos) : 'av-mo',
+        initials: pl.nm.split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase(),
+      });
+    });
+  });
+  console.log('[TM] players[] güncellendi:', players.length, 'oyuncu');
+}
 
 /* ── Borsa Sabitleri ── */
 const MARKET_BASE_PER_RATING = 210000;   // 80 rating → ~16.8M€ base
@@ -6710,6 +6748,13 @@ async function kickFromTeam(playerName) {
   }
 
   if (typeof renderRosterList === 'function') renderRosterList();
+
+  /* players[] dizisini teamDB'den doldur (Top20 + Gol Krallığı için) */
+  if (typeof tmSyncPlayers === 'function') {
+    tmSyncPlayers();
+    if (typeof renderTop20    === 'function') renderTop20();
+    if (typeof renderScorers  === 'function') renderScorers();
+  }
   if (typeof renderPitch === 'function') renderPitch();
   showToast('🚫 ' + playerName + ' takımdan çıkarıldı.');
 }
@@ -7037,6 +7082,54 @@ function updateRsmStat(statKey, value, valEl) {
 
 
 /* ── Kendi stat modalını aç — sadece superadmin ── */
+
+/* ── İzleyici moduna geç ── */
+async function setIzleyici() {
+  if (!confirm('İzleyici moduna geçmek istediğinize emin misiniz? Takımdan çıkacaksınız.')) return;
+
+  const name = currentProfile.name || currentUser.name || '';
+
+  /* Eski takımdan çıkar */
+  const oldTeam = currentProfile.team;
+  if (oldTeam && teamDB[oldTeam]) {
+    teamDB[oldTeam].kadro = teamDB[oldTeam].kadro.filter(pl => pl.nm !== name);
+    if (typeof tmSaveTeam === 'function') await tmSaveTeam(oldTeam);
+  }
+
+  currentProfile = { ...currentProfile, team: '', pos: 'IZL' };
+  currentUser.team = '';
+
+  /* memberDB güncelle */
+  const mbIdx = memberDB.findIndex(m => m.id === currentUser.id);
+  if (mbIdx >= 0) { memberDB[mbIdx].team = ''; memberDB[mbIdx].pos = 'IZL'; }
+
+  /* Firebase güncelle */
+  if (typeof tmSaveProfile === 'function') await tmSaveProfile(name, '', 'IZL', currentProfile.foot || '');
+
+  /* UI güncelle */
+  updateIzleyiciUI(true);
+  renderProfileCard();
+  showToast('👁️ İzleyici moduna geçildi!');
+}
+
+function updateIzleyiciUI(isIzleyici) {
+  const updateBtn  = document.getElementById('profileUpdateBtn');
+  const statBtn    = document.getElementById('statAyarlaBtn');
+  const izBtn      = document.getElementById('izleyiciBtn');
+  const izMsg      = document.getElementById('izleyiciMsg');
+
+  if (isIzleyici) {
+    if (updateBtn) updateBtn.style.display = 'none';
+    if (statBtn)   statBtn.style.display   = 'none';
+    if (izBtn)     izBtn.style.display     = 'none';
+    if (izMsg)     izMsg.style.display     = 'block';
+  } else {
+    if (updateBtn) updateBtn.style.display = '';
+    if (izBtn)     izBtn.style.display     = '';
+    if (izMsg)     izMsg.style.display     = 'none';
+  }
+}
+
 function openMyStatModal() {
   if (currentRole !== 'superadmin' && currentRole !== 'kaptan') {
     showToast('⚠️ Stat ayarlama yetkisi yok.');
@@ -7867,6 +7960,8 @@ function renderKomChart() {
 /* ─── refreshAllViews: rAF ile batch DOM yazımı ─── */
 let _rafPending = false;
 function refreshAllViews() {
+  /* players[] güncelle */
+  if (typeof tmSyncPlayers === 'function') tmSyncPlayers();
   if (_rafPending) return;          /* zaten kuyruktaysa ikinci çağrıyı atla */
   _rafPending = true;
   requestAnimationFrame(() => {
@@ -8193,6 +8288,9 @@ function saveProfile() {
 
   currentProfile = { name, team, pos, foot };
 
+  /* players[] güncelle */
+  if (typeof tmSyncPlayers === 'function') tmSyncPlayers();
+
   /* Firebase'e yaz — hem takım kadrosu hem kullanıcı profili */
   setTimeout(async () => {
     try {
@@ -8336,6 +8434,11 @@ function renderProfileCard() {
   const statBtn = document.getElementById('statAyarlaBtn');
   if (statBtn) {
     statBtn.style.display = (currentRole === 'superadmin' || currentRole === 'kaptan') ? '' : 'none';
+  }
+
+  /* İzleyici UI güncelle */
+  if (typeof updateIzleyiciUI === 'function') {
+    updateIzleyiciUI(p.pos === 'IZL');
   }
 
   /* OVR bilgi chipini güncelle */
@@ -8521,8 +8624,16 @@ function _tmKey(name) {
 async function tmLoadCurrentUser() {
   if (!_tmSession) return;
   try {
-    const dbKey = _tmSession.dbKey || (_tmSession.name||'').toLowerCase();
-    const snap  = await _tmDB.ref('turnuva_users/' + dbKey).once('value');
+    /* dbKey: önce session'dan, sonra isim lowercase + boşluk normalize */
+    const rawName = (_tmSession.name || '').trim();
+    const dbKey   = _tmSession.dbKey || rawName.toLowerCase();
+    const dbKeyAlt = rawName.toLowerCase().replace(/\s+/g, '_');
+
+    /* Her iki formatta da ara */
+    let snap = await _tmDB.ref('turnuva_users/' + dbKey).once('value');
+    if (!snap.exists()) {
+      snap = await _tmDB.ref('turnuva_users/' + dbKeyAlt).once('value');
+    }
     let   data  = snap.val();
 
     const SUPERADMINS = ['furkan soydan'];
@@ -8697,6 +8808,8 @@ async function tmSaveTeam(teamName) {
       kadro: safeKadro
     });
     console.log('[TM] tmSaveTeam:', teamName, '| kadro:', safeKadro.length);
+    /* players[] güncelle */
+    if (typeof tmSyncPlayers === 'function') tmSyncPlayers();
   } catch(err) { console.warn('[TM] tmSaveTeam:', err); }
 }
 
@@ -8923,6 +9036,13 @@ document.addEventListener('DOMContentLoaded', async function() {
 
   // Rol yüklendikten sonra roster'ı yenile (⚙️ butonları rol'e göre göster)
   if (typeof renderRosterList === 'function') renderRosterList();
+
+  /* players[] dizisini teamDB'den doldur (Top20 + Gol Krallığı için) */
+  if (typeof tmSyncPlayers === 'function') {
+    tmSyncPlayers();
+    if (typeof renderTop20    === 'function') renderTop20();
+    if (typeof renderScorers  === 'function') renderScorers();
+  }
 });
 </script>
 </body>
