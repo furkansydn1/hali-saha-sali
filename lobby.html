@@ -450,13 +450,62 @@ html, body {
 
 /* Responsive */
 @media (max-width: 680px) {
+  /* Dikey layout */
   .lobby { flex-direction: column; }
-  .panel { flex: 1 !important; filter: none !important; }
-  .divider { top: 50%; left: 0; right: 0; width: 100%; height: 2px; transform: translateY(-50%); }
-  .vs-badge { top: 50%; left: 50%; }
-  .mode-title { font-size: 2rem; }
-  .mode-stats { gap: 18px; }
+  .panel { flex: 1 !important; filter: none !important; min-height: 50vh; }
+
+  /* Orta çizgi yatay */
+  .divider {
+    top: 50%; left: 0; right: 0;
+    width: 100%; height: 2px;
+    transform: translateY(-50%);
+  }
+
+  /* VS badge gizle */
+  .vs-badge { display: none; }
+
+  /* İçerik hizalama */
+  .panel-content {
+    padding: 28px 24px;
+    justify-content: center;
+  }
+
+  /* Mode tag küçük */
+  .mode-tag { font-size: .58rem; letter-spacing: 3px; margin-bottom: 14px; }
+
+  /* İkon */
+  .mode-icon { font-size: 2.6rem; margin-bottom: 12px; }
+
+  /* Başlık */
+  .mode-title { font-size: 1.7rem; letter-spacing: 1.5px; margin-bottom: 8px; }
+
+  /* Açıklama — mobilde gizle (yer kaplıyor) */
+  .mode-desc { display: none; }
+
+  /* Deco çizgi gizle */
+  .deco-line { display: none; }
+
+  /* CTA buton */
+  .mode-btn {
+    padding: 11px 28px;
+    font-size: .95rem;
+    letter-spacing: 2px;
+  }
+
+  /* Stats */
+  .mode-stats { gap: 20px; margin-top: 16px; }
+  .mode-stat strong { font-size: 1.1rem; }
+  .mode-stat span { font-size: .55rem; }
+
+  /* Footer gizle */
   .lobby-footer { display: none; }
+}
+
+@media (max-width: 380px) {
+  .panel-content { padding: 20px 16px; }
+  .mode-icon { font-size: 2.2rem; }
+  .mode-title { font-size: 1.4rem; }
+  .mode-btn { padding: 10px 22px; font-size: .85rem; }
 }
 </style>
 </head>
