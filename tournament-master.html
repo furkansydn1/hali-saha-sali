@@ -5514,16 +5514,16 @@ html, body {
 /* Üye veritabanı — Firebase turnuva_users'dan yüklenir */
 const memberDB = [];
 
-/* ── Aktif kullanıcı — Furkan Soydan: Süper Admin ── */
+/* ── Aktif kullanıcı — Firebase'den yüklenir ── */
 let currentUser = {
-  id:   'sa01',
-  name: 'Furkan Soydan',
+  id:   '',
+  name: '',
   team: '',
-  role: 'superadmin',
+  role: 'oyuncu',
 };
 
 /* Geriye dönük uyumluluk — currentUser ile senkron başlat */
-let currentRole   = currentUser.role;   /* 'superadmin' */
+let currentRole   = currentUser.role;   /* Firebase'den güncellenir */
 let activeSection = 'fikstur';
 let dropOpen      = false;
 let toastTimer    = null;
@@ -6644,34 +6644,55 @@ function getCaptainTeam() {
    KAPTAN: Oyuncuyu takımdan çıkar
 ══════════════════════════════════════════════════════ */
 async function kickFromTeam(playerName) {
-  const teamName = getCaptainTeam();
-  if (!teamName) return;
-  if (!confirm('"' + playerName + '" adlı oyuncuyu takımdan çıkarmak istediğinize emin misiniz?')) return;
+  /* Kaptan kendi takımını, süper admin / komite herhangi takımı yönetebilir */
+  let teamName = getCaptainTeam();
+  if (!teamName) {
+    /* Süper admin / komite: hangi takımda bu oyuncu varsa oradan çıkar */
+    for (const [tn, t] of Object.entries(teamDB)) {
+      if (t.kadro && t.kadro.find(pl => pl.nm === playerName)) {
+        teamName = tn;
+        break;
+      }
+    }
+  }
+  if (!teamName) { showToast('⚠️ Oyuncu hangi takımda bulunamadı.'); return; }
+  if (!confirm('"' + playerName + '" adlı oyuncuyu ' + teamName + ' takımından çıkarmak istediğinize emin misiniz?')) return;
 
+  /* teamDB kadrosundan çıkar */
   if (teamDB[teamName]) {
     teamDB[teamName].kadro = teamDB[teamName].kadro.filter(pl => pl.nm !== playerName);
   }
 
+  /* memberDB güncelle */
   const member = memberDB.find(m => m.name === playerName);
-  if (member) { member.team = ''; member.kicked = true; member.kickMsg = '\u26a0\ufe0f Lütfen oynamadığın takıma üye olma, siteden uzaklaştırılırsınız.'; }
+  if (member) {
+    member.team    = '';
+    member.kicked  = true;
+    member.kickMsg = '⚠️ Lütfen oynamadığın takıma üye olma, siteden uzaklaştırılırsınız.';
+  }
 
+  /* Sahadaki slottan çıkar */
   for (let i = 0; i < slotState.length; i++) {
     if (slotState[i] && slotState[i].name === playerName) slotState[i] = null;
   }
 
+  /* DB'ye yaz */
   if (typeof tmSaveTeam === 'function') await tmSaveTeam(teamName);
   if (typeof _tmDB !== 'undefined') {
     try {
-      await _tmDB.ref('turnuva_users/' + playerName.toLowerCase()).update({
-        team: '', kicked: true,
-        kickMsg: '\u26a0\ufe0f Lütfen oynamadığın takıma üye olma, siteden uzaklaştırılırsınız.'
+      const dbKey = playerName.toLowerCase().replace(/\s+/g,' ').trim();
+      await _tmDB.ref('turnuva_users/' + dbKey).update({
+        team: '',
+        kicked: true,
+        kickMsg: '⚠️ Lütfen oynamadığın takıma üye olma, siteden uzaklaştırılırsınız.'
       });
-    } catch(e) { console.warn('kickFromTeam DB:', e); }
+      console.log('[TM] kickFromTeam DB yazıldı:', dbKey);
+    } catch(e) { console.warn('[TM] kickFromTeam DB:', e); }
   }
 
   if (typeof renderRosterList === 'function') renderRosterList();
   if (typeof renderPitch === 'function') renderPitch();
-  showToast('\ud83d\udeab ' + playerName + ' takımdan çıkarıldı.');
+  showToast('🚫 ' + playerName + ' takımdan çıkarıldı.');
 }
 
 function renderRosterList() {
@@ -8386,6 +8407,10 @@ const _tmSession = (function() {
   try {
     const s = JSON.parse(raw);
     if (!s || !s.id) { window.location.replace('login.html'); return null; }
+    /* Lobby'den mi gelindiğini kontrol et */
+    const fromLobby = document.referrer.indexOf('lobby.html') >= 0 ||
+                      sessionStorage.getItem('from_lobby') === '1';
+    if (!fromLobby) { window.location.replace('lobby.html'); return null; }
     return s;
   } catch(e) { window.location.replace('login.html'); return null; }
 })();
@@ -8422,6 +8447,14 @@ async function tmLoadCurrentUser() {
     currentRole  = role;
     if (typeof setRole === 'function') setRole(role);
 
+    // currentProfile'ı DB'den gelen veriyle güncelle (her açılışta sıfırlanmasın)
+    if (typeof currentProfile !== 'undefined') {
+      currentProfile.name = data.name || currentProfile.name;
+      currentProfile.team = data.team || '';
+      currentProfile.pos  = data.pos  || currentProfile.pos;
+      currentProfile.foot = data.foot || currentProfile.foot;
+    }
+
     // memberDB'ye ekle/güncelle
     const idx = memberDB.findIndex(m => m.id === data.id || m.name === data.name);
     const entry = { id: data.id, name: data.name, team: data.team||'', pos: data.pos||'', foot: data.foot||'', role, kicked: data.kicked||false, kickMsg: data.kickMsg||'' };
@@ -8433,7 +8466,7 @@ async function tmLoadCurrentUser() {
       setTimeout(() => showToast(data.kickMsg || '⚠️ Lütfen oynamadığın takıma üye olma, siteden uzaklaştırılırsınız.'), 1000);
     }
 
-    console.log('[TM] Kullanıcı:', data.name, '|', role);
+    console.log('[TM] Kullanıcı:', data.name, '| Rol:', role, '| Takım:', data.team||'yok');
   } catch(err) { console.warn('[TM] tmLoadCurrentUser:', err); }
 }
 
@@ -8525,7 +8558,13 @@ async function tmSaveProfile(name, team, pos, foot) {
   if (!_tmSession) return;
   try {
     const dbKey = _tmSession.dbKey || (_tmSession.name||'').toLowerCase();
-    await _tmDB.ref('turnuva_users/' + dbKey).update({ team, pos, foot });
+    await _tmDB.ref('turnuva_users/' + dbKey).update({
+      name: name || _tmSession.name,
+      team: team || '',
+      pos:  pos  || '',
+      foot: foot || ''
+    });
+    console.log('[TM] Profil kaydedildi:', dbKey, team, pos);
   } catch(err) { console.warn('[TM] tmSaveProfile:', err); }
 }
 
@@ -8599,7 +8638,7 @@ if (_origSaveProfile) {
     _origSaveProfile();
     setTimeout(() => {
       const p = currentProfile;
-      if (p && p.team) tmSaveProfile(p.name, p.team, p.pos, p.foot);
+      if (p && p.name) tmSaveProfile(p.name, p.team||'', p.pos||'', p.foot||'');
     }, 100);
   };
 }
@@ -8613,10 +8652,22 @@ document.addEventListener('DOMContentLoaded', async function() {
   await tmLoadTeamData();
   await tmLoadMatchResults();
 
+  // Profil kartını DB verisiyle render et
+  if (typeof renderProfileCard === 'function') renderProfileCard();
+
   if (typeof renderGroups   === 'function') renderGroups();
   if (typeof renderFixture  === 'function') renderFixture();
   if (typeof renderScorers  === 'function') renderScorers();
   if (typeof renderTop20    === 'function') renderTop20();
+
+  // turnuva_matches yoksa boş kayıt oluştur (klasör görünsün)
+  try {
+    const ms = await _tmDB.ref('turnuva_matches').once('value');
+    if (!ms.exists()) {
+      await _tmDB.ref('turnuva_matches/_init').set({ created: Date.now() });
+      console.log('[TM] turnuva_matches klasörü oluşturuldu');
+    }
+  } catch(e) {}
 });
 </script>
 </body>
