@@ -8060,6 +8060,25 @@ function saveProfile() {
   if (mbIdx >= 0) { memberDB[mbIdx].team = team; memberDB[mbIdx].pos = pos; }
 
   currentProfile = { name, team, pos, foot };
+
+  /* Firebase'e yaz — hem takım kadrosu hem kullanıcı profili */
+  setTimeout(async () => {
+    try {
+      /* 1. turnuva_users güncelle */
+      if (typeof tmSaveProfile === 'function') {
+        await tmSaveProfile(name, team, pos, foot);
+      }
+      /* 2. Eski takımı DB'den güncelle */
+      if (oldTeam && oldTeam !== team && typeof tmSaveTeam === 'function') {
+        await tmSaveTeam(oldTeam);
+      }
+      /* 3. Yeni takımı DB'ye yaz (kadroyla birlikte) */
+      if (team && typeof tmSaveTeam === 'function') {
+        await tmSaveTeam(team);
+      }
+    } catch(e) { console.warn('[TM] saveProfile Firebase:', e); }
+  }, 50);
+
   closeRegisterModal();
   renderProfileCard();
   showToast('✅ Profil güncellendi! ' + name + ' · ' + pos + ' · ' + team);
@@ -8419,6 +8438,24 @@ async function tmLoadAllMembers() {
       if (idx >= 0) memberDB[idx] = { ...memberDB[idx], ...entry };
       else memberDB.push(entry);
     });
+    /* Üyelerin takım bilgilerini teamDB kadrosuna yansıt */
+    Object.values(data).forEach(u => {
+      if (!u || !u.name || !u.team || !teamDB[u.team] || u.kicked) return;
+      const kadro = teamDB[u.team].kadro;
+      const zaten = kadro.find(pl => pl.nm === u.name);
+      if (!zaten) {
+        const clsMap = {'KL':'av-kl','STP':'av-stp','BEK':'av-stp','OOS':'av-mo','MO':'av-mo','DOS':'av-mo','SNT':'av-snt','SĞK':'av-snt','SLK':'av-snt','IZL':'av-mo'};
+        kadro.push({
+          id:      u.id || ('u_' + Date.now()),
+          nm:      u.name,
+          pos:     u.pos  || '',
+          cls:     clsMap[u.pos] || 'av-mo',
+          gol:     0, sari: 0, kirmizi: 0, mac: 0,
+          rating:  u.rating || 75,
+          stats:   u.stats  || {}
+        });
+      }
+    });
     console.log('[TM] Üyeler yüklendi:', memberDB.length);
   } catch(err) { console.warn('[TM] tmLoadAllMembers:', err); }
 }
@@ -8430,8 +8467,17 @@ async function tmLoadTeamData() {
     const data = snap.val();
     if (!data) return;
     Object.entries(data).forEach(([key, td]) => {
-      const teamName = td.name || key.replace(/_/g,' ');
-      if (!teamDB[teamName]) return;
+      /* Firebase key'den takım adını çıkar — hem direkt isim hem key dene */
+      let teamName = td.name || key.replace(/_/g,' ');
+      /* Eğer teamDB'de bulunamazsa tüm takım adlarında ara */
+      if (!teamDB[teamName]) {
+        const found = Object.keys(teamDB).find(tn =>
+          tn.replace(/\s+/g,'_').replace(/[.#$\[\]]/g,'') === key ||
+          tn === teamName
+        );
+        if (!found) return;
+        teamName = found;
+      }
       if (td.g   !== undefined) teamDB[teamName].g   = td.g;
       if (td.b   !== undefined) teamDB[teamName].b   = td.b;
       if (td.m   !== undefined) teamDB[teamName].m   = td.m;
@@ -8440,7 +8486,13 @@ async function tmLoadTeamData() {
       if (td.yg  !== undefined) teamDB[teamName].yg  = td.yg;
       if (td.kap !== undefined) teamDB[teamName].kap = td.kap;
       if (td.formation)         teamDB[teamName].formation = td.formation;
-      if (td.kadro) teamDB[teamName].kadro = Array.isArray(td.kadro) ? td.kadro : Object.values(td.kadro);
+      if (td.kadro) {
+          const raw = td.kadro;
+          teamDB[teamName].kadro = (Array.isArray(raw)
+            ? raw
+            : Object.values(raw)
+          ).filter(Boolean);
+        }
     });
     console.log('[TM] Takımlar yüklendi');
   } catch(err) { console.warn('[TM] tmLoadTeamData:', err); }
@@ -8470,13 +8522,27 @@ async function tmSaveTeam(teamName) {
     const t = teamDB[teamName];
     if (!t) return;
     const key = _tmKey(teamName);
+    /* Kadroyu Firebase-safe formata çevir (undefined değerleri temizle) */
+    const safeKadro = (t.kadro || []).map(pl => ({
+      id:      pl.id      || ('u_' + Date.now() + Math.random()),
+      nm:      pl.nm      || '',
+      pos:     pl.pos     || '',
+      cls:     pl.cls     || 'av-mo',
+      gol:     pl.gol     || 0,
+      sari:    pl.sari    || 0,
+      kirmizi: pl.kirmizi || 0,
+      mac:     pl.mac     || 0,
+      rating:  pl.rating  || 75,
+      stats:   pl.stats   || {}
+    }));
     await _tmDB.ref('turnuva_teams/' + key).set({
-      name: teamName, grp: t.grp,
+      name: teamName, grp: t.grp || '',
       g: t.g||0, b: t.b||0, m: t.m||0, o: t.o||0,
       ag: t.ag||0, yg: t.yg||0, kap: t.kap||null,
       formation: t.formation||'1-2-1-2-1',
-      kadro: t.kadro||[]
+      kadro: safeKadro
     });
+    console.log('[TM] tmSaveTeam:', teamName, '| kadro:', safeKadro.length);
   } catch(err) { console.warn('[TM] tmSaveTeam:', err); }
 }
 
@@ -8566,16 +8632,7 @@ if (_origPublishLineup) {
 // ════════════════════════════════════
 // Hook: saveProfile → turnuva_users'a yaz
 // ════════════════════════════════════
-const _origSaveProfile = typeof saveProfile === 'function' ? saveProfile : null;
-if (_origSaveProfile) {
-  window.saveProfile = function() {
-    _origSaveProfile();
-    setTimeout(() => {
-      const p = currentProfile;
-      if (p && p.name) tmSaveProfile(p.name, p.team||'', p.pos||'', p.foot||'');
-    }, 100);
-  };
-}
+/* saveProfile Firebase yazma artık doğrudan saveProfile içinde yapılıyor */
 
 // ════════════════════════════════════
 // Başlangıç yüklemesi
