@@ -1498,6 +1498,12 @@ html, body {
   flex-direction: column;
 }
 
+/* Yeni absolute saha modu — eski flex kaldırılır */
+.mm-pitch-field.mm-pitch-abs {
+  display: block !important;
+  min-height: 400px;
+}
+
 /* Beyaz saha çizgileri (CSS only) */
 .mm-pf-lines {
   position: absolute; inset: 0; pointer-events: none;
@@ -3131,6 +3137,570 @@ html, body {
   cursor: pointer; transition: all .22s;
 }
 .rsm-save-btn:hover { box-shadow: var(--gmd); transform: translateY(-1px); }
+/* ═══════════════════════════════════════════════════════
+   İKİ AYRI SAHA — DUAL PITCH CSS
+═══════════════════════════════════════════════════════ */
+
+/* Ana sarmalayıcı: iki saha alt alta */
+.mm-dual-pitch-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 14px 20px 20px;
+}
+
+/* Tek bir saha bloğu (başlık + saha) */
+.mm-single-pitch-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-radius: var(--r3);
+  overflow: hidden;
+  border: 1px solid var(--b1);
+  box-shadow: 0 6px 24px rgba(0,0,0,.45);
+}
+
+/* Saha başlığı */
+.mm-sph-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.mmp-hdr-home {
+  background: linear-gradient(90deg, rgba(0,88,200,.28), rgba(0,44,110,.18), transparent);
+}
+.mmp-hdr-away {
+  background: linear-gradient(90deg, transparent, rgba(180,30,50,.18), rgba(200,40,60,.28));
+}
+.mmp-hdr-av {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', cursive; font-size: .72rem;
+  border: 1px solid rgba(255,255,255,.16);
+  flex-shrink: 0;
+}
+.mmp-hdr-info { flex: 1; }
+.mmp-hdr-name {
+  font-family: 'Bebas Neue', cursive;
+  font-size: .88rem; letter-spacing: 2.5px;
+  color: var(--plat); line-height: 1.1;
+}
+.mmp-hdr-form {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .58rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--t2); margin-top: 1px;
+}
+.mmp-hdr-badge {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .58rem; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 20px;
+  background: var(--cyan-a); border: 1px solid var(--b1);
+  color: var(--silver); flex-shrink: 0;
+}
+
+/* Mini futbol sahası */
+.mmp-field {
+  position: relative;
+  min-height: 260px;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0,0,0,0) 0px, rgba(0,0,0,0) 40px,
+      rgba(0,0,0,.07) 40px, rgba(0,0,0,.07) 80px
+    ),
+    radial-gradient(ellipse 95% 88% at 50% 50%,
+      #175212 0%, #103808 50%, #092c05 100%);
+  border-top: none; /* başlık zaten çizgi */
+  overflow: hidden;
+}
+.mmp-home { /* mavi glow soldan */
+  box-shadow: inset 3px 0 20px rgba(0,100,220,.12);
+}
+.mmp-away { /* kırmızı glow sağdan */
+  box-shadow: inset -3px 0 20px rgba(200,40,60,.12);
+}
+
+/* Saha çizgileri */
+.mmp-lines {
+  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+}
+.mmp-outer {
+  position: absolute; inset: 6px;
+  border: 1.5px solid rgba(255,255,255,.42);
+  border-radius: 2px;
+}
+.mmp-center-circle {
+  position: absolute;
+  width: 80px; height: 80px;
+  left: 50%; top: 50%;
+  transform: translate(-50%,-50%);
+  border: 1.5px solid rgba(255,255,255,.38);
+  border-radius: 50%;
+}
+.mmp-center-dot {
+  position: absolute;
+  width: 5px; height: 5px;
+  left: 50%; top: 50%;
+  transform: translate(-50%,-50%);
+  background: rgba(255,255,255,.55);
+  border-radius: 50%;
+}
+.mmp-pen-top {
+  position: absolute;
+  left: 50%; top: 6px;
+  transform: translateX(-50%);
+  width: 110px; height: 40px;
+  border: 1.5px solid rgba(255,255,255,.32);
+  border-top: none;
+}
+.mmp-pen-bot {
+  position: absolute;
+  left: 50%; bottom: 6px;
+  transform: translateX(-50%);
+  width: 110px; height: 40px;
+  border: 1.5px solid rgba(255,255,255,.32);
+  border-bottom: none;
+}
+.mmp-goal-top {
+  position: absolute;
+  left: 50%; top: 6px;
+  transform: translateX(-50%);
+  width: 46px; height: 14px;
+  border: 1.5px solid rgba(255,255,255,.26);
+  border-top: none;
+}
+.mmp-goal-bot {
+  position: absolute;
+  left: 50%; bottom: 6px;
+  transform: translateX(-50%);
+  width: 46px; height: 14px;
+  border: 1.5px solid rgba(255,255,255,.26);
+  border-bottom: none;
+}
+
+/* Oyuncu slotu */
+.mmp-slot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  z-index: 3; pointer-events: none;
+}
+.mmp-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .56rem; font-weight: 700;
+  letter-spacing: .3px;
+  color: rgba(255,255,255,.85);
+  text-align: center;
+  text-shadow: 0 1px 4px rgba(0,0,0,.9);
+  max-width: 50px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.mmp-pos {
+  font-size: .44rem; letter-spacing: 1px; text-transform: uppercase;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0,0,0,.8);
+  font-family: 'Rajdhani', sans-serif; font-weight: 700;
+}
+
+/* Avatar mini boyut */
+.mm-pc-av {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', cursive; font-size: .80rem;
+  border: 2px solid rgba(255,255,255,.20);
+  box-shadow: 0 3px 10px rgba(0,0,0,.55);
+  position: relative;
+}
+
+/* Mobil uyum */
+@media (max-width: 600px) {
+  .mm-dual-pitch-wrap { padding: 10px 12px 14px; gap: 12px; }
+  .mmp-field { min-height: 200px; }
+  .mmp-slot .mm-pc-av { width: 32px; height: 32px; border-radius: 7px; font-size: .68rem; }
+  .mmp-name { font-size: .50rem; max-width: 40px; }
+  .mmp-pos  { font-size: .40rem; }
+}
+
+/* Mevki renk tokenları — SĞK, SLK, OOS için */
+.mmp-pos-sgk { color: #ffaa44; }  /* turuncu-altın: kanat */
+.mmp-pos-slk { color: #ffaa44; }
+.mmp-pos-oos { color: #44ddff; }  /* cyan: ofansif orta */
+.mmp-pos-snt { color: #ff7777; }  /* kırmızı: forvet */
+.mmp-pos-def { color: #66ee88; }  /* yeşil: defans */
+.mmp-pos-kal { color: #aabbff; }  /* mavi: kaleci */
+/* ═══════════════════════════════════════════════════════
+   PROFİLİM SEKMESİ — CSS
+═══════════════════════════════════════════════════════ */
+
+/* Profilim nav tab özel renk */
+.nav-tab-profile { color: var(--gold) !important; }
+.nav-tab-profile.active { border-color: rgba(255,215,0,.45) !important; background: linear-gradient(135deg, rgba(255,215,0,.14), rgba(180,120,0,.08)) !important; box-shadow: 0 0 14px rgba(255,215,0,.20) !important; }
+
+/* Dış sarmalayıcı */
+.profile-outer {
+  flex: 1; overflow-y: auto; padding: 18px 22px 28px;
+  scrollbar-width: thin; scrollbar-color: rgba(0,212,255,.22) transparent;
+}
+.profile-outer::-webkit-scrollbar { width: 4px; }
+.profile-outer::-webkit-scrollbar-thumb { background: rgba(0,212,255,.2); border-radius: 4px; }
+
+.profile-layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 22px;
+  align-items: start;
+}
+@media (max-width: 900px) { .profile-layout { grid-template-columns: 1fr; } }
+
+/* ── ULTIMATE TEAM KARTI ── */
+.profile-card-wrap {
+  display: flex; justify-content: center;
+  perspective: 1000px;
+}
+
+.profile-ut-card {
+  position: relative;
+  width: 290px;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 18px 20px 20px;
+  display: flex; flex-direction: column; gap: 10px;
+  background: linear-gradient(155deg,
+    rgba(10,18,50,.96) 0%,
+    rgba(4,10,34,.98) 55%,
+    rgba(8,14,42,.96) 100%);
+  border: 1px solid rgba(255,215,0,.35);
+  box-shadow:
+    0 0 0 1px rgba(255,215,0,.12) inset,
+    0 20px 60px rgba(0,0,0,.65),
+    0 0 40px rgba(255,215,0,.10),
+    0 0 80px rgba(0,100,200,.08);
+  transition: transform .3s ease;
+  animation: card-appear .4s ease both;
+}
+.profile-ut-card:hover { transform: translateY(-6px) rotateX(2deg); }
+
+/* Arka plan conic halo */
+.puc-bg-layer {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: conic-gradient(from 220deg at 70% 110%,
+    transparent 0deg, rgba(255,215,0,.06) 40deg,
+    rgba(255,255,200,.04) 80deg, transparent 120deg);
+  animation: card-bg-spin 10s linear infinite;
+}
+/* Üst parıltı şeridi */
+.puc-shine {
+  position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 1;
+  background: linear-gradient(90deg,
+    transparent, rgba(255,215,0,.6), rgba(255,255,255,.9), rgba(255,215,0,.6), transparent);
+  animation: card-topline 3s ease-in-out infinite;
+}
+
+/* OVR + POS satırı */
+.puc-top-bar {
+  position: relative; z-index: 2;
+  display: flex; align-items: center; gap: 8px;
+}
+.puc-ovr {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 2.8rem; line-height: 1; color: var(--gold);
+  text-shadow: var(--ggold);
+}
+.puc-pos-wrap { display: flex; flex-direction: column; gap: 2px; }
+.puc-pos {
+  font-family: 'Bebas Neue', cursive;
+  font-size: .90rem; letter-spacing: 2px; color: var(--gold);
+  text-shadow: var(--ggold);
+}
+.puc-nation { font-size: .85rem; }
+.puc-flag-strip {
+  flex: 1; height: 2px;
+  background: linear-gradient(90deg, rgba(255,215,0,.5), transparent);
+  border-radius: 2px; margin-left: 6px;
+}
+
+/* Avatar */
+.puc-avatar-zone { position: relative; z-index: 2; display: flex; justify-content: center; }
+.puc-avatar {
+  width: 100px; height: 100px; border-radius: 50%;
+  background: linear-gradient(135deg, rgba(0,80,180,.40), rgba(0,30,100,.65));
+  border: 3px solid rgba(255,215,0,.45);
+  box-shadow: 0 0 24px rgba(255,215,0,.20), 0 8px 28px rgba(0,0,0,.65);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.puc-av-initials {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 2.2rem; letter-spacing: 4px; color: var(--gold);
+  text-shadow: var(--ggold); z-index: 2;
+}
+.puc-av-glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 40% 35%, rgba(255,255,255,.18), transparent 65%);
+}
+
+/* İsim ve takım */
+.puc-name {
+  position: relative; z-index: 2;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.35rem; letter-spacing: 3px; line-height: 1; text-align: center;
+  color: var(--plat); text-shadow: 0 0 16px rgba(255,215,0,.22);
+}
+.puc-team {
+  position: relative; z-index: 2;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .65rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  text-align: center; color: rgba(255,215,0,.55);
+}
+
+/* Güçlü ayak */
+.puc-foot-row {
+  position: relative; z-index: 2;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 4px 10px;
+  background: rgba(255,215,0,.07); border-radius: var(--r5);
+  border: 1px solid rgba(255,215,0,.18);
+}
+.puc-foot-lbl { font-family: 'Rajdhani', sans-serif; font-size: .60rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--t2); }
+.puc-foot-val { font-family: 'Bebas Neue', cursive; font-size: .82rem; letter-spacing: 1px; color: var(--gold); }
+
+/* Stat grid (6 stat) */
+.puc-stats-grid {
+  position: relative; z-index: 2;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 5px 10px;
+  padding: 8px 10px;
+  background: rgba(0,0,0,.28); border-radius: var(--r2);
+  border: 1px solid rgba(255,215,0,.08);
+}
+.puc-stat-row { display: flex; align-items: center; gap: 5px; }
+.puc-stat-lbl { font-family: 'Bebas Neue', cursive; font-size: .56rem; letter-spacing: 1px; color: var(--t2); width: 24px; flex-shrink: 0; }
+.puc-stat-bar { flex: 1; height: 3px; background: rgba(255,255,255,.07); border-radius: 2px; overflow: hidden; }
+.puc-stat-fill { height: 100%; border-radius: 2px; }
+.puc-stat-val { font-family: 'Bebas Neue', cursive; font-size: .68rem; color: var(--gold); width: 20px; text-align: right; }
+
+/* Piyasa değeri */
+.puc-value-row {
+  position: relative; z-index: 2;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 10px;
+  background: rgba(0,0,0,.30); border-radius: var(--r2);
+  border: 1px solid rgba(255,215,0,.12);
+}
+.puc-value-lbl { font-family: 'Rajdhani', sans-serif; font-size: .60rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--t2); }
+.puc-value-num { font-family: 'Bebas Neue', cursive; font-size: 1.10rem; color: #44ffaa; text-shadow: 0 0 10px rgba(0,238,136,.4); }
+
+/* Scout raporu */
+.puc-scout {
+  position: relative; z-index: 2;
+  padding: 8px 10px;
+  background: rgba(255,215,0,.04); border-radius: var(--r2);
+  border-left: 2px solid rgba(255,215,0,.28);
+}
+.puc-scout-lbl { font-family: 'Rajdhani', sans-serif; font-size: .58rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,215,0,.50); margin-bottom: 4px; }
+.puc-scout-txt { font-family: 'Rajdhani', sans-serif; font-size: .64rem; font-weight: 500; font-style: italic; line-height: 1.45; color: rgba(200,220,240,.65); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* ── SAĞ PANEL ── */
+.profile-right-panel { display: flex; flex-direction: column; gap: 16px; }
+
+.profile-section-title {
+  font-family: 'Bebas Neue', cursive; font-size: .88rem; letter-spacing: 3px;
+  color: var(--cyan); text-shadow: var(--gxs); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.profile-section-title::before { content: ''; width: 3px; height: 12px; border-radius: 2px; background: var(--cyan); box-shadow: var(--gxs); }
+
+.profile-stat-section, .profile-team-section {
+  background: var(--glass); backdrop-filter: blur(16px);
+  border: 1px solid var(--b1); border-radius: var(--r3);
+  padding: 16px 18px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.40);
+}
+
+.profile-stat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+.prf-stat-box {
+  padding: 12px 8px; text-align: center;
+  background: rgba(0,0,0,.28); border-radius: var(--r2);
+  border: 1px solid var(--b0);
+}
+.prf-stat-icon { font-size: 1rem; margin-bottom: 3px; }
+.prf-stat-val { font-family: 'Bebas Neue', cursive; font-size: 1.60rem; line-height: 1; color: var(--cyan); text-shadow: var(--gxs); }
+.prf-stat-val.prf-yellow { color: #ffcc00; }
+.prf-stat-val.prf-red    { color: var(--red-c); }
+.prf-stat-lbl { font-family: 'Rajdhani', sans-serif; font-size: .58rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--t2); margin-top: 2px; }
+
+/* G/B/M barlar */
+.prf-team-name { font-family: 'Bebas Neue', cursive; font-size: 1rem; letter-spacing: 2.5px; color: var(--silver); margin-bottom: 12px; }
+
+.prf-gbm-bars { display: flex; flex-direction: column; gap: 8px; }
+.prf-gbm-row { display: flex; align-items: center; gap: 10px; }
+.prf-gbm-lbl { font-family: 'Rajdhani', sans-serif; font-size: .62rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; width: 76px; flex-shrink: 0; }
+.prf-gbm-track { flex: 1; height: 18px; background: rgba(255,255,255,.06); border-radius: 9px; overflow: hidden; }
+.prf-gbm-fill { height: 100%; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', cursive; font-size: .60rem; color: rgba(255,255,255,.80); min-width: 18px; transition: width .8s cubic-bezier(.16,1,.3,1); }
+.prf-gbm-win  { background: linear-gradient(90deg, rgba(0,200,80,.55), rgba(0,238,100,.40)); }
+.prf-gbm-draw { background: rgba(255,215,0,.32); }
+.prf-gbm-lose { background: linear-gradient(90deg, rgba(220,50,70,.50), rgba(255,70,90,.40)); }
+.prf-gbm-zero { background: rgba(255,255,255,.08); color: var(--t2); }
+.prf-gbm-pct { font-family: 'Bebas Neue', cursive; font-size: .80rem; color: var(--t1); width: 34px; text-align: right; flex-shrink: 0; }
+
+.prf-team-stats-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.prf-ts-chip { padding: 4px 11px; border-radius: 20px; background: var(--cyan-a); border: 1px solid var(--b1); font-family: 'Rajdhani', sans-serif; font-size: .62rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--silver); }
+
+/* Güncelle butonu */
+.prf-register-btn {
+  width: 100%; padding: 13px;
+  background: linear-gradient(135deg, rgba(255,215,0,.22), rgba(180,130,0,.30));
+  border: 1.5px solid rgba(255,215,0,.40); border-radius: var(--r2);
+  font-family: 'Bebas Neue', cursive; font-size: .95rem; letter-spacing: 4px;
+  color: var(--gold); text-shadow: var(--ggold); box-shadow: 0 0 18px rgba(255,215,0,.14);
+  cursor: pointer; transition: all .25s;
+}
+.prf-register-btn:hover { box-shadow: var(--ggold); transform: translateY(-2px); }
+
+/* ═══════════════════════════════════════════════════════
+   KAYIT FORMU MODAL CSS
+═══════════════════════════════════════════════════════ */
+.reg-modal-ov {
+  position: fixed; inset: 0; z-index: 700;
+  display: flex; align-items: center; justify-content: center;
+  padding: 12px;
+  background: rgba(0,2,12,.84); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  opacity: 0; visibility: hidden; transition: all .25s;
+}
+.reg-modal-ov.open { opacity: 1; visibility: visible; }
+.reg-modal-box {
+  position: relative; width: 100%; max-width: 560px; max-height: 92vh; overflow-y: auto;
+  background: linear-gradient(158deg, rgba(3,8,26,.97), rgba(5,13,36,.98));
+  border: 1px solid rgba(255,215,0,.30); border-radius: var(--r4);
+  box-shadow: 0 0 80px rgba(0,0,0,.8), 0 0 40px rgba(255,215,0,.08);
+  scrollbar-width: thin; scrollbar-color: rgba(255,215,0,.20) transparent;
+  transform: translateY(20px) scale(.97); transition: all .28s cubic-bezier(.16,1,.3,1);
+}
+.reg-modal-ov.open .reg-modal-box { transform: translateY(0) scale(1); }
+.reg-modal-box::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), rgba(255,255,255,.9), var(--gold), transparent);
+  animation: card-topline 3.5s ease-in-out infinite;
+}
+.reg-modal-close {
+  position: absolute; top: 12px; right: 12px;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14);
+  color: rgba(255,255,255,.5); font-size: .85rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 10; transition: all .2s;
+}
+.reg-modal-close:hover { background: rgba(255,60,60,.18); border-color: rgba(255,80,80,.35); color: #ff7070; }
+
+.reg-hd {
+  display: flex; align-items: center; gap: 14px;
+  padding: 22px 24px 16px;
+  border-bottom: 1px solid rgba(255,215,0,.14);
+  background: linear-gradient(135deg, rgba(255,215,0,.08), transparent);
+}
+.reg-hd-icon { font-size: 1.6rem; }
+.reg-hd-title { font-family: 'Bebas Neue', cursive; font-size: 1.30rem; letter-spacing: 3px; color: var(--gold); text-shadow: var(--ggold); }
+.reg-hd-sub { font-family: 'Rajdhani', sans-serif; font-size: .62rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,215,0,.42); margin-top: 2px; }
+
+.reg-body { padding: 18px 24px 24px; display: flex; flex-direction: column; gap: 14px; }
+
+.reg-row { display: flex; flex-direction: column; gap: 14px; }
+.reg-row-2 { flex-direction: row; gap: 12px; }
+.reg-row-2 .reg-field { flex: 1; min-width: 0; }
+
+.reg-field { display: flex; flex-direction: column; gap: 5px; }
+.reg-label { font-family: 'Rajdhani', sans-serif; font-size: .62rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,215,0,.55); }
+
+.reg-input, .reg-select {
+  width: 100%; padding: 10px 12px;
+  background: rgba(255,215,0,.05); border: 1.5px solid rgba(255,215,0,.16);
+  border-radius: var(--r2); color: var(--t0);
+  font-family: 'Exo 2', sans-serif; font-size: .84rem;
+  transition: border-color .20s, background .20s;
+  -webkit-appearance: none;
+}
+.reg-input:focus, .reg-select:focus { border-color: rgba(255,215,0,.45); background: rgba(255,215,0,.08); outline: none; }
+.reg-select option { background: #050d1e; color: var(--t0); }
+
+/* OVR slider */
+.reg-ovr-row { display: flex; flex-direction: column; gap: 4px; }
+.reg-ovr-display {
+  font-family: 'Bebas Neue', cursive; font-size: 1.10rem;
+  color: var(--gold); text-shadow: var(--ggold);
+  margin-left: 10px;
+}
+.reg-ovr-slider {
+  width: 100%; height: 5px; border-radius: 3px;
+  -webkit-appearance: none; background: rgba(255,215,0,.18); cursor: pointer;
+}
+.reg-ovr-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--gold); border: 2px solid rgba(255,255,255,.3);
+  box-shadow: 0 0 8px rgba(255,215,0,.6);
+}
+.reg-ovr-labels { display: flex; justify-content: space-between; font-family: 'Rajdhani', sans-serif; font-size: .58rem; color: var(--t2); }
+
+.reg-submit-btn {
+  width: 100%; padding: 13px;
+  background: linear-gradient(135deg, rgba(255,215,0,.26), rgba(180,130,0,.38));
+  border: 1.5px solid rgba(255,215,0,.42); border-radius: var(--r2);
+  font-family: 'Bebas Neue', cursive; font-size: .95rem; letter-spacing: 4px;
+  color: var(--gold); text-shadow: var(--ggold); box-shadow: 0 0 20px rgba(255,215,0,.15);
+  cursor: pointer; transition: all .25s; margin-top: 4px;
+}
+.reg-submit-btn:hover { box-shadow: var(--ggold); transform: translateY(-2px); }
+.reg-submit-btn:active { transform: scale(.97); }
+
+@media (max-width: 560px) {
+  .reg-row-2 { flex-direction: column; }
+  .profile-stat-grid { grid-template-columns: repeat(2,1fr); }
+}
+/* OVR bilgi notu (formda) */
+.reg-ovr-info {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 11px 14px;
+  background: rgba(255,215,0,.06);
+  border: 1px solid rgba(255,215,0,.20);
+  border-radius: var(--r2);
+  border-left: 3px solid rgba(255,215,0,.50);
+}
+.reg-ovr-info-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+.reg-ovr-info-txt {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .68rem; font-weight: 600; line-height: 1.5;
+  color: rgba(255,215,0,.60);
+}
+.reg-ovr-info-txt strong { color: rgba(255,215,0,.85); }
+
+/* UT kart tier renkleri */
+.profile-ut-card.puc-tier-gold {
+  border-color: rgba(255,215,0,.55);
+  box-shadow: 0 0 0 1px rgba(255,215,0,.18) inset, 0 20px 60px rgba(0,0,0,.65), 0 0 50px rgba(255,215,0,.18);
+}
+.profile-ut-card.puc-tier-silver {
+  border-color: rgba(200,215,240,.40);
+  box-shadow: 0 0 0 1px rgba(200,215,240,.12) inset, 0 20px 60px rgba(0,0,0,.65), 0 0 40px rgba(180,200,240,.10);
+}
+.profile-ut-card.puc-tier-silver .puc-ovr,
+.profile-ut-card.puc-tier-silver .puc-pos,
+.profile-ut-card.puc-tier-silver .puc-value-num { color: #c8d8ec; text-shadow: 0 0 14px rgba(200,215,240,.40); }
+.profile-ut-card.puc-tier-bronze {
+  border-color: rgba(180,100,50,.40);
+  box-shadow: 0 0 0 1px rgba(180,100,50,.10) inset, 0 20px 60px rgba(0,0,0,.65), 0 0 40px rgba(180,100,50,.10);
+}
+.profile-ut-card.puc-tier-bronze .puc-ovr,
+.profile-ut-card.puc-tier-bronze .puc-pos { color: #d09060; text-shadow: 0 0 14px rgba(180,100,50,.35); }
+
+/* profileOvrChip (sec-bar içinde) */
+#profileOvrChip {
+  background: rgba(255,215,0,.10) !important;
+  border-color: rgba(255,215,0,.28) !important;
+  color: var(--gold) !important;
+}
 </style>
 </head>
 <body>
@@ -3202,6 +3772,9 @@ html, body {
       </button>
       <button class="nav-tab" onclick="switchTab('top20', this)">
         <span class="tab-dot"></span>Top 20
+      </button>
+      <button class="nav-tab nav-tab-profile" onclick="switchTab('profil', this)">
+        <span class="tab-dot"></span>⚡ Profilim
       </button>
     </nav>
 
@@ -3603,7 +4176,229 @@ html, body {
       </div><!-- /kom-outer -->
     </section>
 
+    <!-- ── PROFİLİM ── -->
+    <section class="section" id="sec-profil">
+      <div class="sec-bar">
+        <div class="sec-bar-title">Profilim</div>
+        <div class="sec-bar-chip" id="profileRoleBadge">👤 Oyuncu Görünümü</div>
+        <div class="sec-bar-chip" id="profileTeamBadge">🏟️ Takım Seçilmedi</div>
+        <div class="sec-bar-chip" id="profileOvrChip">OVR — · Kaptandan</div>
+      </div>
+
+      <div class="profile-outer">
+
+        <!-- UT KARTI + SAĞ PANEL YAN YANA -->
+        <div class="profile-layout">
+
+          <!-- ULTIMATE TEAM KARTI -->
+          <div class="profile-card-wrap">
+            <div class="profile-ut-card" id="profileCard">
+              <!-- Kart arka plan katmanları -->
+              <div class="puc-bg-layer"></div>
+              <div class="puc-shine"></div>
+
+              <!-- Üst bilgi satırı -->
+              <div class="puc-top-bar">
+                <div class="puc-ovr" id="pucOvr">82</div>
+                <div class="puc-pos-wrap">
+                  <div class="puc-pos" id="pucPos">SNT</div>
+                  <div class="puc-nation">🇹🇷</div>
+                </div>
+                <div class="puc-flag-strip"></div>
+              </div>
+
+              <!-- Avatar / İsim bölgesi -->
+              <div class="puc-avatar-zone">
+                <div class="puc-avatar" id="pucAvatar">
+                  <div class="puc-av-initials" id="pucInitials">HT</div>
+                  <div class="puc-av-glow"></div>
+                </div>
+              </div>
+
+              <!-- Oyuncu ismi -->
+              <div class="puc-name" id="pucName">Oyuncu Adı</div>
+              <div class="puc-team" id="pucTeam">Takım Seçilmedi</div>
+
+              <!-- Ayak bilgisi -->
+              <div class="puc-foot-row">
+                <span class="puc-foot-lbl">Güçlü Ayak</span>
+                <span class="puc-foot-val" id="pucFoot">—</span>
+              </div>
+
+              <!-- Stat barlar (6 stat) -->
+              <div class="puc-stats-grid" id="pucStatsGrid">
+                <!-- JS doldurur -->
+              </div>
+
+              <!-- Alt değer -->
+              <div class="puc-value-row">
+                <div class="puc-value-lbl">💹 Piyasa Değeri</div>
+                <div class="puc-value-num" id="pucValue">—</div>
+              </div>
+
+              <!-- Scout raporu -->
+              <div class="puc-scout" id="pucScout">
+                <div class="puc-scout-lbl">🔍 Scout Raporu</div>
+                <div class="puc-scout-txt" id="pucScoutTxt">Henüz profil güncellenmedi.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SAĞ PANEL: istatistikler + takım durumu -->
+          <div class="profile-right-panel">
+
+            <!-- İstatistik kutuları -->
+            <div class="profile-stat-section">
+              <div class="profile-section-title">📊 Sezon İstatistikleri</div>
+              <div class="profile-stat-grid">
+                <div class="prf-stat-box">
+                  <div class="prf-stat-icon">⚽</div>
+                  <div class="prf-stat-val" id="prfGoals">0</div>
+                  <div class="prf-stat-lbl">Gol</div>
+                </div>
+                <div class="prf-stat-box">
+                  <div class="prf-stat-icon">🟨</div>
+                  <div class="prf-stat-val prf-yellow" id="prfYellow">0</div>
+                  <div class="prf-stat-lbl">Sarı Kart</div>
+                </div>
+                <div class="prf-stat-box">
+                  <div class="prf-stat-icon">🟥</div>
+                  <div class="prf-stat-val prf-red" id="prfRed">0</div>
+                  <div class="prf-stat-lbl">Kırmızı</div>
+                </div>
+                <div class="prf-stat-box">
+                  <div class="prf-stat-icon">🏃</div>
+                  <div class="prf-stat-val" id="prfMatches">0</div>
+                  <div class="prf-stat-lbl">Maç</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Takım G/B/M barı -->
+            <div class="profile-team-section">
+              <div class="profile-section-title">🏆 Takımımın Durumu</div>
+              <div class="prf-team-name" id="prfTeamName">—</div>
+              <div class="prf-gbm-bars" id="prfGbmBars">
+                <!-- JS doldurur -->
+              </div>
+              <div class="prf-team-stats-row" id="prfTeamRow">
+                <!-- JS doldurur -->
+              </div>
+            </div>
+
+            <!-- Kayıt / Profil Güncelle butonu -->
+            <button class="prf-register-btn" onclick="openRegisterModal()">
+              ✏️ Profil Bilgilerini Güncelle
+            </button>
+
+          </div><!-- /profile-right-panel -->
+        </div><!-- /profile-layout -->
+      </div><!-- /profile-outer -->
+    </section>
+
   </main>
+
+  <!-- ════ KAYIT FORMU MODAL ════ -->
+  <div class="reg-modal-ov" id="regModal" onclick="if(event.target===this)closeRegisterModal()">
+    <div class="reg-modal-box">
+      <button class="reg-modal-close" onclick="closeRegisterModal()">✕</button>
+
+      <div class="reg-hd">
+        <div class="reg-hd-icon">⚡</div>
+        <div>
+          <div class="reg-hd-title">Profil Güncelle</div>
+          <div class="reg-hd-sub">Hastane Turnuvası 2026 · Oyuncu Kaydı</div>
+        </div>
+      </div>
+
+      <div class="reg-body">
+
+        <!-- Ad Soyad -->
+        <div class="reg-row">
+          <div class="reg-field">
+            <label class="reg-label" for="regName">⬡ Ad Soyad</label>
+            <input class="reg-input" type="text" id="regName" name="name"
+                   placeholder="Mehmet Yıldırım" autocomplete="off" maxlength="60">
+          </div>
+        </div>
+
+        <!-- Takım seçimi -->
+        <div class="reg-row">
+          <div class="reg-field">
+            <label class="reg-label" for="regTeam">🏟️ Takım</label>
+            <select class="reg-select" id="regTeam" name="team">
+              <option value="">— Takım Seç —</option>
+              <optgroup label="Grup A">
+                <option value="FUTMEYDANI">FUTMEYDANI</option>
+                <option value="OKMEYDANI DİŞ">OKMEYDANI DİŞ</option>
+                <option value="ARNAVUTKÖY FK">ARNAVUTKÖY FK</option>
+                <option value="İLKYARDIM SPOR">İLKYARDIM SPOR</option>
+              </optgroup>
+              <optgroup label="Grup B">
+                <option value="EYÜP CİTY">EYÜP CİTY</option>
+                <option value="SİSTRUNK">SİSTRUNK</option>
+                <option value="SAGRADA FAMİLA">SAGRADA FAMİLA</option>
+                <option value="TÜPÇÜLER FK">TÜPÇÜLER FK</option>
+              </optgroup>
+              <optgroup label="Grup C">
+                <option value="PUSU FK">PUSU FK</option>
+                <option value="SSK MONTANA">SSK MONTANA</option>
+                <option value="RÖNTGEN">RÖNTGEN</option>
+                <option value="DETERJAN GÜCÜ">DETERJAN GÜCÜ</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+
+        <!-- Mevki + Güçlü Ayak -->
+        <div class="reg-row reg-row-2">
+          <div class="reg-field">
+            <label class="reg-label" for="regPos">🎯 Mevki</label>
+            <select class="reg-select" id="regPos" name="pos">
+              <option value="">— Mevki Seç —</option>
+              <optgroup label="Forvet">
+                <option value="SNT">SNT — Santrafor</option>
+                <option value="SĞK">SĞK — Sağ Kanat</option>
+                <option value="SLK">SLK — Sol Kanat</option>
+              </optgroup>
+              <optgroup label="Orta Saha">
+                <option value="OOS">OOS — Ofansif OS</option>
+                <option value="MO">MO — Merkez OS</option>
+                <option value="DOS">DOS — Defansif OS</option>
+              </optgroup>
+              <optgroup label="Defans">
+                <option value="BEK">BEK — Bek</option>
+                <option value="STP">STP — Stoper</option>
+              </optgroup>
+              <optgroup label="Kale">
+                <option value="KL">KL — Kaleci</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="reg-field">
+            <label class="reg-label" for="regFoot">⚽ Güçlü Ayak</label>
+            <select class="reg-select" id="regFoot" name="foot">
+              <option value="">— Seç —</option>
+              <option value="Sağ Ayak">Sağ Ayak</option>
+              <option value="Sol Ayak">Sol Ayak</option>
+              <option value="Her İki Ayak">Her İki Ayak</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- OVR bilgi notu -->
+        <div class="reg-ovr-info">
+          <div class="reg-ovr-info-icon">🛡️</div>
+          <div class="reg-ovr-info-txt">Genel Reyting (OVR), kaptanın sana atadığı statülerden <strong>otomatik hesaplanır</strong>. Oyuncular kendi reytingini belirleyemez.</div>
+        </div>
+
+        <button class="reg-submit-btn" onclick="saveProfile()">
+          🚀 Profili Kaydet &amp; Kartı Güncelle
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- ════ FOOTER ════ -->
   <footer class="footer">
@@ -3832,7 +4627,7 @@ const players = [
     id: 5,
     name: 'Serhan Yıldız',
     team: 'EYÜP CİTY',
-    pos: 'KAN',
+    pos: 'SĞK',
     posGroup: 'forvet',
     rating: 85,
     goals: 11,
@@ -4397,91 +5192,118 @@ switchTab = function(target, btn) {
    MAÇ DETAY MODAL — veri + render
 ═════════════════════════════════════════════════════════ */
 
-/* Sahada gösterilecek örnek kadro verisi (dummy) */
-const pitchDummySquads = {
-  home: [
-    /* SNT */ [{ init:'MY', pos:'SNT', cls:'av-snt' }],
-    /* KAN */ [{ init:'AK', pos:'SAĞ KAN', cls:'av-kan' }, { init:'SY', pos:'SOL KAN', cls:'av-kan' }],
-    /* DOS */ [{ init:'EK', pos:'DOS', cls:'av-mo' }],
-    /* DEF */ [{ init:'BD', pos:'SAĞ DEF', cls:'av-stp' }, { init:'HÇ', pos:'SOL DEF', cls:'av-bek' }],
-    /* KAL */ [{ init:'KA', pos:'KAL', cls:'av-kl' }],
-  ],
-  away: [
-    /* SNT */ [{ init:'TG', pos:'SNT', cls:'av-snt' }],
-    /* KAN */ [{ init:'RK', pos:'SAĞ KAN', cls:'av-kan' }, { init:'MB', pos:'SOL KAN', cls:'av-kan' }],
-    /* DOS */ [{ init:'CH', pos:'DOS', cls:'av-mo' }],
-    /* DEF */ [{ init:'YT', pos:'SAĞ DEF', cls:'av-stp' }, { init:'OK', pos:'SOL DEF', cls:'av-bek' }],
-    /* KAL */ [{ init:'YC', pos:'KAL', cls:'av-kl' }],
-  ],
-};
+/* ═════════════════════════════════════════════════════════
+   MAÇ DETAY MODAL — İKİ AYRI SAHA SİSTEMİ
+═════════════════════════════════════════════════════════ */
 
-/* AI kazanma yüzdesi basit hesaplama (dummy rating ortalaması) */
+/* AI kazanma yüzdesi */
 function calcWinPct(t1, t2) {
-  // Gerçek senaryoda takım ortalama ratinglerini kullanırsın.
-  // Şimdilik isim hash ile farklı değerler üretelim.
   const hash = s => s.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
-  const h1 = (hash(t1) % 30) + 40;   // 40–70 arası
-  const h2 = 100 - h1;
-  return { home: h1, away: h2 };
+  const h1 = (hash(t1) % 30) + 40;
+  return { home: h1, away: 100 - h1 };
+}
+
+/* ─── Takım kadrosunu al (publishedSquad → teamDB.kadro → dummy) ─── */
+function getTeamSquad(teamName, formKey) {
+  const t    = teamDB[teamName];
+  const form = FORMATIONS[formKey] || FORMATIONS['1-2-1-2-1'];
+
+  if (t && t.publishedSquad && t.publishedSquad.length > 0) {
+    return t.publishedSquad;
+  }
+  if (t && t.kadro && t.kadro.length > 0) {
+    return t.kadro.slice(0, form.slots.length).map(pl => ({
+      init: pl.nm.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase(),
+      pos:  pl.pos,
+      cls:  pl.cls,
+      name: pl.nm,
+    }));
+  }
+  /* Son çare: pozisyon harfi */
+  return form.slots.map((s, i) => ({
+    init: s.pos.substring(0, 2),
+    pos:  s.pos,
+    cls:  s.pos === 'KAL' ? 'av-kl' : s.pos === 'SNT' ? 'av-snt' : s.pos.startsWith('DE') ? 'av-stp' : 'av-mo',
+    name: s.pos,
+  }));
+}
+
+/* ─── Tek bir mini-saha HTML'i oluştur (absolute slotlar) ─── */
+function buildMiniPitch(squad, formation, side) {
+  /* side: 'home' (mavi) | 'away' (kırmızı) */
+  const accentHome = 'rgba(0,180,255,.35)';
+  const accentAway = 'rgba(255,80,80,.30)';
+  const glowHome   = '0 0 10px rgba(0,180,255,.28)';
+  const glowAway   = '0 0 10px rgba(255,80,80,.22)';
+  const accent = side === 'home' ? accentHome : accentAway;
+  const glow   = side === 'home' ? glowHome   : glowAway;
+  const labelColor = side === 'home' ? 'rgba(0,200,255,.80)' : 'rgba(255,100,100,.80)';
+
+  const slots = formation.slots.map((slotDef, i) => {
+    const pl = squad[i];
+    if (!pl) return '';
+    const avCls = pl.cls || 'av-snt';
+    return `
+      <div class="mmp-slot" style="left:${slotDef.left};top:${slotDef.top}">
+        <div class="mm-pc-av ${avCls}" style="border-color:${accent};box-shadow:0 3px 10px rgba(0,0,0,.55),${glow}">${pl.init}</div>
+        <div class="mmp-name">${pl.name ? pl.name.split(' ')[0] : pl.init}</div>
+        <div class="mmp-pos" style="color:${labelColor}">${pl.pos}</div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="mmp-field ${side === 'home' ? 'mmp-home' : 'mmp-away'}">
+      <!-- Saha çizgileri -->
+      <div class="mmp-lines">
+        <div class="mmp-outer"></div>
+        <div class="mmp-center-circle"></div>
+        <div class="mmp-center-dot"></div>
+        <div class="mmp-pen-top"></div>
+        <div class="mmp-pen-bot"></div>
+        <div class="mmp-goal-top"></div>
+        <div class="mmp-goal-bot"></div>
+      </div>
+      <!-- Slotlar -->
+      ${slots}
+    </div>`;
 }
 
 function openMatchModal(matchId, team1, team2, date, time, group) {
   const pct = calcWinPct(team1, team2);
   const res  = matchId ? matchResults[matchId] : null;
 
-  /* ─── Skor bloğu ─── */
-  const scoreBlock = res
-    ? `<div class="mm-score-display">
-         <div class="mm-score-box">${res.hg}</div>
-         <div class="mm-score-dash">–</div>
-         <div class="mm-score-box">${res.ag}</div>
-       </div>`
-    : '';
+  /* Formasyon ve kadro */
+  const homeFormKey = (teamDB[team1]?.formation) || '1-2-1-2-1';
+  const awayFormKey = (teamDB[team2]?.formation) || '1-2-1-2-1';
+  const homeForm    = FORMATIONS[homeFormKey] || FORMATIONS['1-2-1-2-1'];
+  const awayForm    = FORMATIONS[awayFormKey] || FORMATIONS['1-2-1-2-1'];
+  const homeSquad   = getTeamSquad(team1, homeFormKey);
+  const awaySquad   = getTeamSquad(team2, awayFormKey);
 
-  /* ─── Golcüler ─── */
+  const homePitch = buildMiniPitch(homeSquad, homeForm, 'home');
+  const awayPitch = buildMiniPitch(awaySquad, awayForm, 'away');
+
+  /* Golcüler */
   let scorersBlock = '';
-  if (res && res.scorers && res.scorers.length > 0) {
-    const homeScorers = res.scorers.filter(s => s.team === team1);
-    const awayScorers = res.scorers.filter(s => s.team === team2);
-    const buildSide = (list) => list.length
-      ? list.map(s => `<div class="mm-scorer-row"><span class="mm-scorer-icon">⚽</span><span class="mm-scorer-name">${s.name}</span><span class="mm-scorer-count">${s.goals > 1 ? '×' + s.goals : ''}</span></div>`).join('')
-      : `<div class="mm-scorer-empty">—</div>`;
+  if (res?.scorers?.length > 0) {
+    const hs = res.scorers.filter(s => s.team === team1);
+    const as = res.scorers.filter(s => s.team === team2);
+    const side = list => list.length
+      ? list.map(s => `<div class="mm-scorer-row"><span class="mm-scorer-icon">⚽</span><span class="mm-scorer-name">${s.name}</span><span class="mm-scorer-count">${s.goals > 1 ? '×'+s.goals : ''}</span></div>`).join('')
+      : '<div class="mm-scorer-empty">—</div>';
     scorersBlock = `
       <div class="mm-scorers-section">
         <div class="mm-scorers-title">⚽ Golcüler</div>
         <div class="mm-scorers-grid">
-          <div class="mm-scorers-col">
-            <div class="mm-scorers-team-lbl">${team1}</div>
-            ${buildSide(homeScorers)}
-          </div>
+          <div class="mm-scorers-col"><div class="mm-scorers-team-lbl">${team1}</div>${side(hs)}</div>
           <div class="mm-scorers-divider"></div>
-          <div class="mm-scorers-col">
-            <div class="mm-scorers-team-lbl">${team2}</div>
-            ${buildSide(awayScorers)}
-          </div>
+          <div class="mm-scorers-col"><div class="mm-scorers-team-lbl">${team2}</div>${side(as)}</div>
         </div>
       </div>`;
   }
 
-  /* ─── Saha oyuncu yarıları ─── */
-  function buildHalfRows(side, labelCls, label) {
-    const rows = pitchDummySquads[side];
-    const rowsHTML = rows.map(row => {
-      const pls = row.map(p =>
-        `<div class="mm-player-card">
-           <div class="mm-pc-av ${p.cls}">${p.init}</div>
-           <div class="mm-pc-name">${p.init}</div>
-           <div class="mm-pc-pos">${p.pos}</div>
-         </div>`
-      ).join('');
-      return `<div class="mm-pitch-row">${pls}</div>`;
-    }).join('');
-    return `
-      <div class="mm-team-half ${side === 'home' ? 'top' : 'bottom'}">
-        <div class="mm-team-label ${labelCls}">${label}</div>
-        ${rowsHTML}
-      </div>`;
-  }
+  const t1init = team1.split(' ').map(w=>w[0]).join('').substring(0,2);
+  const t2init = team2.split(' ').map(w=>w[0]).join('').substring(0,2);
 
   const content = `
     <div class="mm-header">
@@ -4496,7 +5318,7 @@ function openMatchModal(matchId, team1, team2, date, time, group) {
         <span class="mm-chip">👮 Güvenlik Halil</span>
         <span class="mm-chip">📊 Grup ${group}</span>
         <span class="mm-chip">⚽ 7v7</span>
-        ${res ? `<span class="mm-chip" style="background:rgba(0,238,102,.1);border-color:rgba(0,238,102,.3);color:#00ee66">✓ Oynandı</span>` : ''}
+        ${res ? '<span class="mm-chip" style="background:rgba(0,238,102,.1);border-color:rgba(0,238,102,.3);color:#00ee66">✓ Oynandı</span>' : ''}
       </div>
     </div>
 
@@ -4505,36 +5327,41 @@ function openMatchModal(matchId, team1, team2, date, time, group) {
     <div class="mm-ai-section">
       <div class="mm-ai-title">🤖 Yapay Zeka Kazanma Tahmini</div>
       <div class="mm-ai-bar-wrap">
-        <div class="mm-ai-home" style="width:${pct.home}%">
-          <div class="mm-ai-pct">%${pct.home}</div>
-        </div>
-        <div class="mm-ai-away">
-          <div class="mm-ai-pct">%${pct.away}</div>
-        </div>
+        <div class="mm-ai-home" style="width:${pct.home}%"><div class="mm-ai-pct">%${pct.home}</div></div>
+        <div class="mm-ai-away"><div class="mm-ai-pct">%${pct.away}</div></div>
       </div>
-      <div class="mm-ai-labels">
-        <span>${team1}</span>
-        <span>${team2}</span>
-      </div>
+      <div class="mm-ai-labels"><span>${team1}</span><span>${team2}</span></div>
     </div>
 
-    <div class="mm-pitch-section">
-      <div class="mm-pitch-title">Saha Dizilimi (1-2-1-2-1)</div>
-      <div class="mm-pitch-field">
-        <div class="mm-pf-lines">
-          <div class="mm-pf-outer"></div>
-          <div class="mm-pf-center"></div>
-          <div class="mm-pf-circle"></div>
-          <div class="mm-pf-dot"></div>
-          <div class="mm-pf-pen-t"></div>
-          <div class="mm-pf-pen-b"></div>
+    <!-- İKİ AYRI SAHA -->
+    <div class="mm-dual-pitch-wrap">
+
+      <!-- EV SAHİBİ SAHA -->
+      <div class="mm-single-pitch-block">
+        <div class="mm-sph-header mmp-hdr-home">
+          <div class="mmp-hdr-av av-snt">${t1init}</div>
+          <div class="mmp-hdr-info">
+            <div class="mmp-hdr-name">${team1}</div>
+            <div class="mmp-hdr-form">${homeFormKey.replace(/-/g, ' · ')}</div>
+          </div>
+          <div class="mmp-hdr-badge">🏠 Ev</div>
         </div>
-        <div class="mm-teams-area">
-          ${buildHalfRows('home', 'home', team1)}
-          <div class="mm-half-divider" data-label="ORTA SAHA"></div>
-          ${buildHalfRows('away', 'away', team2)}
-        </div>
+        ${homePitch}
       </div>
+
+      <!-- DEPLASMAN SAHA -->
+      <div class="mm-single-pitch-block">
+        <div class="mm-sph-header mmp-hdr-away">
+          <div class="mmp-hdr-badge">✈️ Dep.</div>
+          <div class="mmp-hdr-info" style="text-align:right">
+            <div class="mmp-hdr-name">${team2}</div>
+            <div class="mmp-hdr-form">${awayFormKey.replace(/-/g, ' · ')}</div>
+          </div>
+          <div class="mmp-hdr-av av-mo">${t2init}</div>
+        </div>
+        ${awayPitch}
+      </div>
+
     </div>`;
 
   document.getElementById('matchModalContent').innerHTML = content;
@@ -4560,85 +5387,69 @@ let rosterStatPlayerId = null; // Listeden açılan stat modal'ın oyuncu id'si
 /* Kaptan panelinin kullandığı örnek kadro */
 const captainRoster = [
   { id:1, name:'Mehmet Yıldırım', pos:'SNT', rating:88, initials:'MY', cls:'av-snt', stats:{ HIZ:86, ŞUT:90, PAS:72, DRB:82, DEF:34, FİZ:80 } },
-  { id:2, name:'Erhan Koç',       pos:'DOS', rating:84, initials:'EK', cls:'av-mo',  stats:{ HIZ:76, ŞUT:70, PAS:88, DRB:80, DEF:62, FİZ:75 } },
+  { id:2, name:'Erhan Koç',       pos:'OOS', rating:84, initials:'EK', cls:'av-mo',  stats:{ HIZ:76, ŞUT:70, PAS:88, DRB:80, DEF:62, FİZ:75 } },
   { id:3, name:'Kadir Aslan',     pos:'KAL', rating:86, initials:'KA', cls:'av-kl',  stats:{ HIZ:58, ŞUT:30, PAS:66, DRB:40, DEF:88, FİZ:82 } },
   { id:4, name:'Burak Demirtaş',  pos:'DEF', rating:82, initials:'BD', cls:'av-stp', stats:{ HIZ:72, ŞUT:55, PAS:68, DRB:58, DEF:86, FİZ:84 } },
-  { id:5, name:'Serhan Yıldız',   pos:'KAN', rating:85, initials:'SY', cls:'av-kan', stats:{ HIZ:92, ŞUT:78, PAS:74, DRB:88, DEF:30, FİZ:70 } },
+  { id:5, name:'Serhan Yıldız',   pos:'SĞK', rating:85, initials:'SY', cls:'av-kan', stats:{ HIZ:92, ŞUT:78, PAS:74, DRB:88, DEF:30, FİZ:70 } },
   { id:6, name:'Hakan Çelik',     pos:'DEF', rating:79, initials:'HÇ', cls:'av-bek', stats:{ HIZ:78, ŞUT:48, PAS:72, DRB:64, DEF:83, FİZ:80 } },
-  { id:7, name:'Tarık Güneş',     pos:'KAN', rating:81, initials:'TG', cls:'av-mo',  stats:{ HIZ:74, ŞUT:75, PAS:84, DRB:76, DEF:55, FİZ:72 } },
+  { id:7, name:'Tarık Güneş',     pos:'SLK', rating:81, initials:'TG', cls:'av-mo',  stats:{ HIZ:74, ŞUT:75, PAS:84, DRB:76, DEF:55, FİZ:72 } },
   /* Yedekler */
   { id:8, name:'Ali Korkmaz',     pos:'SNT', rating:77, initials:'AK', cls:'av-snt', stats:{ HIZ:80, ŞUT:76, PAS:68, DRB:74, DEF:28, FİZ:70 } },
-  { id:9, name:'Cemal Yurt',      pos:'DOS', rating:75, initials:'CY', cls:'av-mo',  stats:{ HIZ:70, ŞUT:60, PAS:82, DRB:72, DEF:55, FİZ:68 } },
+  { id:9, name:'Cemal Yurt',      pos:'OOS', rating:75, initials:'CY', cls:'av-mo',  stats:{ HIZ:70, ŞUT:60, PAS:82, DRB:72, DEF:55, FİZ:68 } },
 ];
 
 /* ══════════════════════════════════════════════════════
    FORMASYON TANIMI — absolute top/left koordinatları
-   top/left: 0–100% (sahada yukarıdan aşağıya, soldan sağa)
-   Her slot: { pos:'SNT', top:'12%', left:'50%' }
-   7v7 formatı: KAL alt, SNT üst
+   Mevkiler: SNT, SĞK (sağ kanat), SLK (sol kanat),
+             OOS (ofansif orta saha), DOS, DEF, KAL
+   top/left: 0–100% — KAL en altta, SNT en üstte
 ══════════════════════════════════════════════════════ */
 const FORMATIONS = {
   '1-2-1-2-1': {
     label: '1 · 2 · 1 · 2 · 1',
     slots: [
-      /* SNT */
       { pos:'SNT', top:'8%',  left:'50%' },
-      /* KAN sol, KAN sağ */
-      { pos:'KAN', top:'28%', left:'20%' },
-      { pos:'KAN', top:'28%', left:'80%' },
-      /* DOS */
-      { pos:'DOS', top:'48%', left:'50%' },
-      /* DEF sol, DEF sağ */
-      { pos:'DEF', top:'68%', left:'30%' },
-      { pos:'DEF', top:'68%', left:'70%' },
-      /* KAL */
+      { pos:'SĞK', top:'28%', left:'82%' },   /* Sağ kanat — çizgiye yakın */
+      { pos:'SLK', top:'28%', left:'18%' },   /* Sol kanat — çizgiye yakın */
+      { pos:'OOS', top:'48%', left:'50%' },   /* Ofansif OS — tam merkez */
+      { pos:'DEF', top:'68%', left:'32%' },
+      { pos:'DEF', top:'68%', left:'68%' },
       { pos:'KAL', top:'88%', left:'50%' },
     ],
   },
   '1-3-3': {
     label: '1 · 3 · 3',
     slots: [
-      /* 3 Forvet üstte */
-      { pos:'SNT', top:'8%',  left:'25%' },
+      { pos:'SNT', top:'8%',  left:'22%' },
       { pos:'SNT', top:'8%',  left:'50%' },
-      { pos:'KAN', top:'8%',  left:'75%' },
-      /* 3 Defans orta-alt */
-      { pos:'DEF', top:'65%', left:'25%' },
-      { pos:'DEF', top:'65%', left:'50%' },
-      { pos:'DEF', top:'65%', left:'75%' },
-      /* KAL */
+      { pos:'SNT', top:'8%',  left:'78%' },
+      { pos:'DEF', top:'62%', left:'22%' },
+      { pos:'DEF', top:'62%', left:'50%' },
+      { pos:'DEF', top:'62%', left:'78%' },
       { pos:'KAL', top:'88%', left:'50%' },
     ],
   },
   '1-2-2-2': {
     label: '1 · 2 · 2 · 2',
     slots: [
-      /* 2 SNT üst */
-      { pos:'SNT', top:'8%',  left:'35%' },
-      { pos:'KAN', top:'8%',  left:'65%' },
-      /* 2 DOS orta */
-      { pos:'DOS', top:'38%', left:'35%' },
-      { pos:'DOS', top:'38%', left:'65%' },
-      /* 2 DEF alt-orta */
-      { pos:'DEF', top:'65%', left:'30%' },
-      { pos:'DEF', top:'65%', left:'70%' },
-      /* KAL */
+      { pos:'SNT', top:'8%',  left:'33%' },
+      { pos:'SĞK', top:'8%',  left:'67%' },
+      { pos:'OOS', top:'38%', left:'33%' },
+      { pos:'OOS', top:'38%', left:'67%' },
+      { pos:'DEF', top:'65%', left:'28%' },
+      { pos:'DEF', top:'65%', left:'72%' },
       { pos:'KAL', top:'88%', left:'50%' },
     ],
   },
   '1-4-1-1': {
     label: '1 · 4 · 1 · 1',
     slots: [
-      /* SNT tek */
       { pos:'SNT', top:'8%',  left:'50%' },
-      /* DOS tek geride */
-      { pos:'DOS', top:'38%', left:'50%' },
-      /* 4 Defans */
-      { pos:'DEF', top:'62%', left:'15%' },
-      { pos:'DEF', top:'62%', left:'38%' },
-      { pos:'DEF', top:'62%', left:'62%' },
-      { pos:'DEF', top:'62%', left:'85%' },
-      /* KAL */
+      { pos:'OOS', top:'36%', left:'50%' },
+      { pos:'SĞK', top:'60%', left:'88%' },
+      { pos:'DEF', top:'60%', left:'62%' },
+      { pos:'DEF', top:'60%', left:'38%' },
+      { pos:'SLK', top:'60%', left:'12%' },
       { pos:'KAL', top:'88%', left:'50%' },
     ],
   },
@@ -4989,7 +5800,28 @@ function publishLineup() {
     showToast(`⚠️ Kadro eksik! ${filled}/${total} oyuncu sahada. Tüm pozisyonları doldur.`);
     return;
   }
-  showToast(`🚀 Kadro yayınlandı! ${total}/${total} · Formasyon: ${f?.label || activeFormation}`);
+
+  /* ── Kaptanın takımını tespit et (pitchTeamLabel'dan) ── */
+  const teamLabelEl = document.getElementById('pitchTeamLabel');
+  const teamName    = teamLabelEl?.textContent?.replace('Takımım: ', '').trim();
+
+  /* ── Formasyonu teamDB'ye kaydet ── */
+  if (teamName && teamDB[teamName]) {
+    teamDB[teamName].formation = activeFormation;
+  }
+
+  /* ── Kaydedilen kadroyu teamDB'ye yaz (maç saha için) ── */
+  if (teamName && teamDB[teamName]) {
+    const publishedSquad = slotState.filter(Boolean).map(pl => ({
+      init: pl.initials,
+      pos:  pl.pos,
+      cls:  pl.cls,
+      name: pl.name,
+    }));
+    teamDB[teamName].publishedSquad = publishedSquad;
+  }
+
+  showToast(`🚀 Kadro yayınlandı! ${total}/${total} · Formasyon: ${f?.label || activeFormation}${teamName ? ' · ' + teamName : ''}`);
 }
 
 /* Sahaya tıklanarak pitch tooltip'i kapat */
@@ -5022,126 +5854,126 @@ document.addEventListener('DOMContentLoaded', function () {
 ─────────────────────────────────────────────────────────── */
 const teamDB = {
   /* GRUP A */
-  'FUTMEYDANI':    { grp:'A', av:'av-snt', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0,
+  'FUTMEYDANI':    { grp:'A', av:'av-snt', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
     kadro:[
       {id:'fu01',nm:'Kadir Avcı',    pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
       {id:'fu02',nm:'Mert Arslan',   pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'fu03',nm:'Serdar Kaya',   pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'fu04',nm:'Tarık Güneş',   pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'fu05',nm:'Ali Koç',       pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'fu06',nm:'Serhat Bal',    pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'fu05',nm:'Ali Koç',       pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'fu06',nm:'Serhat Bal',    pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'fu07',nm:'Mehmet Yıldırım',pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
     ]},
-  'OKMEYDANI DİŞ': { grp:'A', av:'av-mo',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0,
+  'OKMEYDANI DİŞ': { grp:'A', av:'av-mo',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
     kadro:[
       {id:'ok01',nm:'Yusuf Can',     pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ok02',nm:'Rıfat Kaya',    pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ok03',nm:'Tunahan Ak',    pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ok04',nm:'Hasan Bora',    pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ok05',nm:'Musa Demir',    pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ok06',nm:'Ahmet Ateş',    pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'ok05',nm:'Musa Demir',    pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'ok06',nm:'Ahmet Ateş',    pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ok07',nm:'Hakan Öz',      pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
     ]},
-  'ARNAVUTKÖY FK': { grp:'A', av:'av-bek', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0,
+  'ARNAVUTKÖY FK': { grp:'A', av:'av-bek', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
     kadro:[
       {id:'ar01',nm:'Bartu Yıldız',  pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ar02',nm:'Arda Demir',    pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ar03',nm:'Sami Kaya',     pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ar04',nm:'Alp Güneş',     pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ar05',nm:'Orkun Şen',     pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ar06',nm:'İbrahim Can',   pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'ar05',nm:'Orkun Şen',     pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'ar06',nm:'İbrahim Can',   pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ar07',nm:'Ali Şahin',     pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
     ]},
-  'İLKYARDIM SPOR':{ grp:'A', av:'av-kl',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0,
+  'İLKYARDIM SPOR':{ grp:'A', av:'av-kl',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
     kadro:[
       {id:'il01',nm:'Hüseyin Ak',    pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
       {id:'il02',nm:'Nezih Kaya',    pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'il03',nm:'Birol Demir',   pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'il04',nm:'Ercan Şen',     pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'il05',nm:'Muzaffer Çam',  pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'il06',nm:'Selahattin Ak', pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'il05',nm:'Muzaffer Çam',  pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'il06',nm:'Selahattin Ak', pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'il07',nm:'Orhan Demir',   pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
     ]},
   /* GRUP B */
-  'EYÜP CİTY':     { grp:'B', av:'av-stp', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0,
+  'EYÜP CİTY':     { grp:'B', av:'av-stp', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
     kadro:[
       {id:'ey01',nm:'Serkan Ak',     pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ey02',nm:'Gürsel Kaya',   pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ey03',nm:'Çağlar Demir',  pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ey04',nm:'Doruk Şen',     pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ey05',nm:'Taha Ak',       pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ey06',nm:'Asil Çam',      pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'ey05',nm:'Taha Ak',       pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'ey06',nm:'Asil Çam',      pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ey07',nm:'Emir Kaplan',   pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
     ]},
-  'SİSTRUNK':      { grp:'B', av:'av-kan', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0,
+  'SİSTRUNK':      { grp:'B', av:'av-kan', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
     kadro:[
       {id:'si01',nm:'Atakan Ak',     pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
       {id:'si02',nm:'Cüneyt Kaya',   pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'si03',nm:'Demir Taş',     pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'si04',nm:'Fırat Güneş',   pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'si05',nm:'İlker Er',      pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'si06',nm:'Hasan Çam',     pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'si05',nm:'İlker Er',      pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'si06',nm:'Hasan Çam',     pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'si07',nm:'Cem Arslan',    pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
     ]},
-  'SAGRADA FAMİLA':{ grp:'B', av:'av-snt', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0,
+  'SAGRADA FAMİLA':{ grp:'B', av:'av-snt', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
     kadro:[
       {id:'sa01',nm:'Sarp Ak',       pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
       {id:'sa02',nm:'Ufuk Kaya',     pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'sa03',nm:'Veli Taş',      pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'sa04',nm:'Ahmet Şen',     pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'sa05',nm:'Cem Er',        pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'sa06',nm:'Berk Çam',      pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'sa05',nm:'Cem Er',        pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'sa06',nm:'Berk Çam',      pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'sa07',nm:'Öğrenci Bey',   pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
     ]},
-  'TÜPÇÜLER FK':   { grp:'B', av:'av-mo',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0,
+  'TÜPÇÜLER FK':   { grp:'B', av:'av-mo',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
     kadro:[
       {id:'tu01',nm:'Levet Ak',      pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
       {id:'tu02',nm:'Nadir Kaya',    pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'tu03',nm:'Osman Taş',     pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'tu04',nm:'Selim Şen',     pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'tu05',nm:'Ulaş Er',       pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'tu06',nm:'Taner Çam',     pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'tu05',nm:'Ulaş Er',       pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'tu06',nm:'Taner Çam',     pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'tu07',nm:'Kahraman T.',   pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
     ]},
   /* GRUP C */
-  'PUSU FK':       { grp:'C', av:'av-mo',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0,
+  'PUSU FK':       { grp:'C', av:'av-mo',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
     kadro:[
       {id:'pu01',nm:'Faruk Ak',      pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
       {id:'pu02',nm:'İsmail Taş',    pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'pu03',nm:'Halit Kaya',    pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'pu04',nm:'Latif Şen',     pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'pu05',nm:'Mıknat Çam',    pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'pu06',nm:'Orhan Ak',      pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'pu05',nm:'Mıknat Çam',    pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'pu06',nm:'Orhan Ak',      pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'pu07',nm:'Burak Demir',   pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
     ]},
-  'SSK MONTANA':   { grp:'C', av:'av-stp', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0,
+  'SSK MONTANA':   { grp:'C', av:'av-stp', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
     kadro:[
       {id:'ss01',nm:'Zekai Ak',      pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ss02',nm:'Cahit Taş',     pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ss03',nm:'Bayram Kaya',   pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ss04',nm:'Kemal Güneş',   pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ss05',nm:'Harun Er',      pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ss06',nm:'Gündüz Çam',    pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'ss05',nm:'Harun Er',      pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'ss06',nm:'Gündüz Çam',    pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ss07',nm:'Tarık Coşkun',  pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
     ]},
-  'RÖNTGEN':       { grp:'C', av:'av-snt', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0,
+  'RÖNTGEN':       { grp:'C', av:'av-snt', kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
     kadro:[
       {id:'ro01',nm:'Rafet Ak',      pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ro02',nm:'Tufan Kaya',    pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ro03',nm:'Uzay Taş',      pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ro04',nm:'Yalçın Güneş',  pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ro05',nm:'Bekir Er',      pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'ro06',nm:'Adil Çam',      pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'ro05',nm:'Bekir Er',      pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'ro06',nm:'Adil Çam',      pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'ro07',nm:'Kıvanç Bora',   pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
     ]},
-  'DETERJAN GÜCÜ': { grp:'C', av:'av-kl',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0,
+  'DETERJAN GÜCÜ': { grp:'C', av:'av-kl',  kap:null, o:0,g:0,b:0,m:0,ag:0,yg:0, formation:'1-2-1-2-1',
     kadro:[
       {id:'de01',nm:'Kadir Ak',      pos:'KAL',cls:'av-kl', gol:0,sari:0,kirmizi:0,mac:0},
       {id:'de02',nm:'Mikail Kaya',   pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'de03',nm:'Namık Taş',     pos:'DEF',cls:'av-stp',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'de04',nm:'Papatya G.',    pos:'DOS',cls:'av-mo', gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'de05',nm:'Turhan Er',     pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
-      {id:'de06',nm:'Seyhan Çam',    pos:'KAN',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'de05',nm:'Turhan Er',     pos:'SĞK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
+      {id:'de06',nm:'Seyhan Çam',    pos:'SLK',cls:'av-kan',gol:0,sari:0,kirmizi:0,mac:0},
       {id:'de07',nm:'Ramiz Aktaş',   pos:'SNT',cls:'av-snt',gol:0,sari:0,kirmizi:0,mac:0},
     ]},
 };
@@ -5775,8 +6607,251 @@ document.addEventListener('keydown', function(e) {
     closeMatchModal?.();
     closeT20Modal?.();
     closeRosterStatModal?.();
+    closeRegisterModal();
   }
 });
+
+/* ═══════════════════════════════════════════════════════
+   PROFİLİM — Veri Deposu & Fonksiyonlar
+   OVR oyuncu tarafından GİRİLEMEZ — teamDB'den hesaplanır.
+═══════════════════════════════════════════════════════ */
+
+/* Aktif oyuncu profili (lokal state) */
+let currentProfile = {
+  name: 'Oyuncu Adı',
+  team: '',
+  pos:  'SNT',
+  foot: '—',
+};
+
+/* OVR'ı teamDB'deki kadro verisinden hesapla.
+   Kaptan stat slider'larla statları güncellediğinde burası gerçek değeri döner. */
+function deriveOvr(teamName, playerName, pos) {
+  if (!teamName || !playerName) return 75;           /* Henüz seçilmedi */
+  const t  = teamDB[teamName];
+  if (!t) return 72;
+  /* captainRoster veya publishedSquad'dan oyuncunun statlarını bul */
+  const crPlayer = captainRoster.find(p => p.name === playerName);
+  if (crPlayer) {
+    const s   = crPlayer.stats;
+    const avg = Math.round(Object.values(s).reduce((a,b) => a+b, 0) / Object.values(s).length);
+    return Math.min(99, Math.max(50, avg));
+  }
+  /* teamDB kadrosundan tahmin */
+  const kadroPlayer = t.kadro?.find(p => p.nm === playerName);
+  if (kadroPlayer) {
+    /* Yedek formül: mevkie göre baz */
+    const pg = posToGroup(pos);
+    if (pg === 'kaleci')  return 80 + Math.round(t.g * 0.5);
+    if (pg === 'defans')  return 76 + Math.round(t.g * 0.4);
+    if (pg === 'osa')     return 78 + Math.round(t.g * 0.3);
+    return 77 + Math.round(t.g * 0.3);
+  }
+  return 72;
+}
+
+/* Kayıt modalını aç */
+function openRegisterModal() {
+  const m = document.getElementById('regModal');
+  if (!m) return;
+  const p = currentProfile;
+  const sv = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+  sv('regName', p.name !== 'Oyuncu Adı' ? p.name : '');
+  sv('regTeam', p.team);
+  sv('regPos',  p.pos);
+  sv('regFoot', p.foot !== '—' ? p.foot : '');
+  m.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+/* Kayıt modalını kapat */
+function closeRegisterModal() {
+  const m = document.getElementById('regModal');
+  if (m) m.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* Profili kaydet — sadece Ad/Takım/Mevki/Ayak */
+function saveProfile() {
+  const get = id => document.getElementById(id)?.value?.trim() || '';
+  const name = get('regName') || 'İsimsiz Oyuncu';
+  const team = get('regTeam');
+  const pos  = get('regPos') || 'SNT';
+  const foot = get('regFoot') || '—';
+
+  if (!name || name === 'İsimsiz Oyuncu') { showToast('⚠️ Lütfen adınızı girin!'); return; }
+  if (!team) { showToast('⚠️ Lütfen takımınızı seçin!'); return; }
+  if (!pos)  { showToast('⚠️ Lütfen mevkinizi seçin!'); return; }
+
+  currentProfile = { name, team, pos, foot };
+  closeRegisterModal();
+  renderProfileCard();
+  showToast(`✅ Profil güncellendi! ${name} · ${pos} · ${team}`);
+}
+
+/* Profil kartını render et */
+function renderProfileCard() {
+  const p = currentProfile;
+
+  /* OVR: teamDB + captainRoster'dan türet (oyuncu giremez) */
+  const ovr = deriveOvr(p.team, p.name, p.pos);
+
+  /* Stat hesapla */
+  const stats = ovrToStats(ovr, p.pos);
+
+  const syntheticPlayer = {
+    id: 999,
+    name:     p.name,
+    team:     p.team,
+    pos:      p.pos,
+    posGroup: posToGroup(p.pos),
+    rating:   ovr,
+    goals:    0,
+    wins:     (teamDB[p.team]?.g) || 0,
+    stats,
+    avClass:  posToAvClass(p.pos),
+    initials: p.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase(),
+  };
+
+  /* teamDB'den gerçek istatistikler */
+  const kadroPlayer = teamDB[p.team]?.kadro?.find(pl => pl.nm === p.name);
+  if (kadroPlayer) {
+    syntheticPlayer.goals = kadroPlayer.gol || 0;
+  }
+
+  const pl     = syntheticPlayer;
+  const mv     = calcMarketValue(pl);
+  const scout  = generateScoutReport(pl);
+
+  /* Kart elementleri */
+  setText('pucOvr',      ovr);
+  setText('pucPos',      p.pos);
+  setText('pucInitials', pl.initials);
+  setText('pucName',     p.name);
+  setText('pucTeam',     p.team || 'Takım Seçilmedi');
+  setText('pucFoot',     p.foot || '—');
+  setText('pucValue',    formatEuro(mv));
+  setText('pucScoutTxt', '"' + scout + '"');
+
+  /* OVR tier — kart rengi */
+  const card = document.getElementById('profileCard');
+  if (card) {
+    card.classList.remove('puc-tier-gold', 'puc-tier-silver', 'puc-tier-bronze');
+    if (ovr >= 88)      card.classList.add('puc-tier-gold');
+    else if (ovr >= 80) card.classList.add('puc-tier-silver');
+    else                card.classList.add('puc-tier-bronze');
+  }
+
+  /* Stat barlar */
+  const STAT_KEYS   = ['hiz','sut','pas','drb','def','fiz'];
+  const STAT_LABELS = { hiz:'HIZ', sut:'ŞUT', pas:'PAS', drb:'DRB', def:'DEF', fiz:'FİZ' };
+  const grid = document.getElementById('pucStatsGrid');
+  if (grid) {
+    grid.innerHTML = STAT_KEYS.map(k => {
+      const val = pl.stats[k] || 0;
+      return `<div class="puc-stat-row">
+        <div class="puc-stat-lbl">${STAT_LABELS[k]}</div>
+        <div class="puc-stat-bar"><div class="puc-stat-fill ${statColorClass(k)}" style="width:${val}%"></div></div>
+        <div class="puc-stat-val">${val}</div>
+      </div>`;
+    }).join('');
+  }
+
+  /* Sağ panel: istatistikler */
+  setText('prfGoals',   kadroPlayer?.gol      || 0);
+  setText('prfYellow',  kadroPlayer?.sari      || 0);
+  setText('prfRed',     kadroPlayer?.kirmizi   || 0);
+  setText('prfMatches', kadroPlayer?.mac       || 0);
+
+  /* Takım G/B/M */
+  setText('prfTeamName', p.team || '—');
+  const tData = teamDB[p.team];
+  const gbmEl = document.getElementById('prfGbmBars');
+  const rowEl = document.getElementById('prfTeamRow');
+
+  if (gbmEl && tData) {
+    const mac  = tData.o || 0;
+    const gPct = mac > 0 ? Math.round((tData.g / mac) * 100) : 0;
+    const bPct = mac > 0 ? Math.round((tData.b / mac) * 100) : 0;
+    const mPct = mac > 0 ? Math.round((tData.m / mac) * 100) : 0;
+    const pts  = tData.g * 3 + tData.b;
+
+    const barRow = (lbl, pct, cls, color) => `
+      <div class="prf-gbm-row">
+        <div class="prf-gbm-lbl" style="color:${color}">${lbl}</div>
+        <div class="prf-gbm-track">
+          <div class="prf-gbm-fill ${pct > 0 ? cls : 'prf-gbm-zero'}" style="width:${pct > 0 ? pct : 100}%">
+            ${pct > 0 ? '%' + pct : '— Maç Bekleniyor'}
+          </div>
+        </div>
+        <div class="prf-gbm-pct" style="color:${color}">%${pct}</div>
+      </div>`;
+
+    gbmEl.innerHTML =
+      barRow('Galibiyet', gPct, 'prf-gbm-win',  '#00ee66') +
+      barRow('Beraberlik', bPct, 'prf-gbm-draw', '#ffd84d') +
+      barRow('Mağlubiyet', mPct, 'prf-gbm-lose', '#ff4466');
+
+    if (rowEl) rowEl.innerHTML = `
+      <span class="prf-ts-chip">⚽ ${mac} Maç</span>
+      <span class="prf-ts-chip">🏆 ${tData.g}G · ${tData.b}B · ${tData.m}M</span>
+      <span class="prf-ts-chip" style="color:var(--cyan)">${pts} Puan</span>
+      <span class="prf-ts-chip">${tData.ag > 0 || tData.yg > 0 ? tData.ag + '–' + tData.yg + ' AV' : '0–0'}</span>`;
+  } else if (gbmEl) {
+    gbmEl.innerHTML = '<div style="font-family:Rajdhani,sans-serif;font-size:.66rem;color:var(--t3);padding:12px 0;letter-spacing:1px">Sezon başlamadı — maç bekleniyor…</div>';
+    if (rowEl) rowEl.innerHTML = '';
+  }
+
+  /* Sec-bar chip güncelle */
+  setText('profileTeamBadge', p.team ? '🏟️ ' + p.team : '🏟️ Takım Seçilmedi');
+
+  /* OVR bilgi chipini güncelle */
+  const ovrChip = document.getElementById('profileOvrChip');
+  if (ovrChip) ovrChip.textContent = 'OVR ' + ovr + ' · Kaptandan';
+}
+
+/* Yardımcı — mevki → posGroup */
+function posToGroup(pos) {
+  if (['SNT','SĞK','SLK'].includes(pos)) return 'forvet';
+  if (['OOS','MO','DOS'].includes(pos))   return 'osa';
+  if (['BEK','STP'].includes(pos))        return 'defans';
+  if (pos === 'KL')                       return 'kaleci';
+  return 'forvet';
+}
+
+/* Yardımcı — mevki → avatar class */
+function posToAvClass(pos) {
+  if (pos === 'KL')                        return 'av-kl';
+  if (['STP','BEK'].includes(pos))         return 'av-stp';
+  if (['OOS','MO','DOS'].includes(pos))    return 'av-mo';
+  if (['SNT','SĞK','SLK'].includes(pos))  return 'av-snt';
+  return 'av-mo';
+}
+
+/* Yardımcı — OVR → 6 stat */
+function ovrToStats(ovr, pos) {
+  const base = ovr;
+  const posGroup = posToGroup(pos);
+  /* Mevkiye göre ağırlıklı dağılım */
+  if (posGroup === 'forvet')  return { hiz: Math.min(99, base+4),  sut: Math.min(99, base+6),  pas: Math.max(40, base-10), drb: Math.min(99, base+2),  def: Math.max(20, base-30), fiz: base };
+  if (posGroup === 'osa')     return { hiz: base,                  sut: Math.max(40, base-8),  pas: Math.min(99, base+8),  drb: Math.min(99, base+4),  def: Math.max(35, base-15), fiz: base };
+  if (posGroup === 'defans')  return { hiz: Math.max(45, base-6),  sut: Math.max(30, base-18), pas: Math.max(50, base-4),  drb: Math.max(35, base-14), def: Math.min(99, base+8),  fiz: Math.min(99, base+4) };
+  if (posGroup === 'kaleci')  return { hiz: Math.max(40, base-12), sut: Math.max(20, base-25), pas: Math.max(50, base-5),  drb: Math.max(25, base-20), def: Math.min(99, base+12), fiz: Math.min(99, base+6) };
+  return { hiz: base, sut: base, pas: base, drb: base, def: base, fiz: base };
+}
+
+/* Yardımcı — setText */
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+/* switchTab — profil sekmesi */
+const _origSwitchTabProfile = switchTab;
+switchTab = function(target, btn) {
+  _origSwitchTabProfile(target, btn);
+  if (target === 'profil') setTimeout(renderProfileCard, 50);
+};
 
 </script>
 </body>
