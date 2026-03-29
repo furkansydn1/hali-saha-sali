@@ -473,7 +473,7 @@ html, body {
   <div class="divider"></div>
 
   <!-- ═══ PANEL SOL — Hastane Turnuvası ═══ -->
-  <div class="panel panel-left" onclick="sessionStorage.setItem('from_lobby','1'); window.location.href='tournament-master.html'">
+  <div class="panel panel-left" onclick="window.location.href='tournament-master.html'">
     <div class="grid"></div>
     <div class="star-ring"></div>
 
@@ -489,7 +489,7 @@ html, body {
         Şampiyonluk için sahaya çık.
       </div>
 
-      <button class="mode-btn" onclick="event.stopPropagation(); sessionStorage.setItem('from_lobby','1'); window.location.href='tournament-master.html'">
+      <button class="mode-btn" onclick="event.stopPropagation(); window.location.href='tournament-master.html'">
         Turnuvaya Git <i class="btn-arrow">→</i>
       </button>
 
@@ -511,7 +511,7 @@ html, body {
   </div>
 
   <!-- ═══ PANEL SAĞ — Pitch App ═══ -->
-  <div class="panel panel-right" onclick="sessionStorage.setItem('from_lobby','1'); window.location.href='index.html'">
+  <div class="panel panel-right" onclick="window.location.href='index.html'">
     <div class="grid"></div>
 
     <div class="panel-content">
@@ -526,7 +526,7 @@ html, body {
         Her salı saha seninle hesaplaşır.
       </div>
 
-      <button class="mode-btn" onclick="event.stopPropagation(); sessionStorage.setItem('from_lobby','1'); window.location.href='index.html'">
+      <button class="mode-btn" onclick="event.stopPropagation(); window.location.href='index.html'">
         Sahaya Çık <i class="btn-arrow">→</i>
       </button>
 
@@ -579,34 +579,18 @@ if (!supportsHas) {
 
 
 <script>
+/* SESSION GUARD */
 (function() {
   var raw = localStorage.getItem('hs_session') || localStorage.getItem('hs_session_temp');
   if (!raw) { window.location.replace('login.html'); return; }
-  var session;
-  try { session = JSON.parse(raw); } catch(e) { window.location.replace('login.html'); return; }
-  if (!session || !session.id) { window.location.replace('login.html'); return; }
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var footer = document.querySelector('.lobby-footer');
-    if (footer && session.name) {
-      footer.textContent = '👋 Hoş geldin, ' + session.name + ' · Bir mod seç';
-    }
-  });
-})();
-</script>
-
-<script>
-/* LOBBY GUARD */
-(function() {
-  var raw = localStorage.getItem('hs_session') || localStorage.getItem('hs_session_temp');
-  if (!raw) { window.location.replace('login.html'); return; }
-  var session;
-  try { session = JSON.parse(raw); } catch(e) { window.location.replace('login.html'); return; }
-  if (!session || !session.id) { window.location.replace('login.html'); return; }
-  document.addEventListener('DOMContentLoaded', function() {
-    var footer = document.querySelector('.lobby-footer');
-    if (footer && session.name) footer.textContent = '👋 Hoş geldin, ' + session.name + ' · Bir mod seç';
-  });
+  try {
+    var s = JSON.parse(raw);
+    if (!s || !s.id) { window.location.replace('login.html'); return; }
+    document.addEventListener('DOMContentLoaded', function() {
+      var footer = document.querySelector('.lobby-footer');
+      if (footer && s.name) footer.textContent = '👋 Hoş geldin, ' + s.name + ' · Bir mod seç';
+    });
+  } catch(e) { window.location.replace('login.html'); }
 })();
 </script>
 </body>
