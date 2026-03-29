@@ -272,8 +272,8 @@ const firebaseConfig = {
   databaseURL:       "https://sali-maci-default-rtdb.europe-west1.firebasedatabase.app",
   projectId:         "sali-maci",
   storageBucket:     "sali-maci.appspot.com",
-  messagingSenderId: "874498878352",
-  appId:             "1:874498878352:web:abc123"
+  messagingSenderId: "656383692297",
+  appId:             "1:656383692297:web:ecd81c5645e86e073b72d8"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -377,20 +377,29 @@ registerBtn.addEventListener('click', async () => {
       registeredAt:    Date.now()
     };
 
-    // Boşluklu format ile kaydet — eski sistem ile aynı
+    // Ana users koleksiyonuna kaydet (eski Salı Maçı sistemi ile uyumlu)
     await set(ref(db, `users/${dbKey}`), newUser);
+
+    // Turnuva koleksiyonuna da kaydet (turnuva_ prefix — eski veri KORUNUR)
+    await set(ref(db, `turnuva_users/${dbKey}`), {
+      id:           newUser.id,
+      name:         newUser.name,
+      role:         'oyuncu',
+      team:         '',
+      pos:          '',
+      foot:         '',
+      registeredAt: newUser.registeredAt,
+    });
 
     registerBtn.classList.remove('loading');
 
-    // Session'ı hemen kaydet
-    localStorage.setItem('hs_session', JSON.stringify({ id: newUser.id, name: newUser.name }));
+    // Session kaydet — dbKey de dahil (login için gerekli)
+    localStorage.setItem('hs_session', JSON.stringify({ id: newUser.id, name: newUser.name, dbKey: dbKey }));
 
     successSub.textContent = 'Kayıt başarılı! Lobiye yönlendiriliyorsun...';
     successOverlay.classList.add('show');
 
-    setTimeout(() => {
-      window.location.href = 'lobby.html';
-    }, 1400);
+    setTimeout(() => { window.location.href = 'lobby.html'; }, 1400);
 
   } catch (err) {
     registerBtn.classList.remove('loading');
