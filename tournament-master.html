@@ -3701,6 +3701,635 @@ html, body {
   border-color: rgba(255,215,0,.28) !important;
   color: var(--gold) !important;
 }
+/* ─── Süper Admin pill ─── */
+.rbac-pill.superadmin          { border-color: rgba(180,0,255,.22); color: #cc88ff; }
+.rbac-pill.superadmin.active   { background: rgba(180,0,255,.14); border-color: rgba(180,0,255,.50); box-shadow: 0 0 14px rgba(180,0,255,.30); }
+.rbac-status.superadmin        { background: rgba(180,0,255,.12); border: 1px solid rgba(180,0,255,.30); color: #cc88ff; }
+
+/* ─── "ya da kadrodan" ayırıcı ─── */
+.kom-captain-or {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .60rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--t3); text-align: center;
+  padding: 2px 0;
+  position: relative;
+}
+.kom-captain-or::before, .kom-captain-or::after {
+  content: ''; position: absolute; top: 50%; width: 30%;
+  height: 1px; background: var(--b0);
+}
+.kom-captain-or::before { left: 5%; }
+.kom-captain-or::after  { right: 5%; }
+
+/* ═══════════════════════════════════════════════════════
+   SÜPER ADMİN PANELİ CSS
+═══════════════════════════════════════════════════════ */
+.sa-alert {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 22px;
+  background: linear-gradient(90deg, rgba(180,0,255,.10), rgba(120,0,200,.06));
+  border-bottom: 1px solid rgba(180,0,255,.22);
+}
+.sa-alert-icon { font-size: 1.15rem; flex-shrink: 0; }
+.sa-alert-txt  { flex: 1; }
+.sa-alert-title { font-family: 'Bebas Neue', cursive; font-size: .88rem; letter-spacing: 3px; color: #cc88ff; }
+.sa-alert-sub   { font-family: 'Rajdhani', sans-serif; font-size: .58rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(180,0,255,.45); }
+.sa-alert-badge {
+  font-family: 'Rajdhani', sans-serif; font-size: .58rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 3px 12px; border-radius: 20px;
+  background: rgba(180,0,255,.14); border: 1px solid rgba(180,0,255,.35); color: #cc88ff;
+}
+
+.sa-outer {
+  flex: 1; overflow-y: auto;
+  padding: 18px 22px 28px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px; align-content: start;
+  scrollbar-width: thin; scrollbar-color: rgba(180,0,255,.22) transparent;
+}
+.sa-outer::-webkit-scrollbar { width: 4px; }
+.sa-outer::-webkit-scrollbar-thumb { background: rgba(180,0,255,.20); border-radius: 4px; }
+
+.sa-card {
+  background: var(--glass); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(180,0,255,.20); border-radius: var(--r3);
+  padding: 18px 18px 16px;
+  display: flex; flex-direction: column; gap: 12px;
+  position: relative; overflow: hidden;
+  box-shadow: 0 6px 28px rgba(0,0,0,.42);
+}
+.sa-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, #cc88ff, transparent);
+  opacity: .45;
+}
+.sa-card-wide { grid-column: 1 / -1; }
+@media (max-width: 600px) { .sa-card-wide { grid-column: 1; } }
+
+.sa-card-hd {
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.sa-card-icon { font-size: 1.25rem; flex-shrink: 0; margin-top: 2px; }
+.sa-card-title { font-family: 'Bebas Neue', cursive; font-size: .90rem; letter-spacing: 3px; color: #cc88ff; }
+.sa-card-sub   { font-family: 'Rajdhani', sans-serif; font-size: .60rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--t2); margin-top: 2px; }
+
+.sa-refresh-btn {
+  margin-left: auto; flex-shrink: 0;
+  font-family: 'Rajdhani', sans-serif; font-size: .62rem; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 20px;
+  background: rgba(180,0,255,.10); border: 1px solid rgba(180,0,255,.25); color: #cc88ff;
+  cursor: pointer; transition: all .18s;
+}
+.sa-refresh-btn:hover { background: rgba(180,0,255,.22); }
+
+/* Filtre satırı */
+.sa-filter-row {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.sa-search {
+  flex: 1; min-width: 160px; padding: 8px 12px;
+  background: rgba(180,0,255,.06); border: 1.5px solid rgba(180,0,255,.18);
+  border-radius: var(--r2); color: var(--t0);
+  font-family: 'Exo 2', sans-serif; font-size: .80rem;
+}
+.sa-search:focus { border-color: rgba(180,0,255,.45); outline: none; }
+.sa-filter-sel {
+  padding: 8px 12px;
+  background: rgba(180,0,255,.06); border: 1.5px solid rgba(180,0,255,.18);
+  border-radius: var(--r2); color: var(--t0);
+  font-family: 'Exo 2', sans-serif; font-size: .80rem;
+  -webkit-appearance: none;
+}
+.sa-filter-sel:focus { border-color: rgba(180,0,255,.45); outline: none; }
+.sa-filter-sel option { background: #050d1e; }
+
+/* Tablo */
+.sa-table-wrap { overflow-x: auto; }
+.sa-table-head {
+  display: grid; grid-template-columns: 1.8fr 1.5fr .8fr .9fr .9fr 1.2fr;
+  gap: 0; padding: 7px 14px;
+  background: rgba(0,0,0,.32); border-bottom: 1px solid rgba(180,0,255,.12);
+}
+.sa-th {
+  font-family: 'Rajdhani', sans-serif; font-size: .57rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; color: rgba(180,0,255,.55);
+}
+.sa-row {
+  display: grid; grid-template-columns: 1.8fr 1.5fr .8fr .9fr .9fr 1.2fr;
+  gap: 0; padding: 10px 14px;
+  border-bottom: 1px solid rgba(180,0,255,.06);
+  align-items: center; transition: background .18s;
+}
+.sa-row:last-child { border-bottom: none; }
+.sa-row:hover { background: rgba(180,0,255,.05); }
+.sa-td { font-family: 'Rajdhani', sans-serif; font-size: .74rem; font-weight: 600; color: var(--t0); }
+.sa-td-name { color: var(--plat); font-weight: 700; }
+.sa-td-team { color: var(--t1); font-size: .68rem; }
+
+/* Rol badge */
+.sa-role-badge {
+  display: inline-block; padding: 2px 8px; border-radius: 12px;
+  font-family: 'Rajdhani', sans-serif; font-size: .60rem; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+}
+.sa-role-badge.superadmin { background: rgba(180,0,255,.14); border: 1px solid rgba(180,0,255,.35); color: #cc88ff; }
+.sa-role-badge.komite     { background: var(--gold-a); border: 1px solid rgba(255,215,0,.28); color: var(--gold); }
+.sa-role-badge.kaptan     { background: var(--red-a);  border: 1px solid rgba(255,60,90,.28);  color: #ff8899; }
+.sa-role-badge.oyuncu     { background: var(--cyan-a); border: 1px solid var(--b1);            color: var(--cyan); }
+
+/* İşlem butonları */
+.sa-action-btns { display: flex; gap: 4px; }
+.sa-act-btn {
+  padding: 3px 8px; border-radius: var(--r1);
+  font-family: 'Rajdhani', sans-serif; font-size: .58rem; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  cursor: pointer; transition: all .18s; border: 1px solid;
+}
+.sa-act-komite { background: rgba(255,215,0,.08); border-color: rgba(255,215,0,.25); color: var(--gold); }
+.sa-act-komite:hover { background: rgba(255,215,0,.18); }
+.sa-act-kaptan { background: var(--red-a); border-color: rgba(255,60,90,.25); color: #ff8899; }
+.sa-act-kaptan:hover { background: rgba(255,60,90,.22); }
+.sa-act-reset  { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.12); color: var(--t2); }
+.sa-act-reset:hover { background: rgba(255,255,255,.10); color: var(--t1); }
+
+/* Özet */
+.sa-summary { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+.sa-sum-chip {
+  padding: 3px 10px; border-radius: 20px;
+  font-family: 'Rajdhani', sans-serif; font-size: .60rem; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase; color: var(--silver);
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.10);
+}
+
+/* Hızlı yetki kart */
+.sa-field { display: flex; flex-direction: column; gap: 5px; }
+.sa-label { font-family: 'Rajdhani', sans-serif; font-size: .60rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(180,0,255,.55); }
+.sa-select {
+  width: 100%; padding: 9px 12px;
+  background: rgba(180,0,255,.06); border: 1.5px solid rgba(180,0,255,.18);
+  border-radius: var(--r2); color: var(--t0);
+  font-family: 'Exo 2', sans-serif; font-size: .82rem;
+  -webkit-appearance: none;
+}
+.sa-select:focus { border-color: rgba(180,0,255,.45); outline: none; }
+.sa-select option { background: #050d1e; }
+
+/* Rol seçim grid */
+.sa-role-grid { display: flex; gap: 8px; flex-wrap: wrap; }
+.sa-role-opt { cursor: pointer; }
+.sa-role-opt input[type=radio] { display: none; }
+.sa-role-lbl {
+  display: inline-block; padding: 6px 14px; border-radius: 20px;
+  font-family: 'Rajdhani', sans-serif; font-size: .68rem; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  border: 1.5px solid; cursor: pointer; transition: all .18s;
+}
+.sa-role-komite { background: rgba(255,215,0,.06); border-color: rgba(255,215,0,.22); color: rgba(255,215,0,.55); }
+.sa-role-kaptan { background: var(--red-a);         border-color: rgba(255,60,90,.22);  color: rgba(255,100,110,.60); }
+.sa-role-oyuncu { background: var(--cyan-a);        border-color: var(--b1);            color: rgba(0,212,255,.55); }
+.sa-role-opt input:checked + .sa-role-komite { background: rgba(255,215,0,.18); border-color: rgba(255,215,0,.55); color: var(--gold); box-shadow: var(--ggold); }
+.sa-role-opt input:checked + .sa-role-kaptan { background: rgba(255,60,90,.18);  border-color: rgba(255,60,90,.55);  color: #ff8899;      box-shadow: var(--gred); }
+.sa-role-opt input:checked + .sa-role-oyuncu { background: rgba(0,212,255,.16); border-color: var(--b3);            color: var(--cyan);  box-shadow: var(--gxs); }
+
+/* Süper admin btn */
+.sa-btn {
+  width: 100%; padding: 11px;
+  border-radius: var(--r2); font-family: 'Bebas Neue', cursive;
+  font-size: .90rem; letter-spacing: 3px; cursor: pointer; transition: all .22s;
+}
+.sa-btn-purple {
+  background: linear-gradient(135deg, rgba(180,0,255,.28), rgba(120,0,200,.42));
+  border: 1.5px solid rgba(180,0,255,.40); color: #cc88ff;
+  box-shadow: 0 0 16px rgba(180,0,255,.12);
+}
+.sa-btn-purple:hover { box-shadow: 0 0 28px rgba(180,0,255,.28); transform: translateY(-2px); }
+
+/* Aktif komite listesi */
+.sa-komite-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border-radius: var(--r1);
+  background: rgba(255,215,0,.06); border: 1px solid rgba(255,215,0,.12);
+  margin-bottom: 5px;
+}
+.sa-ki-name  { font-family: 'Rajdhani', sans-serif; font-size: .74rem; font-weight: 700; color: var(--t0); flex: 1; }
+.sa-ki-team  { font-family: 'Rajdhani', sans-serif; font-size: .62rem; color: var(--t2); }
+.sa-ki-revoke {
+  font-family: 'Rajdhani', sans-serif; font-size: .58rem; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 12px;
+  background: var(--red-a); border: 1px solid rgba(255,60,90,.28); color: #ff8899;
+  cursor: pointer; transition: all .18s;
+}
+.sa-ki-revoke:hover { background: rgba(255,60,90,.22); }
+
+.sa-empty {
+  font-family: 'Rajdhani', sans-serif; font-size: .66rem; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--t3);
+  text-align: center; padding: 16px 0;
+}
+/* ═══════════════════════════════════════════════════════════════
+   ONBOARDING CAROUSEL MODAL
+═══════════════════════════════════════════════════════════════ */
+
+/* Overlay */
+.ob-overlay {
+  position: fixed; inset: 0; z-index: 900;
+  display: flex; align-items: center; justify-content: center;
+  padding: 14px;
+  background: rgba(0,2,14,.90);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  opacity: 0; visibility: hidden;
+  transition: opacity .35s, visibility .35s;
+}
+.ob-overlay.open { opacity: 1; visibility: visible; }
+
+/* Kart kutusu */
+.ob-box {
+  position: relative;
+  width: 100%; max-width: 580px;
+  background: linear-gradient(158deg,
+    rgba(4,10,32,.97) 0%,
+    rgba(6,14,40,.98) 55%,
+    rgba(4,10,30,.97) 100%);
+  border: 1px solid rgba(0,212,255,.28);
+  border-radius: 26px;
+  box-shadow:
+    0 0 0 1px rgba(0,212,255,.07) inset,
+    0 30px 80px rgba(0,0,0,.75),
+    0 0 60px rgba(0,100,200,.10);
+  overflow: hidden;
+  transform: translateY(28px) scale(.96);
+  transition: transform .38s cubic-bezier(.16,1,.3,1);
+}
+.ob-overlay.open .ob-box { transform: translateY(0) scale(1); }
+
+/* Üst neon çizgi */
+.ob-box::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 10;
+  background: linear-gradient(90deg,
+    transparent 0%, rgba(0,212,255,.55) 25%,
+    rgba(255,255,255,.9) 50%,
+    rgba(0,212,255,.55) 75%, transparent 100%);
+  animation: card-topline 3.5s ease-in-out infinite;
+}
+
+/* İlerleme barı */
+.ob-progress-bar {
+  position: absolute; top: 0; left: 0; height: 2px; z-index: 11;
+  background: var(--cyan);
+  box-shadow: var(--gxs);
+  transition: width .5s cubic-bezier(.16,1,.3,1);
+}
+
+/* Step dot'ları */
+.ob-dots {
+  display: flex; justify-content: center; align-items: center; gap: 7px;
+  padding: 18px 24px 0;
+}
+.ob-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(0,212,255,.20);
+  border: 1px solid rgba(0,212,255,.22);
+  cursor: pointer;
+  transition: all .28s;
+}
+.ob-dot.active {
+  width: 24px; border-radius: 4px;
+  background: var(--cyan);
+  box-shadow: var(--gxs);
+}
+.ob-dot.done {
+  background: rgba(0,212,255,.50);
+}
+
+/* Slayt alanı */
+.ob-slides-viewport {
+  overflow: hidden;
+  padding: 0;
+}
+.ob-slides-track {
+  display: flex;
+  transition: transform .45s cubic-bezier(.77,0,.18,1);
+}
+.ob-slide {
+  min-width: 100%;
+  padding: 22px 32px 10px;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center;
+  gap: 14px;
+}
+
+/* Büyük emoji/ikon */
+.ob-slide-icon {
+  width: 80px; height: 80px; border-radius: 22px;
+  background: linear-gradient(135deg,
+    rgba(0,80,180,.42), rgba(0,34,100,.72));
+  border: 1.5px solid rgba(0,212,255,.35);
+  box-shadow: 0 8px 28px rgba(0,0,0,.55), var(--gxs);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.2rem;
+  position: relative; overflow: hidden;
+  animation: float-icon 4s ease-in-out infinite;
+}
+.ob-slide-icon::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.18), transparent 60%);
+}
+
+/* Sayfa numarası */
+.ob-slide-num {
+  font-family: 'Bebas Neue', cursive;
+  font-size: .70rem; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--cyan); text-shadow: var(--gxs);
+}
+
+/* Başlık */
+.ob-slide-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(1.15rem, 3.5vw, 1.55rem);
+  letter-spacing: 2.5px; line-height: 1.15;
+  color: var(--plat);
+}
+
+/* Metin */
+.ob-slide-body {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(.78rem, 2.2vw, .90rem);
+  font-weight: 500; line-height: 1.65;
+  color: rgba(180, 210, 240, .80);
+  max-width: 480px;
+  padding: 0 4px;
+}
+
+/* Kritik uyarı slide (slide 5) özel renk */
+.ob-slide.ob-critical .ob-slide-title { color: var(--gold); text-shadow: var(--ggold); }
+.ob-slide.ob-critical .ob-slide-icon  {
+  background: linear-gradient(135deg, rgba(200,120,0,.45), rgba(140,70,0,.72));
+  border-color: rgba(255,215,0,.40);
+  box-shadow: 0 8px 28px rgba(0,0,0,.55), var(--ggold);
+}
+.ob-slide.ob-critical .ob-slide-body  { color: rgba(255,220,150,.80); }
+.ob-critical-banner {
+  background: linear-gradient(90deg, rgba(255,215,0,.10), rgba(255,170,0,.06));
+  border: 1px solid rgba(255,215,0,.28);
+  border-radius: var(--r2);
+  padding: 10px 14px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .78rem; font-weight: 700; line-height: 1.55;
+  color: rgba(255,210,100,.85);
+  text-align: left;
+  width: 100%; max-width: 480px;
+}
+.ob-critical-banner strong {
+  font-family: 'Bebas Neue', cursive;
+  font-size: .85rem; letter-spacing: 2px;
+  color: var(--gold); display: block; margin-bottom: 4px;
+}
+
+/* Son slide confetti/kapanış ikonu */
+.ob-slide.ob-final .ob-slide-icon {
+  background: linear-gradient(135deg, rgba(0,160,80,.38), rgba(0,90,50,.65));
+  border-color: rgba(0,238,130,.40);
+  box-shadow: 0 8px 28px rgba(0,0,0,.55), 0 0 20px rgba(0,238,130,.18);
+}
+.ob-slide.ob-final .ob-slide-title { color: #66ffbb; text-shadow: 0 0 16px rgba(0,238,130,.35); }
+.ob-slide.ob-final .ob-slide-body  { color: rgba(150, 230, 190, .80); }
+
+/* Buton bölgesi */
+.ob-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 28px 22px;
+  gap: 10px;
+  border-top: 1px solid rgba(0,212,255,.07);
+  background: rgba(0,0,0,.18);
+}
+
+/* Skip (atla) */
+.ob-skip-btn {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .65rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--t2); cursor: pointer;
+  background: none; border: none;
+  padding: 6px 4px;
+  transition: color .2s;
+}
+.ob-skip-btn:hover { color: var(--t1); }
+
+/* Merkez: sayaç */
+.ob-counter {
+  font-family: 'Bebas Neue', cursive;
+  font-size: .78rem; letter-spacing: 2px;
+  color: var(--t2);
+}
+
+/* Geri / İleri / Başla butonları */
+.ob-nav-btns { display: flex; gap: 8px; align-items: center; }
+
+.ob-btn-back {
+  padding: 9px 18px; border-radius: var(--r2);
+  font-family: 'Bebas Neue', cursive;
+  font-size: .82rem; letter-spacing: 2.5px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  color: var(--t1);
+  cursor: pointer; transition: all .2s;
+}
+.ob-btn-back:hover { background: rgba(255,255,255,.12); color: var(--t0); }
+.ob-btn-back:disabled { opacity: .22; cursor: default; pointer-events: none; }
+
+.ob-btn-next {
+  padding: 9px 22px; border-radius: var(--r2);
+  font-family: 'Bebas Neue', cursive;
+  font-size: .88rem; letter-spacing: 3px;
+  background: linear-gradient(135deg,
+    rgba(0,160,210,.45), rgba(0,100,180,.65));
+  border: 1.5px solid var(--b2);
+  color: var(--cyan); text-shadow: var(--gxs);
+  box-shadow: var(--gsm);
+  cursor: pointer;
+  transition: all .24s;
+  position: relative; overflow: hidden;
+}
+.ob-btn-next::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.12), transparent);
+  opacity: 0; transition: opacity .2s;
+}
+.ob-btn-next:hover { box-shadow: var(--gmd); transform: translateY(-2px); }
+.ob-btn-next:hover::before { opacity: 1; }
+.ob-btn-next:active { transform: scale(.97); }
+
+.ob-btn-start {
+  padding: 10px 26px; border-radius: var(--r2);
+  font-family: 'Bebas Neue', cursive;
+  font-size: .92rem; letter-spacing: 3px;
+  background: linear-gradient(135deg,
+    rgba(0,180,80,.42), rgba(0,110,50,.65));
+  border: 1.5px solid rgba(0,238,130,.40);
+  color: #66ffbb;
+  box-shadow: 0 0 18px rgba(0,238,130,.18);
+  cursor: pointer; transition: all .24s;
+}
+.ob-btn-start:hover { box-shadow: 0 0 32px rgba(0,238,130,.32); transform: translateY(-2px); }
+.ob-btn-start:active { transform: scale(.97); }
+
+/* Mobil */
+@media (max-width: 560px) {
+  .ob-slide { padding: 18px 18px 8px; gap: 11px; }
+  .ob-footer { padding: 14px 18px 18px; }
+  .ob-slide-icon { width: 64px; height: 64px; font-size: 1.85rem; }
+}
+/* ─── Kurallar nav tab ─── */
+.nav-tab-kurallar { color: #aabbff !important; }
+.nav-tab-kurallar.active {
+  border-color: rgba(100,140,255,.45) !important;
+  background: linear-gradient(135deg, rgba(80,120,255,.14), rgba(40,80,200,.08)) !important;
+  box-shadow: 0 0 14px rgba(100,140,255,.20) !important;
+}
+
+/* ═══════════════════════════════════════════════════════
+   KURALLAR SEKMESİ CSS
+═══════════════════════════════════════════════════════ */
+.kural-outer {
+  flex: 1; overflow-y: auto;
+  padding: 16px 20px 28px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100,140,255,.22) transparent;
+}
+.kural-outer::-webkit-scrollbar { width: 4px; }
+.kural-outer::-webkit-scrollbar-thumb { background: rgba(100,140,255,.20); border-radius: 4px; }
+
+.kural-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 10px;
+}
+.kural-card-wide { grid-column: 1 / -1; }
+@media (max-width: 600px) {
+  .kural-grid { grid-template-columns: 1fr; }
+  .kural-card-wide { grid-column: 1; }
+}
+
+/* Kart */
+.kural-card {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--glass);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(100,140,255,.16);
+  border-radius: var(--r3);
+  padding: 13px 15px;
+  box-shadow: 0 4px 18px rgba(0,0,0,.36);
+  position: relative; overflow: hidden;
+  transition: border-color .18s, box-shadow .18s;
+}
+.kural-card:hover {
+  border-color: rgba(100,140,255,.32);
+  box-shadow: 0 6px 24px rgba(0,0,0,.45), 0 0 12px rgba(100,140,255,.08);
+}
+.kural-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; width: 3px; bottom: 0;
+  background: linear-gradient(180deg, rgba(100,140,255,.55), rgba(60,100,200,.28));
+  border-radius: 3px 0 0 3px;
+}
+
+/* Kural numarası */
+.kural-num {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.45rem; line-height: 1; letter-spacing: 1px;
+  color: rgba(100,140,255,.55);
+  min-width: 28px; text-align: center;
+  flex-shrink: 0;
+}
+
+/* Kategori badge */
+.kural-cat {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .52rem; font-weight: 700;
+  letter-spacing: 1.8px; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 10px;
+  flex-shrink: 0; margin-top: 3px;
+  white-space: nowrap;
+}
+.kural-cat-mac    { background: rgba(0,212,255,.10); border: 1px solid rgba(0,212,255,.22); color: var(--cyan); }
+.kural-cat-kadro  { background: rgba(255,215,0,.10);  border: 1px solid rgba(255,215,0,.22);  color: var(--gold); }
+.kural-cat-ceza   { background: rgba(255,60,90,.10);  border: 1px solid rgba(255,60,90,.22);  color: #ff8899; }
+.kural-cat-komite { background: rgba(180,0,255,.10);  border: 1px solid rgba(180,0,255,.22);  color: #cc88ff; }
+.kural-cat-genel  { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); color: var(--silver); }
+
+/* Kural metni */
+.kural-txt {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .80rem; font-weight: 500; line-height: 1.55;
+  color: rgba(180,210,240,.82);
+  flex: 1;
+}
+.kural-txt strong { color: var(--plat); font-weight: 700; }
+
+/* Header kart */
+.kural-header-card {
+  background: linear-gradient(135deg, rgba(60,100,220,.22), rgba(30,60,150,.28));
+  border-color: rgba(100,140,255,.30);
+}
+.kural-header-card::before { background: linear-gradient(180deg, rgba(100,140,255,.80), rgba(60,100,220,.50)); }
+.kural-header-icon { font-size: 2rem; flex-shrink: 0; margin-top: 2px; }
+.kural-header-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.10rem; letter-spacing: 3px; color: #aabbff;
+  text-shadow: 0 0 18px rgba(100,140,255,.35);
+}
+.kural-header-sub {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .62rem; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase;
+  color: rgba(100,140,255,.45); margin-top: 3px;
+}
+
+/* Footer kart */
+.kural-footer-card {
+  background: linear-gradient(135deg, rgba(0,180,80,.12), rgba(0,100,50,.18));
+  border-color: rgba(0,238,130,.22);
+  margin-top: 4px;
+}
+.kural-footer-card::before { background: linear-gradient(180deg, rgba(0,238,130,.70), rgba(0,180,80,.40)); }
+.kural-footer-inner { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+
+.kural-footer-line {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .80rem; font-weight: 700; line-height: 1.5;
+}
+.kural-footer-line-1 { color: rgba(0,238,130,.90); }
+.kural-footer-line-2 { color: rgba(0,220,120,.75); }
+
+.kural-footer-spirit {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 14px;
+  background: rgba(0,238,130,.06); border-radius: var(--r2);
+  border: 1px solid rgba(0,238,130,.18);
+}
+.kural-footer-spirit-icon { font-size: 1.25rem; flex-shrink: 0; margin-top: 1px; }
+.kural-footer-spirit span:last-child {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .82rem; font-weight: 600; line-height: 1.55;
+  font-style: italic;
+  color: rgba(150,230,190,.85);
+}
+
+.kural-footer-komite {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.20rem; letter-spacing: 8px;
+  color: rgba(0,238,130,.60);
+  text-shadow: 0 0 20px rgba(0,238,130,.25);
+  text-align: right;
+}
 </style>
 </head>
 <body>
@@ -3727,25 +4356,6 @@ html, body {
 </div>
 
 <div id="app">
-
-  <!-- ════ RBAC TEST BAR ════ -->
-  <div class="rbac-bar">
-    <span class="rbac-label">🔑 Görünüm Testi:</span>
-
-    <button class="rbac-pill admin"  id="pill-admin"  onclick="setRole('admin')">
-      <span class="pill-dot"></span>Admin
-    </button>
-    <button class="rbac-pill kaptan" id="pill-kaptan" onclick="setRole('kaptan')">
-      <span class="pill-dot"></span>Kaptan
-    </button>
-    <button class="rbac-pill oyuncu active" id="pill-oyuncu" onclick="setRole('oyuncu')">
-      <span class="pill-dot"></span>Oyuncu
-    </button>
-
-    <div class="rbac-bar-right">
-      <div class="rbac-status oyuncu" id="rbac-status">👤 Oyuncu Görünümü</div>
-    </div>
-  </div>
 
   <!-- ════ NAVBAR ════ -->
   <header class="navbar">
@@ -3776,6 +4386,9 @@ html, body {
       <button class="nav-tab nav-tab-profile" onclick="switchTab('profil', this)">
         <span class="tab-dot"></span>⚡ Profilim
       </button>
+      <button class="nav-tab nav-tab-kurallar" onclick="switchTab('kurallar', this)">
+        <span class="tab-dot"></span>📋 Kurallar
+      </button>
     </nav>
 
     <!-- Sağ — Açılır Menü -->
@@ -3786,6 +4399,11 @@ html, body {
         </button>
         <div class="nav-drop-menu" id="dropMenu">
           <div class="drop-lbl">Yetkili Alanlar</div>
+
+          <button class="drop-item superadmin-i hidden" id="drop-superadmin"
+                  onclick="switchTab('superadmin', null); closeDrop()">
+            <span class="drop-icon">🔱</span>Süper Admin Paneli
+          </button>
 
           <button class="drop-item kaptan-i hidden" id="drop-kaptan"
                   onclick="switchTab('kaptan', null); closeDrop()">
@@ -4124,13 +4742,13 @@ html, body {
           </div>
         </div>
 
-        <!-- KART 3: Kaptan Ata -->
+        <!-- KART 3: Kaptan Ata — Kayıtlı Üyeden + Takım Oyuncusundan -->
         <div class="kom-card">
           <div class="kom-card-hd">
             <div class="kom-card-icon">👑</div>
             <div>
               <div class="kom-card-title">Kaptan Ata</div>
-              <div class="kom-card-sub">Takım kaptanını belirle</div>
+              <div class="kom-card-sub">Takım kaptanını belirle · Kayıtlı üye veya kadro oyuncusu</div>
             </div>
           </div>
 
@@ -4141,8 +4759,18 @@ html, body {
             </select>
           </div>
 
+          <!-- Kayıtlı üyelerden seçim (öncelikli) -->
           <div class="kom-field">
-            <div class="kom-label">Kaptan Olacak Oyuncu</div>
+            <div class="kom-label">Kayıtlı Üyeler (Öncelikli)</div>
+            <select class="kom-select" id="captainMemberSel">
+              <option value="">— Kayıtlı Üye Seç —</option>
+            </select>
+          </div>
+
+          <div class="kom-captain-or">— ya da kadrodan —</div>
+
+          <div class="kom-field">
+            <div class="kom-label">Kadro Oyuncusu</div>
             <select class="kom-select" id="captainPlayerSel">
               <option value="">— Önce takım seç —</option>
             </select>
@@ -4174,6 +4802,126 @@ html, body {
         </div>
 
       </div><!-- /kom-outer -->
+    </section>
+
+    <!-- ── SÜPER ADMİN PANELİ ── -->
+    <section class="section" id="sec-superadmin">
+      <div class="sec-bar">
+        <div class="sec-bar-title">Süper Admin</div>
+        <div class="sec-bar-chip" style="background:rgba(180,0,255,.12);border-color:rgba(180,0,255,.35);color:#cc88ff">🔱 Sadece Süper Admin</div>
+        <div class="sec-bar-chip">Üye Yönetimi · Yetki Atama</div>
+      </div>
+
+      <!-- Uyarı bandı -->
+      <div class="sa-alert">
+        <div class="sa-alert-icon">🔱</div>
+        <div class="sa-alert-txt">
+          <div class="sa-alert-title">Süper Admin Yönetim Merkezi</div>
+          <div class="sa-alert-sub">Tüm üyeleri yönet · Komite yetkisi ver/kaldır · Hiyerarşiyi denetle</div>
+        </div>
+        <div class="sa-alert-badge">SUPER ADMIN</div>
+      </div>
+
+      <div class="sa-outer">
+
+        <!-- KART 1: Üye Listesi ve Yetki Yönetimi -->
+        <div class="sa-card sa-card-wide">
+          <div class="sa-card-hd">
+            <div class="sa-card-icon">👥</div>
+            <div>
+              <div class="sa-card-title">Üye Listesi &amp; Yetki Atama</div>
+              <div class="sa-card-sub">Kayıtlı tüm üyeler · Komite yetkisi ver veya kaldır</div>
+            </div>
+            <button class="sa-refresh-btn" onclick="renderMemberTable()">🔄 Yenile</button>
+          </div>
+
+          <!-- Filtre -->
+          <div class="sa-filter-row">
+            <input class="sa-search" type="text" id="memberSearch"
+                   placeholder="🔍 İsim veya takım ara…"
+                   oninput="renderMemberTable()" maxlength="60">
+            <select class="sa-filter-sel" id="memberRoleFilter" onchange="renderMemberTable()">
+              <option value="">Tüm Roller</option>
+              <option value="komite">Komite</option>
+              <option value="kaptan">Kaptan</option>
+              <option value="oyuncu">Oyuncu</option>
+            </select>
+          </div>
+
+          <!-- Tablo -->
+          <div class="sa-table-wrap">
+            <div class="sa-table-head">
+              <div class="sa-th">Ad Soyad</div>
+              <div class="sa-th">Takım</div>
+              <div class="sa-th">Mevki</div>
+              <div class="sa-th">Güçlü Ayak</div>
+              <div class="sa-th">Rol</div>
+              <div class="sa-th">İşlem</div>
+            </div>
+            <div id="memberTableBody">
+              <!-- JS doldurur -->
+            </div>
+          </div>
+
+          <!-- Özet chip'leri -->
+          <div class="sa-summary" id="saSummary"></div>
+        </div>
+
+        <!-- KART 2: Hızlı Yetki Atama -->
+        <div class="sa-card">
+          <div class="sa-card-hd">
+            <div class="sa-card-icon">⚡</div>
+            <div>
+              <div class="sa-card-title">Hızlı Yetki Atama</div>
+              <div class="sa-card-sub">Seç · Rol ata · Kaydet</div>
+            </div>
+          </div>
+
+          <div class="sa-field">
+            <div class="sa-label">Üye</div>
+            <select class="sa-select" id="saGrantMemberSel">
+              <option value="">— Üye Seç —</option>
+            </select>
+          </div>
+
+          <div class="sa-field">
+            <div class="sa-label">Atanacak Rol</div>
+            <div class="sa-role-grid">
+              <label class="sa-role-opt">
+                <input type="radio" name="saGrantRole" value="komite">
+                <span class="sa-role-lbl sa-role-komite">⚙️ Komite</span>
+              </label>
+              <label class="sa-role-opt">
+                <input type="radio" name="saGrantRole" value="kaptan">
+                <span class="sa-role-lbl sa-role-kaptan">👑 Kaptan</span>
+              </label>
+              <label class="sa-role-opt">
+                <input type="radio" name="saGrantRole" value="oyuncu" checked>
+                <span class="sa-role-lbl sa-role-oyuncu">👤 Oyuncu</span>
+              </label>
+            </div>
+          </div>
+
+          <button class="sa-btn sa-btn-purple" onclick="grantRole()">
+            🔱 Rolü Kaydet
+          </button>
+        </div>
+
+        <!-- KART 3: Komite Üyeleri Özeti -->
+        <div class="sa-card">
+          <div class="sa-card-hd">
+            <div class="sa-card-icon">📋</div>
+            <div>
+              <div class="sa-card-title">Aktif Komite</div>
+              <div class="sa-card-sub">Şu an komite yetkisi olan üyeler</div>
+            </div>
+          </div>
+          <div id="activeKomiteList">
+            <div class="sa-empty">Henüz komite üyesi atanmadı.</div>
+          </div>
+        </div>
+
+      </div><!-- /sa-outer -->
     </section>
 
     <!-- ── PROFİLİM ── -->
@@ -4294,6 +5042,199 @@ html, body {
           </div><!-- /profile-right-panel -->
         </div><!-- /profile-layout -->
       </div><!-- /profile-outer -->
+    </section>
+
+    <!-- ── KURALLAR ── -->
+    <section class="section" id="sec-kurallar">
+      <div class="sec-bar">
+        <div class="sec-bar-title">Turnuva Kuralları</div>
+        <div class="sec-bar-chip">📋 25 Madde</div>
+        <div class="sec-bar-chip" style="background:rgba(255,60,90,.10);border-color:rgba(255,60,90,.28);color:#ff8899">⚽ Tüm Takımları Bağlar</div>
+      </div>
+
+      <div class="kural-outer">
+
+        <!-- Kural kartları -->
+        <div class="kural-grid">
+
+          <div class="kural-card kural-card-wide kural-header-card">
+            <div class="kural-header-icon">⚖️</div>
+            <div class="kural-header-txt">
+              <div class="kural-header-title">Hastane Turnuvası 2026 — Resmi Oyun Kuralları</div>
+              <div class="kural-header-sub">Komite tarafından hazırlanmıştır · Tüm takımları bağlayıcı niteliktedir</div>
+            </div>
+          </div>
+
+          <!-- Kural satırları -->
+          <div class="kural-card">
+            <div class="kural-num">01</div>
+            <div class="kural-cat kural-cat-kadro">Kadro</div>
+            <div class="kural-txt">Oyuncular hastane çalışanı olacaktır. İstisna olarak hekim en fazla <strong>2 oyuncu</strong> kadroya alınabilir.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">02</div>
+            <div class="kural-cat kural-cat-kadro">Kadro</div>
+            <div class="kural-txt">Takımlar <strong>14 kişilik liste</strong> verecektir. Liste dışı oyuncu yasaktır.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">03</div>
+            <div class="kural-cat kural-cat-genel">Genel</div>
+            <div class="kural-txt">Takım isimleri kurumun adını temsil etmelidir.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">04</div>
+            <div class="kural-cat kural-cat-mac">Maç</div>
+            <div class="kural-txt">Maç esnasında <strong>4 oyuncu değişikliği</strong> hakkı vardır. Çıkan oyuncu dönemez.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">05</div>
+            <div class="kural-cat kural-cat-mac">Maç</div>
+            <div class="kural-txt">Maçlar <strong>2 × 30 dakika</strong>, devre arası 5 dakikadır.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">06</div>
+            <div class="kural-cat kural-cat-mac">Maç</div>
+            <div class="kural-txt">Maçlar <strong>6 futbolcu + 1 kaleci</strong> oynanır. En az 1 kaleci + 5 futbolcu ile başlanabilir. 5 dakika geç kalan <strong>hükmen yenik</strong> sayılır.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">07</div>
+            <div class="kural-cat kural-cat-ceza">Ceza</div>
+            <div class="kural-txt"><strong>2 Sarı</strong> veya direkt <strong>Kırmızı</strong> kart gören atılır. 2. sarıdan atılan haftaya oynar; direkt kırmızı gören oynayamaz ve komite ceza belirler.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">08</div>
+            <div class="kural-cat kural-cat-ceza">Ceza</div>
+            <div class="kural-txt">Bir takım <strong>3 kırmızı görüp 4 kişi kalırsa</strong> hükmen yenik sayılır.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">09</div>
+            <div class="kural-cat kural-cat-kadro">Kadro</div>
+            <div class="kural-txt">Bir oyuncu <strong>sadece bir takımda</strong> oynayabilir.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">10</div>
+            <div class="kural-cat kural-cat-komite">Komite</div>
+            <div class="kural-txt">İtiraz durumunda komite <strong>kimlik kontrolü</strong> yapabilir.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">11</div>
+            <div class="kural-cat kural-cat-mac">Maç</div>
+            <div class="kural-txt">Maç başladıktan sonra itiraza rağmen maç tatil edilmez; komite sonradan karar verir.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">12</div>
+            <div class="kural-cat kural-cat-komite">Komite</div>
+            <div class="kural-txt">Maçtan sonra yazılı itirazlar en geç <strong>24 saat içinde</strong> komiteye iletilmelidir.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">13</div>
+            <div class="kural-cat kural-cat-mac">Maç</div>
+            <div class="kural-txt">Grup maçları tek devre lig usulüdür. Eşitlikte <strong>ikili averaj</strong>, sonra <strong>gol averajı</strong>. Finalde eşitlikte <strong>penaltılar</strong> atılır.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">14</div>
+            <div class="kural-cat kural-cat-genel">Genel</div>
+            <div class="kural-txt">Forma renkleri benzerse kimin yelek giyeceğine hakem karar verir. <strong>Sivil kıyafet yasaktır.</strong></div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">15</div>
+            <div class="kural-cat kural-cat-mac">Maç</div>
+            <div class="kural-txt">Baraj <strong>3 adımdır</strong>. Ofsayt ve taç yoktur. Aut atışı zorunludur.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">16</div>
+            <div class="kural-cat kural-cat-komite">Komite</div>
+            <div class="kural-txt">Hakem devam edemezse komite hakemi değiştirebilir.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">17</div>
+            <div class="kural-cat kural-cat-ceza">Ceza</div>
+            <div class="kural-txt"><strong>Hakeme itiraz</strong> sarı karttır.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">18</div>
+            <div class="kural-cat kural-cat-mac">Maç</div>
+            <div class="kural-txt">Kaleciye <strong>geri pas yasaktır</strong> — çift vuruş verilir. Kaleci topu <strong>5 saniyede</strong> elinden çıkarmalıdır.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">19</div>
+            <div class="kural-cat kural-cat-mac">Maç</div>
+            <div class="kural-txt">Hükmen galibiyetlerde <strong>en farklı skor</strong> baz alınır.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">20</div>
+            <div class="kural-cat kural-cat-ceza">Ceza</div>
+            <div class="kural-txt">Küfür ve sportmenlik dışı hareketlere <strong>men cezası</strong> verilebilir.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">21</div>
+            <div class="kural-cat kural-cat-komite">Komite</div>
+            <div class="kural-txt">Yazılı olmayan kurallarda <strong>Tertip Komitesi</strong> yetkilidir.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">22</div>
+            <div class="kural-cat kural-cat-ceza">Ceza</div>
+            <div class="kural-txt">Sadece o maç için geçerli kırmızı kartlar hariç, sert müdahale kırmızılarına en az <strong>1 maç men</strong> verilir.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">23</div>
+            <div class="kural-cat kural-cat-ceza">Ceza</div>
+            <div class="kural-txt">Maç bitimi hakeme / komiteye <strong>aşırı reaksiyon ihraç sebebidir.</strong></div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">24</div>
+            <div class="kural-cat kural-cat-ceza">Ceza</div>
+            <div class="kural-txt">İhraç edilen oyuncu taşkınlığa devam ederse <strong>ek ceza</strong> alır.</div>
+          </div>
+
+          <div class="kural-card">
+            <div class="kural-num">25</div>
+            <div class="kural-cat kural-cat-genel">Genel</div>
+            <div class="kural-txt"><strong>Halı saha ayakkabısı</strong> zorunludur.</div>
+          </div>
+
+          <!-- Kapanış notu -->
+          <div class="kural-card kural-card-wide kural-footer-card">
+            <div class="kural-footer-inner">
+              <div class="kural-footer-line kural-footer-line-1">
+                ⚖️ Turnuvaya katılan her takım kuralları okuyup kabul etmiş sayılır.
+              </div>
+              <div class="kural-footer-line kural-footer-line-2">
+                🗓️ Fikstür belirlendikten sonra katılımcı kabul edilmez.
+              </div>
+              <div class="kural-footer-spirit">
+                <span class="kural-footer-spirit-icon">🤝</span>
+                <span>Turnuvanın amacı; gündelik yaşamın sıkıntısından uzaklaşıp dostlarla hoş zaman geçirmek ve ilişkileri güçlendirmektir.</span>
+              </div>
+              <div class="kural-footer-komite">KOMİTE</div>
+            </div>
+          </div>
+
+        </div><!-- /kural-grid -->
+      </div><!-- /kural-outer -->
     </section>
 
   </main>
@@ -4426,73 +5367,247 @@ html, body {
   </div>
 </div>
 
+<!-- ════ ONBOARDING CAROUSEL ════ -->
+<div class="ob-overlay" id="obOverlay">
+  <div class="ob-box">
+
+    <!-- Neon ilerleme barı -->
+    <div class="ob-progress-bar" id="obProgressBar" style="width:16.66%"></div>
+
+    <!-- Step dot'lar -->
+    <div class="ob-dots" id="obDots">
+      <div class="ob-dot active"  data-step="0" onclick="obGoTo(0)"></div>
+      <div class="ob-dot"         data-step="1" onclick="obGoTo(1)"></div>
+      <div class="ob-dot"         data-step="2" onclick="obGoTo(2)"></div>
+      <div class="ob-dot"         data-step="3" onclick="obGoTo(3)"></div>
+      <div class="ob-dot"         data-step="4" onclick="obGoTo(4)"></div>
+      <div class="ob-dot"         data-step="5" onclick="obGoTo(5)"></div>
+    </div>
+
+    <!-- Slayt vizyonu -->
+    <div class="ob-slides-viewport">
+      <div class="ob-slides-track" id="obTrack">
+
+        <!-- SLIDE 1 — Hoş Geldiniz -->
+        <div class="ob-slide">
+          <div class="ob-slide-num">01 / 06</div>
+          <div class="ob-slide-icon">🏆</div>
+          <div class="ob-slide-title">Hastane Turnuvamıza<br>Hoş Geldiniz!</div>
+          <p class="ob-slide-body">
+            Sakatsız, kavgasız, bol gollü ve birbirimizle daha da kaynaşacağımız,
+            rekabetin ve dostluğun zirve yapacağı harika bir turnuva diliyoruz.
+            <strong style="color:var(--cyan);display:block;margin-top:8px;letter-spacing:1px">Başlıyoruz!</strong>
+          </p>
+        </div>
+
+        <!-- SLIDE 2 — Profil Doldurma -->
+        <div class="ob-slide">
+          <div class="ob-slide-num">02 / 06</div>
+          <div class="ob-slide-icon">👤</div>
+          <div class="ob-slide-title">Öncelikle Profilinizi<br>Tamamlayın!</div>
+          <p class="ob-slide-body">
+            Sağ üstten <strong style="color:var(--cyan)">"Profilim"</strong> sekmesine giderek
+            adınızı, takımınızı, mevkinizi ve güçlü ayağınızı eksiksiz doldurun.
+            Sistemin sizi tanıması ve sahaya çıkabilmeniz için bu şart!
+          </p>
+        </div>
+
+        <!-- SLIDE 3 — Borsa Sistemi -->
+        <div class="ob-slide">
+          <div class="ob-slide-num">03 / 06</div>
+          <div class="ob-slide-icon">📈</div>
+          <div class="ob-slide-title">Borsa &amp; Piyasa<br>Değerleri</div>
+          <p class="ob-slide-body">
+            Oyuncuların değerleri; attıkları goller, aldıkları galibiyetler ve mevkilerine göre
+            <strong style="color:var(--cyan)">yapay zeka algoritmamız</strong> tarafından
+            dinamik olarak hesaplanır.
+            <strong style="color:#44ffaa;display:block;margin-top:6px">Sahada ter döken, değerini katlar!</strong>
+          </p>
+        </div>
+
+        <!-- SLIDE 4 — Fikstür & Gruplar -->
+        <div class="ob-slide">
+          <div class="ob-slide-num">04 / 06</div>
+          <div class="ob-slide-icon">🗓️</div>
+          <div class="ob-slide-title">Fikstür &amp;<br>Puan Durumu</div>
+          <p class="ob-slide-body">
+            Maç takviminizi <strong style="color:var(--cyan)">"Fikstür"</strong> sekmesinden takip edebilir,
+            grubunuzdaki amansız rekabeti ve istatistikleri
+            <strong style="color:var(--cyan)">"Gruplar"</strong> sekmesinden anlık olarak inceleyebilirsiniz.
+          </p>
+        </div>
+
+        <!-- SLIDE 5 — Fair-Play KRİTİK -->
+        <div class="ob-slide ob-critical">
+          <div class="ob-slide-num">05 / 06</div>
+          <div class="ob-slide-icon">⚠️</div>
+          <div class="ob-slide-title">Kaptanlara Özel Görev<br>&amp; Fair-Play</div>
+          <p class="ob-slide-body">
+            WhatsApp grubumuzdaki kaptanlara sistemde yetki verilecektir.
+            Kaptanlar kadro dizecek ve güç (reyting) belirleyecektir.
+          </p>
+          <div class="ob-critical-banner">
+            <strong>⚠️ LÜTFEN DİKKAT</strong>
+            Oyunculara reyting verirken adaletli ve gerçekçi olalım.
+            Bu sistem tamamen eğlence amaçlıdır; abartılı ve gerçek dışı verilen puanlar
+            eğlencemize gölge düşürür. Lütfen gerçeğe en yakın şekilde puanlama yapalım.
+          </div>
+        </div>
+
+        <!-- SLIDE 6 — Kapanış -->
+        <div class="ob-slide ob-final">
+          <div class="ob-slide-num">06 / 06</div>
+          <div class="ob-slide-icon">🤝</div>
+          <div class="ob-slide-title">Sahadan Dostlukla<br>Ayrılalım!</div>
+          <p class="ob-slide-body">
+            Sonuç ne olursa olsun sahadan gülerek, rakip takıma sarılarak çıktığımız,
+            bol kahkahalı bir turnuva olması dileğiyle.
+            <strong style="color:#66ffbb;display:block;margin-top:8px;font-size:1rem">
+              🏆 Tüm takımlarımıza sonsuz başarılar!
+            </strong>
+          </p>
+        </div>
+
+      </div><!-- /ob-slides-track -->
+    </div><!-- /ob-slides-viewport -->
+
+    <!-- Alt buton barı -->
+    <div class="ob-footer">
+      <button class="ob-skip-btn" onclick="closeOnboarding()">Atla</button>
+
+      <div class="ob-counter" id="obCounter">1 / 6</div>
+
+      <div class="ob-nav-btns">
+        <button class="ob-btn-back" id="obBtnBack" onclick="obPrev()" disabled>
+          ← Geri
+        </button>
+        <button class="ob-btn-next" id="obBtnNext" onclick="obNext()">
+          İleri →
+        </button>
+        <button class="ob-btn-start" id="obBtnStart" onclick="closeOnboarding()"
+                style="display:none">
+          🚀 Turnuvaya Başla
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /ob-box -->
+</div><!-- /ob-overlay -->
+
 <div class="toast" id="toast"></div>
 
 <script>
 /* ═════════════════════════════════════════════
    STATE
 ═════════════════════════════════════════════ */
-let currentRole   = 'oyuncu';
+/* ═════════════════════════════════════════════════════════════
+   YETKİ HİYERARŞİSİ — ROLE-BASED ACCESS CONTROL
+   superadmin > komite > kaptan > oyuncu
+═════════════════════════════════════════════════════════════ */
+
+/* Simüle edilmiş kayıtlı üye veritabanı */
+const memberDB = [
+  { id:'sa01', name:'Furkan Soydan',   team:'',               pos:'',    foot:'',            role:'superadmin' },
+  { id:'u01',  name:'Mehmet Yıldırım', team:'FUTMEYDANI',     pos:'SNT', foot:'Sağ Ayak',    role:'oyuncu' },
+  { id:'u02',  name:'Erhan Koç',       team:'OKMEYDANI DİŞ', pos:'OOS', foot:'Sol Ayak',    role:'oyuncu' },
+  { id:'u03',  name:'Kadir Aslan',     team:'PUSU FK',        pos:'KL',  foot:'Sağ Ayak',    role:'oyuncu' },
+  { id:'u04',  name:'Burak Demirtaş',  team:'SİSTRUNK',      pos:'STP', foot:'Her İki Ayak', role:'oyuncu' },
+  { id:'u05',  name:'Serhan Yıldız',   team:'EYÜP CİTY',     pos:'SĞK', foot:'Sağ Ayak',    role:'oyuncu' },
+  { id:'u06',  name:'Hakan Çelik',     team:'DETERJAN GÜCÜ', pos:'BEK', foot:'Sol Ayak',    role:'oyuncu' },
+  { id:'u07',  name:'Tarık Güneş',     team:'RÖNTGEN',        pos:'SLK', foot:'Sağ Ayak',    role:'oyuncu' },
+  { id:'u08',  name:'Ali Korkmaz',     team:'ARNAVUTKÖY FK', pos:'SNT', foot:'Sağ Ayak',    role:'oyuncu' },
+  { id:'u09',  name:'Cemal Yurt',      team:'İLKYARDIM SPOR',pos:'DOS', foot:'Sol Ayak',    role:'oyuncu' },
+];
+
+/* ── Aktif kullanıcı — Furkan Soydan: Süper Admin ── */
+let currentUser = {
+  id:   'sa01',
+  name: 'Furkan Soydan',
+  team: '',
+  role: 'superadmin',
+};
+
+/* Geriye dönük uyumluluk — currentUser ile senkron başlat */
+let currentRole   = currentUser.role;   /* 'superadmin' */
 let activeSection = 'fikstur';
 let dropOpen      = false;
 let toastTimer    = null;
 
+/* ─── Rol hiyerarşisi yardımcıları ─── */
+const ROLE_LEVEL = { superadmin: 4, admin: 3, komite: 3, kaptan: 2, oyuncu: 1 };
+
+function hasPermission(requiredRole) {
+  return (ROLE_LEVEL[currentRole] || 1) >= (ROLE_LEVEL[requiredRole] || 1);
+}
+
+function canAccess(section) {
+  const rules = {
+    superadmin: 'superadmin',
+    komite:     'komite',
+    kaptan:     'kaptan',
+  };
+  const required = rules[section];
+  if (!required) return true;                   /* herkese açık sekme */
+  return hasPermission(required);
+}
+
 /* ═════════════════════════════════════════════
-   RBAC — Rol Değiştirme
+   RBAC — Rol Değiştirme (genişletilmiş)
 ═════════════════════════════════════════════ */
-function setRole(role) {
+function setRole(role, silent) {
   currentRole = role;
+  currentUser.role = role;
 
-  // Tüm pilleri sıfırla, aktif olanı işaretle
-  document.querySelectorAll('.rbac-pill')
-    .forEach(p => p.classList.remove('active'));
-  document.getElementById('pill-' + role).classList.add('active');
+  /* Pill aktifleştir — bar production'da olmayabilir, null-safe */
+  document.querySelectorAll('.rbac-pill').forEach(p => p.classList.remove('active'));
+  const pillEl = document.getElementById('pill-' + role);
+  if (pillEl) pillEl.classList.add('active');
 
-  // Status rozeti
+  /* Status rozeti — null-safe */
   const statusEl = document.getElementById('rbac-status');
   const cfgMap = {
-    admin:  { cls: 'admin',  icon: '⚙️', lbl: 'Admin Görünümü'  },
-    kaptan: { cls: 'kaptan', icon: '👑', lbl: 'Kaptan Görünümü' },
-    oyuncu: { cls: 'oyuncu', icon: '👤', lbl: 'Oyuncu Görünümü' },
+    superadmin: { cls: 'superadmin', icon: '🔱', lbl: 'Süper Admin' },
+    admin:      { cls: 'admin',      icon: '⚙️', lbl: 'Komite Görünümü' },
+    komite:     { cls: 'admin',      icon: '⚙️', lbl: 'Komite Görünümü' },
+    kaptan:     { cls: 'kaptan',     icon: '👑', lbl: 'Kaptan Görünümü' },
+    oyuncu:     { cls: 'oyuncu',     icon: '👤', lbl: 'Oyuncu Görünümü' },
   };
-  const cfg = cfgMap[role];
-  statusEl.className = 'rbac-status ' + cfg.cls;
-  statusEl.textContent = cfg.icon + ' ' + cfg.lbl;
-
-  // Dropdown öğelerini göster / gizle
-  const dKaptan = document.getElementById('drop-kaptan');
-  const dKomite = document.getElementById('drop-komite');
-
-  if (role === 'admin') {
-    dKaptan.classList.remove('hidden');
-    dKomite.classList.remove('hidden');
-  } else if (role === 'kaptan') {
-    dKaptan.classList.remove('hidden');
-    dKomite.classList.add('hidden');
-  } else {
-    dKaptan.classList.add('hidden');
-    dKomite.classList.add('hidden');
+  const cfg = cfgMap[role] || cfgMap.oyuncu;
+  if (statusEl) {
+    statusEl.className   = 'rbac-status ' + cfg.cls;
+    statusEl.textContent = cfg.icon + ' ' + cfg.lbl;
   }
 
-  // Yetkisiz sayfadaysa geri at
-  if (role === 'oyuncu' &&
-      (activeSection === 'kaptan' || activeSection === 'komite')) {
+  /* Dropdown item görünürlüğü — null-safe */
+  const show = (id, visible) => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('hidden', !visible);
+  };
+  const isSA     = role === 'superadmin';
+  const isKomite = role === 'admin' || role === 'komite' || isSA;
+  const isKaptan = role === 'kaptan' || isKomite;
+
+  show('drop-superadmin', isSA);
+  show('drop-kaptan',     isKaptan);
+  show('drop-komite',     isKomite);
+
+  /* Yetkisiz sayfadaysa geri at */
+  if (!canAccess(activeSection)) {
     switchTab('fikstur', null);
-    showToast('⚠️ Bu bölüme erişim yetkiniz yok.');
-    return;
-  }
-  if (role === 'kaptan' && activeSection === 'komite') {
-    switchTab('fikstur', null);
-    showToast('⚠️ Komite paneline erişim yetkiniz yok.');
+    if (!silent) showToast('⚠️ Bu bölüme erişim yetkiniz yok.');
     return;
   }
 
-  const msgs = {
-    admin:  '⚙️ Admin görünümü aktif — Tüm paneller açık.',
-    kaptan: '👑 Kaptan görünümü aktif — Kaptan paneli erişilebilir.',
-    oyuncu: '👤 Oyuncu görünümü aktif — Yalnızca görüntüleme.',
-  };
-  showToast(msgs[role]);
+  if (!silent) {
+    const msgs = {
+      superadmin: '🔱 Süper Admin aktif — Tüm sistem açık.',
+      admin:      '⚙️ Komite görünümü aktif.',
+      komite:     '⚙️ Komite görünümü aktif.',
+      kaptan:     '👑 Kaptan görünümü aktif.',
+      oyuncu:     '👤 Oyuncu görünümü aktif.',
+    };
+    showToast(msgs[role] || msgs.oyuncu);
+  }
 }
 
 /* ═════════════════════════════════════════════
@@ -4500,13 +5615,14 @@ function setRole(role) {
 ═════════════════════════════════════════════ */
 function switchTab(target, clickedBtn) {
 
-  // Yetki kontrolleri
-  if (target === 'kaptan' && currentRole === 'oyuncu') {
-    showToast('⚠️ Kaptan paneline erişmek için Kaptan ya da Admin rolü gereklidir.');
-    return;
-  }
-  if (target === 'komite' && currentRole !== 'admin') {
-    showToast('⚠️ Komite paneline erişmek için Admin rolü gereklidir.');
+  // Yetki kontrolleri — hiyerarşik
+  if (!canAccess(target)) {
+    const msgs = {
+      superadmin: '⚠️ Bu panel yalnızca Süper Admin\'e açıktır.',
+      komite:     '⚠️ Komite paneline erişmek için Komite veya üstü yetki gereklidir.',
+      kaptan:     '⚠️ Kaptan paneline erişmek için Kaptan ya da üstü yetki gereklidir.',
+    };
+    showToast(msgs[target] || '⚠️ Bu bölüme erişim yetkiniz yok.');
     return;
   }
 
@@ -4570,99 +5686,8 @@ function showToast(msg) {
 ═════════════════════════════════════════════════════════ */
 
 /* ── Oyuncu Veri Dizisi ── */
-const players = [
-  {
-    id: 1,
-    name: 'Mehmet Yıldırım',
-    team: 'FUTMEYDANI',
-    pos: 'SNT',
-    posGroup: 'forvet',
-    rating: 88,
-    goals: 14,
-    wins: 5,
-    stats: { hiz: 86, sut: 90, pas: 72, drb: 82, def: 34, fiz: 80 },
-    avClass: 'av-snt',
-    initials: 'MY',
-  },
-  {
-    id: 2,
-    name: 'Erhan Koç',
-    team: 'OKMEYDANI DİŞ',
-    pos: 'MO',
-    posGroup: 'osa',
-    rating: 84,
-    goals: 7,
-    wins: 6,
-    stats: { hiz: 76, sut: 70, pas: 88, drb: 80, def: 62, fiz: 75 },
-    avClass: 'av-mo',
-    initials: 'EK',
-  },
-  {
-    id: 3,
-    name: 'Kadir Aslan',
-    team: 'PUSU FK',
-    pos: 'KL',
-    posGroup: 'kaleci',
-    rating: 86,
-    goals: 0,
-    wins: 7,
-    stats: { hiz: 58, sut: 30, pas: 66, drb: 40, def: 88, fiz: 82 },
-    avClass: 'av-kl',
-    initials: 'KA',
-  },
-  {
-    id: 4,
-    name: 'Burak Demirtaş',
-    team: 'SİSTRUNK',
-    pos: 'STP',
-    posGroup: 'defans',
-    rating: 82,
-    goals: 2,
-    wins: 5,
-    stats: { hiz: 72, sut: 55, pas: 68, drb: 58, def: 86, fiz: 84 },
-    avClass: 'av-stp',
-    initials: 'BD',
-  },
-  {
-    id: 5,
-    name: 'Serhan Yıldız',
-    team: 'EYÜP CİTY',
-    pos: 'SĞK',
-    posGroup: 'forvet',
-    rating: 85,
-    goals: 11,
-    wins: 4,
-    stats: { hiz: 92, sut: 78, pas: 74, drb: 88, def: 30, fiz: 70 },
-    avClass: 'av-kan',
-    initials: 'SY',
-  },
-  {
-    id: 6,
-    name: 'Hakan Çelik',
-    team: 'DETERJAN GÜCÜ',
-    pos: 'BEK',
-    posGroup: 'defans',
-    rating: 79,
-    goals: 1,
-    wins: 8,
-    stats: { hiz: 78, sut: 48, pas: 72, drb: 64, def: 83, fiz: 80 },
-    avClass: 'av-bek',
-    initials: 'HÇ',
-  },
-  {
-    id: 7,
-    name: 'Tarık Güneş',
-    team: 'RÖNTGEN',
-    pos: 'MO',
-    posGroup: 'osa',
-    rating: 81,
-    goals: 9,
-    wins: 3,
-    stats: { hiz: 74, sut: 75, pas: 84, drb: 76, def: 55, fiz: 72 },
-    avClass: 'av-mo',
-    initials: 'TG',
-  },
-];
+/* ─── Production: oyuncular Firebase'den gelecek ─── */
+const players = [];
 
 /* ── Borsa Sabitleri ── */
 const MARKET_BASE_PER_RATING = 210000;   // 80 rating → ~16.8M€ base
@@ -5044,16 +6069,32 @@ function buildCard(player, rank) {
 
 /* ── Top 20 Listesini Sırala ve Render Et ── */
 function renderTop20() {
-  const sorted = [...players]
+  const grid = document.getElementById('t20Grid');
+  if (!grid) return;
+
+  /* Production boş state — Firebase entegrasyona kadar */
+  if (!players || players.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:40px 20px;
+                  font-family:'Rajdhani',sans-serif;font-size:.80rem;
+                  letter-spacing:2px;text-transform:uppercase;color:var(--t3)">
+        <div style="font-size:2.5rem;opacity:.25;margin-bottom:12px">📊</div>
+        Oyuncu verisi bekleniyor — Sezon başladığında burada görünecek
+      </div>`;
+    const inner = document.getElementById('t20TickerInner');
+    if (inner) inner.innerHTML =
+      '<span class="t20-ticker-item"><span class="t20-ticker-name">Sezon Bekleniyor</span></span>'.repeat(8);
+    return;
+  }
+
+  /* Normal render */
+  const sorted = players
     .map(p => ({ ...p, _pp: calcPP(p), _mv: calcMarketValue(p) }))
     .sort((a, b) => b._pp - a._pp)
     .slice(0, 20);
 
-  const grid = document.getElementById('t20Grid');
-  if (!grid) return;
-  grid.innerHTML = sorted
-    .map((p, i) => buildCard(p, i + 1))
-    .join('');
+  /* Tüm kart HTML'ini tek seferde birleştir — min DOM reflow */
+  grid.innerHTML = sorted.map((p, i) => buildCard(p, i + 1)).join('');
 
   buildTicker(sorted);
 }
@@ -5546,9 +6587,25 @@ function rebuildPitchSlots(formation) {
 /* ══════════════════════════════════════════════════════
    KAPTAN PANELİ INIT
 ══════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════
+   KAPTAN PANELİ INIT — İzolasyon Zorunlu
+   Kaptan sadece kendi takımını görebilir ve düzenleyebilir.
+══════════════════════════════════════════════════════ */
 function initCaptainPanel() {
   const pitchField = document.getElementById('pitchField');
   if (!pitchField) return;
+
+  /* ── Kaptan izolasyonu: kaptanın takımını tespit et ── */
+  const captainTeamName = getCaptainTeam();
+
+  /* pitchTeamLabel güncelle */
+  const lbl = document.getElementById('pitchTeamLabel');
+  if (lbl) lbl.textContent = captainTeamName ? `Takımım: ${captainTeamName}` : 'Takımım: —';
+
+  /* Kaptanın takımındaki formasyonu al */
+  if (captainTeamName && teamDB[captainTeamName] && teamDB[captainTeamName].formation) {
+    activeFormation = teamDB[captainTeamName].formation;
+  }
 
   const f = FORMATIONS[activeFormation];
 
@@ -5562,18 +6619,65 @@ function initCaptainPanel() {
 
   const sel = document.getElementById('formationSel');
   if (sel) sel.value = activeFormation;
+
+  /* Formasyon değişince kaptanın takımına kaydet */
+  if (sel && !sel._captainIsolationBound) {
+    sel._captainIsolationBound = true;
+    const origOnChange = sel.onchange;
+    sel.onchange = function() {
+      changeFormation(this.value);
+      if (captainTeamName && teamDB[captainTeamName]) {
+        teamDB[captainTeamName].formation = this.value;
+      }
+    };
+  }
+}
+
+/* Kaptanın takım adını döndür (currentUser.team → memberDB → boş) */
+function getCaptainTeam() {
+  if (currentUser.team) return currentUser.team;
+  /* memberDB'den bul */
+  const member = memberDB.find(m => m.id === currentUser.id || m.name === currentUser.name);
+  if (member && member.team) return member.team;
+  /* teamDB'de kap olarak atanmış mı? */
+  for (const [tn, t] of Object.entries(teamDB)) {
+    if (t.kap === currentUser.name) return tn;
+  }
+  return '';
 }
 
 /* ══════════════════════════════════════════════════════
-   KADRO LİSTESİ — RENDER (güncellendi: stat buton eklendi)
+   KADRO LİSTESİ — RENDER (Kaptan İzolasyonlu)
+   Kaptan sadece kendi takımının kadrosunu görür.
 ══════════════════════════════════════════════════════ */
 function renderRosterList() {
   const mainList  = document.getElementById('rosterList');
   const benchList = document.getElementById('benchList');
   if (!mainList || !benchList) return;
 
-  const main  = captainRoster.slice(0, 7);
-  const bench = captainRoster.slice(7);
+  /* Kaptanın takımındaki kadroyu al */
+  const captainTeamName = getCaptainTeam();
+  const teamKadro = captainTeamName && teamDB[captainTeamName]
+    ? teamDB[captainTeamName].kadro
+    : [];
+
+  /* teamDB kadrosundan kaptan roster formatına dönüştür */
+  const rosterFromTeam = teamKadro.map((pl, idx) => ({
+    id:       idx + 1,
+    name:     pl.nm,
+    pos:      pl.pos,
+    rating:   pl.rating || 75,
+    initials: pl.nm.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase(),
+    cls:      pl.cls,
+    stats:    pl.stats || { HIZ:70, ŞUT:70, PAS:70, DRB:70, DEF:70, FİZ:70 },
+  }));
+
+  /* captainRoster güncel tut (interoperability için) */
+  captainRoster.length = 0;
+  rosterFromTeam.forEach(p => captainRoster.push(p));
+
+  const main  = rosterFromTeam.slice(0, 7);
+  const bench = rosterFromTeam.slice(7);
 
   function buildItem(pl) {
     const onField    = slotState.some(s => s && s.id === pl.id);
@@ -5586,12 +6690,19 @@ function renderRosterList() {
           <div class="ri-name">${pl.name}</div>
           <div class="ri-pos">${pl.pos}</div>
         </div>
-        <div class="ri-rating">${pl.rating}</div>
-        <!-- Stat ayar butonu — her zaman tıklanabilir -->
-        <button class="ri-stat-btn"
-                title="Stat Ayarla"
+        <div class="ri-rating">${pl.rating || '—'}</div>
+        <button class="ri-stat-btn" title="Stat Ayarla"
                 onclick="event.stopPropagation(); openRosterStatModal(${pl.id})">⚙️</button>
       </div>`;
+  }
+
+  if (rosterFromTeam.length === 0) {
+    const emptyMsg = `<div style="font-family:'Rajdhani',sans-serif;font-size:.68rem;
+      letter-spacing:2px;text-transform:uppercase;color:var(--t3);padding:16px 8px">
+      ${captainTeamName ? 'Kadro henüz oluşturulmadı.' : 'Takım ataması bekleniyor.'}</div>`;
+    mainList.innerHTML = emptyMsg;
+    benchList.innerHTML = '';
+    return;
   }
 
   mainList.innerHTML  = main.map(buildItem).join('');
@@ -5602,12 +6713,14 @@ function renderRosterList() {
    KADRODAN OYUNCU SEÇ / SAHAya sür
 ══════════════════════════════════════════════════════ */
 function rosterItemClick(playerId) {
-  const pl      = captainRoster.find(p => p.id === playerId);
-  const onField = slotState.some(s => s && s.id === playerId);
+  /* String/number fark etmez — hem captainRoster hem kadro-index uyumlu */
+  const pid = typeof playerId === 'string' ? playerId : Number(playerId);
+  const pl   = captainRoster.find(p => p.id == pid);   /* == intentional */
+  const onField = slotState.some(s => s && s.id == pid);
 
   /* Sahada olan oyuncu tıklanırsa: stat modal aç */
   if (onField) {
-    openRosterStatModal(playerId);
+    openRosterStatModal(pid);
     return;
   }
 
@@ -5636,7 +6749,7 @@ function slotClick(slotEl) {
 
   /* Boş slot + seçili oyuncu → yerleştir */
   if (selectedRosterId !== null) {
-    const pl = captainRoster.find(p => p.id === selectedRosterId);
+    const pl = captainRoster.find(p => p.id == selectedRosterId);  /* == intentional */
     slotState[slotIdx] = pl;
     selectedRosterId   = null;
     refreshAllSlots();
@@ -5723,8 +6836,20 @@ function openSlotTooltip(slotIdx, slotEl) {
 }
 
 function updateSlotStat(playerId, statKey, value, valEl) {
-  const pl = captainRoster.find(p => p.id === playerId);
-  if (pl) pl.stats[statKey] = parseInt(value);
+  const pl = captainRoster.find(p => p.id == playerId);  /* == intentional */
+  if (pl) {
+    if (!pl.stats) pl.stats = {};
+    pl.stats[statKey] = parseInt(value);
+    /* teamDB kadrosuna da yaz */
+    const teamName = getCaptainTeam();
+    if (teamName && teamDB[teamName]) {
+      const kadroPlayer = teamDB[teamName].kadro.find(k => k.nm === pl.name);
+      if (kadroPlayer) {
+        if (!kadroPlayer.stats) kadroPlayer.stats = {};
+        kadroPlayer.stats[statKey] = parseInt(value);
+      }
+    }
+  }
   if (valEl) valEl.textContent = value;
 }
 
@@ -5747,7 +6872,7 @@ function closeTooltip() {
    ROSTER STAT MODAL — listeden doğrudan stat ayarı
 ══════════════════════════════════════════════════════ */
 function openRosterStatModal(playerId) {
-  const pl = captainRoster.find(p => p.id === playerId);
+  const pl = captainRoster.find(p => p.id == playerId);  /* == intentional */
   if (!pl) return;
   rosterStatPlayerId = playerId;
 
@@ -5774,7 +6899,7 @@ function openRosterStatModal(playerId) {
 }
 
 function updateRsmStat(statKey, value, valEl) {
-  const pl = captainRoster.find(p => p.id === rosterStatPlayerId);
+  const pl = captainRoster.find(p => p.id == rosterStatPlayerId);  /* == intentional */
   if (pl) pl.stats[statKey] = parseInt(value);
   if (valEl) valEl.textContent = value;
 }
@@ -5801,27 +6926,30 @@ function publishLineup() {
     return;
   }
 
-  /* ── Kaptanın takımını tespit et (pitchTeamLabel'dan) ── */
-  const teamLabelEl = document.getElementById('pitchTeamLabel');
-  const teamName    = teamLabelEl?.textContent?.replace('Takımım: ', '').trim();
+  /* ── Kaptan izolasyonu: sadece kendi takımı ── */
+  const teamName = getCaptainTeam();
+  if (!teamName) {
+    showToast('⚠️ Takım atamanız bulunamadı. Lütfen komite ile iletişime geçin.');
+    return;
+  }
 
-  /* ── Formasyonu teamDB'ye kaydet ── */
-  if (teamName && teamDB[teamName]) {
+  /* Formasyonu teamDB'ye kaydet */
+  if (teamDB[teamName]) {
     teamDB[teamName].formation = activeFormation;
   }
 
-  /* ── Kaydedilen kadroyu teamDB'ye yaz (maç saha için) ── */
-  if (teamName && teamDB[teamName]) {
-    const publishedSquad = slotState.filter(Boolean).map(pl => ({
-      init: pl.initials,
-      pos:  pl.pos,
-      cls:  pl.cls,
-      name: pl.name,
-    }));
+  /* Kaydedilen kadroyu teamDB'ye yaz (maç saha için) */
+  const publishedSquad = slotState.filter(Boolean).map(pl => ({
+    init: pl.initials,
+    pos:  pl.pos,
+    cls:  pl.cls,
+    name: pl.name,
+  }));
+  if (teamDB[teamName]) {
     teamDB[teamName].publishedSquad = publishedSquad;
   }
 
-  showToast(`🚀 Kadro yayınlandı! ${total}/${total} · Formasyon: ${f?.label || activeFormation}${teamName ? ' · ' + teamName : ''}`);
+  showToast(`🚀 Kadro yayınlandı! ${total}/${total} · Formasyon: ${f?.label || activeFormation} · ${teamName}`);
 }
 
 /* Sahaya tıklanarak pitch tooltip'i kapat */
@@ -5839,6 +6967,15 @@ document.addEventListener('click', function(e) {
 document.addEventListener('DOMContentLoaded', function () {
   /* Fikstür başlangıçta aktif — hemen render et */
   renderFixture();
+
+  /* Kullanıcı rolünü uygula — dropdown'ları ve yetkili alanları açar */
+  setRole(currentUser.role);
+
+  /* SA arama inputuna debounce bağla (300ms) */
+  const saSearch = document.getElementById('memberSearch');
+  if (saSearch) {
+    saSearch.oninput = debounce(renderMemberTable, 300);
+  }
   if (document.getElementById('sec-top20')?.classList.contains('active')) {
     renderTop20();
   }
@@ -5987,15 +7124,26 @@ function allPlayers() {
   return list;
 }
 
+/* ─── Performans: Debounce yardımcı fonksiyonu ─── */
+function debounce(fn, ms) {
+  let t;
+  return function(...args) {
+    clearTimeout(t);
+    t = setTimeout(() => fn.apply(this, args), ms);
+  };
+}
+
 /* ═══════════════════════════════════════════════════════════
-   GRUPLAR — RENDER
+   GRUPLAR — RENDER  (optimize: tek innerHTML yazımı)
 ═══════════════════════════════════════════════════════════ */
 function renderGroups() {
   const container = document.getElementById('grpOuter');
   if (!container) return;
 
   const groups = { A: [], B: [], C: [] };
-  Object.entries(teamDB).forEach(([nm, t]) => groups[t.grp].push({ nm, t }));
+  Object.entries(teamDB).forEach(([nm, t]) => {
+    if (groups[t.grp]) groups[t.grp].push({ nm, t });
+  });
 
   const groupMeta = {
     A: { sub: 'Kuzey Kanadi · 4 Takım' },
@@ -6003,9 +7151,17 @@ function renderGroups() {
     C: { sub: 'Doğu Kanadi · 4 Takım' },
   };
 
-  let html = '';
-  ['A', 'B', 'C'].forEach(grpKey => {
-    const teams = groups[grpKey].sort((a, b) => {
+  /* Toplam oynanan maç sayısına göre badge */
+  function groupBadge(teams) {
+    const totalPlayed = teams.reduce((s, { t }) => s + t.o, 0);
+    if (totalPlayed === 0) return '<div class="grp-hd-badge">🔔 Başlamadı</div>';
+    const maxGames = teams.length * (teams.length - 1);   /* round-robin toplam */
+    const totalMax = teams.reduce((s, { t }) => s + (teams.length - 1), 0) / 2 * teams.length;
+    return `<div class="grp-hd-badge grp-hd-badge-live">🟢 Devam Ediyor</div>`;
+  }
+
+  const parts = ['A', 'B', 'C'].map(grpKey => {
+    const teams = groups[grpKey].slice().sort((a, b) => {
       const pa = a.t.g * 3 + a.t.b, pb = b.t.g * 3 + b.t.b;
       if (pb !== pa) return pb - pa;
       return (b.t.ag - b.t.yg) - (a.t.ag - a.t.yg);
@@ -6013,9 +7169,9 @@ function renderGroups() {
 
     const rows = teams.map((item, idx) => {
       const { nm, t } = item;
-      const pts = t.g * 3 + t.b;
-      const av  = t.ag - t.yg;
-      const avClass = av > 0 ? 'av-pos' : av < 0 ? 'av-neg' : 'av-zero';
+      const pts      = t.g * 3 + t.b;
+      const av       = t.ag - t.yg;
+      const avClass  = av > 0 ? 'av-pos' : av < 0 ? 'av-neg' : 'av-zero';
       const rowClass = idx === 0 ? 'leader' : idx === 1 ? 'second' : '';
       const initials = nm.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
       return `
@@ -6036,7 +7192,7 @@ function renderGroups() {
         </div>`;
     }).join('');
 
-    html += `
+    return `
       <div class="grp-card">
         <div class="grp-card-hd">
           <div class="grp-letter-badge">${grpKey}</div>
@@ -6044,7 +7200,7 @@ function renderGroups() {
             <div class="grp-hd-name">Grup ${grpKey}</div>
             <div class="grp-hd-sub">${groupMeta[grpKey].sub}</div>
           </div>
-          <div class="grp-hd-badge">🔄 Başlamadı</div>
+          ${groupBadge(teams)}
         </div>
         <div class="grp-table-head">
           <div class="grp-th">#</div>
@@ -6062,7 +7218,8 @@ function renderGroups() {
       </div>`;
   });
 
-  container.innerHTML = html;
+  /* Tek seferde DOM'a yaz */
+  container.innerHTML = parts.join('');
 }
 
 /* ─── Takım Detay Modalı ─── */
@@ -6213,7 +7370,7 @@ function renderScorers() {
 let statAmount = 1; // artımlı miktar
 
 /* ═══════════════════════════════════════════════════════════
-   MAÇ SONUÇLARI DEPOSU
+   MAÇ SONUÇLARI DEPOSU  — Production: başlangıçta boş
    { matchId: { hg, ag, t1, t2, scorers:[{name,team,goals}] } }
 ═══════════════════════════════════════════════════════════ */
 const matchResults = {};
@@ -6534,17 +7691,29 @@ function loadCaptainPlayers() {
   }
 }
 
-/* Kaptan ata */
+/* Kaptan ata (kayıtlı üye öncelikli) */
 function assignCaptan() {
-  const tn  = document.getElementById('captainTeamSel')?.value;
-  const nm  = document.getElementById('captainPlayerSel')?.value;
+  const tn     = document.getElementById('captainTeamSel')?.value;
+  /* Önce kayıtlı üye seçimine bak */
+  const memNm  = document.getElementById('captainMemberSel')?.value;
+  const plNm   = document.getElementById('captainPlayerSel')?.value;
+  const nm     = memNm || plNm;
+
   if (!tn || !nm) { showToast('⚠️ Takım ve oyuncu seçin!'); return; }
 
   teamDB[tn].kap = nm;
+
+  /* Kayıtlı üyenin rolünü kaptan yap */
+  const member = memberDB.find(m => m.name === nm);
+  if (member && member.role === 'oyuncu') {
+    member.role = 'kaptan';
+  }
+
   const cc     = document.getElementById('currentCaptainShow');
   const capVal = document.getElementById('currentCaptainVal');
-  if (cc) cc.style.display = 'flex';
+  if (cc)     cc.style.display = 'flex';
   if (capVal) capVal.textContent = nm;
+
   showToast(`👑 ${nm} → ${tn} takımının kaptanı olarak atandı!`);
 }
 
@@ -6582,23 +7751,203 @@ function renderKomChart() {
 }
 
 /* Tüm aktif view'ları güncelle (skor/stat girişi sonrası) */
+/* ─── refreshAllViews: rAF ile batch DOM yazımı ─── */
+let _rafPending = false;
 function refreshAllViews() {
-  renderGroups();
-  renderScorers();
-  renderKomChart();
-  /* Top 20 görünüyorsa onu da yenile */
-  if (document.getElementById('sec-top20')?.classList.contains('active')) renderTop20();
+  if (_rafPending) return;          /* zaten kuyruktaysa ikinci çağrıyı atla */
+  _rafPending = true;
+  requestAnimationFrame(() => {
+    _rafPending = false;
+    renderGroups();
+    renderScorers();
+    renderKomChart();
+    if (document.getElementById('sec-top20')?.classList.contains('active')) renderTop20();
+  });
 }
 
 /* ─── switchTab override'ı genişlet — Gruplar, Gol, Komite ─── */
 const _origSwitchTab2 = switchTab;
 switchTab = function(target, btn) {
   _origSwitchTab2(target, btn);
-  if (target === 'gruplar') setTimeout(renderGroups, 50);
-  if (target === 'gol')     setTimeout(renderScorers, 50);
-  if (target === 'komite')  setTimeout(initCommittee, 50);
-  if (target === 'fixture') setTimeout(renderFixture, 50);
+  if (target === 'gruplar')    setTimeout(renderGroups, 50);
+  if (target === 'gol')        setTimeout(renderScorers, 50);
+  if (target === 'komite')     setTimeout(initCommittee, 50);
+  if (target === 'fixture')    setTimeout(renderFixture, 50);
+  if (target === 'superadmin') setTimeout(initSuperAdmin, 50);
+  /* Kurallar sekmesi — sadece scroll başa al */
+  if (target === 'kurallar') {
+    const sec = document.getElementById('sec-kurallar');
+    if (sec) setTimeout(() => { const o = sec.querySelector('.kural-outer'); if (o) o.scrollTop = 0; }, 30);
+  }
 };
+
+/* ═════════════════════════════════════════════════════════════
+   SÜPER ADMİN PANELİ — FONKSİYONLAR
+═════════════════════════════════════════════════════════════ */
+
+function initSuperAdmin() {
+  renderMemberTable();
+  renderActiveKomite();
+  /* Hızlı yetki atama dropdown */
+  const sel = document.getElementById('saGrantMemberSel');
+  if (sel) {
+    sel.innerHTML = '<option value="">— Üye Seç —</option>';
+    memberDB.forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m.id;
+      opt.textContent = `${m.name} · ${m.team || '—'}`;
+      sel.appendChild(opt);
+    });
+  }
+}
+
+/* Üye tablosu render */
+function renderMemberTable() {
+  const body      = document.getElementById('memberTableBody');
+  const summary   = document.getElementById('saSummary');
+  if (!body) return;
+
+  const search     = document.getElementById('memberSearch')?.value?.toLowerCase() || '';
+  const roleFilter = document.getElementById('memberRoleFilter')?.value || '';
+
+  const filtered = memberDB.filter(m => {
+    const matchSearch = !search ||
+      m.name.toLowerCase().includes(search) ||
+      m.team.toLowerCase().includes(search);
+    const matchRole = !roleFilter || m.role === roleFilter;
+    return matchSearch && matchRole;
+  });
+
+  if (filtered.length === 0) {
+    body.innerHTML = '<div class="sa-empty">Eşleşen üye bulunamadı.</div>';
+    return;
+  }
+
+  body.innerHTML = filtered.map(m => `
+    <div class="sa-row">
+      <div class="sa-td sa-td-name">${m.name}</div>
+      <div class="sa-td sa-td-team">${m.team || '—'}</div>
+      <div class="sa-td">${m.pos || '—'}</div>
+      <div class="sa-td" style="font-size:.62rem">${m.foot || '—'}</div>
+      <div class="sa-td">
+        <span class="sa-role-badge ${m.role}">${roleTr(m.role)}</span>
+      </div>
+      <div class="sa-td">
+        <div class="sa-action-btns">
+          <button class="sa-act-btn sa-act-komite" onclick="quickGrant('${m.id}','komite')"
+                  ${m.role === 'superadmin' ? 'disabled style="opacity:.3;cursor:not-allowed"' : ''}>
+            Komite
+          </button>
+          <button class="sa-act-btn sa-act-kaptan" onclick="quickGrant('${m.id}','kaptan')"
+                  ${m.role === 'superadmin' ? 'disabled style="opacity:.3;cursor:not-allowed"' : ''}>
+            Kaptan
+          </button>
+          <button class="sa-act-btn sa-act-reset" onclick="quickGrant('${m.id}','oyuncu')"
+                  ${m.role === 'superadmin' ? 'disabled style="opacity:.3;cursor:not-allowed"' : ''}>
+            Sıfırla
+          </button>
+        </div>
+      </div>
+    </div>`).join('');
+
+  /* Özet */
+  if (summary) {
+    const counts = { superadmin:0, komite:0, kaptan:0, oyuncu:0 };
+    memberDB.forEach(m => { counts[m.role] = (counts[m.role] || 0) + 1; });
+    summary.innerHTML = `
+      <span class="sa-sum-chip">${memberDB.length} Üye</span>
+      <span class="sa-sum-chip" style="color:#cc88ff">${counts.superadmin} Süper Admin</span>
+      <span class="sa-sum-chip" style="color:var(--gold)">${counts.komite} Komite</span>
+      <span class="sa-sum-chip" style="color:#ff8899">${counts.kaptan} Kaptan</span>
+      <span class="sa-sum-chip" style="color:var(--cyan)">${counts.oyuncu} Oyuncu</span>`;
+  }
+}
+
+/* Aktif komite listesi */
+function renderActiveKomite() {
+  const el = document.getElementById('activeKomiteList');
+  if (!el) return;
+  const list = memberDB.filter(m => m.role === 'komite');
+  if (list.length === 0) {
+    el.innerHTML = '<div class="sa-empty">Henüz komite üyesi atanmadı.</div>';
+    return;
+  }
+  el.innerHTML = list.map(m => `
+    <div class="sa-komite-item">
+      <div class="sa-ki-name">${m.name}</div>
+      <div class="sa-ki-team">${m.team || '—'}</div>
+      <button class="sa-ki-revoke" onclick="quickGrant('${m.id}','oyuncu')">✕ Kaldır</button>
+    </div>`).join('');
+}
+
+/* Hızlı yetki atama (tablo butonundan) */
+function quickGrant(userId, newRole) {
+  const m = memberDB.find(u => u.id === userId);
+  if (!m) return;
+  if (m.role === 'superadmin') { showToast('⚠️ Süper Admin rolü değiştirilemez.'); return; }
+  const old = m.role;
+  m.role = newRole;
+  renderMemberTable();
+  renderActiveKomite();
+  /* Komite atandıysa teamDB kaptan bilgisini de güncelle */
+  if (newRole === 'kaptan' && m.team && teamDB[m.team]) {
+    teamDB[m.team].kap = m.name;
+  }
+  showToast(`✅ ${m.name} → ${roleTr(newRole)} rolüne atandı.`);
+}
+
+/* Hızlı yetki atama formu */
+function grantRole() {
+  const uid     = document.getElementById('saGrantMemberSel')?.value;
+  const roleEl  = document.querySelector('input[name="saGrantRole"]:checked');
+  const newRole = roleEl?.value || 'oyuncu';
+  if (!uid) { showToast('⚠️ Lütfen bir üye seçin.'); return; }
+  quickGrant(uid, newRole);
+}
+
+/* Rol Türkçe çeviri */
+function roleTr(role) {
+  const map = { superadmin:'Süper Admin', komite:'Komite', kaptan:'Kaptan', oyuncu:'Oyuncu', admin:'Komite' };
+  return map[role] || role;
+}
+
+/* ─── Komite Kaptan Atama — kayıtlı üye entegrasyonu ─── */
+function loadCaptainPlayers() {
+  const tn      = document.getElementById('captainTeamSel')?.value;
+  const plSel   = document.getElementById('captainPlayerSel');
+  const memSel  = document.getElementById('captainMemberSel');
+  const cc      = document.getElementById('currentCaptainShow');
+  if (!plSel) return;
+
+  /* Kadro dropdown */
+  plSel.innerHTML = '<option value="">— Kadrodan Seç —</option>';
+  if (tn && teamDB[tn]) {
+    teamDB[tn].kadro.forEach(pl => {
+      const opt = document.createElement('option');
+      opt.value = pl.nm; opt.textContent = `${pl.nm} (${pl.pos})`;
+      plSel.appendChild(opt);
+    });
+  }
+
+  /* Kayıtlı üye dropdown — o takıma kayıtlı üyeler */
+  if (memSel) {
+    memSel.innerHTML = '<option value="">— Kayıtlı Üye Seç —</option>';
+    memberDB.filter(m => m.team === tn).forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m.name;
+      opt.textContent = `${m.name} · ${m.pos || '—'} [${roleTr(m.role)}]`;
+      memSel.appendChild(opt);
+    });
+  }
+
+  /* Mevcut kaptan */
+  if (cc && tn) {
+    const t = teamDB[tn];
+    cc.style.display = t?.kap ? 'flex' : 'none';
+    const capVal = document.getElementById('currentCaptainVal');
+    if (capVal && t?.kap) capVal.textContent = t.kap;
+  }
+}
 
 /* ESC — tüm modalları kapat */
 document.addEventListener('keydown', function(e) {
@@ -6846,8 +8195,90 @@ function setText(id, val) {
   if (el) el.textContent = val;
 }
 
-/* switchTab — profil sekmesi */
-const _origSwitchTabProfile = switchTab;
+/* ═══════════════════════════════════════════════════════════════
+   ONBOARDING CAROUSEL — JS
+═══════════════════════════════════════════════════════════════ */
+
+const OB_TOTAL   = 6;
+let   obStep     = 0;
+
+function obRender() {
+  const track    = document.getElementById('obTrack');
+  const dots     = document.querySelectorAll('.ob-dot');
+  const counter  = document.getElementById('obCounter');
+  const progBar  = document.getElementById('obProgressBar');
+  const btnBack  = document.getElementById('obBtnBack');
+  const btnNext  = document.getElementById('obBtnNext');
+  const btnStart = document.getElementById('obBtnStart');
+
+  /* Slaytı kaydır */
+  if (track) track.style.transform = `translateX(-${obStep * 100}%)`;
+
+  /* Dot'lar */
+  dots.forEach((d, i) => {
+    d.classList.toggle('active', i === obStep);
+    d.classList.toggle('done',   i < obStep);
+  });
+
+  /* İlerleme barı */
+  const pct = ((obStep + 1) / OB_TOTAL) * 100;
+  if (progBar) progBar.style.width = pct + '%';
+
+  /* Sayaç */
+  if (counter) counter.textContent = `${obStep + 1} / ${OB_TOTAL}`;
+
+  /* Butonlar */
+  if (btnBack)  btnBack.disabled = (obStep === 0);
+  const isLast = obStep === OB_TOTAL - 1;
+  if (btnNext)  btnNext.style.display  = isLast ? 'none'  : '';
+  if (btnStart) btnStart.style.display = isLast ? ''      : 'none';
+}
+
+function obNext() {
+  if (obStep < OB_TOTAL - 1) { obStep++; obRender(); }
+}
+
+function obPrev() {
+  if (obStep > 0) { obStep--; obRender(); }
+}
+
+function obGoTo(i) {
+  obStep = Math.max(0, Math.min(OB_TOTAL - 1, i));
+  obRender();
+}
+
+function openOnboarding() {
+  obStep = 0;
+  obRender();
+  document.getElementById('obOverlay')?.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeOnboarding() {
+  document.getElementById('obOverlay')?.classList.remove('open');
+  document.body.style.overflow = '';
+  try { localStorage.setItem('ob_seen_v1', '1'); } catch(e) {}
+}
+
+/* Klavye desteği */
+document.addEventListener('keydown', function(e) {
+  const ov = document.getElementById('obOverlay');
+  if (!ov?.classList.contains('open')) return;
+  if (e.key === 'ArrowRight' || e.key === 'Enter') obNext();
+  if (e.key === 'ArrowLeft')                       obPrev();
+  if (e.key === 'Escape')                          closeOnboarding();
+});
+
+/* İlk açılış — localStorage kontrolü */
+document.addEventListener('DOMContentLoaded', function() {
+  try {
+    if (!localStorage.getItem('ob_seen_v1')) {
+      setTimeout(openOnboarding, 600);
+    }
+  } catch(e) {
+    setTimeout(openOnboarding, 600);
+  }
+});
 switchTab = function(target, btn) {
   _origSwitchTabProfile(target, btn);
   if (target === 'profil') setTimeout(renderProfileCard, 50);
