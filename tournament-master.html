@@ -5038,6 +5038,9 @@ html, body {
             </div>
 
             <!-- Kayıt / Profil Güncelle butonu -->
+            <button class="prf-register-btn" id="statAyarlaBtn" onclick="openMyStatModal()" style="margin-bottom:8px;background:rgba(0,212,255,.08);border-color:var(--b2);color:var(--cyan);display:none">
+              ⚙️ Statlarımı Ayarla
+            </button>
             <button class="prf-register-btn" onclick="openRegisterModal()">
               ✏️ Profil Bilgilerini Güncelle
             </button>
@@ -6714,7 +6717,7 @@ function renderRosterList() {
     rating:   pl.rating || 75,
     initials: pl.nm.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase(),
     cls:      pl.cls,
-    stats:    pl.stats || { HIZ:70, ŞUT:70, PAS:70, DRB:70, DEF:70, FİZ:70 },
+    stats:    (pl.stats && Object.keys(pl.stats).length > 0) ? pl.stats : { ...DEFAULT_STATS },
   }));
 
   /* captainRoster güncel tut (interoperability için) */
@@ -6736,8 +6739,8 @@ function renderRosterList() {
           <div class="ri-pos">${pl.pos}</div>
         </div>
         <div class="ri-rating">${pl.rating || '—'}</div>
-        <button class="ri-stat-btn" title="Stat Ayarla"
-                onclick="event.stopPropagation(); openRosterStatModal(${pl.id})">⚙️</button>
+        ${(currentRole === 'superadmin' || currentRole === 'kaptan') ? `<button class="ri-stat-btn" title="Stat Ayarla"
+                onclick="event.stopPropagation(); openRosterStatModal(${pl.id})">⚙️</button>` : ''}
         <button class="ri-stat-btn" title="Takımdan Çıkar" style="color:#ff4466;margin-left:2px"
                 onclick="event.stopPropagation(); kickFromTeam(${JSON.stringify(pl.name)})">✕</button>
       </div>`;
@@ -6918,28 +6921,93 @@ function closeTooltip() {
 /* ══════════════════════════════════════════════════════
    ROSTER STAT MODAL — listeden doğrudan stat ayarı
 ══════════════════════════════════════════════════════ */
+/* Varsayılan stat şablonu */
+const DEFAULT_STATS = { HIZ:70, SUT:70, PAS:70, DRB:70, DEF:70, FIZ:70 };
+const STAT_LABELS_TR = { HIZ:'Hız', SUT:'Şut', PAS:'Pas', DRB:'Dribling', DEF:'Defans', FIZ:'Fizik' };
+
 function openRosterStatModal(playerId) {
-  const pl = captainRoster.find(p => p.id == playerId);  /* == intentional */
-  if (!pl) return;
-  rosterStatPlayerId = playerId;
+  /* Yetki kontrolü */
+  const isSuperAdmin = currentRole === 'superadmin';
+  const isKaptan     = currentRole === 'kaptan';
+  if (!isSuperAdmin && !isKaptan) {
+    showToast('⚠️ Stat ayarlama yetkisi yok. Sadece kaptanlar kendi takımını, Süper Admin herkesi ayarlayabilir.');
+    return;
+  }
+
+  /* Önce captainRoster'da ara, sonra tüm teamDB'de */
+  let pl = captainRoster.find(p => p.id == playerId);
+
+  if (!pl) {
+    /* teamDB'de doğrudan ara */
+    for (const [tn, t] of Object.entries(teamDB)) {
+      const found = t.kadro.find(k => k.id == playerId || k.nm == playerId);
+      if (found) {
+        pl = {
+          id:       found.id,
+          name:     found.nm,
+          pos:      found.pos,
+          rating:   found.rating || 75,
+          initials: (found.nm||'').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase(),
+          cls:      found.cls || 'av-mo',
+          stats:    found.stats || {}
+        };
+        break;
+      }
+    }
+  }
+
+  if (!pl) { showToast('⚠️ Oyuncu bulunamadı.'); return; }
+
+  /* Kaptan sadece kendi takımının oyuncusunu ayarlayabilir */
+  if (isKaptan && !isSuperAdmin) {
+    const captainTeam = getCaptainTeam();
+    const plTeam = (() => {
+      for (const [tn, t] of Object.entries(teamDB)) {
+        if (t.kadro.find(k => k.id == pl.id || k.nm === pl.name)) return tn;
+      }
+      return null;
+    })();
+    if (captainTeam && plTeam && captainTeam !== plTeam) {
+      showToast('⚠️ Sadece kendi takımının (' + captainTeam + ') oyuncularını ayarlayabilirsin.');
+      return;
+    }
+  }
+
+  rosterStatPlayerId = pl.id;
+
+  /* Stats boşsa default değerleri kullan */
+  const statKeys = Object.keys(pl.stats || {}).filter(k => Object.keys(DEFAULT_STATS).includes(k));
+  if (statKeys.length === 0) {
+    pl.stats = { ...DEFAULT_STATS };
+  }
+  /* Eksik stat anahtarlarını tamamla */
+  Object.keys(DEFAULT_STATS).forEach(k => {
+    if (pl.stats[k] === undefined) pl.stats[k] = DEFAULT_STATS[k];
+  });
 
   /* Avatar & bilgi */
   const av = document.getElementById('rsmAv');
-  av.className   = 'rsm-av ' + pl.cls;
-  av.textContent = pl.initials;
-  document.getElementById('rsmName').textContent = pl.name;
-  document.getElementById('rsmMeta').textContent = `${pl.pos} · OVR ${pl.rating} · ${slotState.some(s => s && s.id === playerId) ? '🟢 Sahada' : '🔵 Yedek'}`;
+  if (av) { av.className = 'rsm-av ' + (pl.cls||'av-mo'); av.textContent = pl.initials; }
+  const nameEl = document.getElementById('rsmName');
+  const metaEl = document.getElementById('rsmMeta');
+  if (nameEl) nameEl.textContent = pl.name;
+  if (metaEl) metaEl.textContent = `${pl.pos} · OVR ${pl.rating || 75} · ${slotState.some(s => s && s.id == pl.id) ? '🟢 Sahada' : '🔵 Yedek'}`;
 
-  /* Slider'lar */
-  const sliders = Object.entries(pl.stats).map(([key, val]) => `
+  /* Slider'lar — sabit sırada göster */
+  const sliders = Object.entries(DEFAULT_STATS).map(([key]) => {
+    const val = pl.stats[key] || DEFAULT_STATS[key];
+    return `
     <div class="rsm-sl-row">
-      <div class="rsm-sl-lbl">${key}</div>
+      <div class="rsm-sl-lbl">${STAT_LABELS_TR[key] || key}</div>
       <input type="range" class="stt-stat-slider" min="1" max="99" value="${val}"
              id="rsm-sl-${key}"
              oninput="updateRsmStat('${key}',this.value,document.getElementById('rsm-val-${key}'))">
       <div class="rsm-sl-val" id="rsm-val-${key}">${val}</div>
-    </div>`).join('');
-  document.getElementById('rsmSliders').innerHTML = sliders;
+    </div>`;
+  }).join('');
+
+  const slidersEl = document.getElementById('rsmSliders');
+  if (slidersEl) slidersEl.innerHTML = sliders;
 
   document.getElementById('rosterStatModal').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -6951,14 +7019,62 @@ function updateRsmStat(statKey, value, valEl) {
   if (valEl) valEl.textContent = value;
 }
 
+
+/* ── Kendi stat modalını aç — sadece superadmin ── */
+function openMyStatModal() {
+  if (currentRole !== 'superadmin' && currentRole !== 'kaptan') {
+    showToast('⚠️ Stat ayarlama yetkisi yok.');
+    return;
+  }
+  const p = currentProfile;
+  if (!p || !p.name) { showToast('⚠️ Önce profilinizi kaydedin.'); return; }
+
+  /* teamDB'de kendini bul */
+  let foundId = null;
+  for (const [tn, t] of Object.entries(teamDB)) {
+    const pl = t.kadro.find(k => k.nm === p.name);
+    if (pl) { foundId = pl.id; break; }
+  }
+
+  if (!foundId) {
+    /* Kadro yok — geçici obje oluştur */
+    rosterStatPlayerId = 'self';
+    const av = document.getElementById('rsmAv');
+    const initials = p.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+    if (av) { av.className = 'rsm-av av-mo'; av.textContent = initials; }
+    const nameEl = document.getElementById('rsmName');
+    const metaEl = document.getElementById('rsmMeta');
+    if (nameEl) nameEl.textContent = p.name;
+    if (metaEl) metaEl.textContent = p.pos + ' · Henüz kadro yok';
+
+    const sliders = Object.entries(DEFAULT_STATS).map(([key]) => {
+      const val = DEFAULT_STATS[key];
+      return `<div class="rsm-sl-row">
+        <div class="rsm-sl-lbl">${STAT_LABELS_TR[key]||key}</div>
+        <input type="range" class="stt-stat-slider" min="1" max="99" value="${val}"
+               id="rsm-sl-${key}"
+               oninput="updateRsmStat('${key}',this.value,document.getElementById('rsm-val-${key}'))">
+        <div class="rsm-sl-val" id="rsm-val-${key}">${val}</div>
+      </div>`;
+    }).join('');
+    const slidersEl = document.getElementById('rsmSliders');
+    if (slidersEl) slidersEl.innerHTML = sliders;
+    document.getElementById('rosterStatModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    return;
+  }
+
+  openRosterStatModal(foundId);
+}
+
 function saveRosterStats() {
   const pl = captainRoster.find(p => p.id == rosterStatPlayerId);
   if (!pl) { closeRosterStatModal(); return; }
 
-  /* Slider değerlerini oku */
-  Object.keys(pl.stats).forEach(key => {
+  /* Slider değerlerini oku — DEFAULT_STATS anahtarları üzerinden */
+  Object.keys(DEFAULT_STATS).forEach(key => {
     const inp = document.getElementById('rsm-sl-' + key);
-    if (inp) pl.stats[key] = parseInt(inp.value) || pl.stats[key];
+    if (inp) pl.stats[key] = parseInt(inp.value) || DEFAULT_STATS[key];
   });
 
   /* OVR hesapla (ağırlıklı ortalama) */
@@ -8200,6 +8316,12 @@ function renderProfileCard() {
   /* Sec-bar chip güncelle */
   setText('profileTeamBadge', p.team ? '🏟️ ' + p.team : '🏟️ Takım Seçilmedi');
 
+  /* Stat butonu — sadece kaptan/superadmin görür */
+  const statBtn = document.getElementById('statAyarlaBtn');
+  if (statBtn) {
+    statBtn.style.display = (currentRole === 'superadmin' || currentRole === 'kaptan') ? '' : 'none';
+  }
+
   /* OVR bilgi chipini güncelle */
   const ovrChip = document.getElementById('profileOvrChip');
   if (ovrChip) ovrChip.textContent = 'OVR ' + ovr + ' · Kaptandan';
@@ -8450,9 +8572,12 @@ async function tmLoadAllMembers() {
           nm:      u.name,
           pos:     u.pos  || '',
           cls:     clsMap[u.pos] || 'av-mo',
-          gol:     0, sari: 0, kirmizi: 0, mac: 0,
-          rating:  u.rating || 75,
-          stats:   u.stats  || {}
+          gol:     u.gol     || 0,
+          sari:    u.sari    || 0,
+          kirmizi: u.kirmizi || 0,
+          mac:     u.mac     || 0,
+          rating:  u.rating  || 75,
+          stats:   (u.stats && Object.keys(u.stats).length > 0) ? u.stats : { ...DEFAULT_STATS }
         });
       }
     });
@@ -8573,17 +8698,35 @@ async function tmSaveProfile(name, team, pos, foot) {
 // ════════════════════════════════════
 const _origSaveFixtureScore = typeof saveFixtureScore === 'function' ? saveFixtureScore : null;
 if (_origSaveFixtureScore) {
-  window.saveFixtureScore = function() {
+  window.saveFixtureScore = async function() {
     _origSaveFixtureScore();
-    // Kaydedilen maçı ve etkilenen takımları DB'ye yaz
-    setTimeout(async () => {
+    try {
       const mid = document.getElementById('fixtureMatchSel')?.value;
-      if (mid && matchResults[mid]) {
-        await tmSaveMatchResult(mid, matchResults[mid]);
+      const res = matchResults[mid];
+      if (!mid || !res) return;
+
+      // 1. Maç sonucunu turnuva_matches'e kaydet
+      await tmSaveMatchResult(mid, res);
+
+      // 2. Sadece bu maçtaki iki takımı turnuva_teams'e kaydet
+      await tmSaveTeam(res.t1);
+      await tmSaveTeam(res.t2);
+
+      // 3. Golcülerin turnuva_users kaydını güncelle
+      if (res.scorers && res.scorers.length > 0) {
+        for (const sc of res.scorers) {
+          const dbKey = sc.name.toLowerCase();
+          const snap  = await _tmDB.ref('turnuva_users/' + dbKey).once('value');
+          if (snap.exists()) {
+            const cur = snap.val().gol || 0;
+            await _tmDB.ref('turnuva_users/' + dbKey).update({ gol: cur + sc.goals });
+          }
+        }
       }
-      // Tüm teamDB'yi kaydet (puan tablosu)
-      for (const tn of Object.keys(teamDB)) { await tmSaveTeam(tn); }
-    }, 100);
+
+      console.log('[TM] Maç kaydedildi Firebase:', mid, res.t1, res.hg, '-', res.ag, res.t2);
+      showToast('💾 Firebase'e kaydedildi!');
+    } catch(e) { console.warn('[TM] saveFixtureScore Firebase:', e); }
   };
 }
 
@@ -8599,6 +8742,43 @@ if (_origQuickGrant) {
       const dbKey = (m.name||'').toLowerCase();
       tmSaveUserRole(dbKey, newRole, m.team||'');
     }
+  };
+}
+
+// ════════════════════════════════════
+// Hook: addStat → Firebase'e yaz
+// ════════════════════════════════════
+const _origAddStat = typeof addStat === 'function' ? addStat : null;
+if (_origAddStat) {
+  window.addStat = async function(type) {
+    _origAddStat(type);
+    try {
+      const plId = document.getElementById('statPlayer')?.value;
+      if (!plId) return;
+
+      // Oyuncuyu teamDB'de bul
+      let foundPl = null, foundTeam = null;
+      for (const [tn, t] of Object.entries(teamDB)) {
+        const pl = t.kadro.find(p => p.id === plId);
+        if (pl) { foundPl = pl; foundTeam = tn; break; }
+      }
+      if (!foundPl || !foundTeam) return;
+
+      // 1. Takım kadrosunu (istatistiklerle) turnuva_teams'e kaydet
+      await tmSaveTeam(foundTeam);
+
+      // 2. turnuva_users'da bu oyuncunun istatistiğini güncelle
+      const dbKey = foundPl.nm.toLowerCase();
+      const snap  = await _tmDB.ref('turnuva_users/' + dbKey).once('value');
+      if (snap.exists()) {
+        const update = {};
+        update[type] = foundPl[type] || 0;
+        if (type === 'gol') update.mac = foundPl.mac || 0;
+        await _tmDB.ref('turnuva_users/' + dbKey).update(update);
+      }
+
+      console.log('[TM] addStat Firebase:', foundPl.nm, type, foundPl[type]);
+    } catch(e) { console.warn('[TM] addStat Firebase:', e); }
   };
 }
 
