@@ -2788,6 +2788,9 @@ html, body {
     letter-spacing: 1px;
   }
 
+  /* Lobi/Çıkış text küçük */
+  .nav-right .nav-drop-btn span { font-size: .58rem; letter-spacing: 1px; }
+
   /* Dropdown pozisyonu: sağa taşmasın */
   .nav-drop-menu {
     right: 0;
@@ -2804,12 +2807,20 @@ html, body {
 /* ── Breakpoint 480px: küçük telefon ── */
 @media (max-width: 480px) {
 
-  .navbar { padding: 0 8px; height: 52px; }
-  .nav-logo-text { display: none; }    /* logo sadece ikon */
-  .nav-logo { margin-right: 4px; }
+  .navbar { padding: 0 6px; height: 52px; gap: 2px; }
+  .nav-logo-text { display: none; }
+  .nav-logo { margin-right: 2px; }
+  .nav-logo-badge { width: 28px; height: 28px; }
 
-  .nav-tab { padding: 5px 8px; font-size: .60rem; letter-spacing: .8px; }
+  .nav-tab { padding: 5px 7px; font-size: .58rem; letter-spacing: .6px; }
   .tab-dot { display: none !important; }
+
+  /* Lobi/Çıkış butonlarında sadece emoji göster */
+  .nav-btn-label { display: none; }
+  #navLobiBtn, #navCikisBtn { padding: 5px 8px; font-size: 1rem; min-width: 32px; justify-content: center; gap: 0; }
+
+  /* Özel paneller butonu da küçülsün */
+  .nav-drop-btn { padding: 5px 8px; font-size: .58rem; letter-spacing: .5px; }
 
   /* Hero kompakt */
   .hero { padding: 11px 14px 9px; gap: 10px; }
@@ -4398,15 +4409,15 @@ html, body {
     <div class="nav-right">
 
       <!-- Lobiye Dön -->
-      <button class="nav-drop-btn" onclick="window.location.href='lobby.html';"
+      <button class="nav-drop-btn" id="navLobiBtn" onclick="window.location.href='lobby.html';"
               style="gap:5px;background:rgba(0,212,255,.06);border-color:var(--b1)">
-        🔙 <span style="font-size:.65rem;letter-spacing:1.5px">Lobi</span>
+        🔙 <span class="nav-btn-label" style="font-size:.65rem;letter-spacing:1.5px">Lobi</span>
       </button>
 
       <!-- Çıkış Yap -->
-      <button class="nav-drop-btn" onclick="tmLogout()"
+      <button class="nav-drop-btn" id="navCikisBtn" onclick="tmLogout()"
               style="gap:5px;background:rgba(255,60,60,.06);border-color:rgba(255,60,60,.25);color:#ff8080">
-        🚪 <span style="font-size:.65rem;letter-spacing:1.5px">Çıkış</span>
+        🚪 <span class="nav-btn-label" style="font-size:.65rem;letter-spacing:1.5px">Çıkış</span>
       </button>
 
       <!-- Özel Paneller -->
