@@ -3384,7 +3384,7 @@ function handleLogout(){
   db.ref('users').off();
   db.ref('matches').off();
   db.ref('news').off();
-  showPage('page-login');
+  window.location.href = 'login.html';
 }
 
 async function startListeners_after_login(){
