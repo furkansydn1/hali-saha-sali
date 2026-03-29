@@ -10,6 +10,54 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body>
+<!-- ═══ GİRİŞ FORMU OVERLAY ═══ -->
+<div id="loginOverlay" style="display:none;position:fixed;inset:0;z-index:99999;background:#020806;align-items:center;justify-content:center;flex-direction:column;padding:24px 16px;">
+  <div style="position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 30%,rgba(10,80,20,.45) 0%,transparent 65%),radial-gradient(ellipse 60% 70% at 80% 70%,rgba(5,50,80,.4) 0%,transparent 65%),#020806;z-index:0"></div>
+  <div style="position:relative;z-index:2;width:100%;max-width:420px">
+    <!-- Brand -->
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="font-size:2.2rem;margin-bottom:8px;filter:drop-shadow(0 0 12px rgba(184,247,23,.5))">⚽</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:2.4rem;letter-spacing:6px;color:#b8f717;text-shadow:0 0 20px rgba(184,247,23,.5);line-height:1">PITCH APP</div>
+      <div style="font-size:.63rem;letter-spacing:4px;text-transform:uppercase;color:rgba(184,247,23,.4);margin-top:4px">Giriş Yap</div>
+    </div>
+    <!-- Kart -->
+    <div style="background:rgba(10,24,12,.65);backdrop-filter:blur(24px);border:1px solid rgba(184,247,23,.12);border-radius:20px;padding:36px;box-shadow:0 8px 40px rgba(0,0,0,.6);position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:10%;right:10%;height:2px;background:linear-gradient(90deg,transparent,#b8f717,transparent);opacity:.7"></div>
+      <!-- Hata -->
+      <div id="loginError" style="display:none;align-items:center;gap:8px;background:rgba(255,50,50,.1);border:1px solid rgba(255,80,80,.25);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:.77rem;color:#ff8080">
+        <span>⚠️</span><span id="loginErrorText">Hata</span>
+      </div>
+      <!-- Ad Soyad -->
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-size:.65rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(184,247,23,.5);margin-bottom:7px">👤 Ad Soyad</label>
+        <div style="position:relative;display:flex;align-items:center">
+          <input id="loginName" type="text" placeholder="Adın ve soyadın" autocomplete="name"
+            style="width:100%;padding:12px 13px;background:rgba(255,255,255,.04);border:1.5px solid rgba(184,247,23,.1);border-radius:10px;color:#e8f5eb;font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s">
+        </div>
+      </div>
+      <!-- Şifre -->
+      <div style="margin-bottom:22px">
+        <label style="display:block;font-size:.65rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(184,247,23,.5);margin-bottom:7px">🔒 Şifre</label>
+        <div style="position:relative;display:flex;align-items:center">
+          <input id="loginPass" type="password" placeholder="Şifren" autocomplete="current-password"
+            style="width:100%;padding:12px 13px;background:rgba(255,255,255,.04);border:1.5px solid rgba(184,247,23,.1);border-radius:10px;color:#e8f5eb;font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s">
+          <button id="loginPassToggle" type="button" onclick="toggleLoginPass()"
+            style="position:absolute;right:12px;background:none;border:none;cursor:pointer;font-size:.9rem;opacity:.35;color:inherit;padding:4px">👁️</button>
+        </div>
+      </div>
+      <!-- Buton -->
+      <button id="loginBtn" onclick="doLogin()"
+        style="width:100%;padding:14px;background:linear-gradient(135deg,#7ab80d,#b8f717);color:#020806;font-family:'Bebas Neue',cursive;font-size:1.1rem;letter-spacing:4px;border:none;border-radius:10px;cursor:pointer;box-shadow:0 4px 24px rgba(184,247,23,.3);transition:transform .2s,box-shadow .2s">
+        Giriş Yap
+      </button>
+      <!-- Footer -->
+      <div style="text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid rgba(184,247,23,.07)">
+        <p style="font-size:.77rem;color:rgba(255,255,255,.3)">Hesabın yok mu? <a href="register.html" style="color:rgba(184,247,23,.7);text-decoration:none;font-weight:600">Kayıt Ol</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
 :root{
   --grass:#1a6b2f;--lime:#b8f717;--lime-dim:#9fd614;
@@ -3333,43 +3381,39 @@ async function startListeners_after_login(){
 
 // Auto-login
 async function initApp(){
-  // ── Merkezi login sistemi: localStorage session kontrolü ──
+  // ── Session kontrolü — session varsa direkt lobby.html'e git ──
   const sessionData = localStorage.getItem('hs_session') || localStorage.getItem('hs_session_temp');
   if(!sessionData){
-    // Session yok → login.html'e yönlendir
-    window.location.href = 'login.html';
+    // Session yok → login formunu göster
+    showLoginForm();
     return;
   }
   let parsed;
   try{ parsed = JSON.parse(sessionData); }
-  catch(e){ window.location.href = 'login.html'; return; }
-  if(!parsed || !parsed.id){
-    window.location.href = 'login.html';
-    return;
-  }
-  showLoading('Yükleniyor...');
+  catch(e){ showLoginForm(); return; }
+  if(!parsed || !parsed.id){ showLoginForm(); return; }
+
+  // Session var → doğrula ve lobby'ye git
+  showLoading('Giriş yapılıyor...');
   try{
     const snap = await db.ref('users').once('value');
     _users = snap.val()||{};
-    const matchSnap = await db.ref('matches').once('value');
-    _matches = Object.values(matchSnap.val()||{});
     const fresh = Object.values(_users).find(u=>u.id===parsed.id);
     if(fresh){
       currentUser = fresh;
       hideLoading();
-      await startListeners_after_login();
-      goHome();
+      window.location.href = 'lobby.html';
       return;
     }
-    // Kullanıcı DB'de bulunamadı → session geçersiz
+    // Geçersiz session
     localStorage.removeItem('hs_session');
     localStorage.removeItem('hs_session_temp');
     hideLoading();
-    window.location.href = 'login.html';
+    showLoginForm();
   }catch(e){
     console.error('initApp error:', e);
     hideLoading();
-    window.location.href = 'login.html';
+    showLoginForm();
   }
 }
 
