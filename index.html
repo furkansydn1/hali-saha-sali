@@ -3398,27 +3398,56 @@ async function startListeners_after_login(){
 // Auto-login
 async function initApp(){
   let sessionData = LS.get('hs_session') || LS.get('hs_session_temp');
-  if(sessionData){
-    try{
-      const parsed = JSON.parse(sessionData);
-      showLoading('Giriş yapılıyor...');
-      const snap = await db.ref('users').once('value');
-      _users = snap.val()||{};
-      const matchSnap = await db.ref('matches').once('value');
-      const val = matchSnap.val()||{};
-      _matches = Object.values(val);
-      const fresh = Object.values(_users).find(u=>u.id===parsed.id);
-      if(fresh){
-        currentUser = fresh;
-        hideLoading();
-        await startListeners_after_login();
-        goHome();
-        return;
-      }
-    }catch(e){ console.error('Auto-login error:', e); }
-    hideLoading();
-  }
-  // Session yok veya geçersiz → login.html'e gönder (page-login gösterme)
+  if(!sessionData){ window.location.replace('login.html'); return; }
+
+  let parsed;
+  try{ parsed = JSON.parse(sessionData); } catch(e){ window.location.replace('login.html'); return; }
+  if(!parsed || !parsed.id){ window.location.replace('login.html'); return; }
+
+  showLoading('Giriş yapılıyor...');
+  try{
+    const snap = await db.ref('users').once('value');
+    _users = snap.val()||{};
+    const matchSnap = await db.ref('matches').once('value');
+    _matches = Object.values(matchSnap.val()||{});
+
+    // ID ile ara
+    let fresh = Object.values(_users).find(u => u.id === parsed.id);
+
+    // Bulunamazsa isimle ara (dbKey formatında)
+    if(!fresh && parsed.name){
+      const dbKey = parsed.name.toLowerCase();
+      fresh = _users[dbKey] || _users[dbKey.replace(/ /g,'_')];
+    }
+
+    // Hâlâ bulunamazsa → bu kullanıcı sadece register.html üzerinden kayıt olmuş
+    // Klasik maç için minimal profil oluştur
+    if(!fresh && parsed.name){
+      const dbKey = parsed.dbKey || parsed.name.toLowerCase();
+      const newUser = {
+        id: parsed.id, name: parsed.name, pass: '',
+        pos:'', ayak:'Sağ',
+        hiz:50,sut:50,pas:50,fizik:50,defans:50,kalecilik:50,topKontrol:50,dribling:50,
+        wins:0, matches:0, motm:0, worst:0,
+        winStreak:0, loseStreak:0, formPuani:0, formHistory:[],
+        profileComplete:false
+      };
+      await db.ref('users/' + dbKey).set(newUser);
+      _users[dbKey] = newUser;
+      fresh = newUser;
+      console.log('Klasik maç profili oluşturuldu:', dbKey);
+    }
+
+    if(fresh){
+      currentUser = fresh;
+      hideLoading();
+      await startListeners_after_login();
+      goHome();
+      return;
+    }
+  }catch(e){ console.error('initApp error:', e); }
+
+  hideLoading();
   localStorage.removeItem('hs_session');
   localStorage.removeItem('hs_session_temp');
   window.location.replace('login.html');
