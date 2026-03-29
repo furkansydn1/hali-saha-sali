@@ -1672,26 +1672,33 @@ html, body {
   border-radius: 20px; padding: 3px 12px;
 }
 
-/* Saha zemin */
+/* Saha zemin — absolute slot sistemi */
 .pitch-field {
   flex: 1;
-  position: relative;
+  position: relative;        /* absolute slotların referansı */
   border-radius: var(--r2);
   overflow: hidden;
-  min-height: 440px;
-  /* Çizgili yeşil saha dokusu */
+  min-height: 480px;
+  /* Saha dokusu */
   background:
     repeating-linear-gradient(
-      90deg,
-      rgba(0,0,0,0) 0px, rgba(0,0,0,0) 36px,
-      rgba(0,0,0,.08) 36px, rgba(0,0,0,.08) 72px
+      0deg,
+      rgba(0,0,0,0) 0px, rgba(0,0,0,0) 44px,
+      rgba(0,0,0,.07) 44px, rgba(0,0,0,.07) 88px
     ),
-    radial-gradient(ellipse 80% 80% at 50% 50%, #164a10 0%, #0f3209 50%, #0b2806 100%);
-  border: 2px solid rgba(255,255,255,.12);
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,.015) 0px, rgba(255,255,255,.015) 1px,
+      transparent 1px, transparent 60px
+    ),
+    radial-gradient(ellipse 90% 85% at 50% 50%,
+      #16500e 0%, #0f3808 40%, #092d05 100%);
+  border: 2px solid rgba(255,255,255,.13);
   box-shadow:
-    inset 0 0 80px rgba(0,0,0,.5),
+    inset 0 0 80px rgba(0,0,0,.55),
     0 0 0 1px rgba(0,212,255,.04);
-  display: flex; flex-direction: column;
+  /* Artık flex değil — display:block veya içerik absolute */
+  display: block;
 }
 
 /* CSS Saha çizgileri */
@@ -2558,6 +2565,572 @@ html, body {
 .kom-chart-l { height: 100%; background: linear-gradient(90deg, rgba(220,50,70,.45), rgba(255,70,90,.35)); border-radius: 0 9px 9px 0; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', cursive; font-size: .60rem; color: rgba(255,255,255,.75); min-width: 0; }
 .kom-chart-pts { font-family: 'Bebas Neue', cursive; font-size: .92rem; color: var(--cyan); text-shadow: var(--gxs); width: 24px; text-align: right; flex-shrink: 0; }
 .kom-chart-empty { font-family: 'Rajdhani', sans-serif; font-size: .66rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--t3); text-align: center; padding: 16px 0; }
+
+/* ════════════════════════════════════════════════════════════
+   TAKTİK TAHTASI — ABSOLUTE SLOT SİSTEMİ (Kesin Çözüm)
+   pitch-field: position:relative, display:block
+   .pitch-slot: position:absolute, top/left % koordinatları
+   Eski pitch-rows-container / pitch-row flex sistemi KULLANILMIYOR.
+════════════════════════════════════════════════════════════ */
+
+/* Saha kapsayıcı wrapper — mobil scale burada */
+.pitch-wrap {
+  display: flex; flex-direction: column;
+  padding: 14px 16px 16px;
+  border-right: 1px solid var(--b0);
+  overflow: hidden;
+}
+@media (max-width: 900px) {
+  .pitch-wrap {
+    transform: scale(0.97);
+    transform-origin: top center;
+    border-right: none;
+    border-bottom: 1px solid var(--b0);
+    padding: 12px 10px 14px;
+  }
+}
+@media (max-width: 500px) {
+  .pitch-wrap {
+    transform: scale(0.92);
+    transform-origin: top center;
+    padding: 8px 6px 10px;
+  }
+}
+
+/* Saha zemini — kesinlikle display:block, position:relative */
+.pitch-field {
+  position: relative !important;
+  display: block !important;
+  flex: 1;
+  border-radius: var(--r2);
+  overflow: hidden;
+  min-height: 460px;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0,0,0,0) 0px, rgba(0,0,0,0) 44px,
+      rgba(0,0,0,.065) 44px, rgba(0,0,0,.065) 88px
+    ),
+    radial-gradient(ellipse 95% 90% at 50% 50%,
+      #16520e 0%, #103a08 45%, #092e05 100%);
+  border: 2px solid rgba(255,255,255,.13);
+  box-shadow: inset 0 0 80px rgba(0,0,0,.55), 0 0 0 1px rgba(0,212,255,.04);
+}
+
+/* Absolute slot — konumu JS'den inline style ile verilir */
+.pitch-slot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  cursor: pointer;
+  z-index: 3;
+  transition: filter .18s, transform .18s;
+  pointer-events: auto;
+}
+.pitch-slot:hover {
+  transform: translate(-50%, -50%) scale(1.12);
+  filter: brightness(1.15);
+}
+.pitch-slot.selected .ps-av {
+  border-color: var(--cyan) !important;
+  box-shadow: var(--gsm) !important;
+}
+
+/* Avatar */
+.ps-av {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', cursive; font-size: .88rem;
+  border: 2px solid rgba(255,255,255,.20);
+  box-shadow: 0 4px 14px rgba(0,0,0,.60);
+  transition: border-color .2s, box-shadow .2s;
+  position: relative; overflow: hidden;
+}
+.ps-av::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.18), transparent 55%);
+  pointer-events: none;
+}
+.ps-empty {
+  background: rgba(255,255,255,.05);
+  border: 2px dashed rgba(255,255,255,.22);
+  color: rgba(255,255,255,.28);
+  font-size: 1.15rem;
+}
+.ps-empty:hover { border-color: rgba(0,212,255,.50); color: var(--cyan); }
+
+.ps-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .50rem; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: rgba(255,255,255,.35);
+  text-shadow: 0 1px 3px rgba(0,0,0,.8);
+}
+.ps-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .56rem; font-weight: 700;
+  color: rgba(255,255,255,.80);
+  text-align: center;
+  text-shadow: 0 1px 4px rgba(0,0,0,.9);
+  max-width: 52px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* Slot tooltip */
+.slot-tooltip {
+  position: absolute;
+  background: rgba(2,6,24,.96);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--b2);
+  border-radius: var(--r3);
+  padding: 14px 16px;
+  width: min(240px, 82vw);
+  max-height: 70vh; overflow-y: auto;
+  box-shadow: var(--gmd), 0 20px 50px rgba(0,0,0,.7);
+  z-index: 100;
+  display: none;
+  animation: tooltip-in .2s ease;
+}
+.slot-tooltip.visible { display: block; }
+@keyframes tooltip-in {
+  from { opacity: 0; transform: translateY(-8px) scale(.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.slot-tooltip::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+}
+
+/* Mobil slot boyutları */
+@media (max-width: 600px) {
+  .ps-av { width: 38px; height: 38px; border-radius: 9px; }
+  .ps-name { font-size: .50rem; max-width: 42px; }
+  .ps-label { font-size: .44rem; }
+  .pitch-field { min-height: 360px; }
+  .slot-tooltip {
+    position: fixed !important;
+    left: 50% !important; top: auto !important;
+    bottom: 14px !important;
+    transform: translateX(-50%) !important;
+    width: min(300px, 94vw) !important;
+    z-index: 600;
+  }
+}
+
+/* Eski row-based CSS nötralize (artık kullanılmıyor) */
+.pitch-rows-container { display: none !important; }
+.pitch-row            { display: none !important; }
+
+/* Roster paneli tıklanabilirlik */
+.roster-item { cursor: pointer; }
+.roster-item .ri-info { cursor: pointer; }
+.roster-item.on-field .ri-av-sm { cursor: default; }
+
+/* Roster panel mobil */
+@media (max-width: 900px) {
+  .pitch-layout { grid-template-columns: 1fr; overflow-y: auto; }
+  .roster-panel {
+    max-height: 220px; overflow-y: auto;
+    border-left: none; border-top: 1px solid var(--b0);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   FIX PATCH — NAVBAR MOBİL
+════════════════════════════════════════════════════════════ */
+
+/* ── Breakpoint 768px: küçük tablet / büyük telefon ── */
+@media (max-width: 768px) {
+
+  /* Navbar: logoyu küçült, tab'lar scroll edilebilir */
+  .navbar {
+    padding: 0 12px;
+    gap: 2px;
+    height: 56px;
+  }
+
+  .nav-logo { margin-right: 8px; gap: 6px; }
+  .nav-logo-badge { width: 32px; height: 32px; }
+  .nav-logo-text strong { font-size: .80rem; letter-spacing: 2px; }
+  .nav-logo-text small  { display: none; }
+
+  /* Tab'lar scroll şeridine döner */
+  .nav-tabs {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex: 1;
+    gap: 2px;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+
+  .nav-tab {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    padding: 6px 10px;
+    font-size: .64rem;
+    letter-spacing: 1.2px;
+  }
+
+  .nav-drop-btn {
+    padding: 6px 10px;
+    font-size: .60rem;
+    letter-spacing: 1px;
+  }
+
+  /* Dropdown pozisyonu: sağa taşmasın */
+  .nav-drop-menu {
+    right: 0;
+    min-width: min(200px, 88vw);
+  }
+
+  /* RBAC bar daha kompakt */
+  .rbac-bar { padding: 5px 12px; gap: 6px; }
+  .rbac-label { font-size: .52rem; }
+  .rbac-pill { padding: 2px 9px; font-size: .56rem; }
+  .rbac-status { font-size: .52rem; padding: 2px 8px; }
+}
+
+/* ── Breakpoint 480px: küçük telefon ── */
+@media (max-width: 480px) {
+
+  .navbar { padding: 0 8px; height: 52px; }
+  .nav-logo-text { display: none; }    /* logo sadece ikon */
+  .nav-logo { margin-right: 4px; }
+
+  .nav-tab { padding: 5px 8px; font-size: .60rem; letter-spacing: .8px; }
+  .tab-dot { display: none !important; }
+
+  /* Hero kompakt */
+  .hero { padding: 11px 14px 9px; gap: 10px; }
+  .hero-ico { width: 44px; height: 44px; font-size: 1.3rem; }
+  .hero-h1  { font-size: 1.3rem; letter-spacing: 2px; }
+  .hero-ey  { font-size: .52rem; letter-spacing: 2px; }
+  .hero-chips { gap: 4px; }
+  .hchip { font-size: .54rem; padding: 2px 7px; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   FIX PATCH — TÜM MODALLER MOBİL
+════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* Genel modal kutusu */
+  .match-modal-box,
+  .team-modal-box,
+  .t20-modal-box {
+    max-height: 92vh;
+    border-radius: var(--r3);
+    margin: 0;
+  }
+  .match-modal-ov,
+  .team-modal-ov,
+  .t20-modal-ov {
+    padding: 6px;
+    align-items: flex-end;   /* alttan yukarı süzülür — UX daha iyi */
+  }
+
+  /* Maç modal saha yüksekliği */
+  .mm-pitch-field { min-height: 280px; }
+
+  /* Takım modal stat grid 2 sütun */
+  .tm-stat-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Maç modal vs satırı */
+  .mm-vs-row { gap: 6px; }
+  .mm-team-name { font-size: .78rem; letter-spacing: 1.5px; }
+  .mm-vs-badge  { font-size: .70rem; padding: 4px 9px; }
+  .mm-info-chips { gap: 4px; }
+  .mm-chip { font-size: .55rem; padding: 2px 7px; }
+
+  /* t20 modal */
+  .t20-md-header { padding: 16px 16px 12px; gap: 10px; }
+  .t20-md-av     { width: 56px; height: 56px; }
+  .t20-md-stat-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .t20-md-body   { padding: 14px 16px 18px; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   FIX PATCH — TAKTİK TAHTASI MOBİL
+════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+
+  /* pitch-layout alt alta gelsin */
+  .pitch-layout {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+
+  /* Saha yüksekliği küçülsün */
+  .pitch-field { min-height: 360px; }
+
+  /* Kadro paneli yatayda scroll */
+  .roster-panel {
+    max-height: 220px;
+    overflow-y: auto;
+    border-left: none;
+    border-top: 1px solid var(--b0);
+  }
+}
+
+@media (max-width: 600px) {
+
+  /* Slot tooltip ekrana sığsın */
+  .slot-tooltip {
+    position: fixed !important;
+    left: 50% !important;
+    top: auto !important;
+    bottom: 16px !important;
+    transform: translateX(-50%) !important;
+    width: min(300px, 92vw) !important;
+    z-index: 500;
+  }
+
+  /* Kadro listesi küçük font */
+  .ri-name { font-size: .68rem; }
+  .ri-pos  { font-size: .50rem; }
+  .ri-rating { font-size: .80rem; }
+
+  /* Komite kartları tam genişlik */
+  .kom-outer {
+    grid-template-columns: 1fr;
+    padding: 12px 14px 20px;
+  }
+  .kom-card-wide { grid-column: 1; }
+
+  /* Grup tablosu - küçük sütunlar sığsın */
+  .grp-table-head,
+  .grp-row {
+    grid-template-columns: 16px 1fr 28px 28px 28px 28px 36px 36px 36px 34px;
+    padding: 7px 10px;
+    font-size: .78rem;
+  }
+  .grp-team-name { font-size: .68rem; }
+
+  /* Gol krallığı - piyasa değeri sütununu gizle */
+  .scorer-header-row,
+  .scorer-row {
+    grid-template-columns: 32px 1fr 60px 56px 68px 48px;
+  }
+  .scorer-col-val,
+  .scorer-val-cell { display: none; }
+
+  /* Fikstür maç kartı takım isimleri sığsın */
+  .fmc-name { font-size: .68rem; max-width: 80px; }
+  .fmc-av   { width: 28px; height: 28px; font-size: .46rem; }
+}
+/* ════════════════════════════════════════════════════════════
+   FORMASYON DROPDOWN & ROSTER STAT MODAL CSS
+════════════════════════════════════════════════════════════ */
+
+/* Kadro listesi — stat ayar butonu */
+.ri-stat-btn {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: rgba(0,212,255,.08);
+  border: 1px solid rgba(0,212,255,.18);
+  color: rgba(0,212,255,.60);
+  font-size: .72rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  transition: all .18s;
+  /* her zaman görünür ama hafif */
+  opacity: .55;
+}
+.roster-item:hover .ri-stat-btn { opacity: 1; background: rgba(0,212,255,.16); box-shadow: var(--gxs); }
+.roster-item.on-field .ri-stat-btn { opacity: 1; border-color: rgba(0,238,100,.40); color: #00ee66; }
+.formation-select-wrap {
+  display: flex; align-items: center; gap: 7px;
+}
+.formation-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .60rem; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--t2); white-space: nowrap; flex-shrink: 0;
+}
+.formation-select {
+  padding: 5px 28px 5px 10px;
+  background: rgba(0,212,255,.07);
+  border: 1px solid var(--b2);
+  border-radius: var(--r2);
+  color: var(--cyan);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .68rem; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  /* Küçük ok oku */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2300d4ff' opacity='.7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  transition: border-color .2s, box-shadow .2s;
+}
+.formation-select:focus { outline: none; border-color: var(--b3); box-shadow: var(--gxs); }
+.formation-select option { background: #050d1e; color: var(--t0); }
+
+/* ─── Oynanan maç kartı ─── */
+.fmc-played { border-left: 3px solid rgba(0,238,102,.5) !important; }
+.fmc-played .fmc-vs { background: rgba(0,238,102,.1); border-color: rgba(0,238,102,.3); color: #00ee66; }
+
+/* ─── Modal içi skor gösterimi ─── */
+.mm-score-display {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  padding: 14px 20px; background: rgba(0,212,255,.05);
+  border-bottom: 1px solid var(--b0);
+}
+.mm-score-box {
+  width: 56px; height: 56px; border-radius: var(--r2);
+  background: rgba(0,212,255,.10); border: 1px solid var(--b2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', cursive; font-size: 2rem; color: var(--cyan);
+  text-shadow: var(--gxs); box-shadow: var(--gxs);
+}
+.mm-score-dash { font-family: 'Bebas Neue', cursive; font-size: 1.5rem; color: var(--t2); }
+
+/* ─── Modal içi golcüler ─── */
+.mm-scorers-section {
+  padding: 12px 20px; border-bottom: 1px solid var(--b0);
+  background: rgba(0,238,102,.03);
+}
+.mm-scorers-title {
+  font-family: 'Bebas Neue', cursive; font-size: .82rem; letter-spacing: 3px;
+  color: #00ee66; text-shadow: var(--ggreen); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.mm-scorers-title::before { content: ''; width: 3px; height: 12px; border-radius: 2px; background: #00ee66; box-shadow: var(--ggreen); }
+.mm-scorers-grid { display: grid; grid-template-columns: 1fr 1px 1fr; gap: 10px; }
+.mm-scorers-col { display: flex; flex-direction: column; gap: 5px; }
+.mm-scorers-team-lbl {
+  font-family: 'Rajdhani', sans-serif; font-size: .62rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--t2); margin-bottom: 3px;
+}
+.mm-scorers-divider { background: var(--b0); width: 1px; }
+.mm-scorer-row {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 8px; border-radius: var(--r1);
+  background: rgba(0,238,102,.06); border: 1px solid rgba(0,238,102,.14);
+}
+.mm-scorer-icon { font-size: .82rem; }
+.mm-scorer-name { font-family: 'Rajdhani', sans-serif; font-size: .74rem; font-weight: 700; color: var(--t0); flex: 1; }
+.mm-scorer-count { font-family: 'Bebas Neue', cursive; font-size: .78rem; color: #00ee66; }
+.mm-scorer-empty { font-family: 'Rajdhani', sans-serif; font-size: .68rem; color: var(--t3); padding: 4px 8px; }
+
+/* ─── Komite: golcü satırı ─── */
+.scorer-input-row {
+  display: grid; grid-template-columns: 1fr 80px 36px; gap: 6px;
+  align-items: center; margin-bottom: 6px;
+}
+.scorer-input-row select, .scorer-input-row input {
+  padding: 7px 9px;
+  background: rgba(0,212,255,.05); border: 1.5px solid rgba(0,212,255,.14);
+  border-radius: var(--r1); color: var(--t0);
+  font-family: 'Exo 2', sans-serif; font-size: .78rem;
+}
+.scorer-input-row select { width: 100%; }
+.scorer-input-row input  { text-align: center; font-family: 'Bebas Neue', cursive; font-size: 1rem; }
+.scorer-del-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--r2); border: 1px solid rgba(255,60,90,.3);
+  color: #ff8899; font-size: .80rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .18s;
+}
+.scorer-del-btn:hover { background: rgba(255,60,90,.25); }
+
+/* ─── Scout Raporu ─── */
+.t20-scout-report {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .62rem;
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: .3px;
+  line-height: 1.45;
+  color: rgba(140, 180, 210, 0.72);
+  margin-top: 5px;
+  padding: 5px 7px;
+  border-left: 2px solid rgba(0, 212, 255, 0.22);
+  background: rgba(0, 212, 255, 0.04);
+  border-radius: 0 var(--r1) var(--r1) 0;
+  /* Metni 2 satıra sınırla, taşanı gizle */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.tier-superstar  .t20-scout-report { color: rgba(255, 215, 77, 0.65); border-left-color: rgba(255, 215, 0, 0.30); background: rgba(255, 215, 0, 0.04); }
+.tier-gol-makine .t20-scout-report { color: rgba(255, 140, 80, 0.70); border-left-color: rgba(255, 100, 0, 0.28); background: rgba(255, 100, 0, 0.04); }
+
+/* Roster listesi stat modal overlay (listeden açılır) */
+.roster-stat-modal-ov {
+  position: fixed; inset: 0; z-index: 700;
+  display: flex; align-items: center; justify-content: center;
+  padding: 12px;
+  background: rgba(0,2,12,.82);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  opacity: 0; visibility: hidden;
+  transition: all .22s;
+}
+.roster-stat-modal-ov.open { opacity: 1; visibility: visible; }
+.roster-stat-modal-box {
+  position: relative;
+  width: 100%; max-width: 380px;
+  background: linear-gradient(155deg, rgba(3,8,26,.97), rgba(5,13,36,.98));
+  border: 1px solid var(--b2);
+  border-radius: var(--r4);
+  box-shadow: var(--gmd), 0 0 60px rgba(0,0,0,.7);
+  transform: translateY(16px) scale(.97);
+  transition: all .26s cubic-bezier(.16,1,.3,1);
+  overflow: hidden;
+}
+.roster-stat-modal-ov.open .roster-stat-modal-box { transform: translateY(0) scale(1); }
+.roster-stat-modal-box::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), rgba(255,255,255,.8), var(--cyan), transparent);
+  animation: card-topline 3.5s ease-in-out infinite;
+}
+.rsm-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 18px 18px 12px;
+  border-bottom: 1px solid var(--b0);
+  background: linear-gradient(135deg, rgba(0,88,195,.1), transparent);
+}
+.rsm-av {
+  width: 44px; height: 44px; border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', cursive; font-size: .85rem;
+  border: 2px solid rgba(255,255,255,.16);
+  box-shadow: var(--gxs); flex-shrink: 0;
+}
+.rsm-info { flex: 1; }
+.rsm-name { font-family: 'Bebas Neue', cursive; font-size: 1.1rem; letter-spacing: 2px; color: var(--plat); line-height: 1; margin-bottom: 3px; }
+.rsm-meta { font-family: 'Rajdhani', sans-serif; font-size: .62rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--t2); }
+.rsm-close {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14);
+  color: rgba(255,255,255,.5); font-size: .80rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all .2s; flex-shrink: 0;
+}
+.rsm-close:hover { background: rgba(255,60,60,.18); border-color: rgba(255,80,80,.35); color: #ff7070; }
+.rsm-body { padding: 14px 18px 18px; }
+.rsm-sliders { display: flex; flex-direction: column; gap: 9px; }
+.rsm-sl-row { display: flex; align-items: center; gap: 9px; }
+.rsm-sl-lbl { font-family: 'Rajdhani', sans-serif; font-size: .62rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--t1); width: 30px; flex-shrink: 0; }
+.rsm-sl-val { font-family: 'Bebas Neue', cursive; font-size: .82rem; color: var(--cyan); text-shadow: var(--gxs); width: 24px; text-align: right; flex-shrink: 0; }
+.rsm-save-btn {
+  margin-top: 14px; width: 100%; padding: 10px;
+  background: linear-gradient(135deg, rgba(0,160,210,.40), rgba(0,100,180,.58));
+  border: 1.5px solid var(--b2); border-radius: var(--r2);
+  font-family: 'Bebas Neue', cursive; font-size: .90rem; letter-spacing: 3px;
+  color: var(--cyan); text-shadow: var(--gxs); box-shadow: var(--gsm);
+  cursor: pointer; transition: all .22s;
+}
+.rsm-save-btn:hover { box-shadow: var(--gmd); transform: translateY(-1px); }
 </style>
 </head>
 <body>
@@ -2675,213 +3248,8 @@ html, body {
         <div class="sec-bar-chip">🏟️ Hasbahçe Stadium</div>
       </div>
 
-      <div class="fix-outer">
-
-        <!-- HAFTA 1 -->
-        <div class="fix-week-block">
-          <div class="fix-week-hd">
-            <div class="fix-week-num">01</div>
-            <div class="fix-week-info">
-              <div class="fix-week-lbl">1. Hafta</div>
-              <div class="fix-week-sub">06–10 Nisan 2026 · Grup Aşaması</div>
-            </div>
-            <div class="fix-week-badge badge-upcoming">Yaklaşıyor</div>
-          </div>
-          <div class="fix-matches">
-            <div class="fix-match-card" onclick="openMatchModal('FUTMEYDANI','OKMEYDANI DİŞ','06.04.2026','17:00','A')">
-              <div class="fmc-date">06 Nis · Pzt · 17:00</div>
-              <div class="fmc-teams">
-                <div class="fmc-team fmc-home">
-                  <div class="fmc-av av-snt">FU</div>
-                  <div class="fmc-name">FUTMEYDANI</div>
-                </div>
-                <div class="fmc-vs">VS</div>
-                <div class="fmc-team fmc-away">
-                  <div class="fmc-name">OKMEYDANI DİŞ</div>
-                  <div class="fmc-av av-mo">OK</div>
-                </div>
-              </div>
-              <div class="fmc-tags">
-                <span class="fmc-tag">Grup A</span>
-                <span class="fmc-tag fmc-tag-cyan">🏟️ Hasbahçe Stadium</span>
-              </div>
-            </div>
-            <div class="fix-match-card" onclick="openMatchModal('ARNAVUTKÖY FK','İLKYARDIM SPOR','07.04.2026','17:00','A')">
-              <div class="fmc-date">07 Nis · Sal · 17:00</div>
-              <div class="fmc-teams">
-                <div class="fmc-team fmc-home">
-                  <div class="fmc-av av-bek">AR</div>
-                  <div class="fmc-name">ARNAVUTKÖY FK</div>
-                </div>
-                <div class="fmc-vs">VS</div>
-                <div class="fmc-team fmc-away">
-                  <div class="fmc-name">İLKYARDIM SPOR</div>
-                  <div class="fmc-av av-kl">İS</div>
-                </div>
-              </div>
-              <div class="fmc-tags">
-                <span class="fmc-tag">Grup A</span>
-                <span class="fmc-tag fmc-tag-cyan">🏟️ Hasbahçe Stadium</span>
-              </div>
-            </div>
-            <div class="fix-match-card" onclick="openMatchModal('EYÜP CİTY','SİSTRUNK','08.04.2026','19:00','B')">
-              <div class="fmc-date">08 Nis · Çar · 19:00</div>
-              <div class="fmc-teams">
-                <div class="fmc-team fmc-home">
-                  <div class="fmc-av av-stp">EC</div>
-                  <div class="fmc-name">EYÜP CİTY</div>
-                </div>
-                <div class="fmc-vs">VS</div>
-                <div class="fmc-team fmc-away">
-                  <div class="fmc-name">SİSTRUNK</div>
-                  <div class="fmc-av av-kan">SI</div>
-                </div>
-              </div>
-              <div class="fmc-tags">
-                <span class="fmc-tag">Grup B</span>
-                <span class="fmc-tag fmc-tag-cyan">🏟️ Hasbahçe Stadium</span>
-              </div>
-            </div>
-            <div class="fix-match-card" onclick="openMatchModal('PUSU FK','RÖNTGEN','09.04.2026','17:00','C')">
-              <div class="fmc-date">09 Nis · Per · 17:00</div>
-              <div class="fmc-teams">
-                <div class="fmc-team fmc-home">
-                  <div class="fmc-av av-mo">PU</div>
-                  <div class="fmc-name">PUSU FK</div>
-                </div>
-                <div class="fmc-vs">VS</div>
-                <div class="fmc-team fmc-away">
-                  <div class="fmc-name">RÖNTGEN</div>
-                  <div class="fmc-av av-snt">RÖ</div>
-                </div>
-              </div>
-              <div class="fmc-tags">
-                <span class="fmc-tag">Grup C</span>
-                <span class="fmc-tag fmc-tag-cyan">🏟️ Hasbahçe Stadium</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- HAFTA 2 -->
-        <div class="fix-week-block">
-          <div class="fix-week-hd">
-            <div class="fix-week-num">02</div>
-            <div class="fix-week-info">
-              <div class="fix-week-lbl">2. Hafta</div>
-              <div class="fix-week-sub">13–17 Nisan 2026 · Grup Aşaması</div>
-            </div>
-            <div class="fix-week-badge badge-upcoming">Yaklaşıyor</div>
-          </div>
-          <div class="fix-matches">
-            <div class="fix-match-card" onclick="openMatchModal('OKMEYDANI DİŞ','ARNAVUTKÖY FK','13.04.2026','17:00','A')">
-              <div class="fmc-date">13 Nis · Pzt · 17:00</div>
-              <div class="fmc-teams">
-                <div class="fmc-team fmc-home"><div class="fmc-av av-mo">OK</div><div class="fmc-name">OKMEYDANI DİŞ</div></div>
-                <div class="fmc-vs">VS</div>
-                <div class="fmc-team fmc-away"><div class="fmc-name">ARNAVUTKÖY FK</div><div class="fmc-av av-bek">AR</div></div>
-              </div>
-              <div class="fmc-tags"><span class="fmc-tag">Grup A</span><span class="fmc-tag fmc-tag-cyan">🏟️ Hasbahçe Stadium</span></div>
-            </div>
-            <div class="fix-match-card" onclick="openMatchModal('SİSTRUNK','DETERJAN GÜCÜ','14.04.2026','19:00','B')">
-              <div class="fmc-date">14 Nis · Sal · 19:00</div>
-              <div class="fmc-teams">
-                <div class="fmc-team fmc-home"><div class="fmc-av av-kan">SI</div><div class="fmc-name">SİSTRUNK</div></div>
-                <div class="fmc-vs">VS</div>
-                <div class="fmc-team fmc-away"><div class="fmc-name">DETERJAN GÜCÜ</div><div class="fmc-av av-kl">DG</div></div>
-              </div>
-              <div class="fmc-tags"><span class="fmc-tag">Grup B</span><span class="fmc-tag fmc-tag-cyan">🏟️ Hasbahçe Stadium</span></div>
-            </div>
-            <div class="fix-match-card" onclick="openMatchModal('RÖNTGEN','SSK MONTANA','16.04.2026','17:00','C')">
-              <div class="fmc-date">16 Nis · Per · 17:00</div>
-              <div class="fmc-teams">
-                <div class="fmc-team fmc-home"><div class="fmc-av av-snt">RÖ</div><div class="fmc-name">RÖNTGEN</div></div>
-                <div class="fmc-vs">VS</div>
-                <div class="fmc-team fmc-away"><div class="fmc-name">SSK MONTANA</div><div class="fmc-av av-stp">SS</div></div>
-              </div>
-              <div class="fmc-tags"><span class="fmc-tag">Grup C</span><span class="fmc-tag fmc-tag-cyan">🏟️ Hasbahçe Stadium</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ÇEYREK FİNAL -->
-        <div class="fix-week-block fix-week-knockout">
-          <div class="fix-week-hd">
-            <div class="fix-week-num fix-wn-gold">ÇF</div>
-            <div class="fix-week-info">
-              <div class="fix-week-lbl" style="color:var(--gold)">Çeyrek Final</div>
-              <div class="fix-week-sub">04–07 Mayıs 2026 · Eleme</div>
-            </div>
-            <div class="fix-week-badge badge-ko">Eleme Turu</div>
-          </div>
-          <div class="fix-matches">
-            <div class="fix-match-card fix-ko-card" onclick="openMatchModal('TBD (A1)','TBD (B2)','04.05.2026','17:00','ÇF')">
-              <div class="fmc-date">04 May · 17:00</div>
-              <div class="fmc-teams">
-                <div class="fmc-team fmc-home"><div class="fmc-av av-tbd">A1</div><div class="fmc-name">Grup A — 1.</div></div>
-                <div class="fmc-vs fmc-vs-gold">VS</div>
-                <div class="fmc-team fmc-away"><div class="fmc-name">Grup B — 2.</div><div class="fmc-av av-tbd">B2</div></div>
-              </div>
-              <div class="fmc-tags"><span class="fmc-tag fmc-tag-gold">⚡ Çeyrek Final 1</span></div>
-            </div>
-            <div class="fix-match-card fix-ko-card" onclick="openMatchModal('TBD (B1)','TBD (C2)','05.05.2026','17:00','ÇF')">
-              <div class="fmc-date">05 May · 17:00</div>
-              <div class="fmc-teams">
-                <div class="fmc-team fmc-home"><div class="fmc-av av-tbd">B1</div><div class="fmc-name">Grup B — 1.</div></div>
-                <div class="fmc-vs fmc-vs-gold">VS</div>
-                <div class="fmc-team fmc-away"><div class="fmc-name">Grup C — 2.</div><div class="fmc-av av-tbd">C2</div></div>
-              </div>
-              <div class="fmc-tags"><span class="fmc-tag fmc-tag-gold">⚡ Çeyrek Final 2</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- YARI FİNAL -->
-        <div class="fix-week-block fix-week-knockout">
-          <div class="fix-week-hd">
-            <div class="fix-week-num fix-wn-gold">YF</div>
-            <div class="fix-week-info">
-              <div class="fix-week-lbl" style="color:var(--gold)">Yarı Final</div>
-              <div class="fix-week-sub">12–13 Mayıs 2026 · Eleme</div>
-            </div>
-            <div class="fix-week-badge badge-ko">Yarı Final</div>
-          </div>
-          <div class="fix-matches">
-            <div class="fix-match-card fix-ko-card" onclick="openMatchModal('YF Galibi 1','YF Galibi 2','12.05.2026','17:00','YF')">
-              <div class="fmc-date">12 May · 17:00</div>
-              <div class="fmc-teams">
-                <div class="fmc-team fmc-home"><div class="fmc-av av-tbd">G1</div><div class="fmc-name">ÇF Galibi 1</div></div>
-                <div class="fmc-vs fmc-vs-gold">VS</div>
-                <div class="fmc-team fmc-away"><div class="fmc-name">ÇF Galibi 2</div><div class="fmc-av av-tbd">G2</div></div>
-              </div>
-              <div class="fmc-tags"><span class="fmc-tag fmc-tag-gold">🔥 Yarı Final</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- BÜYÜK FİNAL -->
-        <div class="fix-week-block fix-week-final">
-          <div class="fix-week-hd">
-            <div class="fix-week-num fix-wn-gold">🏆</div>
-            <div class="fix-week-info">
-              <div class="fix-week-lbl" style="color:var(--gold);font-size:1rem">Büyük Final</div>
-              <div class="fix-week-sub">20–22 Mayıs 2026 · Şampiyonluk</div>
-            </div>
-            <div class="fix-week-badge badge-final">🏆 Final</div>
-          </div>
-          <div class="fix-matches">
-            <div class="fix-match-card fix-final-card" onclick="openMatchModal('Final Takım 1','Final Takım 2','20.05.2026','17:00','FİNAL')">
-              <div class="fmc-date">20 May · 17:00 · Hasbahçe Stadium</div>
-              <div class="fmc-teams">
-                <div class="fmc-team fmc-home"><div class="fmc-av av-tbd" style="background:linear-gradient(135deg,rgba(255,215,0,.3),rgba(255,170,0,.2))">?</div><div class="fmc-name" style="color:var(--gold)">Finalist 1</div></div>
-                <div class="fmc-vs fmc-vs-final">FİNAL</div>
-                <div class="fmc-team fmc-away"><div class="fmc-name" style="color:var(--gold)">Finalist 2</div><div class="fmc-av av-tbd" style="background:linear-gradient(135deg,rgba(255,215,0,.3),rgba(255,170,0,.2))">?</div></div>
-              </div>
-              <div class="fmc-tags"><span class="fmc-tag fmc-tag-gold">🏆 Büyük Final — Şampiyonluk Maçı</span></div>
-            </div>
-          </div>
-        </div>
-
+      <div class="fix-outer" id="fixOuter">
+        <!-- JS tarafından FIXTURE_WEEKS verisinden render edilir -->
       </div><!-- /fix-outer -->
 
       <!-- MAÇ DETAY MODAL -->
@@ -2893,7 +3261,6 @@ html, body {
       </div>
 
     </section>
-
     <!-- ── GRUPLAR ── -->
     <section class="section" id="sec-gruplar">
       <div class="sec-bar">
@@ -2990,12 +3357,21 @@ html, body {
 
           <div class="pitch-title-bar">
             <span class="pitch-title-team" id="pitchTeamLabel">Takımım: FUTMEYDANI</span>
-            <span class="pitch-title-formation">1 · 2 · 1 · 2 · 1</span>
+            <!-- Formasyon Seçici -->
+            <div class="formation-select-wrap">
+              <label class="formation-label" for="formationSel">⚙️ Formasyon</label>
+              <select class="formation-select" id="formationSel" onchange="changeFormation(this.value)">
+                <option value="1-2-1-2-1" selected>1-2-1-2-1 (Varsayılan)</option>
+                <option value="1-3-3">1-3-3 (Üçlü Orta)</option>
+                <option value="1-2-2-2">1-2-2-2 (Çift Kanat + Çift Forvet)</option>
+                <option value="1-4-1-1">1-4-1-1 (Dört Savunma)</option>
+              </select>
+            </div>
           </div>
 
-          <!-- Saha zemini -->
+          <!-- Saha zemini — slotlar JS tarafından absolute olarak eklenir -->
           <div class="pitch-field" id="pitchField">
-            <!-- Saha çizgileri -->
+            <!-- Saha çizgileri — sabit kalır -->
             <div class="pf-lines">
               <div class="pf-center-circle"></div>
               <div class="pf-center-line"></div>
@@ -3008,66 +3384,6 @@ html, body {
               <div class="pf-corner pf-corner-bl"></div>
               <div class="pf-corner pf-corner-br"></div>
             </div>
-
-            <!-- 7 Oyuncu Slotu — 1-2-1-2-1 dizilimi -->
-            <!-- Sıra 1: Forvet (1) -->
-            <div class="pitch-row pitch-row-1">
-              <div class="pitch-slot" data-pos="SNT" data-slot="0"
-                   onclick="slotClick(this)">
-                <div class="ps-av ps-empty" id="slot-av-0">+</div>
-                <div class="ps-label" id="slot-lbl-0">SNT</div>
-                <div class="ps-name" id="slot-name-0">Boş Slot</div>
-              </div>
-            </div>
-            <!-- Sıra 2: Kanatlar (2) -->
-            <div class="pitch-row pitch-row-2">
-              <div class="pitch-slot" data-pos="KAN" data-slot="1"
-                   onclick="slotClick(this)">
-                <div class="ps-av ps-empty" id="slot-av-1">+</div>
-                <div class="ps-label" id="slot-lbl-1">KAN</div>
-                <div class="ps-name" id="slot-name-1">Boş Slot</div>
-              </div>
-              <div class="pitch-slot" data-pos="KAN" data-slot="2"
-                   onclick="slotClick(this)">
-                <div class="ps-av ps-empty" id="slot-av-2">+</div>
-                <div class="ps-label" id="slot-lbl-2">KAN</div>
-                <div class="ps-name" id="slot-name-2">Boş Slot</div>
-              </div>
-            </div>
-            <!-- Sıra 3: Orta Saha (1) -->
-            <div class="pitch-row pitch-row-3">
-              <div class="pitch-slot" data-pos="DOS" data-slot="3"
-                   onclick="slotClick(this)">
-                <div class="ps-av ps-empty" id="slot-av-3">+</div>
-                <div class="ps-label" id="slot-lbl-3">DOS</div>
-                <div class="ps-name" id="slot-name-3">Boş Slot</div>
-              </div>
-            </div>
-            <!-- Sıra 4: Defans (2) -->
-            <div class="pitch-row pitch-row-4">
-              <div class="pitch-slot" data-pos="DEF" data-slot="4"
-                   onclick="slotClick(this)">
-                <div class="ps-av ps-empty" id="slot-av-4">+</div>
-                <div class="ps-label" id="slot-lbl-4">DEF</div>
-                <div class="ps-name" id="slot-name-4">Boş Slot</div>
-              </div>
-              <div class="pitch-slot" data-pos="DEF" data-slot="5"
-                   onclick="slotClick(this)">
-                <div class="ps-av ps-empty" id="slot-av-5">+</div>
-                <div class="ps-label" id="slot-lbl-5">DEF</div>
-                <div class="ps-name" id="slot-name-5">Boş Slot</div>
-              </div>
-            </div>
-            <!-- Sıra 5: Kaleci (1) -->
-            <div class="pitch-row pitch-row-5">
-              <div class="pitch-slot" data-pos="KAL" data-slot="6"
-                   onclick="slotClick(this)">
-                <div class="ps-av ps-empty" id="slot-av-6">+</div>
-                <div class="ps-label" id="slot-lbl-6">KAL</div>
-                <div class="ps-name" id="slot-name-6">Boş Slot</div>
-              </div>
-            </div>
-
             <!-- Oyuncu Tooltip / Stat editör -->
             <div class="slot-tooltip" id="slotTooltip">
               <div class="stt-header">
@@ -3077,7 +3393,6 @@ html, body {
               <div class="stt-stats" id="sttStats"></div>
               <div class="stt-close" onclick="closeTooltip()">Kapat</div>
             </div>
-
           </div><!-- /pitch-field -->
 
           <!-- Yayınla butonu -->
@@ -3091,7 +3406,7 @@ html, body {
         <div class="roster-panel">
           <div class="roster-panel-hd">
             <div class="roster-panel-title">Kadro Listesi</div>
-            <div class="roster-panel-sub">Oyuncuya tıkla → Sahaya sür</div>
+            <div class="roster-panel-sub">Tıkla → Sahaya sür &nbsp;|&nbsp; Uzun tıkla → Stat Ayarla</div>
           </div>
           <div class="roster-list" id="rosterList">
             <!-- JS doldurur -->
@@ -3127,51 +3442,57 @@ html, body {
 
       <div class="kom-outer">
 
-        <!-- KART 1: Maç Skoru Gir -->
+        <!-- KART 1: Maç Skoru Gir (Fikstüre Bağlı) -->
         <div class="kom-card">
           <div class="kom-card-hd">
             <div class="kom-card-icon">📊</div>
             <div>
               <div class="kom-card-title">Maç Skoru Gir</div>
-              <div class="kom-card-sub">Oynanan maçın sonucunu kaydet</div>
+              <div class="kom-card-sub">Fikstürden resmi maç seç · Skor &amp; golcü gir</div>
             </div>
           </div>
 
+          <!-- ADIM 1: Maç seç -->
           <div class="kom-field">
-            <div class="kom-label">Ev Sahibi</div>
-            <select class="kom-select" id="scoreHomeTeam" onchange="onScoreTeamChange()">
-              <option value="">— Takım Seç —</option>
+            <div class="kom-label">Resmi Maç Seç</div>
+            <select class="kom-select" id="fixtureMatchSel" onchange="onFixtureMatchChange()">
+              <option value="">— Maç Seçin —</option>
             </select>
           </div>
 
-          <div class="kom-score-row">
-            <div class="kom-field" style="flex:1">
-              <div class="kom-label">Ev Golü</div>
-              <input type="number" class="kom-input kom-score-input" id="scoreHome" min="0" max="20" value="0">
+          <!-- ADIM 2: Skor (dinamik açılır) -->
+          <div id="matchScoreSection" style="display:none">
+            <div class="kom-field">
+              <div class="kom-label" id="matchScoreLabel">Skor Gir</div>
+              <div class="kom-score-row">
+                <div class="kom-field" style="flex:1;margin-bottom:0">
+                  <div class="kom-label" id="scoreT1Label">Ev</div>
+                  <input type="number" class="kom-input kom-score-input" id="fxScoreHome" min="0" max="20" value="0" oninput="onFxScoreChange()">
+                </div>
+                <div class="kom-score-sep">–</div>
+                <div class="kom-field" style="flex:1;margin-bottom:0">
+                  <div class="kom-label" id="scoreT2Label">Dep.</div>
+                  <input type="number" class="kom-input kom-score-input" id="fxScoreAway" min="0" max="20" value="0" oninput="onFxScoreChange()">
+                </div>
+              </div>
             </div>
-            <div class="kom-score-sep">–</div>
-            <div class="kom-field" style="flex:1">
-              <div class="kom-label">Dep. Golü</div>
-              <input type="number" class="kom-input kom-score-input" id="scoreAway" min="0" max="20" value="0">
+
+            <!-- ADIM 3: Golcüler (dinamik) -->
+            <div id="scorerSection" style="display:none">
+              <div class="kom-label" style="margin-bottom:6px">Golcüler</div>
+              <div id="scorerRows"><!-- JS doldurur --></div>
+              <button class="kom-btn" style="margin-top:6px;padding:6px 10px;background:rgba(0,212,255,.07);border:1px dashed var(--b1);color:var(--t1);font-size:.72rem;letter-spacing:2px;border-radius:var(--r1)" onclick="addScorerRow()">+ Golcü Ekle</button>
             </div>
-          </div>
 
-          <div class="kom-field">
-            <div class="kom-label">Deplasman</div>
-            <select class="kom-select" id="scoreAwayTeam" onchange="onScoreTeamChange()">
-              <option value="">— Takım Seç —</option>
-            </select>
-          </div>
+            <div class="kom-preview" id="fxPreview" style="display:none">
+              <div class="kom-preview-label">Önizleme</div>
+              <div class="kom-preview-val" id="fxPreviewVal">—</div>
+            </div>
 
-          <!-- Önizleme -->
-          <div class="kom-preview" id="scorePreview" style="display:none">
-            <div class="kom-preview-label">Sonuç Önizleme</div>
-            <div class="kom-preview-val" id="scorePreviewVal">—</div>
+            <button class="kom-btn kom-btn-cyan" onclick="saveFixtureScore()">
+              💾 Skoru Kaydet &amp; Puan Tablosunu Güncelle
+            </button>
           </div>
-
-          <button class="kom-btn kom-btn-cyan" onclick="saveScore()">
-            💾 Skoru Kaydet &amp; Puan Tablosunu Güncelle
-          </button>
         </div>
 
         <!-- KART 2: Oyuncu İstatistikleri (Artımlı) -->
@@ -3291,6 +3612,24 @@ html, body {
   </footer>
 
 </div><!-- /#app -->
+
+<!-- KADRO LİSTESİ STAT MODAL -->
+<div class="roster-stat-modal-ov" id="rosterStatModal" onclick="if(event.target===this)closeRosterStatModal()">
+  <div class="roster-stat-modal-box">
+    <div class="rsm-header">
+      <div class="rsm-av" id="rsmAv">—</div>
+      <div class="rsm-info">
+        <div class="rsm-name" id="rsmName">—</div>
+        <div class="rsm-meta" id="rsmMeta">—</div>
+      </div>
+      <button class="rsm-close" onclick="closeRosterStatModal()">✕</button>
+    </div>
+    <div class="rsm-body">
+      <div class="rsm-sliders" id="rsmSliders"></div>
+      <button class="rsm-save-btn" onclick="saveRosterStats()">✅ Statları Kaydet</button>
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -3620,26 +3959,243 @@ function ppFormulaTxt(player) {
 }
 
 /* ── Kart HTML'i Oluştur ── */
+/* ═══════════════════════════════════════════════════════════════
+   FİKSTÜR VERİSİ — 4 Hafta Grup Aşaması + Eleme + Final
+   Takım kısaltmaları teamDB'deki av class'larıyla eşleşir.
+═══════════════════════════════════════════════════════════════ */
+const FIXTURE_WEEKS = [
+  /* ═══════════════ HAFTA 1 — 06–10 Nisan 2026 ═══════════════ */
+  {
+    n: '01', label: '1. Hafta', dates: '06–10 Nisan 2026',
+    type: 'group', badge: 'badge-upcoming', badgeTxt: 'Yaklaşıyor',
+    matches: [
+      { id:'m01', t1:'OKMEYDANI DİŞ',  av1:'av-mo',  t2:'İLKYARDIM SPOR', av2:'av-kl',  date:'06 Nis · Pzt', time:'17:00–18:00', grp:'A' },
+      { id:'m02', t1:'FUTMEYDANI',     av1:'av-snt', t2:'ARNAVUTKÖY FK',   av2:'av-bek', date:'07 Nis · Sal', time:'18:00–19:00', grp:'A' },
+      { id:'m03', t1:'EYÜP CİTY',     av1:'av-stp', t2:'TÜPÇÜLER FK',     av2:'av-mo',  date:'08 Nis · Çar', time:'17:30–18:30', grp:'B' },
+      { id:'m04', t1:'SİSTRUNK',      av1:'av-kan', t2:'SAGRADA FAMİLA',  av2:'av-snt', date:'09 Nis · Per', time:'17:00–18:00', grp:'B' },
+      { id:'m05', t1:'SSK MONTANA',   av1:'av-stp', t2:'PUSU FK',          av2:'av-mo',  date:'10 Nis · Cum', time:'17:00–18:00', grp:'C' },
+    ],
+  },
+  /* ═══════════════ HAFTA 2 — 13–17 Nisan 2026 ═══════════════ */
+  {
+    n: '02', label: '2. Hafta', dates: '13–17 Nisan 2026',
+    type: 'group', badge: 'badge-upcoming', badgeTxt: 'Yaklaşıyor',
+    matches: [
+      { id:'m06', t1:'EYÜP CİTY',    av1:'av-stp', t2:'SİSTRUNK',        av2:'av-kan', date:'13 Nis · Pzt', time:'17:00–18:00', grp:'B' },
+      { id:'m07', t1:'ARNAVUTKÖY FK',av1:'av-bek', t2:'İLKYARDIM SPOR',  av2:'av-kl',  date:'14 Nis · Sal', time:'18:00–19:00', grp:'A' },
+      { id:'m08', t1:'TÜPÇÜLER FK',  av1:'av-mo',  t2:'SAGRADA FAMİLA',  av2:'av-snt', date:'15 Nis · Çar', time:'17:30–18:30', grp:'B' },
+      { id:'m09', t1:'DETERJAN GÜCÜ',av1:'av-kl',  t2:'PUSU FK',          av2:'av-mo',  date:'16 Nis · Per', time:'17:00–18:00', grp:'C' },
+      { id:'m10', t1:'RÖNTGEN',      av1:'av-snt', t2:'SSK MONTANA',      av2:'av-stp', date:'17 Nis · Cum', time:'17:00–18:00', grp:'C' },
+    ],
+  },
+  /* ═══════════════ HAFTA 3 — 20–24 Nisan 2026 ═══════════════ */
+  {
+    n: '03', label: '3. Hafta', dates: '20–24 Nisan 2026',
+    type: 'group', badge: 'badge-upcoming', badgeTxt: 'Yaklaşıyor',
+    matches: [
+      { id:'m11', t1:'EYÜP CİTY',    av1:'av-stp', t2:'SAGRADA FAMİLA',  av2:'av-snt', date:'20 Nis · Pzt', time:'17:00–18:00', grp:'B' },
+      { id:'m12', t1:'FUTMEYDANI',   av1:'av-snt', t2:'OKMEYDANI DİŞ',   av2:'av-mo',  date:'21 Nis · Sal', time:'18:00–19:00', grp:'A' },
+      { id:'m13', t1:'PUSU FK',      av1:'av-mo',  t2:'RÖNTGEN',          av2:'av-snt', date:'22 Nis · Çar', time:'17:30–18:30', grp:'C' },
+      { id:'m14', t1:'SSK MONTANA',  av1:'av-stp', t2:'DETERJAN GÜCÜ',   av2:'av-kl',  date:'24 Nis · Per', time:'17:00–18:00', grp:'C' },
+    ],
+  },
+  /* ═══════════════ HAFTA 4 — 27–30 Nisan 2026 ═══════════════ */
+  {
+    n: '04', label: '4. Hafta', dates: '27–30 Nisan 2026',
+    type: 'group', badge: 'badge-upcoming', badgeTxt: 'Yaklaşıyor',
+    matches: [
+      { id:'m15', t1:'İLKYARDIM SPOR',av1:'av-kl',  t2:'FUTMEYDANI',      av2:'av-snt', date:'27 Nis · Pzt', time:'17:00–18:00', grp:'A' },
+      { id:'m16', t1:'OKMEYDANI DİŞ', av1:'av-mo',  t2:'ARNAVUTKÖY FK',   av2:'av-bek', date:'28 Nis · Sal', time:'18:00–19:00', grp:'A' },
+      { id:'m17', t1:'SİSTRUNK',      av1:'av-kan', t2:'TÜPÇÜLER FK',     av2:'av-mo',  date:'29 Nis · Çar', time:'17:30–18:30', grp:'B' },
+      { id:'m18', t1:'RÖNTGEN',       av1:'av-snt', t2:'DETERJAN GÜCÜ',   av2:'av-kl',  date:'30 Nis · Per', time:'17:00–18:00', grp:'C' },
+    ],
+  },
+  /* ═══════════════ ÇEYREK FİNAL — 04–07 Mayıs 2026 ═══════════════ */
+  {
+    n: 'ÇF', label: 'Çeyrek Final', dates: '04–07 Mayıs 2026',
+    type: 'knockout', badge: 'badge-ko', badgeTxt: 'Eleme Turu',
+    numStyle: 'fix-wn-gold', labelStyle: 'color:var(--gold)',
+    matches: [
+      { id:'cf1', t1:'TBD', av1:'av-tbd', t2:'TBD', av2:'av-tbd', date:'04 May · Pzt', time:'17:00', grp:'ÇF-1', ko:true },
+      { id:'cf2', t1:'TBD', av1:'av-tbd', t2:'TBD', av2:'av-tbd', date:'05 May · Sal', time:'17:00', grp:'ÇF-2', ko:true },
+      { id:'cf3', t1:'TBD', av1:'av-tbd', t2:'TBD', av2:'av-tbd', date:'06 May · Çar', time:'17:00', grp:'ÇF-3', ko:true },
+      { id:'cf4', t1:'TBD', av1:'av-tbd', t2:'TBD', av2:'av-tbd', date:'07 May · Per', time:'17:00', grp:'ÇF-4', ko:true },
+    ],
+  },
+  /* ═══════════════ YARI FİNAL — 12–13 Mayıs 2026 ═══════════════ */
+  {
+    n: 'YF', label: 'Yarı Final', dates: '12–13 Mayıs 2026',
+    type: 'knockout', badge: 'badge-ko', badgeTxt: 'Yarı Final',
+    numStyle: 'fix-wn-gold', labelStyle: 'color:var(--gold)',
+    matches: [
+      { id:'yf1', t1:'TBD', av1:'av-tbd', t2:'TBD', av2:'av-tbd', date:'12 May · Sal', time:'17:00', grp:'YF-1', ko:true },
+      { id:'yf2', t1:'TBD', av1:'av-tbd', t2:'TBD', av2:'av-tbd', date:'13 May · Çar', time:'17:00', grp:'YF-2', ko:true },
+    ],
+  },
+  /* ═══════════════ BÜYÜK FİNAL — 20–22 Mayıs 2026 ═══════════════ */
+  {
+    n: '🏆', label: 'Büyük Final', dates: '20–22 Mayıs 2026',
+    type: 'final', badge: 'badge-final', badgeTxt: '🏆 Final',
+    numStyle: 'fix-wn-gold', labelStyle: 'color:var(--gold);font-size:1rem',
+    matches: [
+      { id:'final', t1:'TBD', av1:'av-tbd', t2:'TBD', av2:'av-tbd', date:'20–22 May', time:'17:00', grp:'FİNAL', final:true },
+    ],
+  },
+];
+
+/* ─── Fikstür Renderer ─── */
+function renderFixture() {
+  const container = document.getElementById('fixOuter');
+  if (!container) return;
+
+  const initials = (name) => {
+    if (!name || name === 'TBD' || name.includes('Finalist') || name.includes('Galibi'))
+      return name.substring(0, 2).toUpperCase();
+    return name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+  };
+
+  container.innerHTML = FIXTURE_WEEKS.map(wk => {
+    const isFinal    = wk.type === 'final';
+    const isKnockout = wk.type === 'knockout' || isFinal;
+    const blockCls   = ['fix-week-block',
+      isKnockout && !isFinal ? 'fix-week-knockout' : '',
+      isFinal ? 'fix-week-final' : ''].filter(Boolean).join(' ');
+
+    const matchesHTML = wk.matches.map(m => {
+      const isKoMatch  = m.ko || isFinal;
+      const cardCls    = ['fix-match-card',
+        isKoMatch && !isFinal ? 'fix-ko-card' : '',
+        isFinal ? 'fix-final-card' : ''].filter(Boolean).join(' ');
+      const vsClass    = isFinal ? 'fmc-vs fmc-vs-final' : isKoMatch ? 'fmc-vs fmc-vs-gold' : 'fmc-vs';
+      const tagClass   = isKoMatch ? 'fmc-tag fmc-tag-gold' : 'fmc-tag';
+      const tagIcon    = isFinal ? '🏆' : isKoMatch ? '⚡' : '';
+      const nm1style   = isFinal ? 'color:var(--gold)' : '';
+      const nm2style   = isFinal ? 'color:var(--gold)' : '';
+      const av1style   = isFinal ? 'background:linear-gradient(135deg,rgba(255,215,0,.3),rgba(255,170,0,.2))' : '';
+      const av2style   = isFinal ? 'background:linear-gradient(135deg,rgba(255,215,0,.3),rgba(255,170,0,.2))' : '';
+
+      /* Kayıtlı skor kontrolü */
+      const res = m.id ? matchResults[m.id] : null;
+      const vsTxt = isFinal ? 'FİNAL'
+        : res ? `<span style="font-size:.70rem;letter-spacing:0;font-family:'Bebas Neue',cursive;color:#fff">${res.hg}–${res.ag}</span>`
+        : 'VS';
+      const playedCls = res ? ' fmc-played' : '';
+
+      return `
+        <div class="${cardCls}${playedCls}" data-mid="${m.id || ''}" onclick="openMatchModal('${m.id||''}','${m.t1}','${m.t2}','${m.date}','${m.time}','${m.grp}')">
+          <div class="fmc-date">${m.date} · ${m.time}</div>
+          <div class="fmc-teams">
+            <div class="fmc-team fmc-home">
+              <div class="fmc-av ${m.av1}" style="${av1style}">${initials(m.t1)}</div>
+              <div class="fmc-name" style="${nm1style}">${m.t1}</div>
+            </div>
+            <div class="${vsClass}">${vsTxt}</div>
+            <div class="fmc-team fmc-away">
+              <div class="fmc-name" style="${nm2style}">${m.t2}</div>
+              <div class="fmc-av ${m.av2}" style="${av2style}">${initials(m.t2)}</div>
+            </div>
+          </div>
+          <div class="fmc-tags">
+            <span class="${tagClass}">${tagIcon} ${m.grp}</span>
+            <span class="fmc-tag fmc-tag-cyan">🏟️ Hasbahçe Stadium</span>
+            ${res ? `<span class="fmc-tag" style="background:rgba(0,238,102,.1);border-color:rgba(0,238,102,.3);color:#00ee66">✓ Oynandı</span>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="${blockCls}">
+        <div class="fix-week-hd">
+          <div class="fix-week-num ${wk.numStyle || ''}">${wk.n}</div>
+          <div class="fix-week-info">
+            <div class="fix-week-lbl" style="${wk.labelStyle || ''}">${wk.label}</div>
+            <div class="fix-week-sub">${wk.dates} · ${wk.type === 'group' ? 'Grup Aşaması' : 'Eleme'}</div>
+          </div>
+          <div class="fix-week-badge ${wk.badge}">${wk.badgeTxt}</div>
+        </div>
+        <div class="fix-matches">${matchesHTML}</div>
+      </div>`;
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCOUT RAPORU — generateScoutReport()
+   En yüksek statü analiz edilir, 4 varyasyondan rastgele seçilir.
+═══════════════════════════════════════════════════════════════ */
+const SCOUT_REPORTS = {
+  hiz: [
+    'Bu adam pistte fişek gibi. Arkasına atılan toplarda stoperler panikler, kovalamaları boşuna.',
+    'Sprint hızıyla sahada rüzgar gibi geçer. Savunmacılar için kabus — dönmeden önce çoktan gitmişti.',
+    'İlk iki adımdaki patlayıcı hıza dikkat. Savunma düzeni kurulmadan yarı saha geçilmiş oluyor.',
+    'Hız istatistiği aldatıcı derecede basit görünüyor; ama sahaya çıkınca anlaşılıyor — saf elektrik.',
+  ],
+  sut: [
+    'Atışlarında sert ve isabetli. Kaleci hazırlıklı olsa bile köşeleri bu kadar keskin kullanan çok az oyuncu var.',
+    'Sol ayak, sağ ayak fark etmez — her ikisini de kullanıyor. İki direk arası ona göre dar.',
+    'Vuruşlarındaki tork farklı. Kutu içinde fırsat bulduğunda golaydı zaten, mesafe sorun değil.',
+    'Şut gücu takımına ek kalite katıyor. Savunma çözüldüğünde kim atacak sorusu bu isimle biter.',
+  ],
+  pas: [
+    'Pas vizyonu sahada bir seviye yukarıda. Koşulara erken okuma yapıyor, top tam zamanında oraya geliyor.',
+    'Açık adamı bulmak için acele etmez. Beklediği an geldiğinde pas isabetli, tempolu ve gol tehlikeli.',
+    'Rakip baskısı altında bile topu kaybetmiyor. Bu tür organizasyon oyuncusu takımın nabzı oluyor.',
+    'Asist sayısını düşük tutan yapı bu sezon kısıtlı. Ama katkısı istatistiğin çok ötesinde.',
+  ],
+  drb: [
+    'Dar alanda bire bir pozisyonlardan zevk alıyor gibi. Dribling repertuarı rakibi bitkin düşürüyor.',
+    'Topla buluştuğu anda birkaç metre değer yaratıyor. Defans hattı onu serbest bırakamaz — kapatmaya kalktıklarında boşluklar açılıyor.',
+    'Hızlı çevikliğiyle bire bir kazanma yüzdesi yüksek. Bu tip oyuncular koç defteri için baş ağrısı demek.',
+    'Omuz sallantısından başlayan hareket kümesi rakibi okutmuyor. Kendi tarzını kurmuş, bunu durdurmak kolay değil.',
+  ],
+  def: [
+    'Savunmada pozisyon okuma konusunda takımın en güvenilir ismi. Hücum bitmeden defans kapıyı kilitliyor.',
+    'Hava toplarında dominant. Ceza sahası içinde sürgü görevi görüyor — golü örtülü bırakmıyor.',
+    'Defansif katkısı rakamdan büyük. Öne çıkan her girişimi kesiyor, pas yollarını sürekli kesiyor.',
+    'Top kazanma yeteneği etkileyici. Rakip forvet bu isimle yüz yüze geldiğinde çok zorlanıyor.',
+  ],
+  fiz: [
+    'Kondisyon bakımından takımın motoru. 90 dakikanın sonunda hâlâ aynı koşu hızında, inanılmaz.',
+    'Rakiple temas korkusu yok. Fiziksel düelloları nadiren kaybediyor — bu güç diğer istatistiklerin de temelini oluşturuyor.',
+    'Zorlu maç temposu onu yıkmıyor. Fitness düzeyi mücadeleci oyunu uzun süre sürdürmeye izin veriyor.',
+    'Güç denklemi rakip tarafta hep ekside kalıyor. Bu kadar kompakt bir vücut kontrolüyle durdurmak zor.',
+  ],
+};
+
+function generateScoutReport(player) {
+  /* Tüm stat anahtarlarını değeriyle karşılaştır */
+  const statMap = player.stats;   // { hiz, sut, pas, drb, def, fiz }
+  let topKey = 'hiz', topVal = 0;
+  Object.entries(statMap).forEach(([k, v]) => {
+    if (v > topVal) { topVal = v; topKey = k; }
+  });
+
+  const pool = SCOUT_REPORTS[topKey] || SCOUT_REPORTS.fiz;
+  /* Deterministic "rastgelelik" — aynı oyuncu her render'da aynı raporu alır */
+  const seed = player.id * 7 + topVal;
+  return pool[seed % pool.length];
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BUILD CARD — güncellenmiş (scout raporu eklendi, meta satırı sabit)
+═══════════════════════════════════════════════════════════════ */
 function buildCard(player, rank) {
   const pp        = calcPP(player).toFixed(1);
   const marketVal = calcMarketValue(player);
   const tier      = getTier(player, marketVal);
   const marketStr = formatEuro(marketVal);
+  const scout     = generateScoutReport(player);
 
   const rankClass = rank <= 3 ? `rank-${rank}` : '';
   const tierClass = tier !== 'normal' ? `tier-${tier}` : '';
 
-  // Stat satırları
   const statKeys = ['hiz', 'sut', 'pas', 'drb', 'def', 'fiz'];
   const statsHTML = statKeys.map(k => {
     const val = player.stats[k] || 0;
-    const pct = val; // 1-100 arası doğrudan yüzde
     return `
       <div class="t20-stat-row">
         <div class="t20-stat-lbl">${STAT_LABELS[k]}</div>
         <div class="t20-stat-bar">
-          <div class="t20-stat-fill ${statColorClass(k)}"
-               style="width:${pct}%"></div>
+          <div class="t20-stat-fill ${statColorClass(k)}" style="width:${val}%"></div>
         </div>
         <div class="t20-stat-val" style="color:${statTextColor(k)}">${val}</div>
       </div>`;
@@ -3667,6 +4223,7 @@ function buildCard(player, rank) {
             <span class="t20-meta-sep">·</span>
             <span>${player.pos}</span>
           </div>
+          <div class="t20-scout-report">"${scout}"</div>
         </div>
 
         <div class="t20-stats">${statsHTML}</div>
@@ -3868,10 +4425,45 @@ function calcWinPct(t1, t2) {
   return { home: h1, away: h2 };
 }
 
-function openMatchModal(team1, team2, date, time, group) {
+function openMatchModal(matchId, team1, team2, date, time, group) {
   const pct = calcWinPct(team1, team2);
+  const res  = matchId ? matchResults[matchId] : null;
 
-  /* Saha oyuncu satırları HTML'i oluştur */
+  /* ─── Skor bloğu ─── */
+  const scoreBlock = res
+    ? `<div class="mm-score-display">
+         <div class="mm-score-box">${res.hg}</div>
+         <div class="mm-score-dash">–</div>
+         <div class="mm-score-box">${res.ag}</div>
+       </div>`
+    : '';
+
+  /* ─── Golcüler ─── */
+  let scorersBlock = '';
+  if (res && res.scorers && res.scorers.length > 0) {
+    const homeScorers = res.scorers.filter(s => s.team === team1);
+    const awayScorers = res.scorers.filter(s => s.team === team2);
+    const buildSide = (list) => list.length
+      ? list.map(s => `<div class="mm-scorer-row"><span class="mm-scorer-icon">⚽</span><span class="mm-scorer-name">${s.name}</span><span class="mm-scorer-count">${s.goals > 1 ? '×' + s.goals : ''}</span></div>`).join('')
+      : `<div class="mm-scorer-empty">—</div>`;
+    scorersBlock = `
+      <div class="mm-scorers-section">
+        <div class="mm-scorers-title">⚽ Golcüler</div>
+        <div class="mm-scorers-grid">
+          <div class="mm-scorers-col">
+            <div class="mm-scorers-team-lbl">${team1}</div>
+            ${buildSide(homeScorers)}
+          </div>
+          <div class="mm-scorers-divider"></div>
+          <div class="mm-scorers-col">
+            <div class="mm-scorers-team-lbl">${team2}</div>
+            ${buildSide(awayScorers)}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  /* ─── Saha oyuncu yarıları ─── */
   function buildHalfRows(side, labelCls, label) {
     const rows = pitchDummySquads[side];
     const rowsHTML = rows.map(row => {
@@ -3895,7 +4487,7 @@ function openMatchModal(team1, team2, date, time, group) {
     <div class="mm-header">
       <div class="mm-vs-row">
         <div class="mm-team-name">${team1}</div>
-        <div class="mm-vs-badge">VS</div>
+        <div class="mm-vs-badge">${res ? `${res.hg}–${res.ag}` : 'VS'}</div>
         <div class="mm-team-name">${team2}</div>
       </div>
       <div class="mm-info-chips">
@@ -3904,8 +4496,11 @@ function openMatchModal(team1, team2, date, time, group) {
         <span class="mm-chip">👮 Güvenlik Halil</span>
         <span class="mm-chip">📊 Grup ${group}</span>
         <span class="mm-chip">⚽ 7v7</span>
+        ${res ? `<span class="mm-chip" style="background:rgba(0,238,102,.1);border-color:rgba(0,238,102,.3);color:#00ee66">✓ Oynandı</span>` : ''}
       </div>
     </div>
+
+    ${scorersBlock}
 
     <div class="mm-ai-section">
       <div class="mm-ai-title">🤖 Yapay Zeka Kazanma Tahmini</div>
@@ -3926,7 +4521,6 @@ function openMatchModal(team1, team2, date, time, group) {
     <div class="mm-pitch-section">
       <div class="mm-pitch-title">Saha Dizilimi (1-2-1-2-1)</div>
       <div class="mm-pitch-field">
-        <!-- Saha çizgileri -->
         <div class="mm-pf-lines">
           <div class="mm-pf-outer"></div>
           <div class="mm-pf-center"></div>
@@ -3935,7 +4529,6 @@ function openMatchModal(team1, team2, date, time, group) {
           <div class="mm-pf-pen-t"></div>
           <div class="mm-pf-pen-b"></div>
         </div>
-        <!-- Oyuncular -->
         <div class="mm-teams-area">
           ${buildHalfRows('home', 'home', team1)}
           <div class="mm-half-divider" data-label="ORTA SAHA"></div>
@@ -3945,8 +4538,7 @@ function openMatchModal(team1, team2, date, time, group) {
     </div>`;
 
   document.getElementById('matchModalContent').innerHTML = content;
-  const ov = document.getElementById('matchModal');
-  ov.classList.add('open');
+  document.getElementById('matchModal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
@@ -3961,8 +4553,9 @@ function closeMatchModal() {
 
 /* Saha slotlarının durumu (7 slot, index 0-6) */
 const slotState   = Array(7).fill(null); // null ya da {player} objesi
-let selectedRosterId = null;  // Kadrodan seçilen oyuncunun id'si
-let activeTooltipSlot = null; // Açık tooltip'in slot index'i
+let selectedRosterId  = null;  // Kadrodan seçilen oyuncunun id'si
+let activeTooltipSlot = null;  // Açık pitch-tooltip'in slot index'i
+let rosterStatPlayerId = null; // Listeden açılan stat modal'ın oyuncu id'si
 
 /* Kaptan panelinin kullandığı örnek kadro */
 const captainRoster = [
@@ -3978,35 +4571,191 @@ const captainRoster = [
   { id:9, name:'Cemal Yurt',      pos:'DOS', rating:75, initials:'CY', cls:'av-mo',  stats:{ HIZ:70, ŞUT:60, PAS:82, DRB:72, DEF:55, FİZ:68 } },
 ];
 
-function initCaptainPanel() {
-  /* Pitch içini yeniden düzenle (oyuncu satırlarını pitch-field'a ekle) */
+/* ══════════════════════════════════════════════════════
+   FORMASYON TANIMI — absolute top/left koordinatları
+   top/left: 0–100% (sahada yukarıdan aşağıya, soldan sağa)
+   Her slot: { pos:'SNT', top:'12%', left:'50%' }
+   7v7 formatı: KAL alt, SNT üst
+══════════════════════════════════════════════════════ */
+const FORMATIONS = {
+  '1-2-1-2-1': {
+    label: '1 · 2 · 1 · 2 · 1',
+    slots: [
+      /* SNT */
+      { pos:'SNT', top:'8%',  left:'50%' },
+      /* KAN sol, KAN sağ */
+      { pos:'KAN', top:'28%', left:'20%' },
+      { pos:'KAN', top:'28%', left:'80%' },
+      /* DOS */
+      { pos:'DOS', top:'48%', left:'50%' },
+      /* DEF sol, DEF sağ */
+      { pos:'DEF', top:'68%', left:'30%' },
+      { pos:'DEF', top:'68%', left:'70%' },
+      /* KAL */
+      { pos:'KAL', top:'88%', left:'50%' },
+    ],
+  },
+  '1-3-3': {
+    label: '1 · 3 · 3',
+    slots: [
+      /* 3 Forvet üstte */
+      { pos:'SNT', top:'8%',  left:'25%' },
+      { pos:'SNT', top:'8%',  left:'50%' },
+      { pos:'KAN', top:'8%',  left:'75%' },
+      /* 3 Defans orta-alt */
+      { pos:'DEF', top:'65%', left:'25%' },
+      { pos:'DEF', top:'65%', left:'50%' },
+      { pos:'DEF', top:'65%', left:'75%' },
+      /* KAL */
+      { pos:'KAL', top:'88%', left:'50%' },
+    ],
+  },
+  '1-2-2-2': {
+    label: '1 · 2 · 2 · 2',
+    slots: [
+      /* 2 SNT üst */
+      { pos:'SNT', top:'8%',  left:'35%' },
+      { pos:'KAN', top:'8%',  left:'65%' },
+      /* 2 DOS orta */
+      { pos:'DOS', top:'38%', left:'35%' },
+      { pos:'DOS', top:'38%', left:'65%' },
+      /* 2 DEF alt-orta */
+      { pos:'DEF', top:'65%', left:'30%' },
+      { pos:'DEF', top:'65%', left:'70%' },
+      /* KAL */
+      { pos:'KAL', top:'88%', left:'50%' },
+    ],
+  },
+  '1-4-1-1': {
+    label: '1 · 4 · 1 · 1',
+    slots: [
+      /* SNT tek */
+      { pos:'SNT', top:'8%',  left:'50%' },
+      /* DOS tek geride */
+      { pos:'DOS', top:'38%', left:'50%' },
+      /* 4 Defans */
+      { pos:'DEF', top:'62%', left:'15%' },
+      { pos:'DEF', top:'62%', left:'38%' },
+      { pos:'DEF', top:'62%', left:'62%' },
+      { pos:'DEF', top:'62%', left:'85%' },
+      /* KAL */
+      { pos:'KAL', top:'88%', left:'50%' },
+    ],
+  },
+};
+
+/* Aktif formasyon */
+let activeFormation = '1-2-1-2-1';
+
+/* ══════════════════════════════════════════════════════
+   FORMASYON DEĞİŞTİR — Temiz Slate
+══════════════════════════════════════════════════════ */
+function changeFormation(key) {
+  const f = FORMATIONS[key];
+  if (!f) return;
+  activeFormation = key;
+
+  /* Slot state sıfırla */
+  slotState.length = 0;
+  f.slots.forEach(() => slotState.push(null));
+
+  closeTooltip();
+  rebuildPitchSlots(f);
+  refreshAllSlots();
+  renderRosterList();
+
+  const lbl = document.getElementById('pitchTeamLabel');
+  if (lbl) lbl.dataset.formation = f.label;
+
+  showToast(`⚽ Formasyon: ${f.label}`);
+}
+
+/* ══════════════════════════════════════════════════════
+   SAHAyı KOMPLE TEMİZLE & YENİDEN İNŞA ET
+   — Absolute konumlu slotlar, düz çizgi YOK
+══════════════════════════════════════════════════════ */
+function rebuildPitchSlots(formation) {
   const pitchField = document.getElementById('pitchField');
   if (!pitchField) return;
 
-  /* Rows container oluştur (ilk çağrıda) */
-  let rowsContainer = pitchField.querySelector('.pitch-rows-container');
-  if (!rowsContainer) {
-    rowsContainer = document.createElement('div');
-    rowsContainer.className = 'pitch-rows-container';
-    pitchField.appendChild(rowsContainer);
+  /* 1. TÜM eski pitch içeriğini temizle (container, row, slot — hepsi) */
+  const preserve = [
+    pitchField.querySelector('.pf-lines'),       /* saha çizgileri */
+    document.getElementById('slotTooltip'),       /* tooltip */
+  ].filter(Boolean);
 
-    /* Mevcut pitch-row'ları taşı */
-    pitchField.querySelectorAll('.pitch-row').forEach(r => {
-      rowsContainer.appendChild(r);
-    });
+  /* Saha çizgileri ve tooltip dışında her şeyi sil */
+  Array.from(pitchField.children).forEach(child => {
+    if (!preserve.includes(child)) child.remove();
+  });
+
+  /* 2. Absolute kapsayıcı oluştur */
+  const overlay = document.createElement('div');
+  overlay.className = 'pitch-slots-overlay';
+  overlay.style.cssText = 'position:absolute;inset:0;z-index:2;pointer-events:none;';
+
+  /* 3. Her slot için absolute div */
+  formation.slots.forEach((slotDef, idx) => {
+    const slot = document.createElement('div');
+    slot.className    = 'pitch-slot';
+    slot.dataset.pos  = slotDef.pos;
+    slot.dataset.slot = String(idx);
+    slot.onclick      = function() { slotClick(this); };
+    /* Konumlandır: merkez hizalı */
+    slot.style.cssText = `
+      position: absolute;
+      top: ${slotDef.top};
+      left: ${slotDef.left};
+      transform: translate(-50%, -50%);
+      pointer-events: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+      transition: transform .2s;
+      z-index: 3;
+    `;
+    slot.innerHTML = `
+      <div class="ps-av ps-empty" id="slot-av-${idx}">+</div>
+      <div class="ps-label" id="slot-lbl-${idx}">${slotDef.pos}</div>
+      <div class="ps-name" id="slot-name-${idx}">Boş</div>`;
+    overlay.appendChild(slot);
+  });
+
+  pitchField.appendChild(overlay);
+
+  /* Tooltip'i en sona taşı (z-index için) */
+  const tip = document.getElementById('slotTooltip');
+  if (tip && pitchField.contains(tip)) {
+    pitchField.appendChild(tip);
   }
-
-  /* Tooltip'i de buraya ekle (bir kez) */
-  if (!pitchField.querySelector('.slot-tooltip')) {
-    const tip = document.getElementById('slotTooltip');
-    if (tip) pitchField.appendChild(tip);
-  }
-
-  renderRosterList();
-  refreshAllSlots();
 }
 
-/* Kadro listesini render et */
+/* ══════════════════════════════════════════════════════
+   KAPTAN PANELİ INIT
+══════════════════════════════════════════════════════ */
+function initCaptainPanel() {
+  const pitchField = document.getElementById('pitchField');
+  if (!pitchField) return;
+
+  const f = FORMATIONS[activeFormation];
+
+  /* slotState boyutunu formasyona eşitle */
+  slotState.length = 0;
+  f.slots.forEach(() => slotState.push(null));
+
+  rebuildPitchSlots(f);
+  refreshAllSlots();
+  renderRosterList();
+
+  const sel = document.getElementById('formationSel');
+  if (sel) sel.value = activeFormation;
+}
+
+/* ══════════════════════════════════════════════════════
+   KADRO LİSTESİ — RENDER (güncellendi: stat buton eklendi)
+══════════════════════════════════════════════════════ */
 function renderRosterList() {
   const mainList  = document.getElementById('rosterList');
   const benchList = document.getElementById('benchList');
@@ -4016,48 +4765,65 @@ function renderRosterList() {
   const bench = captainRoster.slice(7);
 
   function buildItem(pl) {
-    const onField = slotState.some(s => s && s.id === pl.id);
+    const onField    = slotState.some(s => s && s.id === pl.id);
     const isSelected = selectedRosterId === pl.id;
-    return `<div class="roster-item ${onField ? 'on-field' : ''} ${isSelected ? 'selected' : ''}"
-                 data-pid="${pl.id}" onclick="rosterItemClick(${pl.id})">
-      <div class="ri-av-sm ${pl.cls}">${pl.initials}</div>
-      <div class="ri-info">
-        <div class="ri-name">${pl.name}</div>
-        <div class="ri-pos">${pl.pos}</div>
-      </div>
-      <div class="ri-rating">${pl.rating}</div>
-    </div>`;
+    return `
+      <div class="roster-item ${onField ? 'on-field' : ''} ${isSelected ? 'selected' : ''}"
+           data-pid="${pl.id}">
+        <div class="ri-av-sm ${pl.cls}" onclick="rosterItemClick(${pl.id})">${pl.initials}</div>
+        <div class="ri-info" onclick="rosterItemClick(${pl.id})" style="cursor:pointer">
+          <div class="ri-name">${pl.name}</div>
+          <div class="ri-pos">${pl.pos}</div>
+        </div>
+        <div class="ri-rating">${pl.rating}</div>
+        <!-- Stat ayar butonu — her zaman tıklanabilir -->
+        <button class="ri-stat-btn"
+                title="Stat Ayarla"
+                onclick="event.stopPropagation(); openRosterStatModal(${pl.id})">⚙️</button>
+      </div>`;
   }
 
   mainList.innerHTML  = main.map(buildItem).join('');
   benchList.innerHTML = bench.map(buildItem).join('');
 }
 
-/* Kadrodan oyuncu seç */
+/* ══════════════════════════════════════════════════════
+   KADRODAN OYUNCU SEÇ / SAHAya sür
+══════════════════════════════════════════════════════ */
 function rosterItemClick(playerId) {
   const pl      = captainRoster.find(p => p.id === playerId);
   const onField = slotState.some(s => s && s.id === playerId);
-  if (onField) { showToast('Bu oyuncu zaten sahada!'); return; }
 
+  /* Sahada olan oyuncu tıklanırsa: stat modal aç */
+  if (onField) {
+    openRosterStatModal(playerId);
+    return;
+  }
+
+  /* Toggle seçim */
   selectedRosterId = selectedRosterId === playerId ? null : playerId;
   renderRosterList();
 
   if (selectedRosterId) {
-    showToast(`${pl.name} seçildi — şimdi sahada bir slot'a tıkla`);
+    showToast(`${pl.name} seçildi — sahada boş bir slot'a tıkla`);
+  } else {
+    showToast('Seçim iptal edildi.');
   }
 }
 
-/* Slot'a tıklandığında */
+/* ══════════════════════════════════════════════════════
+   SAHADA SLOT TIKLAMASI
+══════════════════════════════════════════════════════ */
 function slotClick(slotEl) {
   const slotIdx = parseInt(slotEl.dataset.slot);
 
-  /* Eğer slot doluysa tooltip aç */
+  /* Dolu slot → pitch tooltip aç */
   if (slotState[slotIdx]) {
     openSlotTooltip(slotIdx, slotEl);
     return;
   }
 
-  /* Boş slot + seçili oyuncu varsa yerleştir */
+  /* Boş slot + seçili oyuncu → yerleştir */
   if (selectedRosterId !== null) {
     const pl = captainRoster.find(p => p.id === selectedRosterId);
     slotState[slotIdx] = pl;
@@ -4068,35 +4834,38 @@ function slotClick(slotEl) {
     return;
   }
 
-  /* Ne seçim ne de dolu slot — bildir */
   showToast('Önce kadrodan bir oyuncu seç!');
 }
 
 /* Slot görünümlerini yenile */
 function refreshAllSlots() {
-  for (let i = 0; i < 7; i++) {
+  const f        = FORMATIONS[activeFormation];
+  const slotDefs = f?.slots || [];
+
+  slotDefs.forEach((def, i) => {
     const pl  = slotState[i];
     const av  = document.getElementById(`slot-av-${i}`);
     const lbl = document.getElementById(`slot-lbl-${i}`);
     const nm  = document.getElementById(`slot-name-${i}`);
-    if (!av) continue;
+    if (!av) return;
 
     if (pl) {
-      av.className  = `ps-av ps-filled ${pl.cls}`;
+      av.className   = `ps-av ps-filled ${pl.cls}`;
       av.textContent = pl.initials;
       if (lbl) lbl.textContent = pl.pos;
       if (nm)  nm.textContent  = pl.name.split(' ')[0];
     } else {
-      const posLabels = ['SNT','KAN','KAN','DOS','DEF','DEF','KAL'];
-      av.className  = 'ps-av ps-empty';
+      av.className   = 'ps-av ps-empty';
       av.textContent = '+';
-      if (lbl) lbl.textContent = posLabels[i] || '?';
-      if (nm)  nm.textContent  = 'Boş Slot';
+      if (lbl) lbl.textContent = def.pos;
+      if (nm)  nm.textContent  = 'Boş';
     }
-  }
+  });
 }
 
-/* Tooltip aç */
+/* ══════════════════════════════════════════════════════
+   PITCH TOOLTIP (saha üstündeki slot stat editörü)
+══════════════════════════════════════════════════════ */
 function openSlotTooltip(slotIdx, slotEl) {
   activeTooltipSlot = slotIdx;
   const pl  = slotState[slotIdx];
@@ -4105,7 +4874,6 @@ function openSlotTooltip(slotIdx, slotEl) {
 
   document.getElementById('sttName').textContent = pl.name;
 
-  /* Stat slider'ları oluştur */
   const statsHTML = Object.entries(pl.stats).map(([key, val]) =>
     `<div class="stt-stat-row">
        <div class="stt-stat-lbl">${key}</div>
@@ -4116,26 +4884,39 @@ function openSlotTooltip(slotIdx, slotEl) {
   ).join('');
   document.getElementById('sttStats').innerHTML = statsHTML;
 
-  /* Konumlandır */
-  const rect  = slotEl.getBoundingClientRect();
-  const field = document.getElementById('pitchField').getBoundingClientRect();
-  let left = rect.left - field.left + 58;
-  let top  = rect.top  - field.top;
-  /* Sağ taşma kontrolü */
-  if (left + 248 > field.width) left = rect.left - field.left - 252;
-  tip.style.left = left + 'px';
-  tip.style.top  = top  + 'px';
+  /* Tooltip konumlandır — slotun % konumundan hesapla */
+  const field    = document.getElementById('pitchField');
+  const fieldW   = field.offsetWidth;
+  const fieldH   = field.offsetHeight;
+  const slotDef  = FORMATIONS[activeFormation]?.slots?.[slotIdx];
+
+  if (slotDef) {
+    const pctL = parseFloat(slotDef.left) / 100;
+    const pctT = parseFloat(slotDef.top)  / 100;
+    let left = fieldW * pctL;
+    let top  = fieldH * pctT;
+
+    /* Tooltip sağa taşarsa sola al */
+    const tipW = Math.min(240, fieldW * 0.82);
+    if (left + tipW + 32 > fieldW) left = left - tipW - 12;
+    else left = left + 32;
+
+    /* Tooltip altına taşarsa yukarı al */
+    const tipH = 200;
+    if (top + tipH > fieldH) top = top - tipH;
+
+    tip.style.left = Math.max(4, left) + 'px';
+    tip.style.top  = Math.max(4, top)  + 'px';
+  }
   tip.classList.add('visible');
 }
 
-/* Stat değiştir */
 function updateSlotStat(playerId, statKey, value, valEl) {
   const pl = captainRoster.find(p => p.id === playerId);
   if (pl) pl.stats[statKey] = parseInt(value);
   if (valEl) valEl.textContent = value;
 }
 
-/* Oyuncuyu slottan çıkar */
 function removeFromSlot() {
   if (activeTooltipSlot === null) return;
   slotState[activeTooltipSlot] = null;
@@ -4145,25 +4926,73 @@ function removeFromSlot() {
   showToast('Oyuncu sahadan çıkarıldı.');
 }
 
-/* Tooltip kapat */
 function closeTooltip() {
   const tip = document.getElementById('slotTooltip');
   if (tip) tip.classList.remove('visible');
   activeTooltipSlot = null;
 }
 
+/* ══════════════════════════════════════════════════════
+   ROSTER STAT MODAL — listeden doğrudan stat ayarı
+══════════════════════════════════════════════════════ */
+function openRosterStatModal(playerId) {
+  const pl = captainRoster.find(p => p.id === playerId);
+  if (!pl) return;
+  rosterStatPlayerId = playerId;
+
+  /* Avatar & bilgi */
+  const av = document.getElementById('rsmAv');
+  av.className   = 'rsm-av ' + pl.cls;
+  av.textContent = pl.initials;
+  document.getElementById('rsmName').textContent = pl.name;
+  document.getElementById('rsmMeta').textContent = `${pl.pos} · OVR ${pl.rating} · ${slotState.some(s => s && s.id === playerId) ? '🟢 Sahada' : '🔵 Yedek'}`;
+
+  /* Slider'lar */
+  const sliders = Object.entries(pl.stats).map(([key, val]) => `
+    <div class="rsm-sl-row">
+      <div class="rsm-sl-lbl">${key}</div>
+      <input type="range" class="stt-stat-slider" min="1" max="99" value="${val}"
+             id="rsm-sl-${key}"
+             oninput="updateRsmStat('${key}',this.value,document.getElementById('rsm-val-${key}'))">
+      <div class="rsm-sl-val" id="rsm-val-${key}">${val}</div>
+    </div>`).join('');
+  document.getElementById('rsmSliders').innerHTML = sliders;
+
+  document.getElementById('rosterStatModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function updateRsmStat(statKey, value, valEl) {
+  const pl = captainRoster.find(p => p.id === rosterStatPlayerId);
+  if (pl) pl.stats[statKey] = parseInt(value);
+  if (valEl) valEl.textContent = value;
+}
+
+function saveRosterStats() {
+  closeRosterStatModal();
+  showToast('✅ Stat değişiklikleri kaydedildi!');
+}
+
+function closeRosterStatModal() {
+  document.getElementById('rosterStatModal').classList.remove('open');
+  document.body.style.overflow = '';
+  rosterStatPlayerId = null;
+}
+
 /* Kadroyu yayınla */
 function publishLineup() {
   const filled = slotState.filter(Boolean).length;
-  if (filled < 7) {
-    showToast(`⚠️ Kadro eksik! ${filled}/7 oyuncu sahada. Tüm pozisyonları doldur.`);
+  const f      = FORMATIONS[activeFormation];
+  const total  = f?.slots?.length || 7;
+
+  if (filled < total) {
+    showToast(`⚠️ Kadro eksik! ${filled}/${total} oyuncu sahada. Tüm pozisyonları doldur.`);
     return;
   }
-  const names = slotState.map(p => p.name).join(', ');
-  showToast('🚀 Kadro yayınlandı! 7/7 · ' + slotState[0].name + ' (SNT) lider');
+  showToast(`🚀 Kadro yayınlandı! ${total}/${total} · Formasyon: ${f?.label || activeFormation}`);
 }
 
-/* Sahaya tıklanarak tooltip'i kapat */
+/* Sahaya tıklanarak pitch tooltip'i kapat */
 document.addEventListener('click', function(e) {
   const tip = document.getElementById('slotTooltip');
   if (!tip) return;
@@ -4176,6 +5005,8 @@ document.addEventListener('click', function(e) {
 
 /* İlk render (sayfa yüklenince) */
 document.addEventListener('DOMContentLoaded', function () {
+  /* Fikstür başlangıçta aktif — hemen render et */
+  renderFixture();
   if (document.getElementById('sec-top20')?.classList.contains('active')) {
     renderTop20();
   }
@@ -4549,29 +5380,50 @@ function renderScorers() {
 ═══════════════════════════════════════════════════════════ */
 let statAmount = 1; // artımlı miktar
 
+/* ═══════════════════════════════════════════════════════════
+   MAÇ SONUÇLARI DEPOSU
+   { matchId: { hg, ag, t1, t2, scorers:[{name,team,goals}] } }
+═══════════════════════════════════════════════════════════ */
+const matchResults = {};
+
+/* Tüm maçları düzleştir */
+function getAllMatches() {
+  return FIXTURE_WEEKS.flatMap(wk => wk.matches);
+}
+
+/* matchId'ye göre maç bul */
+function findMatch(id) {
+  return getAllMatches().find(m => m.id === id);
+}
+
 function initCommittee() {
-  const teamNames = Object.keys(teamDB);
-
-  /* Takım dropdown'larını doldur */
-  ['scoreHomeTeam', 'scoreAwayTeam', 'captainTeamSel'].forEach(id => {
-    const sel = document.getElementById(id);
-    if (!sel) return;
-    const current = sel.value;
-    sel.innerHTML = `<option value="">— Takım Seç —</option>`;
-    teamNames.forEach(nm => {
-      const opt = document.createElement('option');
-      opt.value = nm; opt.textContent = nm;
-      sel.appendChild(opt);
+  /* ─ Fikstür maç dropdown'unu doldur ─ */
+  const sel = document.getElementById('fixtureMatchSel');
+  if (sel) {
+    const currentVal = sel.value;
+    sel.innerHTML = '<option value="">— Maç Seçin —</option>';
+    FIXTURE_WEEKS.forEach(wk => {
+      if (wk.type !== 'group') return; // sadece grup maçları seçilebilir
+      const grp = document.createElement('optgroup');
+      grp.label = wk.label + ' — ' + wk.dates;
+      wk.matches.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.id;
+        const played = matchResults[m.id] ? ' ✓' : '';
+        opt.textContent = `${m.date} · ${m.t1} vs ${m.t2}${played}`;
+        grp.appendChild(opt);
+      });
+      sel.appendChild(grp);
     });
-    sel.value = current;
-  });
+    sel.value = currentVal;
+  }
 
-  /* Oyuncu dropdown'unu doldur */
+  /* ─ Oyuncu dropdown'unu doldur (Gol Ekle kartı için) ─ */
   const plSel = document.getElementById('statPlayer');
   if (plSel) {
     const currentPl = plSel.value;
-    plSel.innerHTML = `<option value="">— Oyuncu Seç —</option>`;
-    teamNames.forEach(tn => {
+    plSel.innerHTML = '<option value="">— Oyuncu Seç —</option>';
+    Object.keys(teamDB).forEach(tn => {
       const group = document.createElement('optgroup');
       group.label = tn;
       teamDB[tn].kadro.forEach(pl => {
@@ -4582,67 +5434,198 @@ function initCommittee() {
       plSel.appendChild(group);
     });
     plSel.value = currentPl;
-    onStatPlayerChange(); // önizlemeyi güncelle
+    onStatPlayerChange();
   }
 
-  /* Miktar display sıfırla */
+  /* ─ Kaptan takım dropdown ─ */
+  const capSel = document.getElementById('captainTeamSel');
+  if (capSel) {
+    const cur = capSel.value;
+    capSel.innerHTML = '<option value="">— Takım Seç —</option>';
+    Object.keys(teamDB).forEach(tn => {
+      const opt = document.createElement('option');
+      opt.value = tn; opt.textContent = tn;
+      capSel.appendChild(opt);
+    });
+    capSel.value = cur;
+  }
+
   statAmount = 1;
   const amtEl = document.getElementById('statAmount');
   if (amtEl) amtEl.textContent = '1';
 
-  /* Bar chart render */
   renderKomChart();
 }
 
-/* Skor ekranı takım değişince önizleme */
-function onScoreTeamChange() {
-  const h = document.getElementById('scoreHomeTeam')?.value;
-  const a = document.getElementById('scoreAwayTeam')?.value;
-  const hg = document.getElementById('scoreHome')?.value || '0';
-  const ag = document.getElementById('scoreAway')?.value || '0';
-  const prev = document.getElementById('scorePreview');
-  const val  = document.getElementById('scorePreviewVal');
-  if (!prev || !val) return;
-  if (h && a && h !== a) {
+/* ─── Maç seçilince skor paneli aç ─── */
+function onFixtureMatchChange() {
+  const mid  = document.getElementById('fixtureMatchSel')?.value;
+  const sec  = document.getElementById('matchScoreSection');
+  if (!mid || !sec) return;
+
+  const m = findMatch(mid);
+  if (!m) { sec.style.display = 'none'; return; }
+
+  sec.style.display = 'block';
+  document.getElementById('scoreT1Label').textContent = m.t1;
+  document.getElementById('scoreT2Label').textContent = m.t2;
+  document.getElementById('matchScoreLabel').textContent = `${m.t1}  –  ${m.t2}`;
+
+  /* Kayıtlı skor varsa otomatik doldur */
+  const res = matchResults[mid];
+  document.getElementById('fxScoreHome').value = res ? res.hg : 0;
+  document.getElementById('fxScoreAway').value = res ? res.ag : 0;
+
+  /* Golcüler bölümünü başlat */
+  document.getElementById('scorerSection').style.display = 'none';
+  document.getElementById('scorerRows').innerHTML = '';
+  document.getElementById('fxPreview').style.display = 'none';
+
+  onFxScoreChange();
+}
+
+/* ─── Skor değişince önizle & golcü alanını aç ─── */
+function onFxScoreChange() {
+  const mid = document.getElementById('fixtureMatchSel')?.value;
+  const m   = mid ? findMatch(mid) : null;
+  if (!m) return;
+
+  const hg = parseInt(document.getElementById('fxScoreHome')?.value) || 0;
+  const ag = parseInt(document.getElementById('fxScoreAway')?.value) || 0;
+
+  const prev    = document.getElementById('fxPreview');
+  const prevVal = document.getElementById('fxPreviewVal');
+  if (prev && prevVal) {
     prev.style.display = 'block';
-    val.textContent = `${h}  ${hg} – ${ag}  ${a}`;
-  } else {
-    prev.style.display = h && a && h === a ? 'block' : 'none';
-    if (h === a && h) val.textContent = '⚠️ Aynı takım seçilemez!';
+    prevVal.textContent = `${m.t1}  ${hg} – ${ag}  ${m.t2}`;
   }
+
+  /* Golcü bölümü: toplam gol > 0 ise göster */
+  const scorerSec = document.getElementById('scorerSection');
+  if (scorerSec) {
+    scorerSec.style.display = (hg + ag) > 0 ? 'block' : 'none';
+  }
+  buildScorerDropdowns(m);
 }
 
-/* Skor kaydet */
-function saveScore() {
-  const hn = document.getElementById('scoreHomeTeam')?.value;
-  const an = document.getElementById('scoreAwayTeam')?.value;
-  if (!hn || !an)      { showToast('⚠️ İki takımı da seçin!'); return; }
-  if (hn === an)       { showToast('⚠️ Aynı takım seçilemez!'); return; }
+/* ─── Golcü dropdown satırları ─── */
+let scorerRowCount = 0;
 
-  const hg = parseInt(document.getElementById('scoreHome')?.value) || 0;
-  const ag = parseInt(document.getElementById('scoreAway')?.value) || 0;
-  const ht = teamDB[hn], at = teamDB[an];
+function buildScorerDropdowns(match) {
+  /* Mevcut satırları temizleme — sadece içleri güncelle (takım seçeneklerini) */
+  document.querySelectorAll('.scorer-input-row select.scorer-team-sel').forEach(sel => {
+    const curVal = sel.value;
+    sel.innerHTML = `
+      <option value="">Takım</option>
+      <option value="${match.t1}">${match.t1}</option>
+      <option value="${match.t2}">${match.t2}</option>`;
+    sel.value = curVal;
+    sel.onchange = () => updateScorerPlayerOpts(sel, match);
+    updateScorerPlayerOpts(sel, match);
+  });
+}
 
-  /* Maç sayısı */
-  ht.o++; at.o++;
+function updateScorerPlayerOpts(teamSel, match) {
+  const row    = teamSel.closest('.scorer-input-row');
+  const plSel  = row?.querySelector('.scorer-pl-sel');
+  if (!plSel) return;
+  const tn = teamSel.value;
+  plSel.innerHTML = '<option value="">Oyuncu seç</option>';
+  if (!tn || !teamDB[tn]) return;
+  teamDB[tn].kadro.forEach(pl => {
+    const opt = document.createElement('option');
+    opt.value = pl.nm; opt.textContent = pl.nm;
+    plSel.appendChild(opt);
+  });
+}
 
-  /* Gol averajları */
-  ht.ag += hg; ht.yg += ag;
-  at.ag += ag; at.yg += hg;
+function addScorerRow() {
+  const mid = document.getElementById('fixtureMatchSel')?.value;
+  const m   = mid ? findMatch(mid) : null;
+  if (!m) return;
+  scorerRowCount++;
+  const id  = 'sr-' + scorerRowCount;
+  const row = document.createElement('div');
+  row.className = 'scorer-input-row';
+  row.id = id;
+  row.innerHTML = `
+    <select class="scorer-team-sel kom-select" style="padding:7px 9px">
+      <option value="">Takım</option>
+      <option value="${m.t1}">${m.t1}</option>
+      <option value="${m.t2}">${m.t2}</option>
+    </select>
+    <select class="scorer-pl-sel kom-select" style="padding:7px 9px"><option value="">Oyuncu</option></select>
+    <input type="number" class="scorer-goals-inp" min="1" max="10" value="1">
+    <button class="scorer-del-btn" onclick="document.getElementById('${id}').remove()">✕</button>`;
+  row.querySelector('.scorer-team-sel').onchange = function() { updateScorerPlayerOpts(this, m); };
+  document.getElementById('scorerRows').appendChild(row);
+}
 
-  /* Sonuç */
-  if (hg > ag)      { ht.g++; at.m++; }
-  else if (ag > hg) { at.g++; ht.m++; }
-  else              { ht.b++; at.b++;  }
+/* ─── Skoru kaydet ─── */
+function saveFixtureScore() {
+  const mid = document.getElementById('fixtureMatchSel')?.value;
+  if (!mid) { showToast('⚠️ Önce bir maç seçin!'); return; }
 
-  /* Tüm görünümleri güncelle */
+  const m  = findMatch(mid);
+  if (!m)  { showToast('⚠️ Maç bulunamadı!'); return; }
+
+  const hg = parseInt(document.getElementById('fxScoreHome')?.value) || 0;
+  const ag = parseInt(document.getElementById('fxScoreAway')?.value) || 0;
+
+  /* Golcüleri topla */
+  const scorers = [];
+  document.querySelectorAll('#scorerRows .scorer-input-row').forEach(row => {
+    const team  = row.querySelector('.scorer-team-sel')?.value;
+    const name  = row.querySelector('.scorer-pl-sel')?.value;
+    const goals = parseInt(row.querySelector('.scorer-goals-inp')?.value) || 1;
+    if (team && name) scorers.push({ team, name, goals });
+  });
+
+  /* Daha önce kaydedilmişse eski puan etkisini geri al */
+  const old = matchResults[mid];
+  if (old) {
+    const ht = teamDB[old.t1], at = teamDB[old.t2];
+    if (ht && at) {
+      ht.o--; at.o--;
+      ht.ag -= old.hg; ht.yg -= old.ag;
+      at.ag -= old.ag; at.yg -= old.hg;
+      if (old.hg > old.ag)      { ht.g--; at.m--; }
+      else if (old.ag > old.hg) { at.g--; ht.m--; }
+      else                      { ht.b--; at.b--; }
+    }
+  }
+
+  /* Yeni sonucu kaydet */
+  matchResults[mid] = { hg, ag, t1: m.t1, t2: m.t2, scorers };
+
+  /* teamDB güncelle */
+  const ht = teamDB[m.t1], at = teamDB[m.t2];
+  if (ht && at) {
+    ht.o++; at.o++;
+    ht.ag += hg; ht.yg += ag;
+    at.ag += ag; at.yg += hg;
+    if (hg > ag)      { ht.g++; at.m++; }
+    else if (ag > hg) { at.g++; ht.m++; }
+    else              { ht.b++; at.b++; }
+  }
+
+  /* Golcülerin gol sayılarını güncelle */
+  scorers.forEach(sc => {
+    const team = teamDB[sc.team];
+    if (!team) return;
+    const pl = team.kadro.find(p => p.nm === sc.name);
+    if (pl) { pl.gol += sc.goals; pl.mac = Math.max(pl.mac, 1); }
+  });
+
   refreshAllViews();
-  showToast(`✅ ${hn} ${hg} – ${ag} ${an} kaydedildi! Puan tablosu güncellendi.`);
-
-  /* Formu sıfırla */
-  ['scoreHome','scoreAway'].forEach(id => { const el = document.getElementById(id); if (el) el.value = '0'; });
-  document.getElementById('scorePreview').style.display = 'none';
+  renderFixture();          /* Fikstür kartını güncelle */
+  initCommittee();          /* Dropdown'u yenile ("✓" ekle) */
+  showToast(`✅ ${m.t1} ${hg}–${ag} ${m.t2} kaydedildi!`);
 }
+
+/* Eski saveScore/onScoreTeamChange artık kullanılmıyor — uyumluluk için boş bırak */
+function saveScore() { showToast('ℹ️ Lütfen "Maç Skoru Gir" formundan fikstür maçı seçin.'); }
+function onScoreTeamChange() {}
 
 /* Oyuncu seçilince mevcut istatistiklerini göster */
 function onStatPlayerChange() {
@@ -4782,6 +5765,7 @@ switchTab = function(target, btn) {
   if (target === 'gruplar') setTimeout(renderGroups, 50);
   if (target === 'gol')     setTimeout(renderScorers, 50);
   if (target === 'komite')  setTimeout(initCommittee, 50);
+  if (target === 'fixture') setTimeout(renderFixture, 50);
 };
 
 /* ESC — tüm modalları kapat */
@@ -4790,6 +5774,7 @@ document.addEventListener('keydown', function(e) {
     closeTeamModal();
     closeMatchModal?.();
     closeT20Modal?.();
+    closeRosterStatModal?.();
   }
 });
 
