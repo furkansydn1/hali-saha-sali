@@ -8279,6 +8279,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(openOnboarding, 600);
   }
 });
+const _origSwitchTabProfile = switchTab;
 switchTab = function(target, btn) {
   _origSwitchTabProfile(target, btn);
   if (target === 'profil') setTimeout(renderProfileCard, 50);
