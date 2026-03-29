@@ -5317,6 +5317,9 @@ html, body {
               <optgroup label="Kale">
                 <option value="KL">KL — Kaleci</option>
               </optgroup>
+              <optgroup label="Diğer">
+                <option value="IZL">👁️ İzleyeci — Oynamıyorum</option>
+              </optgroup>
             </select>
           </div>
 
@@ -5508,19 +5511,8 @@ html, body {
    superadmin > komite > kaptan > oyuncu
 ═════════════════════════════════════════════════════════════ */
 
-/* Simüle edilmiş kayıtlı üye veritabanı */
-const memberDB = [
-  { id:'sa01', name:'Furkan Soydan',   team:'',               pos:'',    foot:'',            role:'superadmin' },
-  { id:'u01',  name:'Mehmet Yıldırım', team:'FUTMEYDANI',     pos:'SNT', foot:'Sağ Ayak',    role:'oyuncu' },
-  { id:'u02',  name:'Erhan Koç',       team:'OKMEYDANI DİŞ', pos:'OOS', foot:'Sol Ayak',    role:'oyuncu' },
-  { id:'u03',  name:'Kadir Aslan',     team:'PUSU FK',        pos:'KL',  foot:'Sağ Ayak',    role:'oyuncu' },
-  { id:'u04',  name:'Burak Demirtaş',  team:'SİSTRUNK',      pos:'STP', foot:'Her İki Ayak', role:'oyuncu' },
-  { id:'u05',  name:'Serhan Yıldız',   team:'EYÜP CİTY',     pos:'SĞK', foot:'Sağ Ayak',    role:'oyuncu' },
-  { id:'u06',  name:'Hakan Çelik',     team:'DETERJAN GÜCÜ', pos:'BEK', foot:'Sol Ayak',    role:'oyuncu' },
-  { id:'u07',  name:'Tarık Güneş',     team:'RÖNTGEN',        pos:'SLK', foot:'Sağ Ayak',    role:'oyuncu' },
-  { id:'u08',  name:'Ali Korkmaz',     team:'ARNAVUTKÖY FK', pos:'SNT', foot:'Sağ Ayak',    role:'oyuncu' },
-  { id:'u09',  name:'Cemal Yurt',      team:'İLKYARDIM SPOR',pos:'DOS', foot:'Sol Ayak',    role:'oyuncu' },
-];
+/* Üye veritabanı — Firebase turnuva_users'dan yüklenir */
+const memberDB = [];
 
 /* ── Aktif kullanıcı — Furkan Soydan: Süper Admin ── */
 let currentUser = {
@@ -6252,24 +6244,21 @@ function getTeamSquad(teamName, formKey) {
   const t    = teamDB[teamName];
   const form = FORMATIONS[formKey] || FORMATIONS['1-2-1-2-1'];
 
+  /* 1. Yayınlanmış kadro (publishLineup sonrası) */
   if (t && t.publishedSquad && t.publishedSquad.length > 0) {
     return t.publishedSquad;
   }
+  /* 2. teamDB kadrosu (kayıtlı üyeler) */
   if (t && t.kadro && t.kadro.length > 0) {
     return t.kadro.slice(0, form.slots.length).map(pl => ({
-      init: pl.nm.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase(),
+      init: (pl.nm||'?').split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase(),
       pos:  pl.pos,
-      cls:  pl.cls,
+      cls:  pl.cls || 'av-mo',
       name: pl.nm,
     }));
   }
-  /* Son çare: pozisyon harfi */
-  return form.slots.map((s, i) => ({
-    init: s.pos.substring(0, 2),
-    pos:  s.pos,
-    cls:  s.pos === 'KAL' ? 'av-kl' : s.pos === 'SNT' ? 'av-snt' : s.pos.startsWith('DE') ? 'av-stp' : 'av-mo',
-    name: s.pos,
-  }));
+  /* Kadro henüz belirlenmedi — null döndür */
+  return null;
 }
 
 /* ─── Tek bir mini-saha HTML'i oluştur (absolute slotlar) ─── */
@@ -6324,8 +6313,16 @@ function openMatchModal(matchId, team1, team2, date, time, group) {
   const homeSquad   = getTeamSquad(team1, homeFormKey);
   const awaySquad   = getTeamSquad(team2, awayFormKey);
 
-  const homePitch = buildMiniPitch(homeSquad, homeForm, 'home');
-  const awayPitch = buildMiniPitch(awaySquad, awayForm, 'away');
+  const _noKadro = (side) => `
+    <div class="mmp-field ${side === 'home' ? 'mmp-home' : 'mmp-away'}" style="display:flex;align-items:center;justify-content:center;min-height:260px">
+      <div style="text-align:center;font-family:'Rajdhani',sans-serif;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--t3)">
+        <div style="font-size:1.8rem;margin-bottom:10px;opacity:.3">⏳</div>
+        Kadro henüz belirlenmedi<br>
+        <span style="font-size:.58rem;color:var(--t3)">Kaptan onayladıktan sonra görünecek</span>
+      </div>
+    </div>`;
+  const homePitch = homeSquad ? buildMiniPitch(homeSquad, homeForm, 'home') : _noKadro('home');
+  const awayPitch = awaySquad ? buildMiniPitch(awaySquad, awayForm, 'away') : _noKadro('away');
 
   /* Golcüler */
   let scorersBlock = '';
@@ -6429,18 +6426,7 @@ let activeTooltipSlot = null;  // Açık pitch-tooltip'in slot index'i
 let rosterStatPlayerId = null; // Listeden açılan stat modal'ın oyuncu id'si
 
 /* Kaptan panelinin kullandığı örnek kadro */
-const captainRoster = [
-  { id:1, name:'Mehmet Yıldırım', pos:'SNT', rating:88, initials:'MY', cls:'av-snt', stats:{ HIZ:86, ŞUT:90, PAS:72, DRB:82, DEF:34, FİZ:80 } },
-  { id:2, name:'Erhan Koç',       pos:'OOS', rating:84, initials:'EK', cls:'av-mo',  stats:{ HIZ:76, ŞUT:70, PAS:88, DRB:80, DEF:62, FİZ:75 } },
-  { id:3, name:'Kadir Aslan',     pos:'KAL', rating:86, initials:'KA', cls:'av-kl',  stats:{ HIZ:58, ŞUT:30, PAS:66, DRB:40, DEF:88, FİZ:82 } },
-  { id:4, name:'Burak Demirtaş',  pos:'DEF', rating:82, initials:'BD', cls:'av-stp', stats:{ HIZ:72, ŞUT:55, PAS:68, DRB:58, DEF:86, FİZ:84 } },
-  { id:5, name:'Serhan Yıldız',   pos:'SĞK', rating:85, initials:'SY', cls:'av-kan', stats:{ HIZ:92, ŞUT:78, PAS:74, DRB:88, DEF:30, FİZ:70 } },
-  { id:6, name:'Hakan Çelik',     pos:'DEF', rating:79, initials:'HÇ', cls:'av-bek', stats:{ HIZ:78, ŞUT:48, PAS:72, DRB:64, DEF:83, FİZ:80 } },
-  { id:7, name:'Tarık Güneş',     pos:'SLK', rating:81, initials:'TG', cls:'av-mo',  stats:{ HIZ:74, ŞUT:75, PAS:84, DRB:76, DEF:55, FİZ:72 } },
-  /* Yedekler */
-  { id:8, name:'Ali Korkmaz',     pos:'SNT', rating:77, initials:'AK', cls:'av-snt', stats:{ HIZ:80, ŞUT:76, PAS:68, DRB:74, DEF:28, FİZ:70 } },
-  { id:9, name:'Cemal Yurt',      pos:'OOS', rating:75, initials:'CY', cls:'av-mo',  stats:{ HIZ:70, ŞUT:60, PAS:82, DRB:72, DEF:55, FİZ:68 } },
-];
+const captainRoster = []; /* Gerçek veriler DB'den gelir */
 
 /* ══════════════════════════════════════════════════════
    FORMASYON TANIMI — absolute top/left koordinatları
@@ -6653,6 +6639,41 @@ function getCaptainTeam() {
    KADRO LİSTESİ — RENDER (Kaptan İzolasyonlu)
    Kaptan sadece kendi takımının kadrosunu görür.
 ══════════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════
+   KAPTAN: Oyuncuyu takımdan çıkar
+══════════════════════════════════════════════════════ */
+async function kickFromTeam(playerName) {
+  const teamName = getCaptainTeam();
+  if (!teamName) return;
+  if (!confirm('"' + playerName + '" adlı oyuncuyu takımdan çıkarmak istediğinize emin misiniz?')) return;
+
+  if (teamDB[teamName]) {
+    teamDB[teamName].kadro = teamDB[teamName].kadro.filter(pl => pl.nm !== playerName);
+  }
+
+  const member = memberDB.find(m => m.name === playerName);
+  if (member) { member.team = ''; member.kicked = true; member.kickMsg = '\u26a0\ufe0f Lütfen oynamadığın takıma üye olma, siteden uzaklaştırılırsınız.'; }
+
+  for (let i = 0; i < slotState.length; i++) {
+    if (slotState[i] && slotState[i].name === playerName) slotState[i] = null;
+  }
+
+  if (typeof tmSaveTeam === 'function') await tmSaveTeam(teamName);
+  if (typeof _tmDB !== 'undefined') {
+    try {
+      await _tmDB.ref('turnuva_users/' + playerName.toLowerCase()).update({
+        team: '', kicked: true,
+        kickMsg: '\u26a0\ufe0f Lütfen oynamadığın takıma üye olma, siteden uzaklaştırılırsınız.'
+      });
+    } catch(e) { console.warn('kickFromTeam DB:', e); }
+  }
+
+  if (typeof renderRosterList === 'function') renderRosterList();
+  if (typeof renderPitch === 'function') renderPitch();
+  showToast('\ud83d\udeab ' + playerName + ' takımdan çıkarıldı.');
+}
+
 function renderRosterList() {
   const mainList  = document.getElementById('rosterList');
   const benchList = document.getElementById('benchList');
@@ -6696,6 +6717,8 @@ function renderRosterList() {
         <div class="ri-rating">${pl.rating || '—'}</div>
         <button class="ri-stat-btn" title="Stat Ayarla"
                 onclick="event.stopPropagation(); openRosterStatModal(${pl.id})">⚙️</button>
+        <button class="ri-stat-btn" title="Takımdan Çıkar" style="color:#ff4466;margin-left:2px"
+                onclick="event.stopPropagation(); kickFromTeam(${JSON.stringify(pl.name)})">✕</button>
       </div>`;
   }
 
@@ -8032,13 +8055,59 @@ function saveProfile() {
   const foot = get('regFoot') || '—';
 
   if (!name || name === 'İsimsiz Oyuncu') { showToast('⚠️ Lütfen adınızı girin!'); return; }
-  if (!team) { showToast('⚠️ Lütfen takımınızı seçin!'); return; }
   if (!pos)  { showToast('⚠️ Lütfen mevkinizi seçin!'); return; }
+
+  /* İzleyeci — takım seçmesine gerek yok */
+  if (pos === 'IZL') {
+    currentProfile = { name, team: '', pos, foot };
+    /* Eski takımdan çıkar */
+    if (currentProfile.team && teamDB[currentProfile.team]) {
+      teamDB[currentProfile.team].kadro = teamDB[currentProfile.team].kadro.filter(pl => pl.nm !== name);
+    }
+    const mbIdx = memberDB.findIndex(m => m.id === currentUser.id);
+    if (mbIdx >= 0) { memberDB[mbIdx].team = ''; memberDB[mbIdx].pos = 'IZL'; }
+    closeRegisterModal();
+    renderProfileCard();
+    showToast('👁️ İzleyeci moduna geçildi. Turnuvayı keyifle takip et!');
+    return;
+  }
+
+  if (!team) { showToast('⚠️ Lütfen takımınızı seçin!'); return; }
+
+  /* Kovulmuş mu kontrol et (DB'den gelen kicked flag) */
+  const memberEntry = memberDB.find(m => m.name === name || m.id === currentUser?.id);
+  if (memberEntry?.kicked) {
+    showToast(memberEntry.kickMsg || '⚠️ Lütfen oynamadığın takıma üye olma, siteden uzaklaştırılırsınız.');
+    closeRegisterModal();
+    return;
+  }
+
+  /* Eski takımdan çıkar */
+  const oldTeam = currentProfile.team;
+  if (oldTeam && oldTeam !== team && teamDB[oldTeam]) {
+    teamDB[oldTeam].kadro = teamDB[oldTeam].kadro.filter(pl => pl.nm !== name);
+  }
+
+  /* Yeni takıma ekle (aynı isim yoksa) */
+  if (teamDB[team]) {
+    const zatenVar = teamDB[team].kadro.find(pl => pl.nm === name);
+    if (!zatenVar) {
+      const clsMap = { 'KL':'av-kl','STP':'av-stp','BEK':'av-stp','OOS':'av-mo','MO':'av-mo','DOS':'av-mo','SNT':'av-snt','SĞK':'av-snt','SLK':'av-snt' };
+      teamDB[team].kadro.push({
+        id: 'u_' + Date.now(), nm: name, pos, cls: clsMap[pos] || 'av-mo',
+        gol:0, sari:0, kirmizi:0, mac:0
+      });
+    }
+  }
+
+  /* memberDB güncelle */
+  const mbIdx = memberDB.findIndex(m => m.id === currentUser?.id);
+  if (mbIdx >= 0) { memberDB[mbIdx].team = team; memberDB[mbIdx].pos = pos; }
 
   currentProfile = { name, team, pos, foot };
   closeRegisterModal();
   renderProfileCard();
-  showToast(`✅ Profil güncellendi! ${name} · ${pos} · ${team}`);
+  showToast('✅ Profil güncellendi! ' + name + ' · ' + pos + ' · ' + team);
 }
 
 /* Profil kartını render et */
@@ -8355,9 +8424,14 @@ async function tmLoadCurrentUser() {
 
     // memberDB'ye ekle/güncelle
     const idx = memberDB.findIndex(m => m.id === data.id || m.name === data.name);
-    const entry = { id: data.id, name: data.name, team: data.team||'', pos: data.pos||'', foot: data.foot||'', role };
+    const entry = { id: data.id, name: data.name, team: data.team||'', pos: data.pos||'', foot: data.foot||'', role, kicked: data.kicked||false, kickMsg: data.kickMsg||'' };
     if (idx >= 0) memberDB[idx] = { ...memberDB[idx], ...entry };
     else memberDB.push(entry);
+
+    /* Kovulmuş kullanıcıya uyarı göster */
+    if (data.kicked) {
+      setTimeout(() => showToast(data.kickMsg || '⚠️ Lütfen oynamadığın takıma üye olma, siteden uzaklaştırılırsınız.'), 1000);
+    }
 
     console.log('[TM] Kullanıcı:', data.name, '|', role);
   } catch(err) { console.warn('[TM] tmLoadCurrentUser:', err); }
@@ -8374,7 +8448,7 @@ async function tmLoadAllMembers() {
       const nameLC = (u.name||'').toLowerCase();
       const role = SUPERADMINS.includes(nameLC) ? 'superadmin' : (u.role||'oyuncu');
       const idx = memberDB.findIndex(m => m.id === u.id || m.name === u.name);
-      const entry = { id: u.id, name: u.name||'', team: u.team||'', pos: u.pos||'', foot: u.foot||'', role };
+      const entry = { id: u.id, name: u.name||'', team: u.team||'', pos: u.pos||'', foot: u.foot||'', role, kicked: u.kicked||false, kickMsg: u.kickMsg||'' };
       if (idx >= 0) memberDB[idx] = { ...memberDB[idx], ...entry };
       else memberDB.push(entry);
     });
