@@ -3203,7 +3203,7 @@ const firebaseConfig={
   authDomain:"sali-maci.firebaseapp.com",
   databaseURL:"https://sali-maci-default-rtdb.europe-west1.firebasedatabase.app",
   projectId:"sali-maci",storageBucket:"sali-maci.appspot.com",
-  messagingSenderId:"874498878352",appId:"1:874498878352:web:abc123"
+  messagingSenderId:"656383692297",appId:"1:656383692297:web:ecd81c5645e86e073b72d8"
 };
 firebase.initializeApp(firebaseConfig);
 const db=firebase.database();
@@ -7234,5 +7234,19 @@ initApp();
 
 
 
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   LOBBY BRIDGE — Başarılı girişi lobby.html'e yönlendir
+═══════════════════════════════════════════════════════ */
+(function() {
+  window.goHome = function() {
+    window.location.href = 'lobby.html';
+  };
+  window.startListeners_after_login = async function() {
+    window.location.href = 'lobby.html';
+  };
+})();
+</script>
 </body>
 </html>
