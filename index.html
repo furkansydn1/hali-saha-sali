@@ -10,6 +10,18 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body>
+<script>
+/* SESSION GUARD — Giriş yapmayanları login'e gönder */
+(function() {
+  var raw = localStorage.getItem('hs_session') || localStorage.getItem('hs_session_temp');
+  if (!raw) { window.location.replace('login.html'); return; }
+  try {
+    var s = JSON.parse(raw);
+    if (!s || !s.id) { window.location.replace('login.html'); }
+  } catch(e) { window.location.replace('login.html'); }
+})();
+</script>
+
 <style>
 :root{
   --grass:#1a6b2f;--lime:#b8f717;--lime-dim:#9fd614;
@@ -3203,7 +3215,7 @@ const firebaseConfig={
   authDomain:"sali-maci.firebaseapp.com",
   databaseURL:"https://sali-maci-default-rtdb.europe-west1.firebasedatabase.app",
   projectId:"sali-maci",storageBucket:"sali-maci.appspot.com",
-  messagingSenderId:"874498878352",appId:"1:874498878352:web:abc123"
+  messagingSenderId:"656383692297",appId:"1:656383692297:web:ecd81c5645e86e073b72d8"
 };
 firebase.initializeApp(firebaseConfig);
 const db=firebase.database();
