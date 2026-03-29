@@ -385,12 +385,11 @@ registerBtn.addEventListener('click', async () => {
     // Session'ı hemen kaydet
     localStorage.setItem('hs_session', JSON.stringify({ id: newUser.id, name: newUser.name }));
 
-    const modeLabel = mode === 'tournament' ? 'Hastane Turnuvası' : 'Pitch App Klasik';
-    successSub.textContent = modeLabel + ' · Lobiye yönlendiriliyorsun...';
+    successSub.textContent = 'Kayıt başarılı! Lobiye yönlendiriliyorsun...';
     successOverlay.classList.add('show');
 
     setTimeout(() => {
-      window.location.href = mode === 'tournament' ? 'tournament.html' : 'lobby.html';
+      window.location.href = 'lobby.html';
     }, 1400);
 
   } catch (err) {
