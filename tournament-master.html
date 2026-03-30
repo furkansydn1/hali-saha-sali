@@ -5119,6 +5119,9 @@ html, body {
             </button>
             <div id="izleyiciMsg" style="display:none;margin-top:10px;padding:10px 14px;border-radius:10px;background:rgba(255,180,0,.07);border:1px solid rgba(255,180,0,.2);font-family:'Rajdhani',sans-serif;font-size:.72rem;letter-spacing:1px;color:#ffb84d;text-align:center">
               👁️ İzleyici modundasın — Turnuvayı takip ediyorsun, sahada değilsin.
+              <button onclick="exitIzleyici()" style="display:block;width:100%;margin-top:8px;padding:7px;background:rgba(255,180,0,.12);border:1px solid rgba(255,180,0,.35);border-radius:8px;color:#ffb84d;font-family:'Rajdhani',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer">
+                ↩ İzleyiciden Çık
+              </button>
             </div>
 
           </div><!-- /profile-right-panel -->
@@ -7177,6 +7180,33 @@ function updateRsmStat(statKey, value, valEl) {
 /* ── Kendi stat modalını aç — sadece superadmin ── */
 
 /* ── İzleyici moduna geç ── */
+
+/* ── İzleyiciden çık — normal oyuncu moduna dön ── */
+async function exitIzleyici() {
+  const name = currentProfile.name || currentUser.name || '';
+  if (!name) { showToast('⚠️ Profil bilgisi bulunamadı.'); return; }
+
+  /* pos'u sıfırla */
+  currentProfile = { ...currentProfile, pos: '' };
+  currentUser.team = currentProfile.team || '';
+
+  /* memberDB güncelle */
+  const mbIdx = memberDB.findIndex(m => m.id === currentUser.id);
+  if (mbIdx >= 0) memberDB[mbIdx].pos = '';
+
+  /* Firebase güncelle */
+  try {
+    if (typeof _tmDB !== 'undefined') {
+      const dbKey = (_tmSession.dbKey || name.toLowerCase());
+      await _tmDB.ref('turnuva_users/' + dbKey).update({ pos: '' });
+    }
+  } catch(e) { console.warn('[TM] exitIzleyici:', e); }
+
+  updateIzleyiciUI(false);
+  renderProfileCard();
+  showToast('✅ Izleyici modundan ciktin. Simdi bir takima katilabilirsin.');
+}
+
 async function setIzleyici() {
   if (!confirm('İzleyici moduna geçmek istediğinize emin misiniz? Takımdan çıkacaksınız.')) return;
 
@@ -7699,17 +7729,20 @@ function initCommittee() {
     const currentVal = sel.value;
     sel.innerHTML = '<option value="">— Maç Seçin —</option>';
     FIXTURE_WEEKS.forEach(wk => {
-      if (wk.type !== 'group') return; // sadece grup maçları seçilebilir
       const grp = document.createElement('optgroup');
       grp.label = wk.label + ' — ' + wk.dates;
+      let hasMatch = false;
       wk.matches.forEach(m => {
+        /* Grup maçları hep göster; eleme maçları sadece takımlar atanmışsa göster */
+        if (wk.type !== 'group' && (m.t1 === 'TBD' || m.t2 === 'TBD')) return;
         const opt = document.createElement('option');
         opt.value = m.id;
         const played = matchResults[m.id] ? ' ✓' : '';
-        opt.textContent = `${m.date} · ${m.t1} vs ${m.t2}${played}`;
+        opt.textContent = m.date + ' · ' + m.t1 + ' vs ' + m.t2 + played;
         grp.appendChild(opt);
+        hasMatch = true;
       });
-      sel.appendChild(grp);
+      if (hasMatch) sel.appendChild(grp);
     });
     sel.value = currentVal;
   }
@@ -8972,6 +9005,20 @@ async function tmLoadAllMembers() {
         });
       }
     });
+    /* Firebase'de olmayan kişileri teamDB kadrosundan temizle */
+    const activeNames = new Set(Object.values(data).map(u => u && u.name).filter(Boolean));
+    Object.values(teamDB).forEach(t => {
+      if (!t.kadro) return;
+      const before = t.kadro.length;
+      t.kadro = t.kadro.filter(pl => {
+        /* id'si 'u_' ile başlayanlar saveProfile ile eklendi — turnuva_users'da isimle kontrol et */
+        return activeNames.has(pl.nm);
+      });
+      if (t.kadro.length !== before) {
+        console.log('[TM] Kadro temizlendi:', before - t.kadro.length, 'kisi silindi');
+      }
+    });
+
     console.log('[TM] Üyeler yüklendi:', memberDB.length);
   } catch(err) { console.warn('[TM] tmLoadAllMembers:', err); }
 }
