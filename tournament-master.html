@@ -9299,6 +9299,41 @@ if (_origPublishLineup) {
 // ════════════════════════════════════
 // Başlangıç yüklemesi
 // ════════════════════════════════════
+
+// ── Kadrodan silinen kullanıcıları temizle ──
+async function tmCleanOrphanedPlayers() {
+  try {
+    /* turnuva_users'dan aktif isim listesi al */
+    const snap = await _tmDB.ref('turnuva_users').once('value');
+    const usersData = snap.val() || {};
+    const activeNames = new Set(
+      Object.values(usersData).map(u => u && u.name).filter(Boolean)
+    );
+
+    /* Her takım için kontrol et */
+    const teamsToUpdate = [];
+    Object.entries(teamDB).forEach(([teamName, t]) => {
+      if (!t.kadro || t.kadro.length === 0) return;
+      const before = t.kadro.length;
+      t.kadro = t.kadro.filter(pl => activeNames.has(pl.nm));
+      if (t.kadro.length !== before) {
+        console.log('[TM] Kadro temizlendi:', teamName,
+          (before - t.kadro.length) + ' kisi silindi');
+        teamsToUpdate.push(teamName);
+      }
+    });
+
+    /* Değişen takımları Firebase'e yaz */
+    for (const teamName of teamsToUpdate) {
+      await tmSaveTeam(teamName);
+    }
+
+    if (teamsToUpdate.length > 0) {
+      console.log('[TM] Temizlik tamamlandi, guncellenen:', teamsToUpdate);
+    }
+  } catch(err) { console.warn('[TM] tmCleanOrphanedPlayers:', err); }
+}
+
 // ── Firebase'e tüm fikstür + takım verilerini yaz (sadece yoksa) ──
 async function tmInitFirebaseData() {
   try {
@@ -9365,6 +9400,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
   // Firebase'de yoksa fikstür + takımları yaz
   await tmInitFirebaseData();
+
+  // turnuva_users'da olmayan kişileri kadrodan temizle + Firebase'e yaz
+  await tmCleanOrphanedPlayers();
 
   // Profil kartını DB verisiyle render et
   if (typeof renderProfileCard === 'function') renderProfileCard();
