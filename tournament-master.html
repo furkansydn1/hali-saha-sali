@@ -5117,9 +5117,9 @@ html, body {
                     style="margin-top:8px;background:rgba(255,180,0,.06);border-color:rgba(255,180,0,.25);color:#ffb84d">
               👁️ İzleyici Moduna Geç
             </button>
-            <div id="izleyiciMsg" style="display:none;margin-top:10px;padding:10px 14px;border-radius:10px;background:rgba(255,180,0,.07);border:1px solid rgba(255,180,0,.2);font-family:'Rajdhani',sans-serif;font-size:.72rem;letter-spacing:1px;color:#ffb84d;text-align:center">
+            <div id="izleyiciMsg" style="display:none;margin-top:10px;padding:10px 14px;border-radius:10px;background:rgba(255,180,0,.07);border:1px solid rgba(255,180,0,.2);font-family:Rajdhani,sans-serif;font-size:.72rem;letter-spacing:1px;color:#ffb84d;text-align:center">
               👁️ İzleyici modundasın — Turnuvayı takip ediyorsun, sahada değilsin.
-              <button onclick="exitIzleyici()" style="display:block;width:100%;margin-top:8px;padding:7px;background:rgba(255,180,0,.12);border:1px solid rgba(255,180,0,.35);border-radius:8px;color:#ffb84d;font-family:'Rajdhani',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer">
+              <button onclick="exitIzleyici()" style="display:block;width:100%;margin-top:8px;padding:7px;background:rgba(255,180,0,.12);border:1px solid rgba(255,180,0,.35);border-radius:8px;color:#ffb84d;font-family:Rajdhani,sans-serif;font-size:.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer">
                 ↩ İzleyiciden Çık
               </button>
             </div>
@@ -5831,14 +5831,18 @@ function tmSyncPlayers() {
 }
 
 /* ── Borsa Sabitleri ── */
-const MARKET_BASE_PER_RATING = 210000;   // 80 rating → ~16.8M€ base
-const MARKET_GOAL_BONUS      = 1_800_000; // her gol için
-const MARKET_WIN_BONUS       = 600_000;  // her galibiyet için
-// Mevki pozisyon çarpanı — defans ve kaleciye adaletli taban
+/* Bonservis: üstel formül — rating farkı katlanarak büyür
+   60 rating→0.5M | 78→3.1M | 85→5.7M | 90→8.5M | 94→11.6M
+   Her gol +1.5M, her galibiyet +400K */
+const MARKET_BASE        = 500_000;
+const MARKET_EXP         = 7;
+const MARKET_REF_RATING  = 60;
+const MARKET_GOAL_BONUS  = 1_500_000;
+const MARKET_WIN_BONUS   = 400_000;
 const MARKET_POS_MULT = {
-  kaleci: 1.45,
-  defans: 1.30,
-  osa:    1.15,
+  kaleci: 1.30,
+  defans: 1.20,
+  osa:    1.10,
   forvet: 1.00,
 };
 
@@ -5854,12 +5858,12 @@ function calcPP(player) {
   }
 }
 
-/* ── Piyasa Değeri Hesapla ── */
+/* ── Piyasa Değeri Hesapla — üstel formül ── */
 function calcMarketValue(player) {
   const mult    = MARKET_POS_MULT[player.posGroup] || 1.0;
-  const base    = player.rating * MARKET_BASE_PER_RATING * mult;
-  const goalAdd = player.goals * MARKET_GOAL_BONUS;
-  const winAdd  = player.wins  * MARKET_WIN_BONUS;
+  const base    = MARKET_BASE * Math.pow(player.rating / MARKET_REF_RATING, MARKET_EXP) * mult;
+  const goalAdd = (player.goals || 0) * MARKET_GOAL_BONUS;
+  const winAdd  = (player.wins  || 0) * MARKET_WIN_BONUS;
   return Math.round(base + goalAdd + winAdd);
 }
 
@@ -6038,7 +6042,7 @@ function renderFixture() {
       /* Kayıtlı skor kontrolü */
       const res = m.id ? matchResults[m.id] : null;
       const vsTxt = isFinal ? 'FİNAL'
-        : res ? `<span style="font-size:.70rem;letter-spacing:0;font-family:'Bebas Neue',cursive;color:#fff">${res.hg}–${res.ag}</span>`
+        : res ? `<span style="font-size:.70rem;letter-spacing:0;font-family:Bebas Neue,cursive;color:#fff">${res.hg}–${res.ag}</span>`
         : 'VS';
       const playedCls = res ? ' fmc-played' : '';
 
@@ -6217,7 +6221,7 @@ function renderTop20() {
   if (!players || players.length === 0) {
     grid.innerHTML = `
       <div style="grid-column:1/-1;text-align:center;padding:40px 20px;
-                  font-family:'Rajdhani',sans-serif;font-size:.80rem;
+                  font-family:Rajdhani,sans-serif;font-size:.80rem;
                   letter-spacing:2px;text-transform:uppercase;color:var(--t3)">
         <div style="font-size:2.5rem;opacity:.25;margin-bottom:12px">📊</div>
         Oyuncu verisi bekleniyor — Sezon başladığında burada görünecek
@@ -6247,7 +6251,8 @@ function buildTicker(sorted) {
 
   // Ticker için iki kopya (sonsuz döngü yanılsaması)
   const items = sorted.slice(0, 10).map(p => {
-    const trend   = p._mv > p.rating * MARKET_BASE_PER_RATING * (MARKET_POS_MULT[p.posGroup] || 1) ? '▲' : '▼';
+    const baseMV  = MARKET_BASE * Math.pow(p.rating / MARKET_REF_RATING, MARKET_EXP) * (MARKET_POS_MULT[p.posGroup] || 1);
+      const trend   = p._mv > baseMV ? '▲' : '▼';
     const tClass  = trend === '▲' ? 't20-ticker-up' : 't20-ticker-dn';
     return `<span class="t20-ticker-item">
       <span class="t20-ticker-name">${p.name}</span>
@@ -6461,7 +6466,7 @@ function openMatchModal(matchId, team1, team2, date, time, group) {
 
   const _noKadro = (side) => `
     <div class="mmp-field ${side === 'home' ? 'mmp-home' : 'mmp-away'}" style="display:flex;align-items:center;justify-content:center;min-height:260px">
-      <div style="text-align:center;font-family:'Rajdhani',sans-serif;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--t3)">
+      <div style="text-align:center;font-family:Rajdhani,sans-serif;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--t3)">
         <div style="font-size:1.8rem;margin-bottom:10px;opacity:.3">⏳</div>
         Kadro henüz belirlenmedi<br>
         <span style="font-size:.58rem;color:var(--t3)">Kaptan onayladıktan sonra görünecek</span>
@@ -6897,7 +6902,7 @@ function renderRosterList() {
   }
 
   if (rosterFromTeam.length === 0) {
-    const emptyMsg = `<div style="font-family:'Rajdhani',sans-serif;font-size:.68rem;
+    const emptyMsg = `<div style="font-family:Rajdhani,sans-serif;font-size:.68rem;
       letter-spacing:2px;text-transform:uppercase;color:var(--t3);padding:16px 8px">
       ${captainTeamName ? 'Kadro henüz oluşturulmadı.' : 'Takım ataması bekleniyor.'}</div>`;
     mainList.innerHTML = emptyMsg;
@@ -7383,18 +7388,31 @@ function publishLineup() {
     teamDB[teamName].formation = activeFormation;
   }
 
-  /* Kaydedilen kadroyu teamDB'ye yaz (maç saha için) */
+  /* Sahada olanlar → publishedSquad */
+  const onFieldIds   = new Set(slotState.filter(Boolean).map(p => p.id));
   const publishedSquad = slotState.filter(Boolean).map(pl => ({
     init: pl.initials,
     pos:  pl.pos,
     cls:  pl.cls,
     name: pl.name,
   }));
+
+  /* Sahada OLMAYANLAR → benchSquad */
+  const benchSquad = captainRoster
+    .filter(pl => !onFieldIds.has(pl.id))
+    .map(pl => ({
+      init: pl.initials,
+      pos:  pl.pos,
+      cls:  pl.cls,
+      name: pl.name,
+    }));
+
   if (teamDB[teamName]) {
     teamDB[teamName].publishedSquad = publishedSquad;
+    teamDB[teamName].benchSquad     = benchSquad;
   }
 
-  showToast(`🚀 Kadro yayınlandı! ${total}/${total} · Formasyon: ${f?.label || activeFormation} · ${teamName}`);
+  showToast('🚀 Kadro yayinlandi! ' + total + '/' + total + ' sahada, ' + benchSquad.length + ' yedek · ' + teamName);
 }
 
 /* Sahaya tıklanarak pitch tooltip'i kapat */
@@ -7584,15 +7602,47 @@ function openTeamModal(teamName) {
       <div class="tm-gbm-pct" style="color:${color}">%${pct}</div>
     </div>`;
 
-  const kadroRows = t.kadro.map(pl => `
-    <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(0,212,255,.04)">
-      <div class="grp-team-av ${pl.cls}" style="width:28px;height:28px;border-radius:7px;font-size:.58rem;flex-shrink:0">${pl.nm.split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase()}</div>
-      <div style="flex:1;font-family:'Rajdhani',sans-serif;font-size:.76rem;font-weight:700;color:var(--t0)">${pl.nm}</div>
-      <div style="font-size:.58rem;letter-spacing:1px;text-transform:uppercase;color:var(--t2);padding:0 8px">${pl.pos}</div>
-      <div style="font-family:'Bebas Neue',cursive;font-size:.88rem;color:var(--cyan);min-width:20px;text-align:center">${pl.gol}</div>
-      <div style="font-size:.75rem;min-width:16px;text-align:center">${pl.sari > 0 ? '🟨'.repeat(Math.min(pl.sari, 3)) : '—'}</div>
-      <div style="font-size:.75rem;min-width:16px;text-align:center">${pl.kirmizi > 0 ? '🟥' : '—'}</div>
-    </div>`).join('');
+  /* Kadro: ilk 11 sahada, geri kalanlar yedek */
+  const buildPlayerRow = (pl, badge) => {
+    const init = pl.nm.split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase();
+    return '<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(0,212,255,.04)">'
+      + '<div class="grp-team-av ' + pl.cls + '" style="width:28px;height:28px;border-radius:7px;font-size:.58rem;flex-shrink:0">' + init + '</div>'
+      + '<div style="flex:1;font-family:Rajdhani,sans-serif;font-size:.76rem;font-weight:700;color:var(--t0)">' + pl.nm + '</div>'
+      + (badge ? '<div style="font-size:.52rem;letter-spacing:1px;padding:2px 6px;border-radius:5px;background:rgba(255,180,0,.12);color:#ffb84d;border:1px solid rgba(255,180,0,.25);flex-shrink:0">' + badge + '</div>' : '')
+      + '<div style="font-size:.58rem;letter-spacing:1px;text-transform:uppercase;color:var(--t2);padding:0 8px">' + pl.pos + '</div>'
+      + '<div style="font-family:Bebas Neue,cursive;font-size:.88rem;color:var(--cyan);min-width:20px;text-align:center">' + pl.gol + '</div>'
+      + '<div style="font-size:.75rem;min-width:16px;text-align:center">' + (pl.sari > 0 ? '🟨'.repeat(Math.min(pl.sari,3)) : '—') + '</div>'
+      + '<div style="font-size:.75rem;min-width:16px;text-align:center">' + (pl.kirmizi > 0 ? '🟥' : '—') + '</div>'
+      + '</div>';
+  };
+
+  /* Yayınlanmış kadro varsa kullan, yoksa teamDB.kadro'yu böl */
+  let startingRows = '';
+  let benchRows    = '';
+
+  if (t.publishedSquad && t.publishedSquad.length > 0) {
+    /* publishedSquad → ilk 11 */
+    const pubNames = new Set(t.publishedSquad.map(p => p.name));
+    /* Sahada olanlar: publishedSquad'daki isimlerle kadroyu eşleştir */
+    startingRows = t.publishedSquad.map(ps => {
+      const pl = t.kadro.find(k => k.nm === ps.name) || { nm: ps.name, pos: ps.pos, cls: ps.cls, gol:0, sari:0, kirmizi:0 };
+      return buildPlayerRow(pl, '🟢 11');
+    }).join('');
+    /* Bench: publishedSquad'da olmayan kadro oyuncuları */
+    const benchPlayers = t.benchSquad && t.benchSquad.length > 0
+      ? t.benchSquad.map(bs => t.kadro.find(k => k.nm === bs.name) || { nm: bs.name, pos: bs.pos, cls: bs.cls, gol:0, sari:0, kirmizi:0 })
+      : t.kadro.filter(pl => !pubNames.has(pl.nm));
+    if (benchPlayers.length > 0) {
+      benchRows = '<div style="font-family:Rajdhani,sans-serif;font-size:.60rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#ffb84d;padding:10px 0 6px;margin-top:4px;border-top:1px solid rgba(255,180,0,.15)">YEDEKLER</div>'
+        + benchPlayers.map(pl => buildPlayerRow(pl, '🔵 YDK')).join('');
+    }
+  } else {
+    /* Kadro yayınlanmamış — tümünü göster */
+    startingRows = t.kadro.map(pl => buildPlayerRow(pl, '')).join('');
+    benchRows    = '';
+  }
+
+  const kadroRows = startingRows + benchRows;
 
   document.getElementById('teamModalContent').innerHTML = `
     <div class="tm-hd">
@@ -7624,13 +7674,13 @@ function openTeamModal(teamName) {
         ${barRow('Mağlubiyet',losePct, 'lose', '#ff4466')}
       </div>
       <div style="display:flex;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--b0)">
-        <div style="font-family:'Rajdhani',sans-serif;font-size:.62rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--t2)">En Golcü</div>
-        <div style="font-family:'Rajdhani',sans-serif;font-size:.72rem;font-weight:700;color:var(--t0)">${topScorerStr}</div>
+        <div style="font-family:Rajdhani,sans-serif;font-size:.62rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--t2)">En Golcü</div>
+        <div style="font-family:Rajdhani,sans-serif;font-size:.72rem;font-weight:700;color:var(--t0)">${topScorerStr}</div>
       </div>
     </div>
     <div style="padding:0 24px 22px">
       <div class="tm-bar-title">Kadro</div>
-      <div style="display:flex;align-items:center;gap:6px;padding:6px 0 10px;border-bottom:1px solid var(--b1);font-family:'Rajdhani',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--t2)">
+      <div style="display:flex;align-items:center;gap:6px;padding:6px 0 10px;border-bottom:1px solid var(--b1);font-family:Rajdhani,sans-serif;font-size:.58rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--t2)">
         <div style="width:28px;flex-shrink:0"></div>
         <div style="flex:1">Oyuncu</div>
         <div style="padding:0 8px;width:48px">Mevki</div>
@@ -9056,6 +9106,8 @@ async function tmLoadTeamData() {
             : Object.values(raw)
           ).filter(Boolean);
         }
+      if (td.publishedSquad) teamDB[teamName].publishedSquad = td.publishedSquad;
+      if (td.benchSquad)     teamDB[teamName].benchSquad     = td.benchSquad;
     });
     console.log('[TM] Takımlar yüklendi');
   } catch(err) { console.warn('[TM] tmLoadTeamData:', err); }
@@ -9098,13 +9150,16 @@ async function tmSaveTeam(teamName) {
       rating:  pl.rating  || 75,
       stats:   pl.stats   || {}
     }));
-    await _tmDB.ref('turnuva_teams/' + key).set({
+    const payload = {
       name: teamName, grp: t.grp || '',
       g: t.g||0, b: t.b||0, m: t.m||0, o: t.o||0,
       ag: t.ag||0, yg: t.yg||0, kap: t.kap||null,
       formation: t.formation||'1-2-1-2-1',
       kadro: safeKadro
-    });
+    };
+    if (t.publishedSquad) payload.publishedSquad = t.publishedSquad;
+    if (t.benchSquad)     payload.benchSquad     = t.benchSquad;
+    await _tmDB.ref('turnuva_teams/' + key).set(payload);
     console.log('[TM] tmSaveTeam:', teamName, '| kadro:', safeKadro.length);
     /* players[] güncelle */
     if (typeof tmSyncPlayers === 'function') tmSyncPlayers();
@@ -9286,7 +9341,8 @@ if (_origPublishLineup) {
   window.publishLineup = function() {
     _origPublishLineup();
     setTimeout(async () => {
-      if (captainTeamName) await tmSaveTeam(captainTeamName);
+      const tn = getCaptainTeam ? getCaptainTeam() : captainTeamName;
+      if (tn) await tmSaveTeam(tn);
     }, 200);
   };
 }
