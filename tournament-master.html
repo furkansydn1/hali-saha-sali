@@ -4704,6 +4704,57 @@ html, body {
             <button class="kom-btn kom-btn-cyan" onclick="saveFixtureScore()">
               💾 Skoru Kaydet &amp; Puan Tablosunu Güncelle
             </button>
+            <button class="kom-btn" id="resetMatchBtn" onclick="resetFixtureScore()"
+                    style="margin-top:8px;background:rgba(255,60,60,.08);border:1px solid rgba(255,60,60,.3);color:#ff6680;display:none">
+              🗑️ Bu Maçı Sıfırla
+            </button>
+          </div>
+        </div>
+
+        <!-- KART 1b: Eleme Turu Takım Atama -->
+        <div class="kom-card">
+          <div class="kom-card-hd">
+            <div class="kom-card-icon">🏆</div>
+            <div>
+              <div class="kom-card-title">Eleme Turu Takım Ata</div>
+              <div class="kom-card-sub">Çeyrek / Yarı Final / Final takımlarını belirle</div>
+            </div>
+          </div>
+          <div class="kom-field">
+            <div class="kom-label">Maç</div>
+            <select class="kom-select" id="koMatchSel" onchange="onKoMatchChange()">
+              <option value="">— Eleme Maçı Seçin —</option>
+              <optgroup label="Çeyrek Final">
+                <option value="cf1">ÇF-1 · 04 May</option>
+                <option value="cf2">ÇF-2 · 05 May</option>
+                <option value="cf3">ÇF-3 · 06 May</option>
+                <option value="cf4">ÇF-4 · 07 May</option>
+              </optgroup>
+              <optgroup label="Yarı Final">
+                <option value="yf1">YF-1 · 12 May</option>
+                <option value="yf2">YF-2 · 13 May</option>
+              </optgroup>
+              <optgroup label="Final">
+                <option value="final">Büyük Final · 20-22 May</option>
+              </optgroup>
+            </select>
+          </div>
+          <div id="koTeamSection" style="display:none">
+            <div class="kom-field">
+              <div class="kom-label">Ev Sahibi</div>
+              <select class="kom-select" id="koT1Sel">
+                <option value="">— Takım Seç —</option>
+              </select>
+            </div>
+            <div class="kom-field">
+              <div class="kom-label">Deplasman</div>
+              <select class="kom-select" id="koT2Sel">
+                <option value="">— Takım Seç —</option>
+              </select>
+            </div>
+            <button class="kom-btn kom-btn-gold" onclick="saveKoTeams()" style="width:100%">
+              ✅ Takımları Kaydet
+            </button>
           </div>
         </div>
 
@@ -7703,8 +7754,79 @@ function initCommittee() {
 }
 
 /* ─── Maç seçilince skor paneli aç ─── */
+
+/* ══════════════════════════════════════════════════════
+   ELEMİNE TURU TAKIM ATAMA — Komite yetkisi
+══════════════════════════════════════════════════════ */
+function onKoMatchChange() {
+  const mid = document.getElementById('koMatchSel')?.value;
+  const sec = document.getElementById('koTeamSection');
+  if (!sec) return;
+
+  if (!mid) { sec.style.display = 'none'; return; }
+  sec.style.display = 'block';
+
+  /* Takım seçeneklerini doldur */
+  const teams = Object.keys(teamDB);
+  const opts  = '<option value="">— Takım Seç —</option>' +
+    teams.map(t => '<option value="' + t + '">' + t + '</option>').join('');
+
+  document.getElementById('koT1Sel').innerHTML = opts;
+  document.getElementById('koT2Sel').innerHTML = opts;
+
+  /* Daha önce atanmış takımları önceden seç */
+  const m = findMatch(mid);
+  if (m && m.t1 !== 'TBD') document.getElementById('koT1Sel').value = m.t1;
+  if (m && m.t2 !== 'TBD') document.getElementById('koT2Sel').value = m.t2;
+}
+
+async function saveKoTeams() {
+  if (!hasPermission('komite')) {
+    showToast('⚠️ Bu işlem için Komite yetkisi gereklidir.');
+    return;
+  }
+
+  const mid = document.getElementById('koMatchSel')?.value;
+  const t1  = document.getElementById('koT1Sel')?.value;
+  const t2  = document.getElementById('koT2Sel')?.value;
+
+  if (!mid) { showToast('⚠️ Maç seçin!'); return; }
+  if (!t1 || !t2) { showToast('⚠️ Her iki takımı da seçin!'); return; }
+  if (t1 === t2)  { showToast('⚠️ Aynı takımı iki kere seçemezsiniz!'); return; }
+
+  /* FIXTURE_WEEKS içindeki maçı güncelle */
+  let updated = false;
+  FIXTURE_WEEKS.forEach(wk => {
+    wk.matches.forEach(m => {
+      if (m.id === mid) {
+        m.t1 = t1;
+        m.t2 = t2;
+        m.av1 = teamDB[t1]?.av || 'av-mo';
+        m.av2 = teamDB[t2]?.av || 'av-mo';
+        updated = true;
+      }
+    });
+  });
+
+  if (!updated) { showToast('⚠️ Maç bulunamadı!'); return; }
+
+  /* Firebase'e kaydet */
+  try {
+    await _tmDB.ref('turnuva_fixtures/' + mid).update({ t1, t2 });
+    console.log('[TM] KO takimlar kaydedildi:', mid, t1, 'vs', t2);
+  } catch(e) { console.warn('[TM] saveKoTeams Firebase:', e); }
+
+  /* UI güncelle */
+  renderFixture();
+  initCommittee();
+  showToast('✅ ' + t1 + ' vs ' + t2 + ' kaydedildi!');
+}
+
 function onFixtureMatchChange() {
   const mid  = document.getElementById('fixtureMatchSel')?.value;
+  /* Sıfırla butonu: sadece oynanmış maç seçiliyse göster */
+  const resetBtn = document.getElementById('resetMatchBtn');
+  if (resetBtn) resetBtn.style.display = (mid && matchResults[mid]) ? '' : 'none';
   const sec  = document.getElementById('matchScoreSection');
   if (!mid || !sec) return;
 
@@ -7807,6 +7929,89 @@ function addScorerRow() {
 }
 
 /* ─── Skoru kaydet ─── */
+
+/* ══════════════════════════════════════════════════════
+   MAÇ SIFIRLA — Komite yetkisi gerekir
+══════════════════════════════════════════════════════ */
+async function resetFixtureScore() {
+  /* Yetki kontrolü */
+  if (!hasPermission('komite')) {
+    showToast('⚠️ Bu işlem için Komite yetkisi gereklidir.');
+    return;
+  }
+
+  const mid = document.getElementById('fixtureMatchSel')?.value;
+  if (!mid) { showToast('⚠️ Önce bir maç seçin!'); return; }
+
+  const old = matchResults[mid];
+  if (!old) { showToast('⚠️ Bu maç zaten oynanmamış!'); return; }
+
+  const m = findMatch(mid);
+  if (!m) { showToast('⚠️ Maç bulunamadı!'); return; }
+
+  if (!confirm(m.t1 + ' - ' + m.t2 + ' macini sifirlamak istediginize emin misiniz? Puan tablosu ve goller geri alinacak.')) return;
+
+  /* Puan tablosunu geri al */
+  const ht = teamDB[old.t1], at = teamDB[old.t2];
+  if (ht && at) {
+    ht.o = Math.max(0, ht.o - 1); at.o = Math.max(0, at.o - 1);
+    ht.ag = Math.max(0, ht.ag - old.hg); ht.yg = Math.max(0, ht.yg - old.ag);
+    at.ag = Math.max(0, at.ag - old.ag); at.yg = Math.max(0, at.yg - old.hg);
+    if (old.hg > old.ag)      { ht.g = Math.max(0, ht.g - 1); at.m = Math.max(0, at.m - 1); }
+    else if (old.ag > old.hg) { at.g = Math.max(0, at.g - 1); ht.m = Math.max(0, ht.m - 1); }
+    else                      { ht.b = Math.max(0, ht.b - 1); at.b = Math.max(0, at.b - 1); }
+  }
+
+  /* Golcülerin gol sayılarını geri al */
+  if (old.scorers) {
+    old.scorers.forEach(sc => {
+      const team = teamDB[sc.team];
+      if (!team) return;
+      const pl = team.kadro.find(p => p.nm === sc.name);
+      if (pl) { pl.gol = Math.max(0, pl.gol - sc.goals); }
+    });
+  }
+
+  /* matchResults'tan sil */
+  delete matchResults[mid];
+
+  /* Firebase'e yaz */
+  try {
+    await _tmDB.ref('turnuva_matches/' + mid).remove();
+    if (ht) await tmSaveTeam(old.t1);
+    if (at) await tmSaveTeam(old.t2);
+
+    /* Golcülerin turnuva_users kaydını güncelle */
+    if (old.scorers) {
+      for (const sc of old.scorers) {
+        const dbKey = sc.name.toLowerCase();
+        const snap = await _tmDB.ref('turnuva_users/' + dbKey).once('value');
+        if (snap.exists()) {
+          const cur = snap.val().gol || 0;
+          await _tmDB.ref('turnuva_users/' + dbKey).update({
+            gol: Math.max(0, cur - sc.goals)
+          });
+        }
+      }
+    }
+    console.log('[TM] Mac sifirlandi Firebase:', mid);
+  } catch(e) { console.warn('[TM] resetFixtureScore Firebase:', e); }
+
+  /* UI güncelle */
+  document.getElementById('fxScoreHome').value = 0;
+  document.getElementById('fxScoreAway').value = 0;
+  document.getElementById('scorerRows').innerHTML = '';
+  document.getElementById('scorerSection').style.display = 'none';
+  document.getElementById('fxPreview').style.display = 'none';
+  const resetBtn = document.getElementById('resetMatchBtn');
+  if (resetBtn) resetBtn.style.display = 'none';
+
+  refreshAllViews();
+  renderFixture();
+  initCommittee();
+  showToast('🗑️ ' + m.t1 + ' - ' + m.t2 + ' sifirlandi!');
+}
+
 function saveFixtureScore() {
   const mid = document.getElementById('fixtureMatchSel')?.value;
   if (!mid) { showToast('⚠️ Önce bir maç seçin!'); return; }
