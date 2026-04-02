@@ -4812,6 +4812,24 @@ html, body {
               🟥 +Kırmızı Kart
             </button>
           </div>
+          <!-- Eksiltme butonları -->
+          <div style="margin-top:8px">
+            <div class="kom-label" style="margin-bottom:6px;color:var(--t2)">Geri Al (−)</div>
+            <div class="kom-actions">
+              <button class="kom-btn" onclick="removeStat('gol')"
+                      style="background:rgba(0,238,102,.06);border-color:rgba(0,238,102,.2);color:#00ee66">
+                ⚽ −Gol
+              </button>
+              <button class="kom-btn" onclick="removeStat('sari')"
+                      style="background:rgba(255,216,77,.06);border-color:rgba(255,216,77,.2);color:#ffd84d">
+                🟨 −Sarı
+              </button>
+              <button class="kom-btn" onclick="removeStat('kirmizi')"
+                      style="background:rgba(255,68,102,.06);border-color:rgba(255,68,102,.2);color:#ff4466">
+                🟥 −Kırmızı
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- KART 3: Kaptan Ata — Kayıtlı Üyeden + Takım Oyuncusundan -->
@@ -5935,10 +5953,10 @@ const FIXTURE_WEEKS = [
     type: 'group', badge: 'badge-upcoming', badgeTxt: 'Yaklaşıyor',
     matches: [
       { id:'m01', t1:'OKMEYDANI DİŞ',  av1:'av-mo',  t2:'İLKYARDIM SPOR', av2:'av-kl',  date:'06 Nis · Pzt', time:'17:00–18:00', grp:'A' },
-      { id:'m02', t1:'FUTMEYDANI',     av1:'av-snt', t2:'ARNAVUTKÖY FK',   av2:'av-bek', date:'07 Nis · Sal', time:'18:00–19:00', grp:'A' },
-      { id:'m03', t1:'EYÜP CİTY',     av1:'av-stp', t2:'TÜPÇÜLER FK',     av2:'av-mo',  date:'08 Nis · Çar', time:'17:30–18:30', grp:'B' },
-      { id:'m04', t1:'SİSTRUNK',      av1:'av-kan', t2:'SAGRADA FAMİLA',  av2:'av-snt', date:'09 Nis · Per', time:'17:00–18:00', grp:'B' },
-      { id:'m05', t1:'SSK MONTANA',   av1:'av-stp', t2:'PUSU FK',          av2:'av-mo',  date:'10 Nis · Cum', time:'17:00–18:00', grp:'C' },
+      { id:'m02', t1:'FUTMEYDANI',     av1:'av-snt', t2:'ARNAVUTKÖY FK',  av2:'av-bek', date:'07 Nis · Sal', time:'18:00–19:00', grp:'A' },
+      { id:'m03', t1:'EYÜP CİTY',     av1:'av-stp', t2:'TÜPÇÜLER FK',    av2:'av-mo',  date:'08 Nis · Çar', time:'17:30–18:30', grp:'B' },
+      { id:'m04', t1:'SİSTRUNK',      av1:'av-kan', t2:'SAGRADA FAMİLA', av2:'av-snt', date:'09 Nis · Per', time:'17:00–18:00', grp:'B' },
+      { id:'m05', t1:'SSK MONTANA',   av1:'av-stp', t2:'PUSU FK',         av2:'av-mo',  date:'10 Nis · Cum', time:'17:00–18:00', grp:'C' },
     ],
   },
   /* ═══════════════ HAFTA 2 — 13–17 Nisan 2026 ═══════════════ */
@@ -5946,11 +5964,11 @@ const FIXTURE_WEEKS = [
     n: '02', label: '2. Hafta', dates: '13–17 Nisan 2026',
     type: 'group', badge: 'badge-upcoming', badgeTxt: 'Yaklaşıyor',
     matches: [
-      { id:'m06', t1:'EYÜP CİTY',    av1:'av-stp', t2:'SİSTRUNK',        av2:'av-kan', date:'13 Nis · Pzt', time:'17:00–18:00', grp:'B' },
-      { id:'m07', t1:'ARNAVUTKÖY FK',av1:'av-bek', t2:'İLKYARDIM SPOR',  av2:'av-kl',  date:'14 Nis · Sal', time:'18:00–19:00', grp:'A' },
-      { id:'m08', t1:'TÜPÇÜLER FK',  av1:'av-mo',  t2:'SAGRADA FAMİLA',  av2:'av-snt', date:'15 Nis · Çar', time:'17:30–18:30', grp:'B' },
-      { id:'m09', t1:'DETERJAN GÜCÜ',av1:'av-kl',  t2:'PUSU FK',          av2:'av-mo',  date:'16 Nis · Per', time:'17:00–18:00', grp:'C' },
-      { id:'m10', t1:'RÖNTGEN',      av1:'av-snt', t2:'SSK MONTANA',      av2:'av-stp', date:'17 Nis · Cum', time:'17:00–18:00', grp:'C' },
+      { id:'m06', t1:'EYÜP CİTY',     av1:'av-stp', t2:'SİSTRUNK',       av2:'av-kan', date:'13 Nis · Pzt', time:'17:00–18:00', grp:'B' },
+      { id:'m07', t1:'ARNAVUTKÖY FK', av1:'av-bek', t2:'OKMEYDANI DİŞ',  av2:'av-mo',  date:'14 Nis · Sal', time:'18:00–19:00', grp:'A' },
+      { id:'m08', t1:'RÖNTGEN',       av1:'av-snt', t2:'SSK MONTANA',     av2:'av-stp', date:'15 Nis · Çar', time:'17:30–18:30', grp:'C' },
+      { id:'m09', t1:'DETERJAN GÜCÜ', av1:'av-kl',  t2:'PUSU FK',         av2:'av-mo',  date:'16 Nis · Per', time:'17:00–18:00', grp:'C' },
+      { id:'m10', t1:'TÜPÇÜLER FK',   av1:'av-mo',  t2:'SAGRADA FAMİLA', av2:'av-snt', date:'17 Nis · Cum', time:'17:00–18:00', grp:'B' },
     ],
   },
   /* ═══════════════ HAFTA 3 — 20–24 Nisan 2026 ═══════════════ */
@@ -5958,10 +5976,10 @@ const FIXTURE_WEEKS = [
     n: '03', label: '3. Hafta', dates: '20–24 Nisan 2026',
     type: 'group', badge: 'badge-upcoming', badgeTxt: 'Yaklaşıyor',
     matches: [
-      { id:'m11', t1:'EYÜP CİTY',    av1:'av-stp', t2:'SAGRADA FAMİLA',  av2:'av-snt', date:'20 Nis · Pzt', time:'17:00–18:00', grp:'B' },
-      { id:'m12', t1:'FUTMEYDANI',   av1:'av-snt', t2:'OKMEYDANI DİŞ',   av2:'av-mo',  date:'21 Nis · Sal', time:'18:00–19:00', grp:'A' },
-      { id:'m13', t1:'PUSU FK',      av1:'av-mo',  t2:'RÖNTGEN',          av2:'av-snt', date:'22 Nis · Çar', time:'17:30–18:30', grp:'C' },
-      { id:'m14', t1:'SSK MONTANA',  av1:'av-stp', t2:'DETERJAN GÜCÜ',   av2:'av-kl',  date:'24 Nis · Per', time:'17:00–18:00', grp:'C' },
+      { id:'m11', t1:'SSK MONTANA',   av1:'av-stp', t2:'DETERJAN GÜCÜ',  av2:'av-kl',  date:'20 Nis · Pzt', time:'17:00–18:00', grp:'C' },
+      { id:'m12', t1:'FUTMEYDANI',    av1:'av-snt', t2:'İLKYARDIM SPOR', av2:'av-kl',  date:'21 Nis · Sal', time:'18:00–19:00', grp:'A' },
+      { id:'m13', t1:'PUSU FK',       av1:'av-mo',  t2:'RÖNTGEN',         av2:'av-snt', date:'22 Nis · Çar', time:'17:30–18:30', grp:'C' },
+      { id:'m14', t1:'EYÜP CİTY',    av1:'av-stp', t2:'SAGRADA FAMİLA', av2:'av-snt', date:'24 Nis · Cum', time:'17:00–18:00', grp:'B' },
     ],
   },
   /* ═══════════════ HAFTA 4 — 27–30 Nisan 2026 ═══════════════ */
@@ -5969,10 +5987,10 @@ const FIXTURE_WEEKS = [
     n: '04', label: '4. Hafta', dates: '27–30 Nisan 2026',
     type: 'group', badge: 'badge-upcoming', badgeTxt: 'Yaklaşıyor',
     matches: [
-      { id:'m15', t1:'İLKYARDIM SPOR',av1:'av-kl',  t2:'FUTMEYDANI',      av2:'av-snt', date:'27 Nis · Pzt', time:'17:00–18:00', grp:'A' },
-      { id:'m16', t1:'OKMEYDANI DİŞ', av1:'av-mo',  t2:'ARNAVUTKÖY FK',   av2:'av-bek', date:'28 Nis · Sal', time:'18:00–19:00', grp:'A' },
-      { id:'m17', t1:'SİSTRUNK',      av1:'av-kan', t2:'TÜPÇÜLER FK',     av2:'av-mo',  date:'29 Nis · Çar', time:'17:30–18:30', grp:'B' },
-      { id:'m18', t1:'RÖNTGEN',       av1:'av-snt', t2:'DETERJAN GÜCÜ',   av2:'av-kl',  date:'30 Nis · Per', time:'17:00–18:00', grp:'C' },
+      { id:'m15', t1:'OKMEYDANI DİŞ', av1:'av-mo',  t2:'FUTMEYDANI',     av2:'av-snt', date:'27 Nis · Pzt', time:'17:00–18:00', grp:'A' },
+      { id:'m16', t1:'İLKYARDIM SPOR',av1:'av-kl',  t2:'ARNAVUTKÖY FK',  av2:'av-bek', date:'28 Nis · Sal', time:'18:00–19:00', grp:'A' },
+      { id:'m17', t1:'SİSTRUNK',      av1:'av-kan', t2:'TÜPÇÜLER FK',    av2:'av-mo',  date:'29 Nis · Çar', time:'17:30–18:30', grp:'B' },
+      { id:'m18', t1:'RÖNTGEN',       av1:'av-snt', t2:'DETERJAN GÜCÜ',  av2:'av-kl',  date:'30 Nis · Per', time:'17:00–18:00', grp:'C' },
     ],
   },
   /* ═══════════════ ÇEYREK FİNAL — 04–07 Mayıs 2026 ═══════════════ */
@@ -8183,6 +8201,44 @@ function changeAmount(delta) {
   if (el) el.textContent = statAmount;
 }
 
+/* İstatistik eksilt (geri al) */
+async function removeStat(type) {
+  const plId = document.getElementById('statPlayer')?.value;
+  if (!plId) { showToast('⚠️ Önce oyuncu seçin!'); return; }
+
+  let foundPl = null, foundTeam = null;
+  for (const [tn, t] of Object.entries(teamDB)) {
+    const pl = t.kadro.find(p => p.id === plId);
+    if (pl) { foundPl = pl; foundTeam = tn; break; }
+  }
+  if (!foundPl) return;
+
+  const labels = { gol: '⚽ Gol', sari: '🟨 Sarı Kart', kirmizi: '🟥 Kırmızı Kart' };
+
+  if ((foundPl[type] || 0) < statAmount) {
+    showToast('⚠️ ' + foundPl.nm + ' zaten ' + (foundPl[type]||0) + ' ' + labels[type] + ' var, ' + statAmount + ' eksiltilemiyor!');
+    return;
+  }
+
+  foundPl[type] = Math.max(0, (foundPl[type] || 0) - statAmount);
+
+  onStatPlayerChange();
+  refreshAllViews();
+  showToast('↩ ' + foundPl.nm + ': −' + statAmount + ' ' + labels[type] + ' (Toplam: ' + foundPl[type] + ')');
+
+  /* Firebase güncelle */
+  try {
+    await tmSaveTeam(foundTeam);
+    const dbKey = foundPl.nm.toLowerCase();
+    const snap  = await _tmDB.ref('turnuva_users/' + dbKey).once('value');
+    if (snap.exists()) {
+      const update = {};
+      update[type] = foundPl[type];
+      await _tmDB.ref('turnuva_users/' + dbKey).update(update);
+    }
+  } catch(e) { console.warn('[TM] removeStat Firebase:', e); }
+}
+
 /* İstatistik ekle (artımlı) */
 function addStat(type) {
   const plId = document.getElementById('statPlayer')?.value;
@@ -9409,24 +9465,27 @@ async function tmInitFirebaseData() {
       console.log('[TM] turnuva_teams Firebase yazildi:', Object.keys(teamsData).length, 'takim');
     }
 
-    // 2. turnuva_fixtures — yoksa tüm maçları yaz
+    // 2. turnuva_fixtures — grup maçlarını her zaman güncelle (eleme maçları korunur)
     const fixtSnap = await _tmDB.ref('turnuva_fixtures').once('value');
-    if (!fixtSnap.exists()) {
-      const fixtData = {};
-      FIXTURE_WEEKS.forEach(wk => {
-        wk.matches.forEach(m => {
-          fixtData[m.id] = {
-            id: m.id, t1: m.t1, t2: m.t2,
-            date: m.date, time: m.time, grp: m.grp,
-            week: wk.label, weekDates: wk.dates,
-            type: wk.type || 'group',
-            ko: m.ko || false, final: m.final || false
-          };
-        });
+    const existingFixt = fixtSnap.val() || {};
+    const fixtData = {};
+    FIXTURE_WEEKS.forEach(wk => {
+      wk.matches.forEach(m => {
+        const existing = existingFixt[m.id] || {};
+        fixtData[m.id] = {
+          id: m.id,
+          /* Eleme maçlarında t1/t2 korunur (komite atamış olabilir) */
+          t1: (m.ko || m.final) ? (existing.t1 || m.t1) : m.t1,
+          t2: (m.ko || m.final) ? (existing.t2 || m.t2) : m.t2,
+          date: m.date, time: m.time, grp: m.grp,
+          week: wk.label, weekDates: wk.dates,
+          type: wk.type || 'group',
+          ko: m.ko || false, final: m.final || false
+        };
       });
-      await _tmDB.ref('turnuva_fixtures').set(fixtData);
-      console.log('[TM] turnuva_fixtures Firebase yazildi:', Object.keys(fixtData).length, 'mac');
-    }
+    });
+    await _tmDB.ref('turnuva_fixtures').set(fixtData);
+    console.log('[TM] turnuva_fixtures guncellendi:', Object.keys(fixtData).length, 'mac');
 
     // 3. turnuva_matches — yoksa boş placeholder oluştur
     const matchSnap = await _tmDB.ref('turnuva_matches').once('value');
